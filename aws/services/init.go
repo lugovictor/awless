@@ -20,6 +20,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/wallix/awless/aws/driver"
+
 	"github.com/wallix/awless/aws/config"
 	"github.com/wallix/awless/cloud"
 	"github.com/wallix/awless/logger"
@@ -64,6 +66,8 @@ func Init(conf map[string]interface{}, log *logger.Logger, profileSetterCallback
 	cloud.ServiceRegistry[MonitoringService.Name()] = MonitoringService
 	cloud.ServiceRegistry[CdnService.Name()] = CdnService
 	cloud.ServiceRegistry[CloudformationService.Name()] = CloudformationService
+
+	awsdriver.InitCommands(log, sess)
 
 	return nil
 }

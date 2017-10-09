@@ -201,15 +201,18 @@ func (l *onceLoader) mustLoad() *graph.Graph {
 var allGraphsOnce = &onceLoader{}
 
 func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]interface{}) error {
+	if newRunnerGlobalFlag {
+		return NewRunner(tplExec.Template, tplExec.Message, fillers...).Run()
+	}
+
 	env := template.NewEnv()
 	env.Log = logger.DefaultLogger
 	env.AddFillers(fillers...)
 	env.DefLookupFunc = awsdriver.AWSLookupDefinitions
 	env.AliasFunc = resolveAliasFunc
 	env.MissingHolesFunc = missingHolesStdinFunc()
-
-	if len(env.Fillers) > 0 {
-		logger.ExtraVerbosef("default/given holes fillers: %s", sprintProcessedParams(env.Fillers))
+	env.Lookuper = func(tokens ...string) interface{} {
+		return awsdriver.Commands[strings.Join(tokens, "")]
 	}
 
 	var err error
@@ -236,6 +239,8 @@ func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]inte
 			for _, e := range errs {
 				logger.Errorf(e.Error())
 			}
+		default:
+			logger.Error(err)
 		}
 		exitOn(errors.New("Dry run failed"))
 	}

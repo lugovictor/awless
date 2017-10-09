@@ -74,8 +74,15 @@ func (s *Template) Run(env *Env) (*Template, error) {
 }
 
 func (s *Template) DryRun(env *Env) error {
-	defer env.Driver.SetDryRun(false)
-	env.Driver.SetDryRun(true)
+	if env.Driver != nil {
+		defer env.Driver.SetDryRun(false)
+		env.Driver.SetDryRun(true)
+	}
+
+	env.IsDryRun = true
+	defer func() {
+		env.IsDryRun = false
+	}()
 
 	res, err := s.Run(env)
 	if err != nil {
@@ -132,14 +139,28 @@ func (t *Template) UniqueDefinitions(fn DefinitionLookupFunc) (definitions Defin
 var driverFunctionFailedErr = errors.New("Driver function call failed")
 
 func runCmd(n *ast.CommandNode, env *Env, vars map[string]interface{}) error {
+	n.ProcessRefs(vars)
+	params := n.ToDriverParams()
+
+	ctx := driver.NewContext(env.ResolvedVariables)
+
+	if env.IsNewRunner {
+		if cmd := env.Lookuper(n.Action, n.Entity); cmd != nil {
+			if env.IsDryRun {
+				n.CmdResult, n.CmdErr = driver.DryRun(cmd, ctx, params)
+			}
+			n.CmdResult, n.CmdErr = driver.Run(cmd, ctx, params)
+		} else {
+			return fmt.Errorf("new runner: no command for %s %s", n.Action, n.Entity)
+		}
+		return nil
+	}
+
 	fn, err := env.Driver.Lookup(n.Action, n.Entity)
 	if err != nil {
 		return err
 	}
-	n.ProcessRefs(vars)
-
-	ctx := driver.NewContext(env.ResolvedVariables)
-	n.CmdResult, n.CmdErr = fn(ctx, n.ToDriverParams())
+	n.CmdResult, n.CmdErr = fn(ctx, params)
 	if n.CmdErr != nil {
 		return driverFunctionFailedErr
 	}

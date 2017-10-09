@@ -32,6 +32,10 @@ type noopDriver struct{}
 func (d *noopDriver) Lookup(lookups ...string) (driver.DriverFn, error) {
 	return func(driver.Context, map[string]interface{}) (interface{}, error) { return nil, nil }, nil
 }
+func (d *noopDriver) LookupIface(lookups ...string) (interface{}, error) {
+	return nil, nil
+}
+
 func (d *noopDriver) SetLogger(*logger.Logger) {}
 func (d *noopDriver) SetDryRun(bool)           {}
 
@@ -41,6 +45,9 @@ type errorDriver struct {
 
 func (d *errorDriver) Lookup(lookups ...string) (driver.DriverFn, error) {
 	return func(driver.Context, map[string]interface{}) (interface{}, error) { return nil, d.err }, nil
+}
+func (d *errorDriver) LookupIface(lookups ...string) (interface{}, error) {
+	return nil, nil
 }
 func (d *errorDriver) SetLogger(*logger.Logger) {}
 func (d *errorDriver) SetDryRun(bool)           {}
@@ -82,7 +89,9 @@ func TestRunDriverReportsInStatement(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		env := &Env{Driver: tcase.driver}
+		env := NewEnv()
+		env.Driver = tcase.driver
+
 		ran, _ := templ.Run(env)
 
 		for i, cmd := range ran.CommandNodesIterator() {
@@ -121,7 +130,9 @@ create instance subnet=$createdsubnet`)
 		},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -142,7 +153,9 @@ create instance subnet=$createdsubnet`)
 		},
 		}
 
-		env = &Env{Driver: mDriver}
+		env = NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -166,7 +179,9 @@ create instance subnet=$createdsubnet`)
 		}},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -187,7 +202,9 @@ create instance subnet=$createdsubnet`)
 		}},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		executedTemplate, err := s.Run(env)
 		if err != nil {
 			t.Fatal(err)
@@ -215,7 +232,9 @@ create loadbalancer subnets=[$subnet1,sub-1234]`)
 		},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -238,7 +257,10 @@ create vpc name=never-achieved`)
 			{action: "create", entity: "vpc", expectedParams: map[string]interface{}{"name": "never-achieved"}},
 		},
 		}
-		env := &Env{Driver: mDriver}
+
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -267,7 +289,10 @@ create vpc name=myvpc subnet=$subnet1`
 			{action: "create", entity: "vpc", expectedParams: map[string]interface{}{"name": "myvpc", "subnet": "mynewsubnet"}},
 		},
 		}
-		env := &Env{Driver: mDriver}
+
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if err := s.DryRun(env); err != nil {
 			t.Fatal(err)
 		}
@@ -324,6 +349,10 @@ func (r *mockDriver) lookupsCalled() error {
 	}
 
 	return nil
+}
+
+func (d *mockDriver) LookupIface(lookups ...string) (interface{}, error) {
+	return nil, nil
 }
 
 func (r *mockDriver) Lookup(lookups ...string) (driver.DriverFn, error) {
