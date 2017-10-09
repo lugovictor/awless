@@ -1,4 +1,4 @@
-//go:generate go run $GOFILE drivers.go properties.go paramsdoc.go mocks.go fetchers.go services.go
+//go:generate go run $GOFILE drivers.go properties.go paramsdoc.go mocks.go fetchers.go services.go new_drivers.go
 //go:generate gofmt -s -w ../../../aws
 //go:generate goimports -w ../../../aws
 
@@ -30,6 +30,7 @@ var (
 	FETCHERS_DIR         = filepath.Join(ROOT_DIR, "aws", "fetch")
 	SERVICES_DIR         = filepath.Join(ROOT_DIR, "aws", "services")
 	DRIVERS_DIR          = filepath.Join(ROOT_DIR, "aws", "driver")
+	SPEC_DIR             = filepath.Join(ROOT_DIR, "aws", "spec")
 	DOC_DIR              = filepath.Join(ROOT_DIR, "aws", "doc")
 	CLOUD_PROPERTIES_DIR = filepath.Join(ROOT_DIR, "cloud", "properties")
 	CLOUD_RDF_DIR        = filepath.Join(ROOT_DIR, "cloud", "rdf")
@@ -46,6 +47,7 @@ func main() {
 	generateTestMocks()
 
 	// drivers, templates
+	generateNewDrivers()
 	generateDriverFuncs()
 	generateTemplateTemplates()
 	generateDriverTypes()

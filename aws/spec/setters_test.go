@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package awsdriver
+package awsspec
 
 import (
 	"encoding/base64"
 	"errors"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -651,4 +652,147 @@ func (ts *TestStruct) ValidateFieldInt64() (err error) {
 		err = errors.New("fint should not exceed 10")
 	}
 	return
+}
+
+func TestValidateStruct(t *testing.T) {
+	tcases := []struct {
+		stru        *TestStruct
+		contains    []string
+		notContains []string
+		err         bool
+	}{
+		{
+			stru:     &TestStruct{FieldString: awssdk.String(""), FieldInt64: awssdk.Int64(12)},
+			contains: []string{"fstring should not be empty", "fint should not exceed 10", "missing required field FieldBool"},
+			err:      true,
+		},
+		{
+			stru:        &TestStruct{FieldString: awssdk.String("not empty"), FieldInt64: awssdk.Int64(12)},
+			contains:    []string{"fint should not exceed 10", "missing required field FieldBool"},
+			notContains: []string{"fstring"},
+			err:         true,
+		},
+		{
+			stru:        &TestStruct{FieldString: awssdk.String(""), FieldInt64: awssdk.Int64(9), FieldBool: awssdk.Bool(true)},
+			contains:    []string{"fstring should not be empty"},
+			notContains: []string{"fint"},
+			err:         true,
+		},
+		{
+			stru:        &TestStruct{FieldString: awssdk.String("non empty"), FieldInt64: awssdk.Int64(8)},
+			contains:    []string{"missing required field FieldBool"},
+			notContains: []string{"fint", "fstring"},
+			err:         true,
+		},
+		{
+			stru: &TestStruct{FieldString: awssdk.String("non empty"), FieldInt64: awssdk.Int64(8), FieldBool: awssdk.Bool(true)},
+			err:  false,
+		},
+	}
+
+	for i, tcase := range tcases {
+		err := validateStruct(tcase.stru)
+		if tcase.err && err == nil {
+			t.Fatalf("%d. expected err got none", i+1)
+		}
+		if !tcase.err && err != nil {
+			t.Fatalf("%d. expected no err got one", i+1)
+		}
+		for _, msg := range tcase.contains {
+			if got, want := err.Error(), msg; !strings.Contains(got, want) {
+				t.Fatalf("%d. %q should contains %q", i+1, got, want)
+			}
+		}
+		for _, msg := range tcase.notContains {
+			if err != nil {
+				if got, want := err.Error(), msg; strings.Contains(got, want) {
+					t.Fatalf("%d. %q should not contains %q", i+1, got, want)
+				}
+			}
+		}
+	}
+}
+func TestStructDynamicSetter(t *testing.T) {
+	params := map[string]interface{}{
+		"fstring":   "jdoe",
+		"fint":      "345",
+		"fbool":     "true",
+		"fstrslice": []interface{}{"one", "two", 3},
+	}
+
+	in := &TestStruct{}
+	err := structSetter(in, params)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	exp := &TestStruct{
+		FieldString:      awssdk.String("jdoe"),
+		FieldInt64:       awssdk.Int64(345),
+		FieldBool:        awssdk.Bool(true),
+		FieldStringSlice: awssdk.StringSlice([]string{"one", "two", "3"}),
+	}
+
+	if got, want := in, exp; !reflect.DeepEqual(got, want) {
+		t.Fatalf("\ngot %#v\n\nwant %#v\n", got, want)
+	}
+}
+
+func TestStructInjector(t *testing.T) {
+	in := &TestStruct{
+		FieldString:      awssdk.String("jdoe"),
+		FieldInt64:       awssdk.Int64(345),
+		FieldBool:        awssdk.Bool(true),
+		FieldStringSlice: awssdk.StringSlice([]string{"one", "two", "3"}),
+		MultiCloudField:  awssdk.Int64(12345),
+	}
+
+	type embStruct struct {
+		CloudBool *bool
+	}
+	type outStruct struct {
+		CloudString              *string
+		CloudInt64               *int64
+		Embedded                 *embStruct
+		CloudStringSlice         []*string
+		CloudField1, CloudField2 *int64
+	}
+
+	out := new(outStruct)
+
+	err := structInjector(in, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	exp := &outStruct{
+		CloudString:      awssdk.String("jdoe"),
+		CloudInt64:       awssdk.Int64(345),
+		Embedded:         &embStruct{CloudBool: awssdk.Bool(true)},
+		CloudStringSlice: awssdk.StringSlice([]string{"one", "two", "3"}),
+		CloudField1:      awssdk.Int64(12345),
+		CloudField2:      awssdk.Int64(12345),
+	}
+
+	if got, want := out, exp; !reflect.DeepEqual(got, want) {
+		// pretty.Print(got)
+		// pretty.Print(want)
+		t.Fatalf("\ngot %#v\n\nwant %#v\n", got, want)
+	}
+}
+
+func TestListParamsWithRequiredFlag(t *testing.T) {
+	type any struct {
+		A string `templateName:"a" required:""`
+		B string `templateName:"b" required:""`
+		C string `templateName:"c"`
+		D int    `templateName:"d"`
+	}
+	keys := structListParamsKeys(new(any))
+
+	exp := map[string]bool{"a": true, "b": true, "c": false, "d": false}
+
+	if got, want := keys, exp; !reflect.DeepEqual(got, want) {
+		t.Fatalf("\ngot %#v\n\nwant %#v\n", got, want)
+	}
 }

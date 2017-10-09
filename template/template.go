@@ -33,6 +33,56 @@ type Template struct {
 	*ast.AST
 }
 
+func (s *Template) DoRun(env *Env) (*Template, error) {
+	vars := map[string]interface{}{}
+
+	current := &Template{AST: &ast.AST{}}
+	current.ID = ulid.MustNew(ulid.Timestamp(time.Now()), rand.Reader).String()
+
+	for _, sts := range s.Statements {
+		clone := sts.Clone()
+		current.Statements = append(current.Statements, clone)
+		switch n := clone.Node.(type) {
+		case *ast.CommandNode:
+			n.ProcessRefs(vars)
+			if env.IsDryRun {
+				if v, ok := n.Command.(dryRunner); ok {
+					n.CmdResult, n.CmdErr = v.DryRun(env.ResolvedVariables, n.ToDriverParams())
+				}
+			} else {
+				n.CmdResult, n.CmdErr = n.Run(env.ResolvedVariables, n.ToDriverParams())
+				if n.CmdErr != nil {
+					return current, nil
+				}
+			}
+		case *ast.DeclarationNode:
+			ident := n.Ident
+			expr := n.Expr
+			switch n := expr.(type) {
+			case *ast.CommandNode:
+				n.ProcessRefs(vars)
+				if env.IsDryRun {
+					if v, ok := n.Command.(dryRunner); ok {
+						n.CmdResult, n.CmdErr = v.DryRun(env.ResolvedVariables, n.ToDriverParams())
+					}
+				} else {
+					n.CmdResult, n.CmdErr = n.Run(env.ResolvedVariables, n.ToDriverParams())
+					if n.CmdErr != nil {
+						return current, nil
+					}
+				}
+				vars[ident] = n.Result()
+			default:
+				return current, fmt.Errorf("unknown type of node: %T", expr)
+			}
+		default:
+			return current, fmt.Errorf("unknown type of node: %T", clone.Node)
+		}
+	}
+
+	return current, nil
+}
+
 func (s *Template) Run(env *Env) (*Template, error) {
 	vars := map[string]interface{}{}
 
@@ -74,8 +124,15 @@ func (s *Template) Run(env *Env) (*Template, error) {
 }
 
 func (s *Template) DryRun(env *Env) error {
-	defer env.Driver.SetDryRun(false)
-	env.Driver.SetDryRun(true)
+	if env.Driver != nil {
+		defer env.Driver.SetDryRun(false)
+		env.Driver.SetDryRun(true)
+	}
+
+	env.IsDryRun = true
+	defer func() {
+		env.IsDryRun = false
+	}()
 
 	res, err := s.Run(env)
 	if err != nil {
@@ -132,14 +189,28 @@ func (t *Template) UniqueDefinitions(fn DefinitionLookupFunc) (definitions Defin
 var driverFunctionFailedErr = errors.New("Driver function call failed")
 
 func runCmd(n *ast.CommandNode, env *Env, vars map[string]interface{}) error {
+	n.ProcessRefs(vars)
+	params := n.ToDriverParams()
+
+	ctx := driver.NewContext(env.ResolvedVariables)
+
+	if env.IsNewRunner {
+		if cmd := env.Lookuper(n.Action, n.Entity); cmd != nil {
+			if env.IsDryRun {
+				n.CmdResult, n.CmdErr = driver.DryRun(cmd, ctx, params)
+			}
+			n.CmdResult, n.CmdErr = driver.Run(cmd, ctx, params)
+		} else {
+			return fmt.Errorf("new runner: no command for %s %s", n.Action, n.Entity)
+		}
+		return nil
+	}
+
 	fn, err := env.Driver.Lookup(n.Action, n.Entity)
 	if err != nil {
 		return err
 	}
-	n.ProcessRefs(vars)
-
-	ctx := driver.NewContext(env.ResolvedVariables)
-	n.CmdResult, n.CmdErr = fn(ctx, n.ToDriverParams())
+	n.CmdResult, n.CmdErr = fn(ctx, params)
 	if n.CmdErr != nil {
 		return driverFunctionFailedErr
 	}
@@ -293,4 +364,8 @@ func (d *Errors) Error() string {
 
 func MatchStringParamValue(s string) bool {
 	return ast.SimpleStringValue.MatchString(s)
+}
+
+type dryRunner interface {
+	DryRun(ctx, params map[string]interface{}) (interface{}, error)
 }
