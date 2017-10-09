@@ -32,6 +32,10 @@ type noopDriver struct{}
 func (d *noopDriver) Lookup(lookups ...string) (driver.DriverFn, error) {
 	return func(driver.Context, map[string]interface{}) (interface{}, error) { return nil, nil }, nil
 }
+func (d *noopDriver) LookupIface(lookups ...string) (interface{}, error) {
+	return nil, nil
+}
+
 func (d *noopDriver) SetLogger(*logger.Logger) {}
 func (d *noopDriver) SetDryRun(bool)           {}
 
@@ -41,6 +45,9 @@ type errorDriver struct {
 
 func (d *errorDriver) Lookup(lookups ...string) (driver.DriverFn, error) {
 	return func(driver.Context, map[string]interface{}) (interface{}, error) { return nil, d.err }, nil
+}
+func (d *errorDriver) LookupIface(lookups ...string) (interface{}, error) {
+	return nil, nil
 }
 func (d *errorDriver) SetLogger(*logger.Logger) {}
 func (d *errorDriver) SetDryRun(bool)           {}
@@ -324,6 +331,10 @@ func (r *mockDriver) lookupsCalled() error {
 	}
 
 	return nil
+}
+
+func (d *mockDriver) LookupIface(lookups ...string) (interface{}, error) {
+	return nil, nil
 }
 
 func (r *mockDriver) Lookup(lookups ...string) (driver.DriverFn, error) {

@@ -132,10 +132,27 @@ func (t *Template) UniqueDefinitions(fn DefinitionLookupFunc) (definitions Defin
 var driverFunctionFailedErr = errors.New("Driver function call failed")
 
 func runCmd(n *ast.CommandNode, env *Env, vars map[string]interface{}) error {
+	iface, ierr := env.Driver.LookupIface(n.Action, n.Entity)
+	if ierr != nil {
+		return ierr
+	}
+	if iface != nil {
+		type beforeRunner interface {
+			BeforeRun() error
+		}
+		if br, ok := iface.(beforeRunner); ok {
+			if err := br.BeforeRun(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+
 	fn, err := env.Driver.Lookup(n.Action, n.Entity)
 	if err != nil {
 		return err
 	}
+
 	n.ProcessRefs(vars)
 
 	ctx := driver.NewContext(env.ResolvedVariables)

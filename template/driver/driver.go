@@ -27,6 +27,7 @@ var ErrDriverFnNotFound = errors.New("driver function not found")
 
 type Driver interface {
 	Lookup(...string) (DriverFn, error)
+	LookupIface(...string) (interface{}, error)
 	SetDryRun(bool)
 	SetLogger(*logger.Logger)
 }
@@ -74,6 +75,19 @@ func (d *MultiDriver) SetLogger(l *logger.Logger) {
 	for _, dr := range d.drivers {
 		dr.SetLogger(l)
 	}
+}
+
+func (d *MultiDriver) LookupIface(lookups ...string) (interface{}, error) {
+	for _, dr := range d.drivers {
+		iface, err := dr.LookupIface(lookups...)
+		if err != nil {
+			return nil, err
+		}
+		if iface != nil {
+			return iface, nil
+		}
+	}
+	return nil, nil
 }
 
 func (d *MultiDriver) Lookup(lookups ...string) (driverFn DriverFn, err error) {
