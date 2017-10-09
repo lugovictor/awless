@@ -33,6 +33,7 @@ var (
 	awsProfileGlobalFlag   string
 	awsColorGlobalFlag     string
 	networkMonitorFlag     bool
+	newRunnerGlobalFlag    bool
 
 	renderGreenFn    = color.New(color.FgGreen).SprintFunc()
 	renderRedFn      = color.New(color.FgRed).SprintFunc()
@@ -56,6 +57,9 @@ func init() {
 	RootCmd.PersistentFlags().MarkHidden("network-monitor")
 
 	RootCmd.Flags().BoolVar(&versionGlobalFlag, "version", false, "Print awless version")
+
+	RootCmd.PersistentFlags().BoolVar(&newRunnerGlobalFlag, "new-runner", false, "Use new runner for running template")
+	RootCmd.PersistentFlags().MarkHidden("new-runner")
 
 	cobra.AddTemplateFunc("IsCmdAnnotatedOneliner", IsCmdAnnotatedOneliner)
 	cobra.AddTemplateFunc("HasCmdOnelinerChilds", HasCmdOnelinerChilds)

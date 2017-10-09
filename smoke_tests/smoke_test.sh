@@ -10,10 +10,12 @@ SUCCESS_KEYWORD=successfull
 echo "{{.Variables.ssh_success_keyword}}" > /tmp/awless-ssh-userdata-success.txt
 EOF
 
-BIN=./awless-test
+BIN_PATH=./awless-test
 
 echo "Building latest awless..."
-go build -o $BIN
+go build -o $BIN_PATH
+
+BIN="$BIN_PATH --new-runner"
 
 $BIN version
 
@@ -98,4 +100,4 @@ $BIN config set instance.image $ORIG_IMAGE
 
 rm $TMP_FILE $TMP_USERDATA_FILE
 rm -f ~/.awless/keys/$KEY_NAME.pem
-rm $BIN
+rm $BIN_PATH
