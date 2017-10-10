@@ -58,23 +58,32 @@ func structSetter(s interface{}, params map[string]interface{}) error {
 		tplName := field.Tag.Get("templateName")
 		fieldType := -1
 		if v, ok := params[tplName]; ok {
-			switch field.Type.String() {
-			case "*string":
-				fieldType = awsstr
-			case "*int64":
-				fieldType = awsint64
-			case "[]*string":
-				fieldType = awsstringslice
-			case "*bool":
-				fieldType = awsbool
-			default:
-				return fmt.Errorf("unknown type %s", field.Type.String())
+			kind := field.Type.Kind()
+			if kind == reflect.Ptr {
+				switch field.Type.Elem().Kind() {
+				case reflect.String:
+					fieldType = awsstr
+				case reflect.Int64:
+					fieldType = awsint64
+				case reflect.Bool:
+					fieldType = awsbool
+				default:
+					return fmt.Errorf("unknown type in pointer %s", field.Type.String())
+				}
+			} else if kind == reflect.Slice && field.Type.Elem().Kind() == reflect.Ptr {
+				switch field.Type.Elem().Elem().Kind() {
+				case reflect.String:
+					fieldType = awsstringslice
+				case reflect.Int64:
+					fieldType = awsint64slice
+				default:
+					return fmt.Errorf("unknown type in slice %s", field.Type.String())
+				}
 			}
 			if err := setFieldWithType(v, s, field.Name, fieldType); err != nil {
 				return err
 			}
 		}
 	}
-
 	return nil
 }
