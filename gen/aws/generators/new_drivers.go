@@ -32,26 +32,56 @@ func generateNewDrivers() {
 		panic(err)
 	}
 
+	finder := &findStructs{}
 	for _, pkg := range pkgs {
 		for _, f := range pkg.Files {
-			ast.Walk(&findStructs{}, f)
+			ast.Walk(finder, f)
 		}
 	}
+	fmt.Printf("%#v\n", finder.result)
 }
 
-type findStructs struct{}
+type tag struct {
+	call, input, output string
+}
+
+type findStructs struct {
+	result map[string][]tag
+}
 
 func (v *findStructs) Visit(node ast.Node) (w ast.Visitor) {
+	if v.result == nil {
+		v.result = make(map[string][]tag)
+	}
 	if typ, ok := node.(*ast.TypeSpec); ok {
 		if s, isStruct := typ.Type.(*ast.StructType); isStruct {
 			for _, f := range s.Fields.List {
 				if tag := f.Tag; tag != nil && strings.Contains(tag.Value, "awsCall") {
-					fmt.Println(typ.Name)
+					key := typ.Name.Name
+					fmt.Println(key)
+					v.result[key] = append(v.result[key], extractTag(tag.Value))
 				}
 			}
 		}
 	}
 	return v
+}
+
+func extractTag(s string) (t tag) {
+	splits := strings.Split(s[1:len(s)-1], " ")
+	for i, e := range splits {
+		el := strings.Split(e, ":")
+		ell := el[1][1 : len(el[1])-1]
+		switch {
+		case i == 0:
+			t.call = ell
+		case i == 1:
+			t.input = ell
+		case i == 2:
+			t.output = ell
+		}
+	}
+	return
 }
 
 const cmdRun = `/* Copyright 2017 WALLIX
