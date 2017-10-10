@@ -14,6 +14,8 @@ import (
 )
 
 type CreateInstance struct {
+	_              string `awsCall:"ec2.RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.RunInstancesOutput"`
+	result         string
 	logger         logger.Logger
 	api            ec2iface.EC2API
 	Image          *string   `awsName:"ImageId" templateName:"image" required:""`
@@ -29,7 +31,7 @@ type CreateInstance struct {
 }
 
 func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
-	return nil
+	return structSetter(cmd, params)
 }
 
 func (cmd *CreateInstance) Validate() error {
@@ -38,21 +40,23 @@ func (cmd *CreateInstance) Validate() error {
 
 func (cmd *CreateInstance) Run(ctx map[string]interface{}) (interface{}, error) {
 	input := &ec2.RunInstancesInput{}
-
 	start := time.Now()
 	output, err := cmd.api.RunInstances(input)
 	if err != nil {
 		return nil, fmt.Errorf("create instance: %s", err)
 	}
 	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
-	id := aws.StringValue(output.Instances[0].InstanceId)
+	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
+	return cmd.result, nil
+}
+
+func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}) (interface{}, error) {
 	//	_, err = d.Create_Tag(ctx, map[string]interface{}{"key": "Name", "value": params["name"], "resource": id})
 	//	if err != nil {
 	//		return nil, fmt.Errorf("create instance: adding tags: %s", err)
 	//	}
-
 	//	d.logger.Infof("create instance '%s' done", id)
-	return id, nil
+	return nil, nil
 }
 
 func structSetter(s interface{}, params map[string]interface{}) error {
