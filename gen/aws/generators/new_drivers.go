@@ -149,6 +149,9 @@ func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 
 func (cmd *{{ $cmdName }}) Run() (interface{}, error) {
 	input := &{{ $tag.Input }}{}
+	if err := structInjector(cmd, input) ; err != nil {
+		return nil, fmt.Errorf("{{ $cmdName }}: cannot inject in {{ $tag.Input }}: %s", err)
+	}
 	start := time.Now()
 	output, err := cmd.api.{{ $tag.Call }}(input)
 	if err != nil {

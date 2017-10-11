@@ -36,6 +36,9 @@ func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance 
 
 func (cmd *CreateInstance) Run() (interface{}, error) {
 	input := &ec2.RunInstancesInput{}
+	if err := structInjector(cmd, input); err != nil {
+		return nil, fmt.Errorf("CreateInstance: cannot inject in ec2.RunInstancesInput: %s", err)
+	}
 	start := time.Now()
 	output, err := cmd.api.RunInstances(input)
 	if err != nil {

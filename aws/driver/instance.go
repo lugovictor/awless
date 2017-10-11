@@ -1,11 +1,6 @@
 package awsdriver
 
 import (
-	"errors"
-	"fmt"
-	"reflect"
-	"strings"
-
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
 )
@@ -15,16 +10,16 @@ type CreateInstance struct {
 	result         string
 	logger         *logger.Logger
 	api            ec2iface.EC2API
-	Image          *string   `awsName:"ImageId" templateName:"image" required:""`
-	Count          *int64    `awsName:"MaxCount,MinCount" templateName:"count" required:""`
-	Type           *string   `awsName:"InstanceType" templateName:"type" required:""`
-	Subnet         *string   `awsName:"SubnetId" templateName:"subnet" required:""`
-	Keypair        *string   `awsName:"KeyName" templateName:"keypair"`
-	PrivateIP      *string   `awsName:"PrivateIpAddress" templateName:"ip"`
-	UserData       *string   `awsName:"UserData" templateName:"userdata" setter:"filetobase64"`
-	SecurityGroups []*string `awsName:"SecurityGroupIds" templateName:"securitygroup"`
-	Lock           *bool     `awsName:"DisableApiTermination" templateName:"lock"`
-	Role           *string   `awsName:"IamInstanceProfile.Name" templateName:"role"`
+	Image          *string   `awsName:"ImageId" awsType:"awsstr" templateName:"image" required:""`
+	Count          *int64    `awsName:"MaxCount,MinCount" awsType:"awsin64" templateName:"count" required:""`
+	Type           *string   `awsName:"InstanceType" awsType:"awsstr" templateName:"type" required:""`
+	Subnet         *string   `awsName:"SubnetId" awsType:"awsstr" templateName:"subnet" required:""`
+	Keypair        *string   `awsName:"KeyName" awsType:"awsstr" templateName:"keypair"`
+	PrivateIP      *string   `awsName:"PrivateIpAddress" awsType:"awsstr" templateName:"ip"`
+	UserData       *string   `awsName:"UserData" awsType:"awsfiletobase64" templateName:"userdata"`
+	SecurityGroups []*string `awsName:"SecurityGroupIds" awsType:"awsstringslice" templateName:"securitygroup"`
+	Lock           *bool     `awsName:"DisableApiTermination" awsType:"awsbool" templateName:"lock"`
+	Role           *string   `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"role"`
 }
 
 func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
@@ -42,76 +37,4 @@ func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}) (interface{}, er
 	//	}
 	//	d.logger.Infof("create instance '%s' done", id)
 	return nil, nil
-}
-
-func structSetter(s interface{}, params map[string]interface{}) error {
-	val := reflect.ValueOf(s).Elem()
-	stru := val.Type()
-
-	for i := 0; i < stru.NumField(); i++ {
-		field := stru.Field(i)
-		tplName := field.Tag.Get("templateName")
-		fieldType := -1
-		if v, ok := params[tplName]; ok {
-			kind := field.Type.Kind()
-			if kind == reflect.Ptr {
-				switch field.Type.Elem().Kind() {
-				case reflect.String:
-					fieldType = awsstr
-				case reflect.Int64:
-					fieldType = awsint64
-				case reflect.Bool:
-					fieldType = awsbool
-				default:
-					return fmt.Errorf("unknown type in pointer %s", field.Type.String())
-				}
-			} else if kind == reflect.Slice && field.Type.Elem().Kind() == reflect.Ptr {
-				switch field.Type.Elem().Elem().Kind() {
-				case reflect.String:
-					fieldType = awsstringslice
-				case reflect.Int64:
-					fieldType = awsint64slice
-				default:
-					return fmt.Errorf("unknown type in slice %s", field.Type.String())
-				}
-			}
-			if err := setFieldWithType(v, s, field.Name, fieldType); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-func validateStruct(s interface{}) error {
-	val := reflect.ValueOf(s)
-	stru := val.Elem().Type()
-
-	var messages []string
-	for i := 0; i < stru.NumField(); i++ {
-		field := stru.Field(i)
-		if _, ok := field.Tag.Lookup("required"); ok {
-			if val.Elem().Field(i).IsNil() {
-				messages = append(messages, fmt.Sprintf("missing required field %s", field.Name))
-			}
-			continue
-		}
-
-		if _, ok := field.Tag.Lookup("templateName"); ok {
-			methName := fmt.Sprintf("Validate%s", field.Name)
-			meth := val.MethodByName(methName)
-			if meth != (reflect.Value{}) {
-				results := meth.Call(nil)
-				if len(results) == 1 {
-					if iface := results[0].Interface(); iface != nil {
-						messages = append(messages, iface.(error).Error())
-					}
-				}
-			}
-		}
-	}
-	if len(messages) > 0 {
-		return errors.New(strings.Join(messages, "; "))
-	}
-	return nil
 }

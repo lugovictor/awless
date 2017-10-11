@@ -18,6 +18,7 @@ package awsdriver
 
 import (
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -43,29 +44,29 @@ import (
 )
 
 const (
-	awsstr = iota
-	awsint
-	awsint64
-	awsfloat
-	awsbool
-	awsboolattribute
-	awsstringattribute
-	awsint64slice
-	awsstringslice
-	awsstringpointermap
-	awsslicestruct
-	awsslicestructint64
-	awsfiletobase64
-	awsfiletobyteslice
-	awsfiletostring
-	awsdimensionslice
-	awsparameterslice
-	awsecskeyvalue
-	awsportmappings
-	awssubnetmappings
-	awsstepadjustments
-	awscsvstr
-	aws6digitsstring
+	awsstr              = "awsstr"
+	awsint              = "awsint"
+	awsint64            = "awsint64"
+	awsfloat            = "awsfloat"
+	awsbool             = "awsbool"
+	awsboolattribute    = "awsboolattribute"
+	awsstringattribute  = "awsstringattribute"
+	awsint64slice       = "awsint64slice"
+	awsstringslice      = "awsstringslice"
+	awsstringpointermap = "awsstringpointermap"
+	awsslicestruct      = "awsslicestruct"
+	awsslicestructint64 = "awsslicestructint64"
+	awsfiletobase64     = "awsfiletobase64"
+	awsfiletobyteslice  = "awsfiletobyteslice"
+	awsfiletostring     = "awsfiletostring"
+	awsdimensionslice   = "awsdimensionslice"
+	awsparameterslice   = "awsparameterslice"
+	awsecskeyvalue      = "awsecskeyvalue"
+	awsportmappings     = "awsportmappings"
+	awssubnetmappings   = "awssubnetmappings"
+	awsstepadjustments  = "awsstepadjustments"
+	awscsvstr           = "awscsvstr"
+	aws6digitsstring    = "aws6digitsstring"
 )
 
 var (
@@ -76,14 +77,14 @@ var (
 type setter struct {
 	val       interface{}
 	fieldPath string
-	fieldType int
+	fieldType string
 }
 
 func (s setter) set(i interface{}) error {
 	return setFieldWithType(s.val, i, s.fieldPath, s.fieldType)
 }
 
-func setFieldWithType(v, i interface{}, fieldPath string, destType int, interfs ...interface{}) (err error) {
+func setFieldWithType(v, i interface{}, fieldPath string, destType string, interfs ...interface{}) (err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = fmt.Errorf("set field %s for %T object: %s", fieldPath, i, e)
@@ -97,6 +98,8 @@ func setFieldWithType(v, i interface{}, fieldPath string, destType int, interfs 
 		switch vv := v.(type) {
 		case []string:
 			v = strings.Join(vv, ",")
+		case *string:
+			v = *vv
 		default:
 			v = fmt.Sprint(v)
 		}
@@ -386,6 +389,8 @@ func castBool(v interface{}) (bool, error) {
 		return strconv.ParseBool(vv)
 	case bool:
 		return vv, nil
+	case *bool:
+		return *vv, nil
 	default:
 		return false, fmt.Errorf("cannot cast %T to bool", v)
 	}
@@ -398,8 +403,12 @@ func castInt64(v interface{}) (int64, error) {
 		return int64(in), err
 	case int:
 		return int64(vv), nil
+	case *int:
+		return int64(*vv), nil
 	case int64:
 		return vv, nil
+	case *int64:
+		return *vv, nil
 	default:
 		return int64(0), fmt.Errorf("cannot cast %T to int64", v)
 	}
@@ -503,4 +512,100 @@ func fileOrRemoteFileAsBase64(v interface{}, tplData interface{}) (string, error
 	}
 
 	return base64.StdEncoding.EncodeToString(content), nil
+}
+
+func structSetter(s interface{}, params map[string]interface{}) error {
+	val := reflect.ValueOf(s).Elem()
+	stru := val.Type()
+
+	for i := 0; i < stru.NumField(); i++ {
+		field := stru.Field(i)
+		tplName := field.Tag.Get("templateName")
+		var fieldType string
+		if v, ok := params[tplName]; ok {
+			kind := field.Type.Kind()
+			if kind == reflect.Ptr {
+				switch field.Type.Elem().Kind() {
+				case reflect.String:
+					fieldType = awsstr
+				case reflect.Int64:
+					fieldType = awsint64
+				case reflect.Bool:
+					fieldType = awsbool
+				default:
+					return fmt.Errorf("unknown type in pointer %s", field.Type.String())
+				}
+			} else if kind == reflect.Slice && field.Type.Elem().Kind() == reflect.Ptr {
+				switch field.Type.Elem().Elem().Kind() {
+				case reflect.String:
+					fieldType = awsstringslice
+				case reflect.Int64:
+					fieldType = awsint64slice
+				default:
+					return fmt.Errorf("unknown type in slice %s", field.Type.String())
+				}
+			}
+			if err := setFieldWithType(v, s, field.Name, fieldType); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func structInjector(src, dest interface{}) error {
+	val := reflect.ValueOf(src).Elem()
+	stru := val.Type()
+
+	for i := 0; i < stru.NumField(); i++ {
+		field := stru.Field(i)
+		if dstNames, ok := field.Tag.Lookup("awsName"); ok {
+			splits := strings.Split(dstNames, ",")
+			for _, destName := range splits {
+				destName = strings.TrimSpace(destName)
+				if dstType, tok := field.Tag.Lookup("awsType"); tok {
+					fieldValue := val.Field(i)
+					if fieldValue.IsValid() && fieldValue.Interface() != nil && !fieldValue.IsNil() {
+						if err := setFieldWithType(fieldValue.Interface(), dest, destName, dstType); err != nil {
+							return err
+						}
+					}
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func validateStruct(s interface{}) error {
+	val := reflect.ValueOf(s)
+	stru := val.Elem().Type()
+
+	var messages []string
+	for i := 0; i < stru.NumField(); i++ {
+		field := stru.Field(i)
+		if _, ok := field.Tag.Lookup("required"); ok {
+			if val.Elem().Field(i).IsNil() {
+				messages = append(messages, fmt.Sprintf("missing required field %s", field.Name))
+			}
+			continue
+		}
+
+		if _, ok := field.Tag.Lookup("templateName"); ok {
+			methName := fmt.Sprintf("Validate%s", field.Name)
+			meth := val.MethodByName(methName)
+			if meth != (reflect.Value{}) {
+				results := meth.Call(nil)
+				if len(results) == 1 {
+					if iface := results[0].Interface(); iface != nil {
+						messages = append(messages, iface.(error).Error())
+					}
+				}
+			}
+		}
+	}
+	if len(messages) > 0 {
+		return errors.New(strings.Join(messages, "; "))
+	}
+	return nil
 }

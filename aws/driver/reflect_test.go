@@ -18,14 +18,16 @@ package awsdriver
 
 import (
 	"encoding/base64"
+	"errors"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/service/elbv2"
 
-	"github.com/aws/aws-sdk-go/aws"
+	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/cloudformation"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -55,7 +57,7 @@ func TestGoTemplatingInUserdata(t *testing.T) {
 		t.Fatal(err)
 	}
 	expText := []byte("file content johndoe")
-	if got, want := aws.StringValue(awsparams.UserData), base64.StdEncoding.EncodeToString(expText); got != want {
+	if got, want := awssdk.StringValue(awsparams.UserData), base64.StdEncoding.EncodeToString(expText); got != want {
 		t.Fatalf("got %s, want %s", got, want)
 	}
 }
@@ -81,7 +83,7 @@ func TestSetFieldWithTypeAWSFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if got, want := aws.StringValue(awsparams.UserData), base64.StdEncoding.EncodeToString(text); got != want {
+	if got, want := awssdk.StringValue(awsparams.UserData), base64.StdEncoding.EncodeToString(text); got != want {
 		t.Fatalf("got %s, want %s", got, want)
 	}
 
@@ -103,7 +105,7 @@ func TestSetFieldWithTypeAWSFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if got, want := aws.StringValue(stackInput.TemplateBody), string(text); got != want {
+	if got, want := awssdk.StringValue(stackInput.TemplateBody), string(text); got != want {
 		t.Fatalf("got %s, want %s", got, want)
 	}
 }
@@ -128,16 +130,16 @@ func TestSetFieldsOnAwsStruct(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if got, want := aws.StringValue(awsparams.ImageId), "ami"; got != want {
+	if got, want := awssdk.StringValue(awsparams.ImageId), "ami"; got != want {
 		t.Fatalf("got %s, want %s", got, want)
 	}
-	if got, want := aws.StringValue(awsparams.InstanceType), "t2.micro"; got != want {
+	if got, want := awssdk.StringValue(awsparams.InstanceType), "t2.micro"; got != want {
 		t.Fatalf("got %s, want %s", got, want)
 	}
-	if got, want := aws.Int64Value(awsparams.MaxCount), int64(5); got != want {
+	if got, want := awssdk.Int64Value(awsparams.MaxCount), int64(5); got != want {
 		t.Fatalf("got %d, want %d", got, want)
 	}
-	if got, want := aws.Int64Value(awsparams.MinCount), int64(3); got != want {
+	if got, want := awssdk.Int64Value(awsparams.MinCount), int64(3); got != want {
 		t.Fatalf("got %d, want %d", got, want)
 	}
 }
@@ -171,7 +173,7 @@ func TestSetFieldWithMultiType(t *testing.T) {
 		StepAdjustments   []*applicationautoscaling.StepAdjustment
 		CSVString         *string
 		SixDigitsString   *string
-	}{Field: "initial", MapAttribute: map[string]*string{"test": aws.String("1234")}}
+	}{Field: "initial", MapAttribute: map[string]*string{"test": awssdk.String("1234")}}
 
 	err := setFieldWithType("expected", &any, "Field", awsstr)
 	if err != nil {
@@ -220,7 +222,7 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	if got, want := len(any.StringArrayField), 1; got != want {
 		t.Fatalf("len: got %d, want %d", got, want)
 	}
-	if got, want := aws.StringValue(any.StringArrayField[0]), "first"; got != want {
+	if got, want := awssdk.StringValue(any.StringArrayField[0]), "first"; got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
 
@@ -231,13 +233,13 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	if got, want := len(any.StringArrayField), 3; got != want {
 		t.Fatalf("len: got %d, want %d", got, want)
 	}
-	if got, want := aws.StringValue(any.StringArrayField[0]), "one"; got != want {
+	if got, want := awssdk.StringValue(any.StringArrayField[0]), "one"; got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
-	if got, want := aws.StringValue(any.StringArrayField[1]), "two"; got != want {
+	if got, want := awssdk.StringValue(any.StringArrayField[1]), "two"; got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
-	if got, want := aws.StringValue(any.StringArrayField[2]), "three"; got != want {
+	if got, want := awssdk.StringValue(any.StringArrayField[2]), "three"; got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
 
@@ -248,10 +250,10 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	if got, want := len(any.StringArrayField), 2; got != want {
 		t.Fatalf("len: got %d, want %d", got, want)
 	}
-	if got, want := aws.StringValue(any.StringArrayField[0]), "four"; got != want {
+	if got, want := awssdk.StringValue(any.StringArrayField[0]), "four"; got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
-	if got, want := aws.StringValue(any.StringArrayField[1]), "five"; got != want {
+	if got, want := awssdk.StringValue(any.StringArrayField[1]), "five"; got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
 
@@ -262,7 +264,7 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	if got, want := len(any.Int64ArrayField), 1; got != want {
 		t.Fatalf("len: got %d, want %d", got, want)
 	}
-	if got, want := aws.Int64Value(any.Int64ArrayField[0]), int64(321); got != want {
+	if got, want := awssdk.Int64Value(any.Int64ArrayField[0]), int64(321); got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
 
@@ -273,7 +275,7 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	if got, want := len(any.Int64ArrayField), 1; got != want {
 		t.Fatalf("len: got %d, want %d", got, want)
 	}
-	if got, want := aws.Int64Value(any.Int64ArrayField[0]), int64(567); got != want {
+	if got, want := awssdk.Int64Value(any.Int64ArrayField[0]), int64(567); got != want {
 		t.Fatalf("got %v, want %v", got, want)
 	}
 
@@ -286,21 +288,21 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := aws.BoolValue(any.BooleanValueField.Value), true; got != want {
+	if got, want := awssdk.BoolValue(any.BooleanValueField.Value), true; got != want {
 		t.Fatalf("len: got %t, want %t", got, want)
 	}
 	err = setFieldWithType(nil, &any, "BooleanValueField", awsboolattribute)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := aws.BoolValue(any.BooleanValueField.Value), true; got != want {
+	if got, want := awssdk.BoolValue(any.BooleanValueField.Value), true; got != want {
 		t.Fatalf("len: got %t, want %t", got, want)
 	}
 	err = setFieldWithType(false, &any, "BooleanValueField", awsboolattribute)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := aws.BoolValue(any.BooleanValueField.Value), false; got != want {
+	if got, want := awssdk.BoolValue(any.BooleanValueField.Value), false; got != want {
 		t.Fatalf("len: got %t, want %t", got, want)
 	}
 
@@ -316,14 +318,14 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := aws.StringValue(any.StringValueField.Value), "abcd"; got != want {
+	if got, want := awssdk.StringValue(any.StringValueField.Value), "abcd"; got != want {
 		t.Fatalf("len: got %s, want %s", got, want)
 	}
 	err = setFieldWithType(nil, &any, "StringValueField", awsstringattribute)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := aws.StringValue(any.StringValueField.Value), "abcd"; got != want {
+	if got, want := awssdk.StringValue(any.StringValueField.Value), "abcd"; got != want {
 		t.Fatalf("len: got %s, want %s", got, want)
 	}
 
@@ -626,5 +628,155 @@ func TestSetFieldWithMultiType(t *testing.T) {
 	}
 	if got, want := *any.SixDigitsString, "002345"; got != want {
 		t.Fatalf("got %s, want %s", got, want)
+	}
+}
+
+type TestStruct struct {
+	FieldString      *string   `awsName:"CloudString" awsType:"awsstr" templateName:"fstring"`
+	FieldInt64       *int64    `awsName:"CloudInt64" awsType:"awsint64" templateName:"fint"`
+	FieldBool        *bool     `awsName:"Embedded.CloudBool" awsType:"awsbool" templateName:"fbool" required:""`
+	FieldStringSlice []*string `awsName:"CloudStringSlice" awsType:"awsstringslice" templateName:"fstrslice"`
+	NilField         *string   `awsName:"CloudNilString" awsType:"awsstr" templateName:"fnilstring"`
+	MultiCloudField  *int64    `awsName:"CloudField1,CloudField2" awsType:"awsint64" templateName:"fmultistring"`
+}
+
+func (ts *TestStruct) ValidateFieldString() (err error) {
+	if len(*ts.FieldString) == 0 {
+		err = errors.New("fstring should not be empty")
+	}
+	return
+}
+
+func (ts *TestStruct) ValidateFieldInt64() (err error) {
+	if *ts.FieldInt64 > 10 {
+		err = errors.New("fint should not exceed 10")
+	}
+	return
+}
+
+func TestValidateStruct(t *testing.T) {
+	tcases := []struct {
+		stru        *TestStruct
+		contains    []string
+		notContains []string
+		err         bool
+	}{
+		{
+			stru:     &TestStruct{FieldString: awssdk.String(""), FieldInt64: awssdk.Int64(12)},
+			contains: []string{"fstring should not be empty", "fint should not exceed 10", "missing required field FieldBool"},
+			err:      true,
+		},
+		{
+			stru:        &TestStruct{FieldString: awssdk.String("not empty"), FieldInt64: awssdk.Int64(12)},
+			contains:    []string{"fint should not exceed 10", "missing required field FieldBool"},
+			notContains: []string{"fstring"},
+			err:         true,
+		},
+		{
+			stru:        &TestStruct{FieldString: awssdk.String(""), FieldInt64: awssdk.Int64(9), FieldBool: awssdk.Bool(true)},
+			contains:    []string{"fstring should not be empty"},
+			notContains: []string{"fint"},
+			err:         true,
+		},
+		{
+			stru:        &TestStruct{FieldString: awssdk.String("non empty"), FieldInt64: awssdk.Int64(8)},
+			contains:    []string{"missing required field FieldBool"},
+			notContains: []string{"fint", "fstring"},
+			err:         true,
+		},
+		{
+			stru: &TestStruct{FieldString: awssdk.String("non empty"), FieldInt64: awssdk.Int64(8), FieldBool: awssdk.Bool(true)},
+			err:  false,
+		},
+	}
+
+	for i, tcase := range tcases {
+		err := validateStruct(tcase.stru)
+		if tcase.err && err == nil {
+			t.Fatalf("%d. expected err got none", i+1)
+		}
+		if !tcase.err && err != nil {
+			t.Fatalf("%d. expected no err got one", i+1)
+		}
+		for _, msg := range tcase.contains {
+			if got, want := err.Error(), msg; !strings.Contains(got, want) {
+				t.Fatalf("%d. %q should contains %q", i+1, got, want)
+			}
+		}
+		for _, msg := range tcase.notContains {
+			if err != nil {
+				if got, want := err.Error(), msg; strings.Contains(got, want) {
+					t.Fatalf("%d. %q should not contains %q", i+1, got, want)
+				}
+			}
+		}
+	}
+}
+func TestStructDynamicSetter(t *testing.T) {
+	params := map[string]interface{}{
+		"fstring":   "jdoe",
+		"fint":      "345",
+		"fbool":     "true",
+		"fstrslice": []interface{}{"one", "two", 3},
+	}
+
+	in := &TestStruct{}
+	err := structSetter(in, params)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	exp := &TestStruct{
+		FieldString:      awssdk.String("jdoe"),
+		FieldInt64:       awssdk.Int64(345),
+		FieldBool:        awssdk.Bool(true),
+		FieldStringSlice: awssdk.StringSlice([]string{"one", "two", "3"}),
+	}
+
+	if got, want := in, exp; !reflect.DeepEqual(got, want) {
+		t.Fatalf("\ngot %#v\n\nwant %#v\n", got, want)
+	}
+}
+
+func TestStructInjector(t *testing.T) {
+	in := &TestStruct{
+		FieldString:      awssdk.String("jdoe"),
+		FieldInt64:       awssdk.Int64(345),
+		FieldBool:        awssdk.Bool(true),
+		FieldStringSlice: awssdk.StringSlice([]string{"one", "two", "3"}),
+		MultiCloudField:  awssdk.Int64(12345),
+	}
+
+	type embStruct struct {
+		CloudBool *bool
+	}
+	type outStruct struct {
+		CloudString              *string
+		CloudInt64               *int64
+		Embedded                 *embStruct
+		CloudStringSlice         []*string
+		CloudField1, CloudField2 *int64
+	}
+
+	out := new(outStruct)
+
+	err := structInjector(in, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	exp := &outStruct{
+		CloudString:      awssdk.String("jdoe"),
+		CloudInt64:       awssdk.Int64(345),
+		Embedded:         &embStruct{CloudBool: awssdk.Bool(true)},
+		CloudStringSlice: awssdk.StringSlice([]string{"one", "two", "3"}),
+		CloudField1:      awssdk.Int64(12345),
+		CloudField2:      awssdk.Int64(12345),
+	}
+
+	if got, want := out, exp; !reflect.DeepEqual(got, want) {
+		// pretty.Print(got)
+		// pretty.Print(want)
+		t.Fatalf("\ngot %#v\n\nwant %#v\n", got, want)
 	}
 }
