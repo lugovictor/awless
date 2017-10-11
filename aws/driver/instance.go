@@ -5,16 +5,13 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateInstance struct {
-	_              string `awsCall:"ec2.RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.RunInstancesOutput"`
+	_              string `awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.RunInstancesOutput"`
 	result         string
 	logger         logger.Logger
 	api            ec2iface.EC2API
@@ -36,18 +33,6 @@ func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
 
 func (cmd *CreateInstance) Validate() error {
 	return validateStruct(cmd)
-}
-
-func (cmd *CreateInstance) Run(ctx map[string]interface{}) (interface{}, error) {
-	input := &ec2.RunInstancesInput{}
-	start := time.Now()
-	output, err := cmd.api.RunInstances(input)
-	if err != nil {
-		return nil, fmt.Errorf("create instance: %s", err)
-	}
-	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
-	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
-	return cmd.result, nil
 }
 
 func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}) (interface{}, error) {

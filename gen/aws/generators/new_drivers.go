@@ -17,11 +17,14 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
+	"bytes"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"html/template"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -38,28 +41,42 @@ func generateNewDrivers() {
 			ast.Walk(finder, f)
 		}
 	}
-	fmt.Printf("%#v\n", finder.result)
+
+	templ, err := template.New("cmdRuns").Parse(cmdRuns)
+	if err != nil {
+		panic(err)
+	}
+
+	var buff bytes.Buffer
+	err = templ.Execute(&buff, finder.result)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := ioutil.WriteFile(filepath.Join(DRIVERS_DIR, "gen_cmd_runs.go"), buff.Bytes(), 0666); err != nil {
+		panic(err)
+	}
 }
 
-type tag struct {
-	call, input, output string
+type cmdData struct {
+	Call, Input, Output string
 }
 
 type findStructs struct {
-	result map[string][]tag
+	result map[string]cmdData
 }
 
 func (v *findStructs) Visit(node ast.Node) (w ast.Visitor) {
 	if v.result == nil {
-		v.result = make(map[string][]tag)
+		v.result = make(map[string]cmdData)
 	}
 	if typ, ok := node.(*ast.TypeSpec); ok {
 		if s, isStruct := typ.Type.(*ast.StructType); isStruct {
 			for _, f := range s.Fields.List {
 				if tag := f.Tag; tag != nil && strings.Contains(tag.Value, "awsCall") {
 					key := typ.Name.Name
-					fmt.Println(key)
-					v.result[key] = append(v.result[key], extractTag(tag.Value))
+					v.result[key] = extractTag(tag.Value)
+					break
 				}
 			}
 		}
@@ -67,24 +84,24 @@ func (v *findStructs) Visit(node ast.Node) (w ast.Visitor) {
 	return v
 }
 
-func extractTag(s string) (t tag) {
+func extractTag(s string) (t cmdData) {
 	splits := strings.Split(s[1:len(s)-1], " ")
 	for i, e := range splits {
 		el := strings.Split(e, ":")
 		ell := el[1][1 : len(el[1])-1]
 		switch {
 		case i == 0:
-			t.call = ell
+			t.Call = ell
 		case i == 1:
-			t.input = ell
+			t.Input = ell
 		case i == 2:
-			t.output = ell
+			t.Output = ell
 		}
 	}
 	return
 }
 
-const cmdRun = `/* Copyright 2017 WALLIX
+const cmdRuns = `/* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -107,36 +124,17 @@ import (
 	"github.com/wallix/awless/template"
 )
 
-
-var APIPerTemplateDefName = map[string]string {
-{{- range $, $service := . }}
-  {{- range $, $def := $service.Drivers }}
-  "{{ $def.Action }}{{ $def.Entity }}": "{{ $service.Api }}",
-  {{- end }}
-{{- end }}
+{{- range $cmdName, $tag := . }}
+func (cmd *{{ $cmdName }}) Run() (interface{}, error) {
+	input := &{{ $tag.Input }}{}
+	start := time.Now()
+	output, err := cmd.api.{{ $tag.Call }}(input)
+	if err != nil {
+		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
+	}
+	cmd.logger.ExtraVerbosef("{{ $tag.Call }} call took %s", time.Since(start))
+	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
+	return cmd.result, nil
 }
-
-var AWSTemplatesDefinitions = map[string]template.Definition{
-{{- range $, $service := . }}
-{{- range $index, $def := $service.Drivers }}
-	"{{ $def.Action }}{{ $def.Entity }}": template.Definition{
-			Action: "{{ $def.Action }}",
-			Entity: "{{ $def.Entity }}",
-			Api: "{{ $service.Api }}",
-			RequiredParams: []string{ {{- range $key := $def.RequiredKeys }}"{{ $key }}", {{- end}} },
-			ExtraParams: []string{ {{- range $key := $def.ExtraKeys }}"{{ $key }}", {{- end}} },
-		},
 {{- end }}
-{{- end }}
-}
-
-func DriverSupportedActions() map[string][]string { 
-	supported := make(map[string][]string)
-{{- range $, $service := . }}
-{{- range $index, $def := $service.Drivers }}
-	supported["{{ $def.Action }}"] = append(supported["{{ $def.Action }}"], "{{ $def.Entity }}")
-{{- end }}
-{{- end }}
-	return supported
-}
 `
