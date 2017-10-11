@@ -207,6 +207,9 @@ func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]inte
 	env.DefLookupFunc = awsdriver.AWSLookupDefinitions
 	env.AliasFunc = resolveAliasFunc
 	env.MissingHolesFunc = missingHolesStdinFunc()
+	env.Lookuper = func(tokens ...string) interface{} {
+		return awsdriver.Commands[strings.Join(tokens, "")]
+	}
 
 	if len(env.Fillers) > 0 {
 		logger.ExtraVerbosef("default/given holes fillers: %s", sprintProcessedParams(env.Fillers))
@@ -236,6 +239,8 @@ func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]inte
 			for _, e := range errs {
 				logger.Errorf(e.Error())
 			}
+		default:
+			logger.Error(err)
 		}
 		exitOn(errors.New("Dry run failed"))
 	}

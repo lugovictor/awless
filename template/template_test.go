@@ -89,7 +89,9 @@ func TestRunDriverReportsInStatement(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		env := &Env{Driver: tcase.driver}
+		env := NewEnv()
+		env.Driver = tcase.driver
+
 		ran, _ := templ.Run(env)
 
 		for i, cmd := range ran.CommandNodesIterator() {
@@ -128,7 +130,9 @@ create instance subnet=$createdsubnet`)
 		},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -149,7 +153,9 @@ create instance subnet=$createdsubnet`)
 		},
 		}
 
-		env = &Env{Driver: mDriver}
+		env = NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -173,7 +179,9 @@ create instance subnet=$createdsubnet`)
 		}},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -194,7 +202,9 @@ create instance subnet=$createdsubnet`)
 		}},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		executedTemplate, err := s.Run(env)
 		if err != nil {
 			t.Fatal(err)
@@ -222,7 +232,9 @@ create loadbalancer subnets=[$subnet1,sub-1234]`)
 		},
 		}
 
-		env := &Env{Driver: mDriver}
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -245,7 +257,10 @@ create vpc name=never-achieved`)
 			{action: "create", entity: "vpc", expectedParams: map[string]interface{}{"name": "never-achieved"}},
 		},
 		}
-		env := &Env{Driver: mDriver}
+
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if _, err := s.Run(env); err != nil {
 			t.Fatal(err)
 		}
@@ -274,7 +289,10 @@ create vpc name=myvpc subnet=$subnet1`
 			{action: "create", entity: "vpc", expectedParams: map[string]interface{}{"name": "myvpc", "subnet": "mynewsubnet"}},
 		},
 		}
-		env := &Env{Driver: mDriver}
+
+		env := NewEnv()
+		env.Driver = mDriver
+
 		if err := s.DryRun(env); err != nil {
 			t.Fatal(err)
 		}

@@ -11,9 +11,9 @@ import (
 )
 
 type CreateInstance struct {
-	_              string `awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.RunInstancesOutput"`
+	_              string `awsAPI:"ec2" awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.RunInstancesOutput"`
 	result         string
-	logger         logger.Logger
+	logger         *logger.Logger
 	api            ec2iface.EC2API
 	Image          *string   `awsName:"ImageId" templateName:"image" required:""`
 	Count          *int64    `awsName:"MaxCount,MinCount" templateName:"count" required:""`

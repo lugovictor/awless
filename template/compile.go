@@ -11,7 +11,8 @@ import (
 )
 
 type Env struct {
-	Driver driver.Driver
+	Driver   driver.Driver
+	Lookuper driver.LookupFunc
 
 	ResolvedVariables map[string]interface{}
 
@@ -28,6 +29,7 @@ func NewEnv() *Env {
 	return &Env{
 		AliasFunc:         nil,
 		MissingHolesFunc:  nil,
+		Lookuper:          func(...string) interface{} { return nil },
 		Log:               logger.DiscardLogger,
 		ResolvedVariables: make(map[string]interface{}),
 		processedFillers:  make(map[string]interface{}),

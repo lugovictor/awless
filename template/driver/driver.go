@@ -25,6 +25,50 @@ import (
 
 var ErrDriverFnNotFound = errors.New("driver function not found")
 
+func Run(cmd interface{}, ctx Context, params map[string]interface{}) error {
+	type I interface {
+		Inject(map[string]interface{}) error
+	}
+	if i, ok := cmd.(I); ok {
+		if err := i.Inject(params); err != nil {
+			return err
+		}
+	}
+
+	type V interface {
+		Validate() error
+	}
+	if i, ok := cmd.(V); ok {
+		if err := i.Validate(); err != nil {
+			return err
+		}
+	}
+
+	type R interface {
+		Run() (interface{}, error)
+	}
+	if i, ok := cmd.(R); ok {
+		if _, err := i.Run(); err != nil {
+			return err
+		}
+	} else {
+		return errors.New("Command is not a runner")
+	}
+
+	type AR interface {
+		AfterRun() error
+	}
+	if i, ok := cmd.(AR); ok {
+		if err := i.AfterRun(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type LookupFunc func(...string) interface{}
+
 type Driver interface {
 	Lookup(...string) (DriverFn, error)
 	LookupIface(...string) (interface{}, error)

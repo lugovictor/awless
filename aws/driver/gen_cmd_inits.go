@@ -18,30 +18,12 @@ limitations under the License.
 package awsdriver
 
 import (
-	"fmt"
-	"time"
-
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/wallix/awless/logger"
 )
 
-func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
-	cmd := new(CreateInstance)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
-	return cmd
-}
+var Commands = map[string]interface{}{}
 
-func (cmd *CreateInstance) Run() (interface{}, error) {
-	input := &ec2.RunInstancesInput{}
-	start := time.Now()
-	output, err := cmd.api.RunInstances(input)
-	if err != nil {
-		return nil, fmt.Errorf("CreateInstance: %s", err)
-	}
-	cmd.logger.ExtraVerbosef("RunInstances call took %s", time.Since(start))
-	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
-	return cmd.result, nil
+func InitCommands(l *logger.Logger, sess *session.Session) {
+	Commands["createinstance"] = NewCreateInstance(l, sess)
 }
