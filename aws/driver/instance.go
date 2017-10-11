@@ -1,6 +1,10 @@
 package awsdriver
 
 import (
+	"fmt"
+
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
 )
@@ -10,6 +14,7 @@ type CreateInstance struct {
 	result         string
 	logger         *logger.Logger
 	api            ec2iface.EC2API
+	sess           *session.Session
 	Image          *string   `awsName:"ImageId" awsType:"awsstr" templateName:"image" required:""`
 	Count          *int64    `awsName:"MaxCount,MinCount" awsType:"awsin64" templateName:"count" required:""`
 	Type           *string   `awsName:"InstanceType" awsType:"awsstr" templateName:"type" required:""`
@@ -20,6 +25,7 @@ type CreateInstance struct {
 	SecurityGroups []*string `awsName:"SecurityGroupIds" awsType:"awsstringslice" templateName:"securitygroup"`
 	Lock           *bool     `awsName:"DisableApiTermination" awsType:"awsbool" templateName:"lock"`
 	Role           *string   `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"role"`
+	Name           *string   `templateName:"name"`
 }
 
 func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
@@ -30,11 +36,16 @@ func (cmd *CreateInstance) Validate() error {
 	return validateStruct(cmd)
 }
 
-func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}) (interface{}, error) {
-	//	_, err = d.Create_Tag(ctx, map[string]interface{}{"key": "Name", "value": params["name"], "resource": id})
-	//	if err != nil {
-	//		return nil, fmt.Errorf("create instance: adding tags: %s", err)
-	//	}
-	//	d.logger.Infof("create instance '%s' done", id)
-	return nil, nil
+func (cmd *CreateInstance) AfterRun() error {
+	createTag := NewCreateTag(cmd.logger, cmd.sess)
+	createTag.Key = awssdk.String("Name")
+	createTag.Value = cmd.Name
+	createTag.Resource = awssdk.String(cmd.result)
+	if err := createTag.Validate(); err != nil {
+		return fmt.Errorf("CreateInstance: CreateTag: %s", err)
+	}
+	if _, err := createTag.Run(); err != nil {
+		return fmt.Errorf("CreateInstance: CreateTag: %s", err)
+	}
+	return nil
 }

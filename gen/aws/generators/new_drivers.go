@@ -143,10 +143,11 @@ package awsdriver
 func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 	cmd := new({{ $cmdName }})
 	cmd.api = {{ $tag.API }}.New(sess)
+	cmd.sess = sess
 	cmd.logger = l
 	return cmd
 }
-
+{{ if $tag.Call }}
 func (cmd *{{ $cmdName }}) Run() (interface{}, error) {
 	input := &{{ $tag.Input }}{}
 	if err := structInjector(cmd, input) ; err != nil {
@@ -157,10 +158,11 @@ func (cmd *{{ $cmdName }}) Run() (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
 	}
-	cmd.logger.ExtraVerbosef("{{ $tag.Call }} call took %s", time.Since(start))
+	cmd.logger.ExtraVerbosef("{{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
 	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
 	return cmd.result, nil
 }
+{{- end }}
 {{ end }}
 `
 

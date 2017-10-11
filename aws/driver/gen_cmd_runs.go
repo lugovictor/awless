@@ -30,6 +30,7 @@ import (
 func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
 	cmd := new(CreateInstance)
 	cmd.api = ec2.New(sess)
+	cmd.sess = sess
 	cmd.logger = l
 	return cmd
 }
@@ -44,7 +45,15 @@ func (cmd *CreateInstance) Run() (interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("CreateInstance: %s", err)
 	}
-	cmd.logger.ExtraVerbosef("RunInstances call took %s", time.Since(start))
+	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
 	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
 	return cmd.result, nil
+}
+
+func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
+	cmd := new(CreateTag)
+	cmd.api = ec2.New(sess)
+	cmd.sess = sess
+	cmd.logger = l
+	return cmd
 }

@@ -26,4 +26,5 @@ var Commands = map[string]interface{}{}
 
 func InitCommands(l *logger.Logger, sess *session.Session) {
 	Commands["createinstance"] = NewCreateInstance(l, sess)
+	Commands["createtag"] = NewCreateTag(l, sess)
 }
