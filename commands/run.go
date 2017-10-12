@@ -201,6 +201,10 @@ func (l *onceLoader) mustLoad() *graph.Graph {
 var allGraphsOnce = &onceLoader{}
 
 func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]interface{}) error {
+	if newRunnerGlobalFlag {
+		return NewRunner(tplExec.Template, tplExec.Message, fillers...).Run()
+	}
+
 	env := template.NewEnv()
 	env.Log = logger.DefaultLogger
 	env.AddFillers(fillers...)
