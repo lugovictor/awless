@@ -2,6 +2,7 @@ package awsdriver
 
 import (
 	"fmt"
+	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -19,6 +20,7 @@ type CreateInstance struct {
 	Image          *string   `awsName:"ImageId" awsType:"awsstr" templateName:"image" required:""`
 	Count          *int64    `awsName:"MaxCount,MinCount" awsType:"awsin64" templateName:"count" required:""`
 	Type           *string   `awsName:"InstanceType" awsType:"awsstr" templateName:"type" required:""`
+	Name           *string   `templateName:"name" required:""`
 	Subnet         *string   `awsName:"SubnetId" awsType:"awsstr" templateName:"subnet" required:""`
 	Keypair        *string   `awsName:"KeyName" awsType:"awsstr" templateName:"keypair"`
 	PrivateIP      *string   `awsName:"PrivateIpAddress" awsType:"awsstr" templateName:"ip"`
@@ -26,7 +28,6 @@ type CreateInstance struct {
 	SecurityGroups []*string `awsName:"SecurityGroupIds" awsType:"awsstringslice" templateName:"securitygroup"`
 	Lock           *bool     `awsName:"DisableApiTermination" awsType:"awsbool" templateName:"lock"`
 	Role           *string   `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"role"`
-	Name           *string   `templateName:"name"`
 }
 
 func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
@@ -35,6 +36,39 @@ func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
 
 func (cmd *CreateInstance) Validate() error {
 	return validateStruct(cmd)
+}
+
+func (cmd *CreateInstance) CheckParams(params []string) ([]string, error) {
+	result := structListParamsKeys(cmd)
+
+	var extras, required, missing []string
+	for n, isRequired := range result {
+		if isRequired {
+			required = append(required, n)
+			if !contains(params, n) {
+				missing = append(missing, n)
+			}
+		} else {
+			extras = append(extras, n)
+		}
+	}
+
+	var extraParams, requiredParams string
+	if len(extras) > 0 {
+		extraParams = fmt.Sprintf("\n\t- extra params: %s", strings.Join(extras, ", "))
+	}
+	if len(required) > 0 {
+		requiredParams = fmt.Sprintf("\n\t- required params: %s", strings.Join(required, ", "))
+	}
+
+	for _, p := range params {
+		_, ok := result[p]
+		if !ok {
+			return missing, fmt.Errorf("%s %s: unexpected param key '%s'%s%s\n", cmd.Action(), cmd.Entity(), p, requiredParams, extraParams)
+		}
+	}
+
+	return missing, nil
 }
 
 func (cmd *CreateInstance) Action() string { return "create" }

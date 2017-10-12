@@ -19,8 +19,10 @@ package awsdriver
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/wallix/awless/logger"
@@ -55,13 +57,20 @@ func (cmd *CreateInstance) DryRun() (interface{}, error) {
 	if err := structInjector(cmd, input); err != nil {
 		return nil, fmt.Errorf("dry run: CreateInstance: cannot inject in ec2.RunInstancesInput: %s", err)
 	}
+
 	start := time.Now()
-	if _, err := cmd.api.RunInstances(input); err != nil {
-		return nil, fmt.Errorf("dry run: CreateInstance: %s", err)
+	_, err := cmd.api.RunInstances(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.result = fakeDryRunId(cmd.Entity())
+			cmd.logger.ExtraVerbosef("dry run: ec2.RunInstances call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: CreateInstance ok")
+			return cmd.result, nil
+		}
 	}
-	cmd.logger.ExtraVerbosef("dry run: ec2.RunInstances call took %s", time.Since(start))
-	cmd.result = fakeDryRunId(cmd.Entity())
-	return cmd.result, nil
+
+	return nil, fmt.Errorf("dry run: CreateInstance : %s", err)
 }
 
 func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {

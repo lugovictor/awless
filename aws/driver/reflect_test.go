@@ -780,3 +780,19 @@ func TestStructInjector(t *testing.T) {
 		t.Fatalf("\ngot %#v\n\nwant %#v\n", got, want)
 	}
 }
+
+func TestListParamsWithRequiredFlag(t *testing.T) {
+	type any struct {
+		A string `templateName:"a" required:""`
+		B string `templateName:"b" required:""`
+		C string `templateName:"c"`
+		D int    `templateName:"d"`
+	}
+	keys := structListParamsKeys(new(any))
+
+	exp := map[string]bool{"a": true, "b": true, "c": false, "d": false}
+
+	if got, want := keys, exp; !reflect.DeepEqual(got, want) {
+		t.Fatalf("\ngot %#v\n\nwant %#v\n", got, want)
+	}
+}

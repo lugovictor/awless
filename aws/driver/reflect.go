@@ -553,6 +553,21 @@ func structSetter(s interface{}, params map[string]interface{}) error {
 	return nil
 }
 
+func structListParamsKeys(src interface{}) map[string]bool {
+	val := reflect.ValueOf(src).Elem()
+	stru := val.Type()
+
+	result := make(map[string]bool)
+	for i := 0; i < stru.NumField(); i++ {
+		field := stru.Field(i)
+		if name, ok := field.Tag.Lookup("templateName"); ok {
+			_, req := field.Tag.Lookup("required")
+			result[name] = req
+		}
+	}
+	return result
+}
+
 func structInjector(src, dest interface{}) error {
 	val := reflect.ValueOf(src).Elem()
 	stru := val.Type()
@@ -608,4 +623,13 @@ func validateStruct(s interface{}) error {
 		return errors.New(strings.Join(messages, "; "))
 	}
 	return nil
+}
+
+func contains(arr []string, e string) bool {
+	for _, a := range arr {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }

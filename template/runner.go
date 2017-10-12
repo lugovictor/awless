@@ -37,9 +37,10 @@ func (ru *Runner) Run() error {
 	env.AliasFunc = ru.AliasFunc
 	env.MissingHolesFunc = ru.MissingHolesFunc
 	env.Lookuper = ru.CmdLookuper
+	env.IsNewRunner = true
 
 	var err error
-	tplExec.Template, env, err = Compile(tplExec.Template, env)
+	tplExec.Template, env, err = Compile(tplExec.Template, env, NewRunnerCompileMode)
 	if err != nil {
 		return fmt.Errorf("runner: compile: %s", err)
 	}

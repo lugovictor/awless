@@ -74,8 +74,10 @@ func (s *Template) Run(env *Env) (*Template, error) {
 }
 
 func (s *Template) DryRun(env *Env) error {
-	defer env.Driver.SetDryRun(false)
-	env.Driver.SetDryRun(true)
+	if env.Driver != nil {
+		defer env.Driver.SetDryRun(false)
+		env.Driver.SetDryRun(true)
+	}
 
 	env.IsDryRun = true
 	defer func() {
@@ -142,14 +144,14 @@ func runCmd(n *ast.CommandNode, env *Env, vars map[string]interface{}) error {
 
 	ctx := driver.NewContext(env.ResolvedVariables)
 
-	if env.IsDryRun {
-		if cmd := env.DryRunLookuper(n.Action, n.Entity); cmd != nil {
-			return driver.Run(cmd, ctx, params)
-		}
-	} else {
+	if env.IsNewRunner {
 		if cmd := env.Lookuper(n.Action, n.Entity); cmd != nil {
-			return driver.Run(cmd, ctx, params)
+			if env.IsDryRun {
+				n.CmdResult, n.CmdErr = driver.DryRun(cmd, ctx, params)
+			}
+			n.CmdResult, n.CmdErr = driver.Run(cmd, ctx, params)
 		}
+		return fmt.Errorf("new runner: non command for %s %s", n.Action, n.Entity)
 	}
 
 	fn, err := env.Driver.Lookup(n.Action, n.Entity)

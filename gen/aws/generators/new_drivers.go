@@ -173,16 +173,22 @@ func (cmd *{{ $cmdName }}) DryRun() (interface{}, error) {
 	if err := structInjector(cmd, input) ; err != nil {
 		return nil, fmt.Errorf("dry run: {{ $cmdName }}: cannot inject in {{ $tag.Input }}: %s", err)
 	}
+
 	start := time.Now()
-	if _, err := cmd.api.{{ $tag.Call }}(input); err != nil {
-		return nil, fmt.Errorf("dry run: {{ $cmdName }}: %s", err)
+	_, err := cmd.api.{{ $tag.Call }}(input);
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.result =  fakeDryRunId(cmd.Entity())
+			cmd.logger.ExtraVerbosef("dry run: {{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: {{ $cmdName }} ok")
+			return cmd.result, nil
+		}
 	}
-	cmd.logger.ExtraVerbosef("dry run: {{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
-	cmd.result = fakeDryRunId(cmd.Entity())
-	return  cmd.result, nil 
+
+	return nil, fmt.Errorf("dry run: {{ $cmdName }} : %s", err) 
 }
 {{- end }}
-
 {{ end }}
 `
 

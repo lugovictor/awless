@@ -215,10 +215,6 @@ func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]inte
 		return awsdriver.Commands[strings.Join(tokens, "")]
 	}
 
-	if len(env.Fillers) > 0 {
-		logger.ExtraVerbosef("default/given holes fillers: %s", sprintProcessedParams(env.Fillers))
-	}
-
 	var err error
 	tplExec.Template, env, err = template.Compile(tplExec.Template, env)
 	exitOn(err)

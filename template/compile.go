@@ -11,10 +11,11 @@ import (
 )
 
 type Env struct {
-	Driver         driver.Driver
-	Lookuper       driver.LookupFunc
-	DryRunLookuper driver.LookupFunc
-	IsDryRun       bool
+	Driver   driver.Driver
+	Lookuper driver.LookupFunc
+	IsDryRun bool
+
+	IsNewRunner bool
 
 	ResolvedVariables map[string]interface{}
 
@@ -32,7 +33,6 @@ func NewEnv() *Env {
 		AliasFunc:         nil,
 		MissingHolesFunc:  nil,
 		Lookuper:          func(...string) interface{} { return nil },
-		DryRunLookuper:    func(...string) interface{} { return nil },
 		Log:               logger.DiscardLogger,
 		ResolvedVariables: make(map[string]interface{}),
 		processedFillers:  make(map[string]interface{}),
@@ -88,6 +88,17 @@ var (
 		failOnUnresolvedHoles,
 		failOnUnresolvedAlias,
 	)
+
+	NewRunnerCompileMode = []compileFunc{
+		resolveAgainstCommands,
+		checkInvalidReferenceDeclarations,
+		resolveHolesPass,
+		resolveMissingHolesPass,
+		resolveAliasPass,
+		inlineVariableValuePass,
+		failOnUnresolvedHoles,
+		failOnUnresolvedAlias,
+	}
 )
 
 func Compile(tpl *Template, env *Env, mode ...Mode) (*Template, *Env, error) {
@@ -123,6 +134,43 @@ func (p *multiPass) compile(tpl *Template, env *Env) (newTpl *Template, newEnv *
 	}
 
 	return
+}
+
+func resolveAgainstCommands(tpl *Template, env *Env) (*Template, *Env, error) {
+	if env.Lookuper == nil {
+		return tpl, env, fmt.Errorf("command lookuper is undefined")
+	}
+
+	verifyValidParamsOnly := func(node *ast.CommandNode) error {
+		tplKey := fmt.Sprintf("%s%s", node.Action, node.Entity)
+		cmd := env.Lookuper(tplKey)
+		if cmd == nil {
+			return fmt.Errorf("cannot find command for '%s'", tplKey)
+		}
+
+		type C interface {
+			CheckParams([]string) ([]string, error)
+		}
+		if v, ok := cmd.(C); ok {
+			missing, err := v.CheckParams(node.Keys())
+			if err != nil {
+				return err
+			}
+			for _, e := range missing {
+				normalized := fmt.Sprintf("%s.%s", node.Entity, e)
+				node.Params[e] = ast.NewHoleValue(normalized)
+			}
+		} else {
+			return fmt.Errorf("command %s does not implement CheckParams", tplKey)
+		}
+		return nil
+	}
+
+	if err := tpl.visitCommandNodesE(verifyValidParamsOnly); err != nil {
+		return tpl, env, err
+	}
+
+	return tpl, env, nil
 }
 
 func resolveAgainstDefinitions(tpl *Template, env *Env) (*Template, *Env, error) {
