@@ -77,6 +77,7 @@ func generateNewDrivers() {
 
 type cmdData struct {
 	API, Call, Input, Output string
+	HasDryRun                bool
 }
 
 type findStructs struct {
@@ -115,6 +116,8 @@ func extractTag(s string) (t cmdData) {
 			t.Input = ell
 		case i == 3:
 			t.Output = ell
+		case i == 4:
+			t.HasDryRun = true
 		}
 	}
 	return
@@ -159,10 +162,27 @@ func (cmd *{{ $cmdName }}) Run() (interface{}, error) {
 		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
 	}
 	cmd.logger.ExtraVerbosef("{{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
-	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
+	cmd.SetResult(output)
 	return cmd.result, nil
 }
 {{- end }}
+{{ if $tag.HasDryRun }}
+func (cmd *{{ $cmdName }}) DryRun() (interface{}, error) {
+	input := &{{ $tag.Input }}{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input) ; err != nil {
+		return nil, fmt.Errorf("dry run: {{ $cmdName }}: cannot inject in {{ $tag.Input }}: %s", err)
+	}
+	start := time.Now()
+	if _, err := cmd.api.{{ $tag.Call }}(input); err != nil {
+		return nil, fmt.Errorf("dry run: {{ $cmdName }}: %s", err)
+	}
+	cmd.logger.ExtraVerbosef("dry run: {{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
+	cmd.result = fakeDryRunId(cmd.Entity())
+	return  cmd.result, nil 
+}
+{{- end }}
+
 {{ end }}
 `
 

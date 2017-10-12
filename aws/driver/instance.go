@@ -5,12 +5,13 @@ import (
 
 	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateInstance struct {
-	_              string `awsAPI:"ec2" awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.RunInstancesOutput"`
+	_              string `awsAPI:"ec2" awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.Reservation" awsDryRun:""`
 	result         string
 	logger         *logger.Logger
 	api            ec2iface.EC2API
@@ -34,6 +35,13 @@ func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
 
 func (cmd *CreateInstance) Validate() error {
 	return validateStruct(cmd)
+}
+
+func (cmd *CreateInstance) Action() string { return "create" }
+func (cmd *CreateInstance) Entity() string { return "instance" }
+
+func (cmd *CreateInstance) SetResult(r *ec2.Reservation) {
+	cmd.result = awssdk.StringValue(r.Instances[0].InstanceId)
 }
 
 func (cmd *CreateInstance) AfterRun() error {

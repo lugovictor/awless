@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/wallix/awless/logger"
@@ -46,7 +45,22 @@ func (cmd *CreateInstance) Run() (interface{}, error) {
 		return nil, fmt.Errorf("CreateInstance: %s", err)
 	}
 	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
-	cmd.result = aws.StringValue(output.Instances[0].InstanceId)
+	cmd.SetResult(output)
+	return cmd.result, nil
+}
+
+func (cmd *CreateInstance) DryRun() (interface{}, error) {
+	input := &ec2.RunInstancesInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input); err != nil {
+		return nil, fmt.Errorf("dry run: CreateInstance: cannot inject in ec2.RunInstancesInput: %s", err)
+	}
+	start := time.Now()
+	if _, err := cmd.api.RunInstances(input); err != nil {
+		return nil, fmt.Errorf("dry run: CreateInstance: %s", err)
+	}
+	cmd.logger.ExtraVerbosef("dry run: ec2.RunInstances call took %s", time.Since(start))
+	cmd.result = fakeDryRunId(cmd.Entity())
 	return cmd.result, nil
 }
 

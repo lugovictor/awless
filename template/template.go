@@ -77,6 +77,11 @@ func (s *Template) DryRun(env *Env) error {
 	defer env.Driver.SetDryRun(false)
 	env.Driver.SetDryRun(true)
 
+	env.IsDryRun = true
+	defer func() {
+		env.IsDryRun = false
+	}()
+
 	res, err := s.Run(env)
 	if err != nil {
 		return err
@@ -137,8 +142,14 @@ func runCmd(n *ast.CommandNode, env *Env, vars map[string]interface{}) error {
 
 	ctx := driver.NewContext(env.ResolvedVariables)
 
-	if cmd := env.Lookuper(n.Action, n.Entity); cmd != nil {
-		return driver.Run(cmd, ctx, params)
+	if env.IsDryRun {
+		if cmd := env.DryRunLookuper(n.Action, n.Entity); cmd != nil {
+			return driver.Run(cmd, ctx, params)
+		}
+	} else {
+		if cmd := env.Lookuper(n.Action, n.Entity); cmd != nil {
+			return driver.Run(cmd, ctx, params)
+		}
 	}
 
 	fn, err := env.Driver.Lookup(n.Action, n.Entity)
