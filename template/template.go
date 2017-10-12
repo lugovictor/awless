@@ -150,8 +150,10 @@ func runCmd(n *ast.CommandNode, env *Env, vars map[string]interface{}) error {
 				n.CmdResult, n.CmdErr = driver.DryRun(cmd, ctx, params)
 			}
 			n.CmdResult, n.CmdErr = driver.Run(cmd, ctx, params)
+		} else {
+			return fmt.Errorf("new runner: no command for %s %s", n.Action, n.Entity)
 		}
-		return fmt.Errorf("new runner: non command for %s %s", n.Action, n.Entity)
+		return nil
 	}
 
 	fn, err := env.Driver.Lookup(n.Action, n.Entity)
