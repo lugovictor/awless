@@ -1,6 +1,7 @@
 package template
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -167,52 +168,22 @@ create loadbalancer name=mylb subnets=subnet-1, subnet-2
 	}
 }
 
-type mockCommand struct{ id int }
+type mockCommand struct{ id string }
 
-func (c *mockCommand) Validate() []error         { return []error{fmt.Errorf("%d", c.id)} }
+func (c *mockCommand) Validate() []error         { return []error{errors.New(c.id)} }
 func (c *mockCommand) Run() (interface{}, error) { return nil, nil }
-
-func TestValidateCommandsPass(t *testing.T) {
-	tpl := MustParse("create instance\nsub = create subnet\ncreate instance")
-
-	cmd1, cmd2, cmd3 := &mockCommand{1}, &mockCommand{2}, &mockCommand{3}
-	var count int
-	env := NewEnv()
-	env.Lookuper = func(...string) interface{} {
-		count++
-		switch count {
-		case 1:
-			return cmd1
-		case 2:
-			return cmd2
-		case 3:
-			return cmd3
-		default:
-			panic("whaat")
-		}
+func (c *mockCommand) CheckParams(p []string) ([]string, error) {
+	switch c.id {
+	case "1", "2":
+		return []string{c.id}, nil
+	case "3":
+		return []string{c.id}, errors.New("unexpected")
 	}
-
-	_, _, err := newMultiPass(lookupAndInjectCommands, validateCommands).compile(tpl, env)
-	if err == nil {
-		t.Fatal("expected err got none")
-	}
-
-	if got, want := err.Error(), "1"; !strings.Contains(got, want) {
-		t.Fatalf("'%s' should contain '%s'", got, want)
-	}
-	if got, want := err.Error(), "2"; !strings.Contains(got, want) {
-		t.Fatalf("'%s' should contain '%s'", got, want)
-	}
-	if got, want := err.Error(), "3"; !strings.Contains(got, want) {
-		t.Fatalf("'%s' should contain '%s'", got, want)
-	}
+	panic("wooot")
 }
 
-func TestLookupAndInjectCommandPass(t *testing.T) {
-	tpl := MustParse("create instance\nsub = create subnet\ncreate instance")
-
-	cmd1, cmd2, cmd3 := &mockCommand{1}, &mockCommand{2}, &mockCommand{3}
-
+func TestCommandsPasses(t *testing.T) {
+	cmd1, cmd2, cmd3 := &mockCommand{"1"}, &mockCommand{"2"}, &mockCommand{"3"}
 	var count int
 	env := NewEnv()
 	env.Lookuper = func(...string) interface{} {
@@ -229,25 +200,74 @@ func TestLookupAndInjectCommandPass(t *testing.T) {
 		}
 	}
 
-	compiled, _, err := lookupAndInjectCommands(tpl, env)
-	if err != nil {
-		t.Fatal(err)
-	}
+	t.Run("nil commands", func(t *testing.T) {
+		tpl := MustParse("create instance\nsub = create subnet\ncreate instance")
+		count = 0
+		_, _, err := newMultiPass(checkCommandParams, validateCommands).compile(tpl, env)
+		if err == nil {
+			t.Fatal("expected err got none")
+		}
+		if got, want := err.Error(), "does not implement"; !strings.Contains(got, want) {
+			t.Fatalf("%s should contain %s", got, want)
+		}
+	})
 
-	cmds := compiled.CommandNodesIterator()
+	t.Run("check params", func(t *testing.T) {
+		tpl := MustParse("create instance\nsub = create subnet\ncreate instance")
+		count = 0
+		compiled, _, err := newMultiPass(lookupAndInjectCommands, checkCommandParams).compile(tpl, env)
+		if err == nil {
+			t.Fatal("expected err got none")
+		}
+		if got, want := err.Error(), "unexpected"; !strings.Contains(got, want) {
+			t.Fatalf("%s should contain %s", got, want)
+		}
 
-	sameObject := func(got, want interface{}) bool {
-		return reflect.ValueOf(got).Pointer() == reflect.ValueOf(want).Pointer()
-	}
-	if got, want := cmds[0].Command, cmd1; !sameObject(got, want) {
-		t.Fatalf("different object: got %#v, want %#v", got, want)
-	}
-	if got, want := cmds[1].Command, cmd2; !sameObject(got, want) {
-		t.Fatalf("different object: got %#v, want %#v", got, want)
-	}
-	if got, want := cmds[2].Command, cmd3; !sameObject(got, want) {
-		t.Fatalf("different object: got %#v, want %#v", got, want)
-	}
+		for i, cmd := range compiled.CommandNodesIterator()[0:2] {
+			if got, want := len(cmd.GetHoles()), 1; got != want {
+				t.Fatalf("%d. got %d, want %d", i+1, got, want)
+			}
+			if got, want := cmd.GetHoles()[0], fmt.Sprintf("%s.%d", cmd.Entity, i+1); got != want {
+				t.Fatalf("%d. got %s, want %s", i+1, got, want)
+			}
+		}
+	})
+
+	t.Run("validate", func(t *testing.T) {
+		tpl := MustParse("create instance\nsub = create subnet\ncreate instance")
+		count = 0
+		_, _, err := newMultiPass(lookupAndInjectCommands, validateCommands).compile(tpl, env)
+		if err == nil {
+			t.Fatal("expected err got none")
+		}
+
+		checkContainsAll(t, err.Error(), "123")
+	})
+
+	t.Run("lookup and inject", func(t *testing.T) {
+		count = 0
+		tpl := MustParse("create instance\nsub = create subnet\ncreate instance")
+
+		compiled, _, err := lookupAndInjectCommands(tpl, env)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		cmds := compiled.CommandNodesIterator()
+
+		sameObject := func(got, want interface{}) bool {
+			return reflect.ValueOf(got).Pointer() == reflect.ValueOf(want).Pointer()
+		}
+		if got, want := cmds[0].Command, cmd1; !sameObject(got, want) {
+			t.Fatalf("different object: got %#v, want %#v", got, want)
+		}
+		if got, want := cmds[1].Command, cmd2; !sameObject(got, want) {
+			t.Fatalf("different object: got %#v, want %#v", got, want)
+		}
+		if got, want := cmds[2].Command, cmd3; !sameObject(got, want) {
+			t.Fatalf("different object: got %#v, want %#v", got, want)
+		}
+	})
 }
 
 func TestExternallyProvidedParams(t *testing.T) {
@@ -648,6 +668,14 @@ func assertCmdAliases(t *testing.T, tpl *Template, exp ...aliases) {
 		}
 		if got, want := aliases(r), exp[i]; !reflect.DeepEqual(got, want) {
 			t.Fatalf("refs: cmd %d: \ngot\n%v\n\nwant\n%v\n", i+1, got, want)
+		}
+	}
+}
+
+func checkContainsAll(t *testing.T, s, chars string) {
+	for _, e := range chars {
+		if !strings.ContainsRune(s, e) {
+			t.Fatalf("%s does not contain '%q'", s, e)
 		}
 	}
 }

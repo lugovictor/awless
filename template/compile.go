@@ -92,7 +92,6 @@ var (
 	NewRunnerCompileMode = []compileFunc{
 		lookupAndInjectCommands,
 		checkCommandParams,
-		validateCommands,
 		checkInvalidReferenceDeclarations,
 		resolveHolesPass,
 		resolveMissingHolesPass,
@@ -100,6 +99,7 @@ var (
 		inlineVariableValuePass,
 		failOnUnresolvedHoles,
 		failOnUnresolvedAlias,
+		validateCommands,
 	}
 )
 
@@ -158,16 +158,10 @@ func lookupAndInjectCommands(tpl *Template, env *Env) (*Template, *Env, error) {
 
 func checkCommandParams(tpl *Template, env *Env) (*Template, *Env, error) {
 	verifyValidParamsOnly := func(node *ast.CommandNode) error {
-		tplKey := fmt.Sprintf("%s%s", node.Action, node.Entity)
-		cmd := env.Lookuper(tplKey)
-		if cmd == nil {
-			return fmt.Errorf("cannot find command for '%s'", tplKey)
-		}
-
 		type C interface {
 			CheckParams([]string) ([]string, error)
 		}
-		if v, ok := cmd.(C); ok {
+		if v, ok := node.Command.(C); ok {
 			missing, err := v.CheckParams(node.Keys())
 			if err != nil {
 				return err
@@ -177,16 +171,13 @@ func checkCommandParams(tpl *Template, env *Env) (*Template, *Env, error) {
 				node.Params[e] = ast.NewHoleValue(normalized)
 			}
 		} else {
-			return fmt.Errorf("command %s does not implement CheckParams", tplKey)
+			return fmt.Errorf("command %s %s does not implement CheckParams", node.Action, node.Entity)
 		}
 		return nil
 	}
 
-	if err := tpl.visitCommandNodesE(verifyValidParamsOnly); err != nil {
-		return tpl, env, err
-	}
-
-	return tpl, env, nil
+	err := tpl.visitCommandNodesE(verifyValidParamsOnly)
+	return tpl, env, err
 }
 
 func validateCommands(tpl *Template, env *Env) (*Template, *Env, error) {
