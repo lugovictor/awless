@@ -3,7 +3,9 @@ package awsdriver
 import (
 	"errors"
 	"fmt"
+	"time"
 
+	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/cloud"
 	"github.com/wallix/awless/logger"
@@ -51,7 +53,7 @@ func (cmd *AttachPolicy) CheckParams(params []string) ([]string, error) {
 	}
 
 	if !hasArn && !hasService && !hasAccess {
-		return nil, errors.New("missing param 'arn', 'service' or 'access'")
+		return []string{"arn"}, nil
 	} else if hasArn {
 		return nil, nil
 	} else if hasService && hasAccess {
@@ -94,7 +96,42 @@ func (cmd *AttachPolicy) Validate() error {
 	}
 	return nil
 }
-
 func (cmd *AttachPolicy) ExtractResultString(i interface{}) string {
 	return ""
+}
+
+func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	start := time.Now()
+	switch {
+	case cmd.User != nil:
+		input := &iam.AttachUserPolicyInput{}
+		input.PolicyArn = cmd.Arn
+		input.UserName = cmd.User
+		_, err := cmd.api.AttachUserPolicy(input)
+		if err != nil {
+			return nil, fmt.Errorf("AttachPolicy: %s", err)
+		}
+		cmd.logger.ExtraVerbosef("ec2.AttachUserPolicy call took %s", time.Since(start))
+	case cmd.Group != nil:
+		input := &iam.AttachGroupPolicyInput{}
+		input.PolicyArn = cmd.Arn
+		input.GroupName = cmd.Group
+		_, err := cmd.api.AttachGroupPolicy(input)
+		if err != nil {
+			return nil, fmt.Errorf("AttachPolicy: %s", err)
+		}
+		cmd.logger.ExtraVerbosef("ec2.AttachGroupPolicy call took %s", time.Since(start))
+	case cmd.Role != nil:
+		input := &iam.AttachRolePolicyInput{}
+		input.PolicyArn = cmd.Arn
+		input.RoleName = cmd.Role
+		_, err := cmd.api.AttachRolePolicy(input)
+		if err != nil {
+			return nil, fmt.Errorf("AttachPolicy: %s", err)
+		}
+		cmd.logger.ExtraVerbosef("ec2.AttachRolePolicy call took %s", time.Since(start))
+	default:
+		return nil, errors.New("missing one of 'user, group, role' param")
+	}
+	return "", nil
 }
