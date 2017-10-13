@@ -25,8 +25,16 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/wallix/awless/logger"
 )
+
+func NewAttachPolicy(l *logger.Logger, sess *session.Session) *AttachPolicy {
+	cmd := new(AttachPolicy)
+	cmd.api = iam.New(sess)
+	cmd.logger = l
+	return cmd
+}
 
 func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
 	cmd := new(CreateInstance)
