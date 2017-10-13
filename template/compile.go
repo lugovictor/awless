@@ -90,7 +90,9 @@ var (
 	)
 
 	NewRunnerCompileMode = []compileFunc{
-		resolveAgainstCommands,
+		lookupAndInjectCommands,
+		checkCommandParams,
+		validateCommands,
 		checkInvalidReferenceDeclarations,
 		resolveHolesPass,
 		resolveMissingHolesPass,
@@ -136,11 +138,25 @@ func (p *multiPass) compile(tpl *Template, env *Env) (newTpl *Template, newEnv *
 	return
 }
 
-func resolveAgainstCommands(tpl *Template, env *Env) (*Template, *Env, error) {
+func lookupAndInjectCommands(tpl *Template, env *Env) (*Template, *Env, error) {
 	if env.Lookuper == nil {
 		return tpl, env, fmt.Errorf("command lookuper is undefined")
 	}
 
+	for _, node := range tpl.CommandNodesIterator() {
+		key := fmt.Sprintf("%s%s", node.Action, node.Entity)
+		cmd := env.Lookuper(key)
+		if cmd == nil {
+			return tpl, env, fmt.Errorf("cannot find command for '%s'", key)
+		}
+
+		node.Command = cmd.(ast.Command)
+	}
+
+	return tpl, env, nil
+}
+
+func checkCommandParams(tpl *Template, env *Env) (*Template, *Env, error) {
 	verifyValidParamsOnly := func(node *ast.CommandNode) error {
 		tplKey := fmt.Sprintf("%s%s", node.Action, node.Entity)
 		cmd := env.Lookuper(tplKey)
@@ -171,6 +187,34 @@ func resolveAgainstCommands(tpl *Template, env *Env) (*Template, *Env, error) {
 	}
 
 	return tpl, env, nil
+}
+
+func validateCommands(tpl *Template, env *Env) (*Template, *Env, error) {
+	var errs []error
+
+	collectValidationErrs := func(node *ast.CommandNode) {
+		type V interface {
+			Validate() []error
+		}
+		if v, ok := node.Command.(V); ok {
+			errs = append(errs, v.Validate()...)
+		}
+	}
+	tpl.visitCommandNodes(collectValidationErrs)
+	switch len(errs) {
+	case 0:
+		return tpl, env, nil
+	case 1:
+		return tpl, env, fmt.Errorf("validation error: %s", errs[0])
+	default:
+		var errsSrings []string
+		for _, err := range errs {
+			if err != nil {
+				errsSrings = append(errsSrings, err.Error())
+			}
+		}
+		return tpl, env, fmt.Errorf("validation errors:\n\t- %s", strings.Join(errsSrings, "\n\t- "))
+	}
 }
 
 func resolveAgainstDefinitions(tpl *Template, env *Env) (*Template, *Env, error) {

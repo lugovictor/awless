@@ -60,7 +60,13 @@ type WithHoles interface {
 	GetHoles() []string
 }
 
+type Command interface {
+	Validate() []error
+	Run() (interface{}, error)
+}
+
 type CommandNode struct {
+	Command
 	CmdResult interface{}
 	CmdErr    error
 
