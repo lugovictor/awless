@@ -26,5 +26,6 @@ var NewCommandFuncs = map[string]func() interface{}{}
 
 func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
+	NewCommandFuncs["createsubnet"] = func() interface{} { return NewCreateSubnet(l, sess) }
 	NewCommandFuncs["createtag"] = func() interface{} { return NewCreateTag(l, sess) }
 }

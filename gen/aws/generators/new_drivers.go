@@ -146,7 +146,6 @@ package awsdriver
 func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 	cmd := new({{ $cmdName }})
 	cmd.api = {{ $tag.API }}.New(sess)
-	cmd.sess = sess
 	cmd.logger = l
 	return cmd
 }
@@ -168,18 +167,17 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	}
 	start := time.Now()
 	output, err := cmd.api.{{ $tag.Call }}(input)
-	
 	cmd.logger.ExtraVerbosef("{{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
+	if err != nil {
+		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
+	}
 
 	if v, ok := implementsAfterRun(cmd); ok {
-		if brErr := v.AfterRun(ctx, output, err); brErr != nil {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
 			return nil, fmt.Errorf("{{ $cmdName }}: AfterRun: %s", brErr)
 		}
 	}
 
-	if err != nil {
-		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
-	}
 	return cmd.ExtractResultString(output), nil
 }
 {{- end }}

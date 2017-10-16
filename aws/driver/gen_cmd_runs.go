@@ -31,7 +31,6 @@ import (
 func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
 	cmd := new(CreateInstance)
 	cmd.api = ec2.New(sess)
-	cmd.sess = sess
 	cmd.logger = l
 	return cmd
 }
@@ -53,18 +52,17 @@ func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{},
 	}
 	start := time.Now()
 	output, err := cmd.api.RunInstances(input)
-
 	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
+	if err != nil {
+		return nil, fmt.Errorf("CreateInstance: %s", err)
+	}
 
 	if v, ok := implementsAfterRun(cmd); ok {
-		if brErr := v.AfterRun(ctx, output, err); brErr != nil {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
 			return nil, fmt.Errorf("CreateInstance: AfterRun: %s", brErr)
 		}
 	}
 
-	if err != nil {
-		return nil, fmt.Errorf("CreateInstance: %s", err)
-	}
 	return cmd.ExtractResultString(output), nil
 }
 
@@ -93,10 +91,72 @@ func (cmd *CreateInstance) DryRun(ctx, params map[string]interface{}) (interface
 	return nil, fmt.Errorf("dry run: CreateInstance : %s", err)
 }
 
+func NewCreateSubnet(l *logger.Logger, sess *session.Session) *CreateSubnet {
+	cmd := new(CreateSubnet)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("CreateSubnet: BeforeRun: %s", brErr)
+		}
+	}
+
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("CreateSubnet: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateSubnetInput{}
+	if err := structInjector(cmd, input); err != nil {
+		return nil, fmt.Errorf("CreateSubnet: cannot inject in ec2.CreateSubnetInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateSubnet(input)
+	cmd.logger.ExtraVerbosef("ec2.CreateSubnet call took %s", time.Since(start))
+	if err != nil {
+		return nil, fmt.Errorf("CreateSubnet: %s", err)
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("CreateSubnet: AfterRun: %s", brErr)
+		}
+	}
+
+	return cmd.ExtractResultString(output), nil
+}
+
+func (cmd *CreateSubnet) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("dry run: CreateSubnet: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateSubnetInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input); err != nil {
+		return nil, fmt.Errorf("dry run: CreateSubnet: cannot inject in ec2.CreateSubnetInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.CreateSubnet(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.CreateSubnet call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: CreateSubnet ok")
+			return fakeDryRunId(cmd.Entity()), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: CreateSubnet : %s", err)
+}
+
 func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
 	cmd := new(CreateTag)
 	cmd.api = ec2.New(sess)
-	cmd.sess = sess
 	cmd.logger = l
 	return cmd
 }

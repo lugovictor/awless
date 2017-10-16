@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
@@ -15,7 +14,6 @@ type CreateInstance struct {
 	_              string `awsAPI:"ec2" awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.Reservation" awsDryRun:""`
 	logger         *logger.Logger
 	api            ec2iface.EC2API
-	sess           *session.Session
 	Image          *string   `awsName:"ImageId" awsType:"awsstr" templateName:"image" required:""`
 	Count          *int64    `awsName:"MaxCount,MinCount" awsType:"awsin64" templateName:"count" required:""`
 	Type           *string   `awsName:"InstanceType" awsType:"awsstr" templateName:"type" required:""`
@@ -77,8 +75,8 @@ func (cmd *CreateInstance) ExtractResultString(r *ec2.Reservation) string {
 	return awssdk.StringValue(r.Instances[0].InstanceId)
 }
 
-func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface{}, runError error) error {
-	createTag := NewCreateTag(cmd.logger, cmd.sess)
+func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface{}) error {
+	createTag := NewCommandFuncs["createtag"]().(*CreateTag)
 	createTag.Key = awssdk.String("Name")
 	createTag.Value = cmd.Name
 	createTag.Resource = awssdk.String(cmd.ExtractResultString(output.(*ec2.Reservation)))
@@ -96,7 +94,7 @@ type BeforeRunner interface {
 }
 
 type AfterRunner interface {
-	AfterRun(ctx map[string]interface{}, output interface{}, runError error) error
+	AfterRun(ctx map[string]interface{}, output interface{}) error
 }
 
 func implementsBeforeRun(i interface{}) (BeforeRunner, bool) {
