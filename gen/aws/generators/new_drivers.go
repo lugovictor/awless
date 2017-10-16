@@ -151,23 +151,44 @@ func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 	return cmd
 }
 {{ if $tag.Call }}
-func (cmd *{{ $cmdName }}) Run() (interface{}, error) {
+func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("{{ $cmdName }}: BeforeRun: %s", brErr)
+		}
+	}
+
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("{{ $cmdName }}: cannot set params on command struct: %s", err)
+	}
+
 	input := &{{ $tag.Input }}{}
 	if err := structInjector(cmd, input) ; err != nil {
 		return nil, fmt.Errorf("{{ $cmdName }}: cannot inject in {{ $tag.Input }}: %s", err)
 	}
 	start := time.Now()
 	output, err := cmd.api.{{ $tag.Call }}(input)
+	
+	cmd.logger.ExtraVerbosef("{{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output, err); brErr != nil {
+			return nil, fmt.Errorf("{{ $cmdName }}: AfterRun: %s", brErr)
+		}
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
 	}
-	cmd.logger.ExtraVerbosef("{{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
-	cmd.SetResult(output)
-	return cmd.result, nil
+	return cmd.ExtractResultString(output), nil
 }
 {{- end }}
 {{ if $tag.HasDryRun }}
-func (cmd *{{ $cmdName }}) DryRun() (interface{}, error) {
+func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("dry run: {{ $cmdName }}: cannot set params on command struct: %s", err)
+	}
+
 	input := &{{ $tag.Input }}{}
 	input.SetDryRun(true)
 	if err := structInjector(cmd, input) ; err != nil {
@@ -179,10 +200,9 @@ func (cmd *{{ $cmdName }}) DryRun() (interface{}, error) {
 	if awsErr, ok := err.(awserr.Error); ok {
 		switch code := awsErr.Code(); {
 		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
-			cmd.result =  fakeDryRunId(cmd.Entity())
 			cmd.logger.ExtraVerbosef("dry run: {{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
 			cmd.logger.Verbose("dry run: {{ $cmdName }} ok")
-			return cmd.result, nil
+			return fakeDryRunId(cmd.Entity()), nil
 		}
 	}
 

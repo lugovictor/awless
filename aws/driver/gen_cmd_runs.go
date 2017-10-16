@@ -36,22 +36,43 @@ func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance 
 	return cmd
 }
 
-func (cmd *CreateInstance) Run() (interface{}, error) {
+func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("CreateInstance: BeforeRun: %s", brErr)
+		}
+	}
+
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("CreateInstance: cannot set params on command struct: %s", err)
+	}
+
 	input := &ec2.RunInstancesInput{}
 	if err := structInjector(cmd, input); err != nil {
 		return nil, fmt.Errorf("CreateInstance: cannot inject in ec2.RunInstancesInput: %s", err)
 	}
 	start := time.Now()
 	output, err := cmd.api.RunInstances(input)
+
+	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output, err); brErr != nil {
+			return nil, fmt.Errorf("CreateInstance: AfterRun: %s", brErr)
+		}
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("CreateInstance: %s", err)
 	}
-	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
-	cmd.SetResult(output)
-	return cmd.result, nil
+	return cmd.ExtractResultString(output), nil
 }
 
-func (cmd *CreateInstance) DryRun() (interface{}, error) {
+func (cmd *CreateInstance) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("dry run: CreateInstance: cannot set params on command struct: %s", err)
+	}
+
 	input := &ec2.RunInstancesInput{}
 	input.SetDryRun(true)
 	if err := structInjector(cmd, input); err != nil {
@@ -63,10 +84,9 @@ func (cmd *CreateInstance) DryRun() (interface{}, error) {
 	if awsErr, ok := err.(awserr.Error); ok {
 		switch code := awsErr.Code(); {
 		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
-			cmd.result = fakeDryRunId(cmd.Entity())
 			cmd.logger.ExtraVerbosef("dry run: ec2.RunInstances call took %s", time.Since(start))
 			cmd.logger.Verbose("dry run: CreateInstance ok")
-			return cmd.result, nil
+			return fakeDryRunId(cmd.Entity()), nil
 		}
 	}
 

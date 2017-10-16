@@ -33,6 +33,52 @@ type Template struct {
 	*ast.AST
 }
 
+func (s *Template) DoRun(env *Env) (*Template, error) {
+	vars := map[string]interface{}{}
+
+	current := &Template{AST: &ast.AST{}}
+	current.ID = ulid.MustNew(ulid.Timestamp(time.Now()), rand.Reader).String()
+
+	for _, sts := range s.Statements {
+		clone := sts.Clone()
+		current.Statements = append(current.Statements, clone)
+		switch n := clone.Node.(type) {
+		case *ast.CommandNode:
+			n.ProcessRefs(vars)
+			if env.IsDryRun {
+				n.CmdResult, n.CmdErr = n.DryRun(env.ResolvedVariables, n.ToDriverParams())
+			} else {
+				n.CmdResult, n.CmdErr = n.Run(env.ResolvedVariables, n.ToDriverParams())
+				if n.CmdErr != nil {
+					return current, nil
+				}
+			}
+		case *ast.DeclarationNode:
+			ident := n.Ident
+			expr := n.Expr
+			switch n := expr.(type) {
+			case *ast.CommandNode:
+				n.ProcessRefs(vars)
+				if env.IsDryRun {
+					n.CmdResult, n.CmdErr = n.DryRun(env.ResolvedVariables, n.ToDriverParams())
+				} else {
+					n.CmdResult, n.CmdErr = n.Run(env.ResolvedVariables, n.ToDriverParams())
+					if n.CmdErr != nil {
+						return current, nil
+					}
+				}
+				vars[ident] = n.Result()
+			default:
+				return current, fmt.Errorf("unknown type of node: %T", expr)
+			}
+		default:
+			return current, fmt.Errorf("unknown type of node: %T", clone.Node)
+		}
+	}
+
+	return current, nil
+}
+
 func (s *Template) Run(env *Env) (*Template, error) {
 	vars := map[string]interface{}{}
 

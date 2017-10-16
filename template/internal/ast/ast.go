@@ -61,8 +61,8 @@ type WithHoles interface {
 }
 
 type Command interface {
-	Validate() []error
-	Run() (interface{}, error)
+	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
+	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 }
 
 type CommandNode struct {
@@ -106,7 +106,8 @@ func (c *CommandNode) String() string {
 
 func (c *CommandNode) clone() Node {
 	cmd := &CommandNode{
-		Action: c.Action, Entity: c.Entity,
+		Command: c.Command,
+		Action:  c.Action, Entity: c.Entity,
 		Params: make(map[string]CompositeValue),
 	}
 

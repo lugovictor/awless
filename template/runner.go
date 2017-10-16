@@ -56,7 +56,8 @@ func (ru *Runner) Run() error {
 	}
 
 	logger.Info("Dry running template ...")
-	if err = tplExec.Template.DryRun(env); err != nil {
+	env.IsDryRun = true
+	if _, err = tplExec.Template.DoRun(env); err != nil {
 		switch t := err.(type) {
 		case *Errors:
 			errs, _ := t.Errors()
@@ -68,6 +69,7 @@ func (ru *Runner) Run() error {
 		}
 		return errors.New("Dry run failed")
 	}
+	env.IsDryRun = false
 
 	ok, err := ru.BeforeRun(tplExec)
 	if err != nil {
@@ -75,7 +77,7 @@ func (ru *Runner) Run() error {
 	}
 
 	if ok {
-		tplExec.Template, err = tplExec.Template.Run(env)
+		tplExec.Template, err = tplExec.Template.DoRun(env)
 		if err != nil {
 			logger.Errorf("Running template error: %s", err)
 		}

@@ -13,7 +13,6 @@ import (
 
 type CreateInstance struct {
 	_              string `awsAPI:"ec2" awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.Reservation" awsDryRun:""`
-	result         string
 	logger         *logger.Logger
 	api            ec2iface.EC2API
 	sess           *session.Session
@@ -74,20 +73,38 @@ func (cmd *CreateInstance) CheckParams(params []string) ([]string, error) {
 func (cmd *CreateInstance) Action() string { return "create" }
 func (cmd *CreateInstance) Entity() string { return "instance" }
 
-func (cmd *CreateInstance) SetResult(r *ec2.Reservation) {
-	cmd.result = awssdk.StringValue(r.Instances[0].InstanceId)
+func (cmd *CreateInstance) ExtractResultString(r *ec2.Reservation) string {
+	return awssdk.StringValue(r.Instances[0].InstanceId)
 }
 
-func (cmd *CreateInstance) AfterRun() error {
+func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface{}, runError error) error {
 	createTag := NewCreateTag(cmd.logger, cmd.sess)
 	createTag.Key = awssdk.String("Name")
 	createTag.Value = cmd.Name
-	createTag.Resource = awssdk.String(cmd.result)
+	createTag.Resource = awssdk.String(cmd.ExtractResultString(output.(*ec2.Reservation)))
 	if err := createTag.Validate(); err != nil {
-		return fmt.Errorf("CreateInstance: CreateTag: %s", err)
+		return err
 	}
 	if _, err := createTag.Run(); err != nil {
-		return fmt.Errorf("CreateInstance: CreateTag: %s", err)
+		return err
 	}
 	return nil
+}
+
+type BeforeRunner interface {
+	BeforeRun(ctx, params map[string]interface{}) error
+}
+
+type AfterRunner interface {
+	AfterRun(ctx map[string]interface{}, output interface{}, runError error) error
+}
+
+func implementsBeforeRun(i interface{}) (BeforeRunner, bool) {
+	v, ok := i.(BeforeRunner)
+	return v, ok
+}
+
+func implementsAfterRun(i interface{}) (AfterRunner, bool) {
+	v, ok := i.(AfterRunner)
+	return v, ok
 }
