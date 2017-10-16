@@ -231,11 +231,11 @@ limitations under the License.
 // This file was automatically generated with go generate
 package awsdriver
 
-var Commands = map[string]interface{}{}
+var NewCommandFuncs = map[string]func() interface{}{}
 
 func InitCommands(l *logger.Logger, sess *session.Session) {
 {{- range $cmdName, $tag := . }}
-	Commands["{{ ToLower $cmdName }}"] = New{{$cmdName}}(l, sess)
+	NewCommandFuncs["{{ ToLower $cmdName }}"] = func() interface{} { return New{{ $cmdName }}(l, sess) }
 {{- end }}
 }
 `

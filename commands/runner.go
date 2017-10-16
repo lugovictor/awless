@@ -15,7 +15,7 @@ import (
 	"github.com/wallix/awless/template"
 )
 
-func NewRunner(tpl *template.Template, msg string, fillers ...map[string]interface{}) *template.Runner {
+func NewRunner(tpl *template.Template, msg, tplPath string, fillers ...map[string]interface{}) *template.Runner {
 	runner := &template.Runner{}
 
 	runner.Template = tpl
@@ -23,6 +23,7 @@ func NewRunner(tpl *template.Template, msg string, fillers ...map[string]interfa
 	runner.Profile = config.GetAWSProfile()
 	runner.Log = logger.DefaultLogger
 	runner.Message = msg
+	runner.TemplatePath = tplPath
 	runner.Fillers = fillers
 	runner.AliasFunc = resolveAliasFunc
 	runner.MissingHolesFunc = missingHolesStdinFunc()
@@ -36,7 +37,11 @@ func NewRunner(tpl *template.Template, msg string, fillers ...map[string]interfa
 	}
 
 	runner.CmdLookuper = func(tokens ...string) interface{} {
-		return awsdriver.Commands[strings.Join(tokens, "")]
+		newCommandFunc, ok := awsdriver.NewCommandFuncs[strings.Join(tokens, "")]
+		if !ok {
+			return nil
+		}
+		return newCommandFunc()
 	}
 
 	runner.BeforeRun = func(tplExec *template.TemplateExecution) (bool, error) {

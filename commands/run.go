@@ -202,7 +202,7 @@ var allGraphsOnce = &onceLoader{}
 
 func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]interface{}) error {
 	if newRunnerGlobalFlag {
-		return NewRunner(tplExec.Template, tplExec.Message, fillers...).Run()
+		return NewRunner(tplExec.Template, tplExec.Message, tplExec.Path, fillers...).Run()
 	}
 
 	env := template.NewEnv()
@@ -211,9 +211,6 @@ func runTemplate(tplExec *template.TemplateExecution, fillers ...map[string]inte
 	env.DefLookupFunc = awsdriver.AWSLookupDefinitions
 	env.AliasFunc = resolveAliasFunc
 	env.MissingHolesFunc = missingHolesStdinFunc()
-	env.Lookuper = func(tokens ...string) interface{} {
-		return awsdriver.Commands[strings.Join(tokens, "")]
-	}
 
 	var err error
 	tplExec.Template, env, err = template.Compile(tplExec.Template, env)

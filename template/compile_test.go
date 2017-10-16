@@ -170,8 +170,9 @@ create loadbalancer name=mylb subnets=subnet-1, subnet-2
 
 type mockCommand struct{ id string }
 
-func (c *mockCommand) Validate() []error         { return []error{errors.New(c.id)} }
-func (c *mockCommand) Run() (interface{}, error) { return nil, nil }
+func (c *mockCommand) Validate() []error                                              { return []error{errors.New(c.id)} }
+func (c *mockCommand) Run(ctx, params map[string]interface{}) (interface{}, error)    { return nil, nil }
+func (c *mockCommand) DryRun(ctx, params map[string]interface{}) (interface{}, error) { return nil, nil }
 func (c *mockCommand) CheckParams(p []string) ([]string, error) {
 	switch c.id {
 	case "1", "2":

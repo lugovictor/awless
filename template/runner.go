@@ -9,14 +9,14 @@ import (
 )
 
 type Runner struct {
-	Template                 *Template
-	Locale, Profile, Message string
-	Log                      *logger.Logger
-	Fillers                  []map[string]interface{}
-	AliasFunc                func(entity, key, alias string) string
-	MissingHolesFunc         func(string) interface{}
-	CmdLookuper              func(tokens ...string) interface{}
-	Validators               []Validator
+	Template                               *Template
+	Locale, Profile, Message, TemplatePath string
+	Log                                    *logger.Logger
+	Fillers                                []map[string]interface{}
+	AliasFunc                              func(entity, key, alias string) string
+	MissingHolesFunc                       func(string) interface{}
+	CmdLookuper                            func(tokens ...string) interface{}
+	Validators                             []Validator
 
 	BeforeRun func(*TemplateExecution) (bool, error)
 	AfterRun  func(*TemplateExecution) error
@@ -25,6 +25,7 @@ type Runner struct {
 func (ru *Runner) Run() error {
 	tplExec := &TemplateExecution{
 		Template: ru.Template,
+		Path:     ru.TemplatePath,
 		Locale:   ru.Locale,
 		Profile:  ru.Profile,
 		Source:   ru.Template.String(),

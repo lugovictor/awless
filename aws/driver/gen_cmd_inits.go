@@ -22,9 +22,9 @@ import (
 	"github.com/wallix/awless/logger"
 )
 
-var Commands = map[string]interface{}{}
+var NewCommandFuncs = map[string]func() interface{}{}
 
 func InitCommands(l *logger.Logger, sess *session.Session) {
-	Commands["createinstance"] = NewCreateInstance(l, sess)
-	Commands["createtag"] = NewCreateTag(l, sess)
+	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
+	NewCommandFuncs["createtag"] = func() interface{} { return NewCreateTag(l, sess) }
 }
