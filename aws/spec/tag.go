@@ -30,8 +30,14 @@ func (cmd *CreateTag) Inject(params map[string]interface{}) error {
 func (cmd *CreateTag) Action() string { return "create" }
 func (cmd *CreateTag) Entity() string { return "tag" }
 
-func (cmd *CreateTag) Validate() error {
-	return validateStruct(cmd)
+func (cmd *CreateTag) ValidateCommand(params map[string]interface{}) []error {
+	if err := cmd.Inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		return []error{err}
+	}
+	return nil
 }
 
 func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, error) { return nil, nil }
@@ -51,6 +57,10 @@ func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}
 	}
 	cmd.logger.ExtraVerbosef("ec2.CreateTags call took %s", time.Since(start))
 	return cmd.result, nil
+}
+
+func (cmd *CreateTag) ValidateParams(params []string) ([]string, error) {
+	return []string{}, nil
 }
 
 func (cmd *CreateTag) ExtractResultString(i interface{}) string { return "" }

@@ -76,7 +76,7 @@ type Mode []compileFunc
 var (
 	LenientCompileMode = []compileFunc{
 		resolveAgainstDefinitions,
-		checkInvalidReferenceDeclarations,
+		checkInvalidReferenceDeclarationsPass,
 		resolveHolesPass,
 		resolveMissingHolesPass,
 		resolveAliasPass,
@@ -85,21 +85,23 @@ var (
 
 	NormalCompileMode = append(
 		LenientCompileMode,
-		failOnUnresolvedHoles,
-		failOnUnresolvedAlias,
+		failOnUnresolvedHolesPass,
+		failOnUnresolvedAliasPass,
 	)
 
 	NewRunnerCompileMode = []compileFunc{
-		lookupAndInjectCommands,
-		checkCommandParams,
-		checkInvalidReferenceDeclarations,
+		verifyCommandsDefinedPass,
+		validateCommandsParamsPass,
+		normalizeMissingRequiredParamsAsHolePass,
+		checkInvalidReferenceDeclarationsPass,
 		resolveHolesPass,
 		resolveMissingHolesPass,
 		resolveAliasPass,
 		inlineVariableValuePass,
-		failOnUnresolvedHoles,
-		failOnUnresolvedAlias,
-		validateCommands,
+		failOnUnresolvedHolesPass,
+		failOnUnresolvedAliasPass,
+		validateCommandsPass,
+		injectCommandsPass,
 	}
 )
 
@@ -138,7 +140,7 @@ func (p *multiPass) compile(tpl *Template, env *Env) (newTpl *Template, newEnv *
 	return
 }
 
-func lookupAndInjectCommands(tpl *Template, env *Env) (*Template, *Env, error) {
+func verifyCommandsDefinedPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	if env.Lookuper == nil {
 		return tpl, env, fmt.Errorf("command lookuper is undefined")
 	}
@@ -149,29 +151,26 @@ func lookupAndInjectCommands(tpl *Template, env *Env) (*Template, *Env, error) {
 		if cmd == nil {
 			return tpl, env, fmt.Errorf("cannot find command for '%s'", key)
 		}
-
-		node.Command = cmd.(ast.Command)
 	}
-
 	return tpl, env, nil
 }
 
-func checkCommandParams(tpl *Template, env *Env) (*Template, *Env, error) {
+func validateCommandsParamsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	verifyValidParamsOnly := func(node *ast.CommandNode) error {
-		type C interface {
-			CheckParams([]string) ([]string, error)
+		key := fmt.Sprintf("%s%s", node.Action, node.Entity)
+		cmd := env.Lookuper(key)
+		if cmd == nil {
+			return fmt.Errorf("validate: cannot find command for '%s'", key)
 		}
-		if v, ok := node.Command.(C); ok {
-			missing, err := v.CheckParams(node.Keys())
-			if err != nil {
+		type VP interface {
+			ValidateParams([]string) ([]string, error)
+		}
+		if v, ok := cmd.(VP); ok {
+			if _, err := v.ValidateParams(node.Keys()); err != nil {
 				return err
 			}
-			for _, e := range missing {
-				normalized := fmt.Sprintf("%s.%s", node.Entity, e)
-				node.Params[e] = ast.NewHoleValue(normalized)
-			}
 		} else {
-			return fmt.Errorf("command %s %s does not implement CheckParams", node.Action, node.Entity)
+			return fmt.Errorf("command %s %s does not implement ValidateParams", node.Action, node.Entity)
 		}
 		return nil
 	}
@@ -180,18 +179,53 @@ func checkCommandParams(tpl *Template, env *Env) (*Template, *Env, error) {
 	return tpl, env, err
 }
 
-func validateCommands(tpl *Template, env *Env) (*Template, *Env, error) {
+func normalizeMissingRequiredParamsAsHolePass(tpl *Template, env *Env) (*Template, *Env, error) {
+	normalize := func(node *ast.CommandNode) error {
+		key := fmt.Sprintf("%s%s", node.Action, node.Entity)
+		cmd := env.Lookuper(key)
+		if cmd == nil {
+			return fmt.Errorf("normalize: cannot find command for '%s'", key)
+		}
+		type VP interface {
+			ValidateParams([]string) ([]string, error)
+		}
+		if v, ok := cmd.(VP); ok {
+			missing, err := v.ValidateParams(node.Keys())
+			if err != nil {
+				return err
+			}
+			for _, e := range missing {
+				normalized := fmt.Sprintf("%s.%s", node.Entity, e)
+				node.Params[e] = ast.NewHoleValue(normalized)
+			}
+		} else {
+			return fmt.Errorf("command %s %s does not implement ValidateParams", node.Action, node.Entity)
+		}
+		return nil
+	}
+
+	err := tpl.visitCommandNodesE(normalize)
+	return tpl, env, err
+}
+
+func validateCommandsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	var errs []error
 
-	collectValidationErrs := func(node *ast.CommandNode) {
+	collectValidationErrs := func(node *ast.CommandNode) error {
+		key := fmt.Sprintf("%s%s", node.Action, node.Entity)
+		cmd := env.Lookuper(key)
+		if cmd == nil {
+			return fmt.Errorf("validate: cannot find command for '%s'", key)
+		}
 		type V interface {
-			Validate() []error
+			ValidateCommand() []error
 		}
-		if v, ok := node.Command.(V); ok {
-			errs = append(errs, v.Validate()...)
+		if v, ok := cmd.(V); ok {
+			errs = append(errs, v.ValidateCommand()...)
 		}
+		return nil
 	}
-	tpl.visitCommandNodes(collectValidationErrs)
+	tpl.visitCommandNodesE(collectValidationErrs)
 	switch len(errs) {
 	case 0:
 		return tpl, env, nil
@@ -206,6 +240,17 @@ func validateCommands(tpl *Template, env *Env) (*Template, *Env, error) {
 		}
 		return tpl, env, fmt.Errorf("validation errors:\n\t- %s", strings.Join(errsSrings, "\n\t- "))
 	}
+}
+
+func injectCommandsPass(tpl *Template, env *Env) (*Template, *Env, error) {
+	for _, node := range tpl.CommandNodesIterator() {
+		key := fmt.Sprintf("%s%s", node.Action, node.Entity)
+		node.Command = env.Lookuper(key).(ast.Command)
+		if node.Command == nil {
+			return tpl, env, fmt.Errorf("inject: cannot find command for '%s'", key)
+		}
+	}
+	return tpl, env, nil
 }
 
 func resolveAgainstDefinitions(tpl *Template, env *Env) (*Template, *Env, error) {
@@ -263,7 +308,7 @@ func resolveAgainstDefinitions(tpl *Template, env *Env) (*Template, *Env, error)
 	return tpl, env, nil
 }
 
-func checkInvalidReferenceDeclarations(tpl *Template, env *Env) (*Template, *Env, error) {
+func checkInvalidReferenceDeclarationsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	usedRefs := make(map[string]struct{})
 
 	for _, withRef := range tpl.WithRefsIterator() {
@@ -417,7 +462,7 @@ func resolveAliasPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	return tpl, env, nil
 }
 
-func failOnUnresolvedHoles(tpl *Template, env *Env) (*Template, *Env, error) {
+func failOnUnresolvedHolesPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	var unresolved []string
 	tpl.visitHoles(func(withHole ast.WithHoles) {
 		for _, hole := range withHole.GetHoles() {
@@ -432,7 +477,7 @@ func failOnUnresolvedHoles(tpl *Template, env *Env) (*Template, *Env, error) {
 	return tpl, env, nil
 }
 
-func failOnUnresolvedAlias(tpl *Template, env *Env) (*Template, *Env, error) {
+func failOnUnresolvedAliasPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	var unresolved []string
 
 	visitAliases := func(withAlias ast.WithAlias) {

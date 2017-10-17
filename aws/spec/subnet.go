@@ -25,11 +25,18 @@ func (cmd *CreateSubnet) Inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func (cmd *CreateSubnet) Validate() error {
-	return validateStruct(cmd)
+func (cmd *CreateSubnet) ValidateCommand(params map[string]interface{}) []error {
+	if err := cmd.Inject(params); err != nil {
+		return []error{err}
+	}
+
+	if err := validateStruct(cmd); err != nil {
+		return []error{err}
+	}
+	return nil
 }
 
-func (cmd *CreateSubnet) CheckParams(params []string) ([]string, error) {
+func (cmd *CreateSubnet) ValidateParams(params []string) ([]string, error) {
 	result := structListParamsKeys(cmd)
 
 	var extras, required, missing []string
@@ -74,8 +81,8 @@ func (cmd *CreateSubnet) AfterRun(ctx map[string]interface{}, output interface{}
 	createTag.Key = awssdk.String("Name")
 	createTag.Value = cmd.Name
 	createTag.Resource = awssdk.String(cmd.ExtractResultString(output.(*ec2.CreateSubnetOutput)))
-	if err := createTag.Validate(); err != nil {
-		return err
+	if errs := createTag.ValidateCommand(nil); len(errs) > 0 {
+		return fmt.Errorf("%v", errs)
 	}
 	if _, err := createTag.Run(nil, nil); err != nil {
 		return err

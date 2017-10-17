@@ -27,7 +27,7 @@ type AttachPolicy struct {
 func (cmd *AttachPolicy) Action() string { return "attach" }
 func (cmd *AttachPolicy) Entity() string { return cloud.Policy }
 
-func (cmd *AttachPolicy) CheckParams(params []string) ([]string, error) {
+func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
 	allParams := map[string]bool{
 		"arn": false, "user": false, "group": false, "role": false, "service": false, "access": false,
 	}
@@ -88,14 +88,17 @@ func (cmd *AttachPolicy) Inject(params map[string]interface{}) error {
 	return nil
 }
 
-func (cmd *AttachPolicy) Validate() error {
+func (cmd *AttachPolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.Inject(params); err != nil {
+		return []error{err}
+	}
 	if err := validateStruct(cmd); err != nil {
-		return err
+		errs = append(errs, err)
 	}
 	if cmd.User == nil && cmd.Group == nil && cmd.Role == nil {
-		return errors.New("AttachPolicy: missing required field 'User', 'Group' or 'Role'")
+		errs = append(errs, fmt.Errorf("AttachPolicy: missing required field 'User', 'Group' or 'Role'"))
 	}
-	return nil
+	return
 }
 func (cmd *AttachPolicy) ExtractResultString(i interface{}) string {
 	return ""

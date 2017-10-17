@@ -515,6 +515,9 @@ func fileOrRemoteFileAsBase64(v interface{}, tplData interface{}) (string, error
 }
 
 func structSetter(s interface{}, params map[string]interface{}) error {
+	if params == nil {
+		return nil
+	}
 	val := reflect.ValueOf(s).Elem()
 	stru := val.Type()
 

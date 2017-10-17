@@ -21,6 +21,8 @@ type AfterRunner interface {
 }
 
 type command interface {
+	ValidateParams([]string) ([]string, error)
+	ValidateCommand(map[string]interface{}) []error
 	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 	Action() string
