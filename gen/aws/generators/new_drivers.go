@@ -30,7 +30,7 @@ import (
 
 func generateNewDrivers() {
 	fset := token.NewFileSet()
-	pkgs, err := parser.ParseDir(fset, DRIVERS_DIR, func(os.FileInfo) bool { return true }, 0)
+	pkgs, err := parser.ParseDir(fset, SPEC_DIR, func(os.FileInfo) bool { return true }, 0)
 	if err != nil {
 		panic(err)
 	}
@@ -53,7 +53,7 @@ func generateNewDrivers() {
 		panic(err)
 	}
 
-	if err := ioutil.WriteFile(filepath.Join(DRIVERS_DIR, "gen_cmd_runs.go"), buff.Bytes(), 0666); err != nil {
+	if err := ioutil.WriteFile(filepath.Join(SPEC_DIR, "gen_runs.go"), buff.Bytes(), 0666); err != nil {
 		panic(err)
 	}
 
@@ -70,7 +70,7 @@ func generateNewDrivers() {
 		panic(err)
 	}
 
-	if err := ioutil.WriteFile(filepath.Join(DRIVERS_DIR, "gen_cmd_inits.go"), buff.Bytes(), 0666); err != nil {
+	if err := ioutil.WriteFile(filepath.Join(SPEC_DIR, "gen_inits.go"), buff.Bytes(), 0666); err != nil {
 		panic(err)
 	}
 }
@@ -140,7 +140,7 @@ limitations under the License.
 
 // DO NOT EDIT
 // This file was automatically generated with go generate
-package awsdriver
+package awsspec
 
 {{ range $cmdName, $tag := . }}
 func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
@@ -235,7 +235,7 @@ limitations under the License.
 
 // DO NOT EDIT
 // This file was automatically generated with go generate
-package awsdriver
+package awsspec
 
 var NewCommandFuncs = map[string]func() interface{}{}
 
@@ -243,13 +243,6 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 {{- range $cmdName, $tag := . }}
 	NewCommandFuncs["{{ ToLower $cmdName }}"] = func() interface{} { return New{{ $cmdName }}(l, sess) }
 {{- end }}
-}
-
-type command interface {
-	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
-	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
-	Action() string
-	Entity() string
 }
 
 var (

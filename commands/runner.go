@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/wallix/awless/aws/driver"
 	"github.com/wallix/awless/aws/services"
+	"github.com/wallix/awless/aws/spec"
 	"github.com/wallix/awless/config"
 	"github.com/wallix/awless/database"
 	"github.com/wallix/awless/graph"
@@ -37,7 +37,7 @@ func NewRunner(tpl *template.Template, msg, tplPath string, fillers ...map[strin
 	}
 
 	runner.CmdLookuper = func(tokens ...string) interface{} {
-		newCommandFunc, ok := awsdriver.NewCommandFuncs[strings.Join(tokens, "")]
+		newCommandFunc, ok := awsspec.NewCommandFuncs[strings.Join(tokens, "")]
 		if !ok {
 			return nil
 		}

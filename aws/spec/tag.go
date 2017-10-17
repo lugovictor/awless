@@ -1,9 +1,11 @@
-package awsdriver
+package awsspec
 
 import (
 	"fmt"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws/client"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
@@ -53,7 +55,6 @@ func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}
 
 func (cmd *CreateTag) ExtractResultString(i interface{}) string { return "" }
 
-/*
 type createTagRetryer struct {
 	client.DefaultRetryer
 }
@@ -65,4 +66,4 @@ func (d createTagRetryer) ShouldRetry(r *request.Request) bool {
 	}
 
 	return false
-}*/
+}

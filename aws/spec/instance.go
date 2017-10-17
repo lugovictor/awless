@@ -1,4 +1,4 @@
-package awsdriver
+package awsspec
 
 import (
 	"fmt"
@@ -26,6 +26,9 @@ type CreateInstance struct {
 	Lock           *bool     `awsName:"DisableApiTermination" awsType:"awsbool" templateName:"lock"`
 	Role           *string   `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"role"`
 }
+
+func (cmd *CreateInstance) Action() string { return "create" }
+func (cmd *CreateInstance) Entity() string { return "instance" }
 
 func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
@@ -68,9 +71,6 @@ func (cmd *CreateInstance) CheckParams(params []string) ([]string, error) {
 	return missing, nil
 }
 
-func (cmd *CreateInstance) Action() string { return "create" }
-func (cmd *CreateInstance) Entity() string { return "instance" }
-
 func (cmd *CreateInstance) ExtractResultString(r *ec2.Reservation) string {
 	return awssdk.StringValue(r.Instances[0].InstanceId)
 }
@@ -87,22 +87,4 @@ func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface
 		return err
 	}
 	return nil
-}
-
-type BeforeRunner interface {
-	BeforeRun(ctx, params map[string]interface{}) error
-}
-
-type AfterRunner interface {
-	AfterRun(ctx map[string]interface{}, output interface{}) error
-}
-
-func implementsBeforeRun(i interface{}) (BeforeRunner, bool) {
-	v, ok := i.(BeforeRunner)
-	return v, ok
-}
-
-func implementsAfterRun(i interface{}) (AfterRunner, bool) {
-	v, ok := i.(AfterRunner)
-	return v, ok
 }

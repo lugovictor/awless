@@ -15,7 +15,7 @@ limitations under the License.
 
 // DO NOT EDIT
 // This file was automatically generated with go generate
-package awsdriver
+package awsspec
 
 import (
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -29,13 +29,6 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
 	NewCommandFuncs["createsubnet"] = func() interface{} { return NewCreateSubnet(l, sess) }
 	NewCommandFuncs["createtag"] = func() interface{} { return NewCreateTag(l, sess) }
-}
-
-type command interface {
-	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
-	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
-	Action() string
-	Entity() string
 }
 
 var (

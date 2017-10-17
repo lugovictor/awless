@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package awsdriver
+package awsspec
 
 import (
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -550,4 +551,85 @@ func structSetter(s interface{}, params map[string]interface{}) error {
 		}
 	}
 	return nil
+}
+
+func structListParamsKeys(src interface{}) map[string]bool {
+	val := reflect.ValueOf(src).Elem()
+	stru := val.Type()
+
+	result := make(map[string]bool)
+	for i := 0; i < stru.NumField(); i++ {
+		field := stru.Field(i)
+		if name, ok := field.Tag.Lookup("templateName"); ok {
+			_, req := field.Tag.Lookup("required")
+			result[name] = req
+		}
+	}
+	return result
+}
+
+func structInjector(src, dest interface{}) error {
+	val := reflect.ValueOf(src).Elem()
+	stru := val.Type()
+
+	for i := 0; i < stru.NumField(); i++ {
+		field := stru.Field(i)
+		if dstNames, ok := field.Tag.Lookup("awsName"); ok {
+			splits := strings.Split(dstNames, ",")
+			for _, destName := range splits {
+				destName = strings.TrimSpace(destName)
+				if dstType, tok := field.Tag.Lookup("awsType"); tok {
+					fieldValue := val.Field(i)
+					if fieldValue.IsValid() && fieldValue.Interface() != nil && !fieldValue.IsNil() {
+						if err := setFieldWithType(fieldValue.Interface(), dest, destName, dstType); err != nil {
+							return err
+						}
+					}
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func validateStruct(s interface{}) error {
+	val := reflect.ValueOf(s)
+	stru := val.Elem().Type()
+
+	var messages []string
+	for i := 0; i < stru.NumField(); i++ {
+		field := stru.Field(i)
+		if _, ok := field.Tag.Lookup("required"); ok {
+			if val.Elem().Field(i).IsNil() {
+				messages = append(messages, fmt.Sprintf("missing required field %s", field.Name))
+			}
+			continue
+		}
+
+		if _, ok := field.Tag.Lookup("templateName"); ok {
+			methName := fmt.Sprintf("Validate%s", field.Name)
+			meth := val.MethodByName(methName)
+			if meth != (reflect.Value{}) {
+				results := meth.Call(nil)
+				if len(results) == 1 {
+					if iface := results[0].Interface(); iface != nil {
+						messages = append(messages, iface.(error).Error())
+					}
+				}
+			}
+		}
+	}
+	if len(messages) > 0 {
+		return errors.New(strings.Join(messages, "; "))
+	}
+	return nil
+}
+
+func contains(arr []string, e string) bool {
+	for _, a := range arr {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }

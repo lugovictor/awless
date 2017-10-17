@@ -1,4 +1,4 @@
-package awsdriver
+package awsspec
 
 import (
 	"errors"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/wallix/awless/aws/driver"
 	"github.com/wallix/awless/cloud"
 	"github.com/wallix/awless/logger"
 )
@@ -75,7 +76,7 @@ func (cmd *AttachPolicy) Inject(params map[string]interface{}) error {
 	access, hasAccess := params["access"].(string)
 
 	if hasService && hasAccess {
-		pol, err := LookupAWSPolicy(service, access)
+		pol, err := awsdriver.LookupAWSPolicy(service, access)
 		if err != nil {
 			return err
 		}

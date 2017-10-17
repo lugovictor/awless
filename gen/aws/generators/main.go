@@ -30,6 +30,7 @@ var (
 	FETCHERS_DIR         = filepath.Join(ROOT_DIR, "aws", "fetch")
 	SERVICES_DIR         = filepath.Join(ROOT_DIR, "aws", "services")
 	DRIVERS_DIR          = filepath.Join(ROOT_DIR, "aws", "driver")
+	SPEC_DIR             = filepath.Join(ROOT_DIR, "aws", "spec")
 	DOC_DIR              = filepath.Join(ROOT_DIR, "aws", "doc")
 	CLOUD_PROPERTIES_DIR = filepath.Join(ROOT_DIR, "cloud", "properties")
 	CLOUD_RDF_DIR        = filepath.Join(ROOT_DIR, "cloud", "rdf")
