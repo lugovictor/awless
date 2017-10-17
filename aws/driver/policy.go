@@ -135,3 +135,7 @@ func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 	return "", nil
 }
+
+func (cmd *AttachPolicy) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	return nil, nil
+}

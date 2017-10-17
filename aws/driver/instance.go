@@ -27,8 +27,13 @@ type CreateInstance struct {
 	Role           *string   `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"role"`
 }
 
-func (cmd *CreateInstance) Action() string { return "create" }
-func (cmd *CreateInstance) Entity() string { return "instance" }
+func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func (cmd *CreateInstance) Validate() error {
+	return validateStruct(cmd)
+}
 
 func (cmd *CreateInstance) CheckParams(params []string) ([]string, error) {
 	result := structListParamsKeys(cmd)
@@ -63,13 +68,8 @@ func (cmd *CreateInstance) CheckParams(params []string) ([]string, error) {
 	return missing, nil
 }
 
-func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
-	return structSetter(cmd, params)
-}
-
-func (cmd *CreateInstance) Validate() error {
-	return validateStruct(cmd)
-}
+func (cmd *CreateInstance) Action() string { return "create" }
+func (cmd *CreateInstance) Entity() string { return "instance" }
 
 func (cmd *CreateInstance) ExtractResultString(r *ec2.Reservation) string {
 	return awssdk.StringValue(r.Instances[0].InstanceId)
@@ -83,7 +83,7 @@ func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface
 	if err := createTag.Validate(); err != nil {
 		return err
 	}
-	if _, err := createTag.Run(); err != nil {
+	if _, err := createTag.Run(ctx, nil); err != nil {
 		return err
 	}
 	return nil

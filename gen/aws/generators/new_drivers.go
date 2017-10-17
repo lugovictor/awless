@@ -236,4 +236,17 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["{{ ToLower $cmdName }}"] = func() interface{} { return New{{ $cmdName }}(l, sess) }
 {{- end }}
 }
+
+type command interface {
+	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
+	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
+	Action() string
+	Entity() string
+}
+
+var (
+	{{- range $cmdName, $tag := . }}
+	_ command = &{{ $cmdName }}{}
+	{{- end }}
+)
 `

@@ -77,7 +77,7 @@ func (cmd *CreateSubnet) AfterRun(ctx map[string]interface{}, output interface{}
 	if err := createTag.Validate(); err != nil {
 		return err
 	}
-	if _, err := createTag.Run(); err != nil {
+	if _, err := createTag.Run(nil, nil); err != nil {
 		return err
 	}
 	return nil

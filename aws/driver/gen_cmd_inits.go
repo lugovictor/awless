@@ -30,3 +30,17 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["createsubnet"] = func() interface{} { return NewCreateSubnet(l, sess) }
 	NewCommandFuncs["createtag"] = func() interface{} { return NewCreateTag(l, sess) }
 }
+
+type command interface {
+	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
+	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
+	Action() string
+	Entity() string
+}
+
+var (
+	_ command = &AttachPolicy{}
+	_ command = &CreateInstance{}
+	_ command = &CreateSubnet{}
+	_ command = &CreateTag{}
+)

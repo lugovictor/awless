@@ -25,11 +25,16 @@ func (cmd *CreateTag) Inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func (cmd *CreateTag) Action() string { return "create" }
+func (cmd *CreateTag) Entity() string { return "tag" }
+
 func (cmd *CreateTag) Validate() error {
 	return validateStruct(cmd)
 }
 
-func (cmd *CreateTag) Run() (interface{}, error) {
+func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, error) { return nil, nil }
+
+func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	input := &ec2.CreateTagsInput{}
 	if err := structInjector(cmd, input); err != nil {
 		return nil, fmt.Errorf("CreateTag: cannot inject in ec2.CreateTagsInput: %s", err)
