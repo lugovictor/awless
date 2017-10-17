@@ -100,7 +100,7 @@ func (cmd *AttachPolicy) ExtractResultString(i interface{}) string {
 	return ""
 }
 
-func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *AttachPolicy) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
 	start := time.Now()
 	switch {
 	case cmd.User != nil:

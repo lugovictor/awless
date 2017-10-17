@@ -36,6 +36,31 @@ func NewAttachPolicy(l *logger.Logger, sess *session.Session) *AttachPolicy {
 	return cmd
 }
 
+func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("AttachPolicy: BeforeRun: %s", brErr)
+		}
+	}
+
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("AttachPolicy: cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, fmt.Errorf("AttachPolicy: %s", err)
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("AttachPolicy: AfterRun: %s", brErr)
+		}
+	}
+
+	return cmd.ExtractResultString(output), nil
+}
+
 func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
 	cmd := new(CreateInstance)
 	cmd.api = ec2.New(sess)
@@ -167,4 +192,29 @@ func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("CreateTag: BeforeRun: %s", brErr)
+		}
+	}
+
+	if err := structSetter(cmd, params); err != nil {
+		return nil, fmt.Errorf("CreateTag: cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, fmt.Errorf("CreateTag: %s", err)
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("CreateTag: AfterRun: %s", brErr)
+		}
+	}
+
+	return cmd.ExtractResultString(output), nil
 }

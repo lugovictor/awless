@@ -34,7 +34,7 @@ func (cmd *CreateTag) Validate() error {
 
 func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, error) { return nil, nil }
 
-func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
 	input := &ec2.CreateTagsInput{}
 	if err := structInjector(cmd, input); err != nil {
 		return nil, fmt.Errorf("CreateTag: cannot inject in ec2.CreateTagsInput: %s", err)
@@ -50,6 +50,8 @@ func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, erro
 	cmd.logger.ExtraVerbosef("ec2.CreateTags call took %s", time.Since(start))
 	return cmd.result, nil
 }
+
+func (cmd *CreateTag) ExtractResultString(i interface{}) string { return "" }
 
 /*
 type createTagRetryer struct {

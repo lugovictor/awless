@@ -149,7 +149,7 @@ func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 	cmd.logger = l
 	return cmd
 }
-{{ if $tag.Call }}
+
 func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
@@ -160,7 +160,8 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	if err := structSetter(cmd, params); err != nil {
 		return nil, fmt.Errorf("{{ $cmdName }}: cannot set params on command struct: %s", err)
 	}
-
+	
+	{{ if $tag.Call }}
 	input := &{{ $tag.Input }}{}
 	if err := structInjector(cmd, input) ; err != nil {
 		return nil, fmt.Errorf("{{ $cmdName }}: cannot inject in {{ $tag.Input }}: %s", err)
@@ -171,6 +172,13 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	if err != nil {
 		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
 	}
+	{{- else }}
+	
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
+	}
+	{{- end }}
 
 	if v, ok := implementsAfterRun(cmd); ok {
 		if brErr := v.AfterRun(ctx, output); brErr != nil {
@@ -180,7 +188,7 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 
 	return cmd.ExtractResultString(output), nil
 }
-{{- end }}
+
 {{ if $tag.HasDryRun }}
 func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := structSetter(cmd, params); err != nil {
