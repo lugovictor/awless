@@ -157,7 +157,7 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 		}
 	}
 
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("{{ $cmdName }}: cannot set params on command struct: %s", err)
 	}
 	
@@ -189,9 +189,24 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	return cmd.ExtractResultString(output), nil
 }
 
+func (cmd *{{ $cmdName }}) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+	
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+	
+	return
+}
+
 {{ if $tag.HasDryRun }}
 func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("dry run: {{ $cmdName }}: cannot set params on command struct: %s", err)
 	}
 

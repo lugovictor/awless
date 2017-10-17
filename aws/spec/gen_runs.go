@@ -43,7 +43,7 @@ func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 		}
 	}
 
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("AttachPolicy: cannot set params on command struct: %s", err)
 	}
 
@@ -61,6 +61,21 @@ func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	return cmd.ExtractResultString(output), nil
 }
 
+func (cmd *AttachPolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
 func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
 	cmd := new(CreateInstance)
 	cmd.api = ec2.New(sess)
@@ -75,7 +90,7 @@ func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{},
 		}
 	}
 
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("CreateInstance: cannot set params on command struct: %s", err)
 	}
 
@@ -99,8 +114,23 @@ func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{},
 	return cmd.ExtractResultString(output), nil
 }
 
+func (cmd *CreateInstance) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
 func (cmd *CreateInstance) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("dry run: CreateInstance: cannot set params on command struct: %s", err)
 	}
 
@@ -138,7 +168,7 @@ func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 		}
 	}
 
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("CreateSubnet: cannot set params on command struct: %s", err)
 	}
 
@@ -162,8 +192,23 @@ func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	return cmd.ExtractResultString(output), nil
 }
 
+func (cmd *CreateSubnet) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
 func (cmd *CreateSubnet) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("dry run: CreateSubnet: cannot set params on command struct: %s", err)
 	}
 
@@ -201,7 +246,7 @@ func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, erro
 		}
 	}
 
-	if err := structSetter(cmd, params); err != nil {
+	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("CreateTag: cannot set params on command struct: %s", err)
 	}
 
@@ -217,4 +262,19 @@ func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, erro
 	}
 
 	return cmd.ExtractResultString(output), nil
+}
+
+func (cmd *CreateTag) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
 }

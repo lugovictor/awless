@@ -20,9 +20,14 @@ type AfterRunner interface {
 	AfterRun(ctx map[string]interface{}, output interface{}) error
 }
 
+type ManualValidator interface {
+	ManualValidateCommand(params map[string]interface{}) []error
+}
+
 type command interface {
 	ValidateParams([]string) ([]string, error)
 	ValidateCommand(map[string]interface{}) []error
+	inject(params map[string]interface{}) error
 	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 	Action() string
@@ -36,6 +41,11 @@ func implementsBeforeRun(i interface{}) (BeforeRunner, bool) {
 
 func implementsAfterRun(i interface{}) (AfterRunner, bool) {
 	v, ok := i.(AfterRunner)
+	return v, ok
+}
+
+func implementsManualValidator(i interface{}) (ManualValidator, bool) {
+	v, ok := i.(ManualValidator)
 	return v, ok
 }
 
@@ -61,4 +71,15 @@ func fakeDryRunId(entity string) string {
 	default:
 		return fmt.Sprintf("dryrunid-%d", suffix)
 	}
+}
+
+func String(v string) *string {
+	return &v
+}
+
+func StringValue(v *string) string {
+	if v != nil {
+		return *v
+	}
+	return ""
 }

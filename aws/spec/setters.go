@@ -606,17 +606,17 @@ func validateStruct(s interface{}) error {
 			if val.Elem().Field(i).IsNil() {
 				messages = append(messages, fmt.Sprintf("missing required field %s", field.Name))
 			}
-			continue
 		}
 
-		if _, ok := field.Tag.Lookup("templateName"); ok {
+		if tplName, ok := field.Tag.Lookup("templateName"); ok {
 			methName := fmt.Sprintf("Validate%s", field.Name)
 			meth := val.MethodByName(methName)
+
 			if meth != (reflect.Value{}) {
 				results := meth.Call(nil)
 				if len(results) == 1 {
 					if iface := results[0].Interface(); iface != nil {
-						messages = append(messages, iface.(error).Error())
+						messages = append(messages, fmt.Sprintf("%s: %s", tplName, iface.(error).Error()))
 					}
 				}
 			}

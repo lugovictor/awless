@@ -23,22 +23,12 @@ type CreateTag struct {
 	Value    *string `templateName:"value" required:""`
 }
 
-func (cmd *CreateTag) Inject(params map[string]interface{}) error {
+func (cmd *CreateTag) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
 func (cmd *CreateTag) Action() string { return "create" }
 func (cmd *CreateTag) Entity() string { return "tag" }
-
-func (cmd *CreateTag) ValidateCommand(params map[string]interface{}) []error {
-	if err := cmd.Inject(params); err != nil {
-		return []error{err}
-	}
-	if err := validateStruct(cmd); err != nil {
-		return []error{err}
-	}
-	return nil
-}
 
 func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, error) { return nil, nil }
 

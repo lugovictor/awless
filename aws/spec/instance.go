@@ -30,18 +30,8 @@ type CreateInstance struct {
 func (cmd *CreateInstance) Action() string { return "create" }
 func (cmd *CreateInstance) Entity() string { return "instance" }
 
-func (cmd *CreateInstance) Inject(params map[string]interface{}) error {
+func (cmd *CreateInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
-}
-
-func (cmd *CreateInstance) ValidateCommand(params map[string]interface{}) []error {
-	if err := cmd.Inject(params); err != nil {
-		return []error{err}
-	}
-	if err := validateStruct(cmd); err != nil {
-		return []error{err}
-	}
-	return nil
 }
 
 func (cmd *CreateInstance) ValidateParams(params []string) ([]string, error) {

@@ -2,6 +2,7 @@ package awsspec
 
 import (
 	"fmt"
+	"net"
 	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go/aws"
@@ -21,19 +22,13 @@ type CreateSubnet struct {
 	Name             *string `templateName:"name"`
 }
 
-func (cmd *CreateSubnet) Inject(params map[string]interface{}) error {
+func (cmd *CreateSubnet) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func (cmd *CreateSubnet) ValidateCommand(params map[string]interface{}) []error {
-	if err := cmd.Inject(params); err != nil {
-		return []error{err}
-	}
-
-	if err := validateStruct(cmd); err != nil {
-		return []error{err}
-	}
-	return nil
+func (cmd *CreateSubnet) ValidateCIDR() error {
+	_, _, err := net.ParseCIDR(StringValue(cmd.CIDR))
+	return err
 }
 
 func (cmd *CreateSubnet) ValidateParams(params []string) ([]string, error) {

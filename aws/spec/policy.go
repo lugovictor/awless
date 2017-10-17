@@ -66,7 +66,7 @@ func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
 	}
 }
 
-func (cmd *AttachPolicy) Inject(params map[string]interface{}) error {
+func (cmd *AttachPolicy) inject(params map[string]interface{}) error {
 	if err := structSetter(cmd, params); err != nil {
 		return err
 	}
@@ -88,15 +88,9 @@ func (cmd *AttachPolicy) Inject(params map[string]interface{}) error {
 	return nil
 }
 
-func (cmd *AttachPolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
-	if err := cmd.Inject(params); err != nil {
-		return []error{err}
-	}
-	if err := validateStruct(cmd); err != nil {
-		errs = append(errs, err)
-	}
+func (cmd *AttachPolicy) ManualValidateCommand(params map[string]interface{}) (errs []error) {
 	if cmd.User == nil && cmd.Group == nil && cmd.Role == nil {
-		errs = append(errs, fmt.Errorf("AttachPolicy: missing required field 'User', 'Group' or 'Role'"))
+		errs = append(errs, fmt.Errorf("AttachPolicy: missing required field 'user', 'group' or 'role'"))
 	}
 	return
 }
