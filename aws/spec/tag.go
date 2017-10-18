@@ -13,7 +13,7 @@ import (
 )
 
 type CreateTag struct {
-	_        string `awsAPI:"ec2"` //  awsCall:"CreateTags" awsInput:"ec2.CreateTagsInput" awsOutput:"ec2.CreateTagsOutput"
+	_        string `action:"create" entity:"tag" awsAPI:"ec2"` //  awsCall:"CreateTags" awsInput:"ec2.CreateTagsInput" awsOutput:"ec2.CreateTagsOutput"
 	result   string
 	logger   *logger.Logger
 	api      ec2iface.EC2API
@@ -23,19 +23,12 @@ type CreateTag struct {
 	Value    *string `templateName:"value" required:""`
 }
 
-func (cmd *CreateTag) inject(params map[string]interface{}) error {
-	return structSetter(cmd, params)
-}
-
-func (cmd *CreateTag) Action() string { return "create" }
-func (cmd *CreateTag) Entity() string { return "tag" }
-
 func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, error) { return nil, nil }
 
 func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
 	input := &ec2.CreateTagsInput{}
 	if err := structInjector(cmd, input); err != nil {
-		return nil, fmt.Errorf("CreateTag: cannot inject in ec2.CreateTagsInput: %s", err)
+		return nil, fmt.Errorf("create tag: cannot inject in ec2.CreateTagsInput: %s", err)
 	}
 	input.Tags = []*ec2.Tag{{Key: cmd.Key, Value: cmd.Value}}
 

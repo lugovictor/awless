@@ -8,22 +8,17 @@ import (
 	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
-	"github.com/wallix/awless/cloud"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateSubnet struct {
-	_                string `awsAPI:"ec2" awsCall:"CreateSubnet" awsInput:"ec2.CreateSubnetInput" awsOutput:"ec2.CreateSubnetOutput" awsDryRun:""`
+	_                string `action:"create" entity:"subnet" awsAPI:"ec2" awsCall:"CreateSubnet" awsInput:"ec2.CreateSubnetInput" awsOutput:"ec2.CreateSubnetOutput" awsDryRun:""`
 	logger           *logger.Logger
 	api              ec2iface.EC2API
 	CIDR             *string `awsName:"CidrBlock" awsType:"awsstr" templateName:"cidr" required:""`
 	VPC              *string `awsName:"VpcId" awsType:"awsstr" templateName:"vpc" required:""`
 	AvailabilityZone *string `awsName:"AvailabilityZone" awsType:"awsstr" templateName:"availabilityzone"`
 	Name             *string `templateName:"name"`
-}
-
-func (cmd *CreateSubnet) inject(params map[string]interface{}) error {
-	return structSetter(cmd, params)
 }
 
 func (cmd *CreateSubnet) ValidateCIDR() error {
@@ -57,15 +52,12 @@ func (cmd *CreateSubnet) ValidateParams(params []string) ([]string, error) {
 	for _, p := range params {
 		_, ok := result[p]
 		if !ok {
-			return missing, fmt.Errorf("%s %s: unexpected param key '%s'%s%s\n", cmd.Action(), cmd.Entity(), p, requiredParams, extraParams)
+			return missing, fmt.Errorf("create subnet: unexpected param key '%s'%s%s\n", p, requiredParams, extraParams)
 		}
 	}
 
 	return missing, nil
 }
-
-func (cmd *CreateSubnet) Action() string { return "create" }
-func (cmd *CreateSubnet) Entity() string { return cloud.Subnet }
 
 func (cmd *CreateSubnet) ExtractResultString(r *ec2.CreateSubnetOutput) string {
 	return awssdk.StringValue(r.Subnet.SubnetId)

@@ -39,22 +39,22 @@ func NewAttachPolicy(l *logger.Logger, sess *session.Session) *AttachPolicy {
 func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
-			return nil, fmt.Errorf("AttachPolicy: BeforeRun: %s", brErr)
+			return nil, fmt.Errorf("attach policy: BeforeRun: %s", brErr)
 		}
 	}
 
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("AttachPolicy: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("attach policy: cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
 	if err != nil {
-		return nil, fmt.Errorf("AttachPolicy: %s", err)
+		return nil, fmt.Errorf("attach policy: %s", err)
 	}
 
 	if v, ok := implementsAfterRun(cmd); ok {
 		if brErr := v.AfterRun(ctx, output); brErr != nil {
-			return nil, fmt.Errorf("AttachPolicy: AfterRun: %s", brErr)
+			return nil, fmt.Errorf("attach policy: AfterRun: %s", brErr)
 		}
 	}
 
@@ -76,6 +76,10 @@ func (cmd *AttachPolicy) ValidateCommand(params map[string]interface{}) (errs []
 	return
 }
 
+func (cmd *AttachPolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
 	cmd := new(CreateInstance)
 	cmd.api = ec2.New(sess)
@@ -86,28 +90,28 @@ func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance 
 func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
-			return nil, fmt.Errorf("CreateInstance: BeforeRun: %s", brErr)
+			return nil, fmt.Errorf("create instance: BeforeRun: %s", brErr)
 		}
 	}
 
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("CreateInstance: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("create instance: cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.RunInstancesInput{}
 	if err := structInjector(cmd, input); err != nil {
-		return nil, fmt.Errorf("CreateInstance: cannot inject in ec2.RunInstancesInput: %s", err)
+		return nil, fmt.Errorf("create instance: cannot inject in ec2.RunInstancesInput: %s", err)
 	}
 	start := time.Now()
 	output, err := cmd.api.RunInstances(input)
 	cmd.logger.ExtraVerbosef("ec2.RunInstances call took %s", time.Since(start))
 	if err != nil {
-		return nil, fmt.Errorf("CreateInstance: %s", err)
+		return nil, fmt.Errorf("create instance: %s", err)
 	}
 
 	if v, ok := implementsAfterRun(cmd); ok {
 		if brErr := v.AfterRun(ctx, output); brErr != nil {
-			return nil, fmt.Errorf("CreateInstance: AfterRun: %s", brErr)
+			return nil, fmt.Errorf("create instance: AfterRun: %s", brErr)
 		}
 	}
 
@@ -131,13 +135,13 @@ func (cmd *CreateInstance) ValidateCommand(params map[string]interface{}) (errs 
 
 func (cmd *CreateInstance) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("dry run: CreateInstance: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("dry run: create instance: cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.RunInstancesInput{}
 	input.SetDryRun(true)
 	if err := structInjector(cmd, input); err != nil {
-		return nil, fmt.Errorf("dry run: CreateInstance: cannot inject in ec2.RunInstancesInput: %s", err)
+		return nil, fmt.Errorf("dry run: create instance: cannot inject in ec2.RunInstancesInput: %s", err)
 	}
 
 	start := time.Now()
@@ -146,12 +150,16 @@ func (cmd *CreateInstance) DryRun(ctx, params map[string]interface{}) (interface
 		switch code := awsErr.Code(); {
 		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
 			cmd.logger.ExtraVerbosef("dry run: ec2.RunInstances call took %s", time.Since(start))
-			cmd.logger.Verbose("dry run: CreateInstance ok")
-			return fakeDryRunId(cmd.Entity()), nil
+			cmd.logger.Verbose("dry run: create instance ok")
+			return fakeDryRunId("instance"), nil
 		}
 	}
 
-	return nil, fmt.Errorf("dry run: CreateInstance : %s", err)
+	return nil, fmt.Errorf("dry run: create instance : %s", err)
+}
+
+func (cmd *CreateInstance) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
 }
 
 func NewCreateSubnet(l *logger.Logger, sess *session.Session) *CreateSubnet {
@@ -164,28 +172,28 @@ func NewCreateSubnet(l *logger.Logger, sess *session.Session) *CreateSubnet {
 func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
-			return nil, fmt.Errorf("CreateSubnet: BeforeRun: %s", brErr)
+			return nil, fmt.Errorf("create subnet: BeforeRun: %s", brErr)
 		}
 	}
 
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("CreateSubnet: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("create subnet: cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateSubnetInput{}
 	if err := structInjector(cmd, input); err != nil {
-		return nil, fmt.Errorf("CreateSubnet: cannot inject in ec2.CreateSubnetInput: %s", err)
+		return nil, fmt.Errorf("create subnet: cannot inject in ec2.CreateSubnetInput: %s", err)
 	}
 	start := time.Now()
 	output, err := cmd.api.CreateSubnet(input)
 	cmd.logger.ExtraVerbosef("ec2.CreateSubnet call took %s", time.Since(start))
 	if err != nil {
-		return nil, fmt.Errorf("CreateSubnet: %s", err)
+		return nil, fmt.Errorf("create subnet: %s", err)
 	}
 
 	if v, ok := implementsAfterRun(cmd); ok {
 		if brErr := v.AfterRun(ctx, output); brErr != nil {
-			return nil, fmt.Errorf("CreateSubnet: AfterRun: %s", brErr)
+			return nil, fmt.Errorf("create subnet: AfterRun: %s", brErr)
 		}
 	}
 
@@ -209,13 +217,13 @@ func (cmd *CreateSubnet) ValidateCommand(params map[string]interface{}) (errs []
 
 func (cmd *CreateSubnet) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("dry run: CreateSubnet: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("dry run: create subnet: cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateSubnetInput{}
 	input.SetDryRun(true)
 	if err := structInjector(cmd, input); err != nil {
-		return nil, fmt.Errorf("dry run: CreateSubnet: cannot inject in ec2.CreateSubnetInput: %s", err)
+		return nil, fmt.Errorf("dry run: create subnet: cannot inject in ec2.CreateSubnetInput: %s", err)
 	}
 
 	start := time.Now()
@@ -224,12 +232,16 @@ func (cmd *CreateSubnet) DryRun(ctx, params map[string]interface{}) (interface{}
 		switch code := awsErr.Code(); {
 		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
 			cmd.logger.ExtraVerbosef("dry run: ec2.CreateSubnet call took %s", time.Since(start))
-			cmd.logger.Verbose("dry run: CreateSubnet ok")
-			return fakeDryRunId(cmd.Entity()), nil
+			cmd.logger.Verbose("dry run: create subnet ok")
+			return fakeDryRunId("subnet"), nil
 		}
 	}
 
-	return nil, fmt.Errorf("dry run: CreateSubnet : %s", err)
+	return nil, fmt.Errorf("dry run: create subnet : %s", err)
+}
+
+func (cmd *CreateSubnet) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
 }
 
 func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
@@ -242,22 +254,22 @@ func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
 func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
-			return nil, fmt.Errorf("CreateTag: BeforeRun: %s", brErr)
+			return nil, fmt.Errorf("create tag: BeforeRun: %s", brErr)
 		}
 	}
 
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("CreateTag: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("create tag: cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
 	if err != nil {
-		return nil, fmt.Errorf("CreateTag: %s", err)
+		return nil, fmt.Errorf("create tag: %s", err)
 	}
 
 	if v, ok := implementsAfterRun(cmd); ok {
 		if brErr := v.AfterRun(ctx, output); brErr != nil {
-			return nil, fmt.Errorf("CreateTag: AfterRun: %s", brErr)
+			return nil, fmt.Errorf("create tag: AfterRun: %s", brErr)
 		}
 	}
 
@@ -277,4 +289,8 @@ func (cmd *CreateTag) ValidateCommand(params map[string]interface{}) (errs []err
 	}
 
 	return
+}
+
+func (cmd *CreateTag) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
 }

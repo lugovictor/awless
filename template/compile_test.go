@@ -170,7 +170,9 @@ create loadbalancer name=mylb subnets=subnet-1, subnet-2
 
 type mockCommand struct{ id string }
 
-func (c *mockCommand) ValidateCommand() []error                                       { return []error{errors.New(c.id)} }
+func (c *mockCommand) ValidateCommand(map[string]interface{}) []error {
+	return []error{errors.New(c.id)}
+}
 func (c *mockCommand) Run(ctx, params map[string]interface{}) (interface{}, error)    { return nil, nil }
 func (c *mockCommand) DryRun(ctx, params map[string]interface{}) (interface{}, error) { return nil, nil }
 func (c *mockCommand) ValidateParams(p []string) ([]string, error) {
@@ -181,6 +183,18 @@ func (c *mockCommand) ValidateParams(p []string) ([]string, error) {
 		return []string{c.id}, errors.New("unexpected")
 	}
 	panic("wooot")
+}
+
+func (c *mockCommand) ConvertParams() ([]string, func(values map[string]interface{}) (map[string]interface{}, error)) {
+	return []string{"param1", "param2"},
+		func(values map[string]interface{}) (map[string]interface{}, error) {
+			_, hasParam1 := values["param1"]
+			_, hasParam2 := values["param2"]
+			if hasParam1 && hasParam2 {
+				return map[string]interface{}{"new": fmt.Sprint(values["param1"], values["param2"])}, nil
+			}
+			return values, nil
+		}
 }
 
 func TestCommandsPasses(t *testing.T) {
@@ -207,6 +221,23 @@ func TestCommandsPasses(t *testing.T) {
 		_, _, err := verifyCommandsDefinedPass(tpl, env)
 		if err != nil {
 			t.Fatal(err)
+		}
+	})
+
+	t.Run("convert params", func(t *testing.T) {
+		tpl := MustParse("create instance\nsub = create subnet param1=anything param2=other\ncreate instance param1=anything")
+		count = 0
+		compiled, _, err := convertParamsPass(tpl, env)
+		if err != nil {
+			t.Fatal(err)
+		}
+		exp := map[string]interface{}{"new": "anythingother"}
+		if got, want := compiled.CommandNodesIterator()[1].ToDriverParams(), exp; !reflect.DeepEqual(got, want) {
+			t.Fatalf("got %#v, want %#v", got, want)
+		}
+		exp = map[string]interface{}{"param1": "anything"}
+		if got, want := compiled.CommandNodesIterator()[2].ToDriverParams(), exp; !reflect.DeepEqual(got, want) {
+			t.Fatalf("got %#v, want %#v", got, want)
 		}
 	})
 

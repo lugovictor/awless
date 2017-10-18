@@ -100,6 +100,7 @@ var (
 		inlineVariableValuePass,
 		failOnUnresolvedHolesPass,
 		failOnUnresolvedAliasPass,
+		convertParamsPass,
 		validateCommandsPass,
 		injectCommandsPass,
 	}
@@ -208,6 +209,43 @@ func normalizeMissingRequiredParamsAsHolePass(tpl *Template, env *Env) (*Templat
 	return tpl, env, err
 }
 
+func convertParamsPass(tpl *Template, env *Env) (*Template, *Env, error) {
+	convert := func(node *ast.CommandNode) error {
+		key := fmt.Sprintf("%s%s", node.Action, node.Entity)
+		cmd := env.Lookuper(key)
+		if cmd == nil {
+			return fmt.Errorf("validate: cannot find command for '%s'", key)
+		}
+
+		type C interface {
+			ConvertParams() ([]string, func(values map[string]interface{}) (map[string]interface{}, error))
+		}
+		if v, ok := cmd.(C); ok {
+			keys, convFunc := v.ConvertParams()
+			values := make(map[string]interface{})
+			params := node.ToDriverParams()
+			for _, k := range keys {
+				if vv, ok := params[k]; ok {
+					values[k] = vv
+				}
+			}
+			converted, err := convFunc(values)
+			if err != nil {
+				return err
+			}
+			for _, k := range keys {
+				delete(node.Params, k)
+			}
+			for k, v := range converted {
+				node.Params[k] = ast.NewInterfaceValue(v)
+			}
+		}
+		return nil
+	}
+	tpl.visitCommandNodesE(convert)
+	return tpl, env, nil
+}
+
 func validateCommandsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	var errs []error
 
@@ -218,10 +256,10 @@ func validateCommandsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 			return fmt.Errorf("validate: cannot find command for '%s'", key)
 		}
 		type V interface {
-			ValidateCommand() []error
+			ValidateCommand(map[string]interface{}) []error
 		}
 		if v, ok := cmd.(V); ok {
-			errs = append(errs, v.ValidateCommand()...)
+			errs = append(errs, v.ValidateCommand(node.ToDriverParams())...)
 		}
 		return nil
 	}

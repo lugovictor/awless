@@ -30,8 +30,6 @@ type command interface {
 	inject(params map[string]interface{}) error
 	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
-	Action() string
-	Entity() string
 }
 
 func implementsBeforeRun(i interface{}) (BeforeRunner, bool) {

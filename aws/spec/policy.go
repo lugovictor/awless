@@ -8,24 +8,18 @@ import (
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/aws/driver"
-	"github.com/wallix/awless/cloud"
 	"github.com/wallix/awless/logger"
 )
 
 type AttachPolicy struct {
-	_      string `awsAPI:"iam"`
+	_      string `action:"attach" entity:"policy" awsAPI:"iam"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
 	Arn    *string `awsName:"PolicyArn" awsType:"awsstr" templateName:"arn" required:""`
 	User   *string `awsName:"UserName" awsType:"awsstr" templateName:"user"`
 	Group  *string `awsName:"GroupName" awsType:"awsstr" templateName:"group"`
 	Role   *string `awsName:"RoleName" awsType:"awsstr" templateName:"role"`
-	//	Service *string `templateName:"service"`
-	//	Access  *string `templateName:"access"`
 }
-
-func (cmd *AttachPolicy) Action() string { return "attach" }
-func (cmd *AttachPolicy) Entity() string { return cloud.Policy }
 
 func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
 	allParams := map[string]bool{
@@ -37,7 +31,7 @@ func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
 	for _, p := range params {
 		_, ok := allParams[p]
 		if !ok {
-			return nil, fmt.Errorf("%s %s: unexpected param key '%s'%s\n", cmd.Action(), cmd.Entity(), p, paramString)
+			return nil, fmt.Errorf("attach policy: unexpected param key '%s'%s\n", p, paramString)
 		}
 	}
 
@@ -66,34 +60,31 @@ func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
 	}
 }
 
-func (cmd *AttachPolicy) inject(params map[string]interface{}) error {
-	if err := structSetter(cmd, params); err != nil {
-		return err
-	}
+func (cmd *AttachPolicy) ConvertParams() ([]string, func(values map[string]interface{}) (map[string]interface{}, error)) {
+	return []string{"access", "service"},
+		func(values map[string]interface{}) (map[string]interface{}, error) {
+			service, hasService := values["service"].(string)
+			access, hasAccess := values["access"].(string)
 
-	arn, _ := params["arn"]
-	service, hasService := params["service"].(string)
-	access, hasAccess := params["access"].(string)
-
-	if hasService && hasAccess {
-		pol, err := awsdriver.LookupAWSPolicy(service, access)
-		if err != nil {
-			return err
+			if hasService && hasAccess {
+				pol, err := awsdriver.LookupAWSPolicy(service, access)
+				if err != nil {
+					return values, err
+				}
+				return map[string]interface{}{"arn": pol.Arn}, nil
+			} else {
+				return nil, nil
+			}
 		}
-		arn = pol.Arn
-	}
-	if err := setFieldWithType(arn, cmd, "Arn", awsstr); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (cmd *AttachPolicy) ManualValidateCommand(params map[string]interface{}) (errs []error) {
 	if cmd.User == nil && cmd.Group == nil && cmd.Role == nil {
-		errs = append(errs, fmt.Errorf("AttachPolicy: missing required field 'user', 'group' or 'role'"))
+		errs = append(errs, fmt.Errorf("attach policy: missing required field 'user', 'group' or 'role'"))
 	}
 	return
 }
+
 func (cmd *AttachPolicy) ExtractResultString(i interface{}) string {
 	return ""
 }

@@ -11,7 +11,7 @@ import (
 )
 
 type CreateInstance struct {
-	_              string `awsAPI:"ec2" awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.Reservation" awsDryRun:""`
+	_              string `action:"create" entity:"instance" awsAPI:"ec2" awsCall:"RunInstances" awsInput:"ec2.RunInstancesInput" awsOutput:"ec2.Reservation" awsDryRun:""`
 	logger         *logger.Logger
 	api            ec2iface.EC2API
 	Image          *string   `awsName:"ImageId" awsType:"awsstr" templateName:"image" required:""`
@@ -25,13 +25,6 @@ type CreateInstance struct {
 	SecurityGroups []*string `awsName:"SecurityGroupIds" awsType:"awsstringslice" templateName:"securitygroup"`
 	Lock           *bool     `awsName:"DisableApiTermination" awsType:"awsbool" templateName:"lock"`
 	Role           *string   `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"role"`
-}
-
-func (cmd *CreateInstance) Action() string { return "create" }
-func (cmd *CreateInstance) Entity() string { return "instance" }
-
-func (cmd *CreateInstance) inject(params map[string]interface{}) error {
-	return structSetter(cmd, params)
 }
 
 func (cmd *CreateInstance) ValidateParams(params []string) ([]string, error) {
@@ -60,7 +53,7 @@ func (cmd *CreateInstance) ValidateParams(params []string) ([]string, error) {
 	for _, p := range params {
 		_, ok := result[p]
 		if !ok {
-			return missing, fmt.Errorf("%s %s: unexpected param key '%s'%s%s\n", cmd.Action(), cmd.Entity(), p, requiredParams, extraParams)
+			return missing, fmt.Errorf("create instance: unexpected param key '%s'%s%s\n", p, requiredParams, extraParams)
 		}
 	}
 

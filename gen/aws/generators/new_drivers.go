@@ -57,9 +57,7 @@ func generateNewDrivers() {
 		panic(err)
 	}
 
-	templ, err = template.New("cmdInits").Funcs(template.FuncMap{
-		"ToLower": strings.ToLower,
-	}).Parse(cmdInits)
+	templ, err = template.New("cmdInits").Parse(cmdInits)
 	if err != nil {
 		panic(err)
 	}
@@ -76,8 +74,8 @@ func generateNewDrivers() {
 }
 
 type cmdData struct {
-	API, Call, Input, Output string
-	HasDryRun                bool
+	Action, Entity, API, Call, Input, Output string
+	HasDryRun                                bool
 }
 
 type findStructs struct {
@@ -109,14 +107,18 @@ func extractTag(s string) (t cmdData) {
 		ell := el[1][1 : len(el[1])-1]
 		switch {
 		case i == 0:
-			t.API = ell
+			t.Action = ell
 		case i == 1:
-			t.Call = ell
+			t.Entity = ell
 		case i == 2:
-			t.Input = ell
+			t.API = ell
 		case i == 3:
-			t.Output = ell
+			t.Call = ell
 		case i == 4:
+			t.Input = ell
+		case i == 5:
+			t.Output = ell
+		case i == 6:
 			t.HasDryRun = true
 		}
 	}
@@ -153,36 +155,36 @@ func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
-			return nil, fmt.Errorf("{{ $cmdName }}: BeforeRun: %s", brErr)
+			return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: BeforeRun: %s", brErr)
 		}
 	}
 
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("{{ $cmdName }}: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: cannot set params on command struct: %s", err)
 	}
 	
 	{{ if $tag.Call }}
 	input := &{{ $tag.Input }}{}
 	if err := structInjector(cmd, input) ; err != nil {
-		return nil, fmt.Errorf("{{ $cmdName }}: cannot inject in {{ $tag.Input }}: %s", err)
+		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: cannot inject in {{ $tag.Input }}: %s", err)
 	}
 	start := time.Now()
 	output, err := cmd.api.{{ $tag.Call }}(input)
 	cmd.logger.ExtraVerbosef("{{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
 	if err != nil {
-		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
+		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: %s", err)
 	}
 	{{- else }}
 	
 	output, err := cmd.ManualRun(ctx, params)
 	if err != nil {
-		return nil, fmt.Errorf("{{ $cmdName }}: %s", err)
+		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: %s", err)
 	}
 	{{- end }}
 
 	if v, ok := implementsAfterRun(cmd); ok {
 		if brErr := v.AfterRun(ctx, output); brErr != nil {
-			return nil, fmt.Errorf("{{ $cmdName }}: AfterRun: %s", brErr)
+			return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: AfterRun: %s", brErr)
 		}
 	}
 
@@ -207,13 +209,13 @@ func (cmd *{{ $cmdName }}) ValidateCommand(params map[string]interface{}) (errs 
 {{ if $tag.HasDryRun }}
 func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("dry run: {{ $cmdName }}: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("dry run: {{ $tag.Action }} {{ $tag.Entity }}: cannot set params on command struct: %s", err)
 	}
 
 	input := &{{ $tag.Input }}{}
 	input.SetDryRun(true)
 	if err := structInjector(cmd, input) ; err != nil {
-		return nil, fmt.Errorf("dry run: {{ $cmdName }}: cannot inject in {{ $tag.Input }}: %s", err)
+		return nil, fmt.Errorf("dry run: {{ $tag.Action }} {{ $tag.Entity }}: cannot inject in {{ $tag.Input }}: %s", err)
 	}
 
 	start := time.Now()
@@ -222,14 +224,18 @@ func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface
 		switch code := awsErr.Code(); {
 		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
 			cmd.logger.ExtraVerbosef("dry run: {{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
-			cmd.logger.Verbose("dry run: {{ $cmdName }} ok")
-			return fakeDryRunId(cmd.Entity()), nil
+			cmd.logger.Verbose("dry run: {{ $tag.Action }} {{ $tag.Entity }} ok")
+			return fakeDryRunId("{{ $tag.Entity }}"), nil
 		}
 	}
 
-	return nil, fmt.Errorf("dry run: {{ $cmdName }} : %s", err) 
+	return nil, fmt.Errorf("dry run: {{ $tag.Action }} {{ $tag.Entity }} : %s", err) 
 }
 {{- end }}
+
+func (cmd *{{ $cmdName }}) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
 {{ end }}
 `
 
@@ -256,7 +262,7 @@ var NewCommandFuncs = map[string]func() interface{}{}
 
 func InitCommands(l *logger.Logger, sess *session.Session) {
 {{- range $cmdName, $tag := . }}
-	NewCommandFuncs["{{ ToLower $cmdName }}"] = func() interface{} { return New{{ $cmdName }}(l, sess) }
+	NewCommandFuncs["{{ $tag.Action }}{{ $tag.Entity }}"] = func() interface{} { return New{{ $cmdName }}(l, sess) }
 {{- end }}
 }
 
