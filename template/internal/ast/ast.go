@@ -62,7 +62,6 @@ type WithHoles interface {
 
 type Command interface {
 	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
-	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 }
 
 type CommandNode struct {

@@ -124,7 +124,3 @@ func (cmd *AttachPolicy) ManualRun(ctx, params map[string]interface{}) (interfac
 	}
 	return "", nil
 }
-
-func (cmd *AttachPolicy) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
-	return nil, nil
-}

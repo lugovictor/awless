@@ -29,7 +29,6 @@ type command interface {
 	ValidateCommand(map[string]interface{}) []error
 	inject(params map[string]interface{}) error
 	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
-	DryRun(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 }
 
 func implementsBeforeRun(i interface{}) (BeforeRunner, bool) {

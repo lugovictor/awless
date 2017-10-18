@@ -46,7 +46,9 @@ func (s *Template) DoRun(env *Env) (*Template, error) {
 		case *ast.CommandNode:
 			n.ProcessRefs(vars)
 			if env.IsDryRun {
-				n.CmdResult, n.CmdErr = n.DryRun(env.ResolvedVariables, n.ToDriverParams())
+				if v, ok := n.Command.(dryRunner); ok {
+					n.CmdResult, n.CmdErr = v.DryRun(env.ResolvedVariables, n.ToDriverParams())
+				}
 			} else {
 				n.CmdResult, n.CmdErr = n.Run(env.ResolvedVariables, n.ToDriverParams())
 				if n.CmdErr != nil {
@@ -60,7 +62,9 @@ func (s *Template) DoRun(env *Env) (*Template, error) {
 			case *ast.CommandNode:
 				n.ProcessRefs(vars)
 				if env.IsDryRun {
-					n.CmdResult, n.CmdErr = n.DryRun(env.ResolvedVariables, n.ToDriverParams())
+					if v, ok := n.Command.(dryRunner); ok {
+						n.CmdResult, n.CmdErr = v.DryRun(env.ResolvedVariables, n.ToDriverParams())
+					}
 				} else {
 					n.CmdResult, n.CmdErr = n.Run(env.ResolvedVariables, n.ToDriverParams())
 					if n.CmdErr != nil {
@@ -360,4 +364,8 @@ func (d *Errors) Error() string {
 
 func MatchStringParamValue(s string) bool {
 	return ast.SimpleStringValue.MatchString(s)
+}
+
+type dryRunner interface {
+	DryRun(ctx, params map[string]interface{}) (interface{}, error)
 }
