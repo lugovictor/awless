@@ -41,7 +41,8 @@ func TestValidationDSL(t *testing.T) {
 		{allOf(node("one"), node("two")), []string{"three"}, []string{"one", "three"}, nil, []string{"two"}},
 		{allOf(oneOf(node("role"), node("user"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))), nil, []string{"role", "arn"}, nil, nil},
 		{allOf(oneOf(node("role"), node("user"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))), nil, []string{"role", "service"}, nil, []string{"access"}},
-		{allOf(oneOf(node("role"), node("user"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))), nil, []string{}, nil, []string{"role", "arn"}},
+		{allOf(oneOf(node("role"), node("user"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))), nil, nil, nil, []string{"role", "arn"}},
+		{allOf(oneOfE(node("role"), node("user"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))), nil, nil, []string{"expecting", "user", "group", "role"}, []string{"role", "arn"}},
 	}
 	for i, tcase := range tcases {
 		missing, err := paramRule{tree: tcase.rule, extras: tcase.extras}.verify(tcase.userInput)

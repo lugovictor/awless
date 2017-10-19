@@ -1,6 +1,8 @@
 package awsspec
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -72,8 +74,9 @@ func fakeDryRunId(entity string) string {
 }
 
 type paramRule struct {
-	tree   ruleNode
-	extras []string
+	errPrefix string
+	tree      ruleNode
+	extras    []string
 }
 
 func (p paramRule) help() string {
@@ -94,18 +97,24 @@ func (p paramRule) verify(keys []string) ([]string, error) {
 			unexpected = append(unexpected, key)
 		}
 	}
-	var err error
 	if len(unexpected) > 0 {
-		err = fmt.Errorf("unexpected param(s) '%s': expecting %s", strings.Join(unexpected, "', '"), p.help())
+		return nil, fmt.Errorf("%sunexpected param(s) '%s': expecting %s", p.errPrefix, strings.Join(unexpected, "', '"), p.help())
 	}
-	missings, _ := p.tree.missings(keys)
-	return missings, err
+	missings, _, errs := p.tree.missings(keys)
+	if len(errs) > 0 {
+		var errStr bytes.Buffer
+		for _, e := range errs {
+			errStr.WriteString(e.Error())
+		}
+		return nil, errors.New(p.errPrefix + errStr.String())
+	}
+	return missings, nil
 }
 
 type ruleNode interface {
 	help() string
 	unexpected(string) bool
-	missings([]string) ([]string, int)
+	missings([]string) ([]string, int, []error)
 }
 
 type oneOfNode struct {
@@ -129,17 +138,38 @@ func (o oneOfNode) unexpected(s string) bool {
 	return true
 }
 
-func (o oneOfNode) missings(keys []string) ([]string, int) {
+func (o oneOfNode) missings(keys []string) ([]string, int, []error) {
+	var errs []error
 	maxFound := -1
 	var missings []string
 	for _, child := range o.children {
-		cMissings, nbFound := child.missings(keys)
+		cMissings, nbFound, err := child.missings(keys)
+		errs = append(errs, err...)
 		if nbFound > maxFound {
 			missings = cMissings
 			maxFound = nbFound
 		}
 	}
-	return missings, maxFound
+	return missings, maxFound, nil
+}
+
+type oneOfNodeWithError struct {
+	oneOfNode
+}
+
+func (o oneOfNodeWithError) missings(keys []string) (missings []string, found int, errs []error) {
+	var hasFoundChild bool
+	for _, child := range o.children {
+		_, nbFound, _ := child.missings(keys)
+		if nbFound > 0 {
+			hasFoundChild = true
+		}
+	}
+	missings, found, errs = o.oneOfNode.missings(keys)
+	if !hasFoundChild {
+		errs = append(errs, fmt.Errorf("expecting %s", o.help()))
+	}
+	return
 }
 
 type allOfNode struct {
@@ -163,9 +193,10 @@ func (a allOfNode) unexpected(s string) bool {
 	return true
 }
 
-func (a allOfNode) missings(keys []string) (missings []string, nbFound int) {
+func (a allOfNode) missings(keys []string) (missings []string, nbFound int, errs []error) {
 	for _, child := range a.children {
-		cMissings, cFound := child.missings(keys)
+		cMissings, cFound, err := child.missings(keys)
+		errs = append(errs, err...)
 		if len(cMissings) > 0 {
 			missings = append(missings, cMissings...)
 		} else {
@@ -187,7 +218,7 @@ func (k stringNode) unexpected(s string) bool {
 	return k.key != s
 }
 
-func (k stringNode) missings(keys []string) (missings []string, nbFound int) {
+func (k stringNode) missings(keys []string) (missings []string, nbFound int, errs []error) {
 	if contains(keys, k.key) {
 		nbFound++
 		return
@@ -198,6 +229,10 @@ func (k stringNode) missings(keys []string) (missings []string, nbFound int) {
 
 func oneOf(nodes ...ruleNode) ruleNode {
 	return oneOfNode{children: nodes}
+}
+
+func oneOfE(nodes ...ruleNode) ruleNode {
+	return oneOfNodeWithError{oneOfNode{children: nodes}}
 }
 
 func allOf(nodes ...ruleNode) ruleNode {

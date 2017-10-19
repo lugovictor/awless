@@ -23,7 +23,8 @@ type AttachPolicy struct {
 
 func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
 	return paramRule{
-		tree: allOf(oneOf(node("user"), node("role"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))),
+		errPrefix: "attach policy: ",
+		tree:      allOf(oneOfE(node("user"), node("role"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))),
 	}.verify(params)
 }
 
