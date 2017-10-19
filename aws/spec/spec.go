@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"strings"
 
+	"github.com/wallix/awless/aws/doc"
 	"github.com/wallix/awless/cloud"
 )
 
@@ -28,6 +29,7 @@ type ManualValidator interface {
 }
 
 type command interface {
+	ParamsHelp() string
 	ValidateParams([]string) ([]string, error)
 	ValidateCommand(map[string]interface{}) []error
 	inject(params map[string]interface{}) error
@@ -47,6 +49,67 @@ func implementsAfterRun(i interface{}) (AfterRunner, bool) {
 func implementsManualValidator(i interface{}) (ManualValidator, bool) {
 	v, ok := i.(ManualValidator)
 	return v, ok
+}
+
+func validateParams(cmdName string, cmd command, params []string) ([]string, error) {
+	paramsDefinitions := structListParamsKeys(cmd)
+	var missing []string
+	for n, isRequired := range paramsDefinitions {
+		if isRequired && !contains(params, n) {
+			missing = append(missing, n)
+		}
+	}
+
+	var unexpected []string
+	for _, p := range params {
+		_, ok := paramsDefinitions[p]
+		if !ok {
+			unexpected = append(unexpected, p)
+		}
+	}
+
+	if len(unexpected) > 0 {
+		return missing, fmt.Errorf("%s: unexpected param(s) '%s'\n%s", cmdName, strings.Join(unexpected, "', '"), cmd.ParamsHelp())
+	}
+	return missing, nil
+}
+
+func generateParamsHelp(commandKey string, params map[string]bool) string {
+	var buff bytes.Buffer
+	var extra, required []string
+	for n, isRequired := range params {
+		if isRequired {
+			required = append(required, n)
+		} else {
+			extra = append(extra, n)
+		}
+	}
+	var anyRequired bool
+	if len(required) > 0 {
+		anyRequired = true
+		buff.WriteString("\tRequired params:")
+		for _, req := range required {
+			buff.WriteString(fmt.Sprintf("\n\t\t- %s", req))
+			if d, ok := awsdoc.TemplateParamsDoc(commandKey, req); ok {
+				buff.WriteString(fmt.Sprintf(": %s", d))
+			}
+		}
+	}
+
+	if len(extra) > 0 {
+		if anyRequired {
+			buff.WriteString("\n\tExtra params:")
+		} else {
+			buff.WriteString("\n\tParams:")
+		}
+		for _, ext := range extra {
+			buff.WriteString(fmt.Sprintf("\n\t\t- %s", ext))
+			if d, ok := awsdoc.TemplateParamsDoc(commandKey, ext); ok {
+				buff.WriteString(fmt.Sprintf(": %s", d))
+			}
+		}
+	}
+	return buff.String()
 }
 
 func fakeDryRunId(entity string) string {

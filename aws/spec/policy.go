@@ -15,7 +15,7 @@ type AttachPolicy struct {
 	_      string `action:"attach" entity:"policy" awsAPI:"iam"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Arn    *string `awsName:"PolicyArn" awsType:"awsstr" templateName:"arn" required:""`
+	Arn    *string `awsName:"PolicyArn" awsType:"awsstr" templateName:"arn"`
 	User   *string `awsName:"UserName" awsType:"awsstr" templateName:"user"`
 	Group  *string `awsName:"GroupName" awsType:"awsstr" templateName:"group"`
 	Role   *string `awsName:"RoleName" awsType:"awsstr" templateName:"role"`
@@ -49,6 +49,9 @@ func (cmd *AttachPolicy) ConvertParams() ([]string, func(values map[string]inter
 func (cmd *AttachPolicy) ManualValidateCommand(params map[string]interface{}) (errs []error) {
 	if cmd.User == nil && cmd.Group == nil && cmd.Role == nil {
 		errs = append(errs, fmt.Errorf("attach policy: missing required field 'user', 'group' or 'role'"))
+	}
+	if cmd.Arn == nil {
+		errs = append(errs, fmt.Errorf("attach policy: missing required field 'arn'"))
 	}
 	return
 }

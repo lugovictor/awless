@@ -25,6 +25,12 @@ type CreateTag struct {
 	Value    *string `templateName:"value" required:""`
 }
 
+func (cmd *CreateTag) ValidateParams(params []string) ([]string, error) {
+	return validateParams("create tag", cmd, params)
+}
+
+func (cmd *CreateTag) ExtractResultString(i interface{}) string { return "" }
+
 func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("dry run: create tag: cannot set params on command struct: %s", err)
@@ -67,41 +73,6 @@ func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}
 	cmd.logger.ExtraVerbosef("ec2.CreateTags call took %s", time.Since(start))
 	return cmd.result, nil
 }
-
-func (cmd *CreateTag) ValidateParams(params []string) ([]string, error) {
-	result := structListParamsKeys(cmd)
-
-	var extras, required, missing []string
-	for n, isRequired := range result {
-		if isRequired {
-			required = append(required, n)
-			if !contains(params, n) {
-				missing = append(missing, n)
-			}
-		} else {
-			extras = append(extras, n)
-		}
-	}
-
-	var extraParams, requiredParams string
-	if len(extras) > 0 {
-		extraParams = fmt.Sprintf("\n\t- extra params: %s", strings.Join(extras, ", "))
-	}
-	if len(required) > 0 {
-		requiredParams = fmt.Sprintf("\n\t- required params: %s", strings.Join(required, ", "))
-	}
-
-	for _, p := range params {
-		_, ok := result[p]
-		if !ok {
-			return missing, fmt.Errorf("create instance: unexpected param key '%s'%s%s\n", p, requiredParams, extraParams)
-		}
-	}
-
-	return missing, nil
-}
-
-func (cmd *CreateTag) ExtractResultString(i interface{}) string { return "" }
 
 type createTagRetryer struct {
 	client.DefaultRetryer

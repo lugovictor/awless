@@ -76,6 +76,10 @@ func (cmd *AttachPolicy) ValidateCommand(params map[string]interface{}) (errs []
 	return
 }
 
+func (cmd *AttachPolicy) ParamsHelp() string {
+	return generateParamsHelp("attachpolicy", structListParamsKeys(cmd))
+}
+
 func (cmd *AttachPolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
@@ -156,6 +160,10 @@ func (cmd *CreateInstance) DryRun(ctx, params map[string]interface{}) (interface
 	}
 
 	return nil, fmt.Errorf("dry run: create instance : %s", err)
+}
+
+func (cmd *CreateInstance) ParamsHelp() string {
+	return generateParamsHelp("createinstance", structListParamsKeys(cmd))
 }
 
 func (cmd *CreateInstance) inject(params map[string]interface{}) error {
@@ -240,6 +248,10 @@ func (cmd *CreateSubnet) DryRun(ctx, params map[string]interface{}) (interface{}
 	return nil, fmt.Errorf("dry run: create subnet : %s", err)
 }
 
+func (cmd *CreateSubnet) ParamsHelp() string {
+	return generateParamsHelp("createsubnet", structListParamsKeys(cmd))
+}
+
 func (cmd *CreateSubnet) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
@@ -289,6 +301,10 @@ func (cmd *CreateTag) ValidateCommand(params map[string]interface{}) (errs []err
 	}
 
 	return
+}
+
+func (cmd *CreateTag) ParamsHelp() string {
+	return generateParamsHelp("createtag", structListParamsKeys(cmd))
 }
 
 func (cmd *CreateTag) inject(params map[string]interface{}) error {

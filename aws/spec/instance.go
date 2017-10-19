@@ -2,7 +2,6 @@ package awsspec
 
 import (
 	"fmt"
-	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -28,36 +27,7 @@ type CreateInstance struct {
 }
 
 func (cmd *CreateInstance) ValidateParams(params []string) ([]string, error) {
-	result := structListParamsKeys(cmd)
-
-	var extras, required, missing []string
-	for n, isRequired := range result {
-		if isRequired {
-			required = append(required, n)
-			if !contains(params, n) {
-				missing = append(missing, n)
-			}
-		} else {
-			extras = append(extras, n)
-		}
-	}
-
-	var extraParams, requiredParams string
-	if len(extras) > 0 {
-		extraParams = fmt.Sprintf("\n\t- extra params: %s", strings.Join(extras, ", "))
-	}
-	if len(required) > 0 {
-		requiredParams = fmt.Sprintf("\n\t- required params: %s", strings.Join(required, ", "))
-	}
-
-	for _, p := range params {
-		_, ok := result[p]
-		if !ok {
-			return missing, fmt.Errorf("create instance: unexpected param key '%s'%s%s\n", p, requiredParams, extraParams)
-		}
-	}
-
-	return missing, nil
+	return validateParams("create instance", cmd, params)
 }
 
 func (cmd *CreateInstance) ExtractResultString(r *ec2.Reservation) string {

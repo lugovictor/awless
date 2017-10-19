@@ -64,5 +64,54 @@ func TestValidationDSL(t *testing.T) {
 			}
 		}
 	}
+}
+
+type validParamTestStruct struct {
+	Param1 *string `templateName:"param1" required:""`
+	Param2 *string `templateName:"param2" required:""`
+	Param3 *string `templateName:"param3"`
+}
+
+func (*validParamTestStruct) ParamsHelp() string                             { return "" }
+func (*validParamTestStruct) ValidateParams([]string) ([]string, error)      { return nil, nil }
+func (*validParamTestStruct) ValidateCommand(map[string]interface{}) []error { return nil }
+func (*validParamTestStruct) inject(params map[string]interface{}) error     { return nil }
+func (*validParamTestStruct) Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error) {
+	return nil, nil
+}
+
+func TestValidateParams(t *testing.T) {
+	tcases := []struct {
+		cmd            command
+		params         []string
+		expMissing     []string
+		expErrContains []string
+	}{
+		{&validParamTestStruct{}, []string{"param1"}, []string{"param2"}, nil},
+		{&validParamTestStruct{}, []string{"param1", "param2"}, nil, nil},
+		{&validParamTestStruct{}, []string{"param1", "param2", "param3"}, nil, nil},
+		{&validParamTestStruct{}, []string{"param1", "param2", "param4"}, nil, []string{"unexpected", "param4"}},
+	}
+
+	for i, tcase := range tcases {
+		missing, err := validateParams("", tcase.cmd, tcase.params)
+		if len(tcase.expErrContains) == 0 {
+			if err != nil {
+				t.Fatalf("%d: %s", i+1, err)
+			}
+			if got, want := missing, tcase.expMissing; !reflect.DeepEqual(got, want) {
+				t.Fatalf("%d: got %#v, want %#v", i+1, got, want)
+			}
+		} else {
+			if err == nil {
+				t.Fatalf("%d: expected err, got nil", i+1)
+			}
+			for _, each := range tcase.expErrContains {
+				if got, want := err.Error(), each; !strings.Contains(got, want) {
+					t.Fatalf("%d: got '%s', want '%s'", i+1, got, want)
+				}
+			}
+		}
+	}
 
 }
