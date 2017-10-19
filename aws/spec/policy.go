@@ -22,42 +22,9 @@ type AttachPolicy struct {
 }
 
 func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
-	allParams := map[string]bool{
-		"arn": false, "user": false, "group": false, "role": false, "service": false, "access": false,
-	}
-
-	paramString := " - params: ((service and access) or arn) and (user or group or role)"
-
-	for _, p := range params {
-		_, ok := allParams[p]
-		if !ok {
-			return nil, fmt.Errorf("attach policy: unexpected param key '%s'%s\n", p, paramString)
-		}
-	}
-
-	hasArn := contains(params, "arn")
-	hasService := contains(params, "service")
-	hasAccess := contains(params, "access")
-
-	hasUser := contains(params, "user")
-	hasGroup := contains(params, "group")
-	hasRole := contains(params, "role")
-
-	if !hasUser && !hasGroup && !hasRole {
-		return nil, errors.New("missing param 'user', 'group' or 'role'")
-	}
-
-	if !hasArn && !hasService && !hasAccess {
-		return []string{"arn"}, nil
-	} else if hasArn {
-		return nil, nil
-	} else if hasService && hasAccess {
-		return nil, nil
-	} else if hasService {
-		return []string{"access"}, nil
-	} else {
-		return []string{"service"}, nil
-	}
+	return paramRule{
+		tree: allOf(oneOf(node("user"), node("role"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))),
+	}.verify(params)
 }
 
 func (cmd *AttachPolicy) ConvertParams() ([]string, func(values map[string]interface{}) (map[string]interface{}, error)) {

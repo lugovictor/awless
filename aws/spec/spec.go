@@ -72,53 +72,52 @@ func fakeDryRunId(entity string) string {
 }
 
 type paramRule struct {
-	rule   ruleNode
+	tree   ruleNode
 	extras []string
 }
 
-func (p *paramRule) hint() string {
+func (p paramRule) help() string {
 	if len(p.extras) == 0 {
-		return p.rule.hint()
+		return p.tree.help()
 	}
 
-	return fmt.Sprintf("(%s OR %s)", p.rule.hint(), strings.Join(p.extras, " OR "))
+	return fmt.Sprintf("%s or extra params: \"%s\"", p.tree.help(), strings.Join(p.extras, "\", \""))
 }
 
-func (p *paramRule) unexpected(keys []string) []string {
+func (p paramRule) verify(keys []string) ([]string, error) {
+	if p.tree == nil {
+		return nil, nil
+	}
 	var unexpected []string
 	for _, key := range keys {
-		if p.rule.unexpected(key) && !contains(p.extras, key) {
+		if p.tree.unexpected(key) && !contains(p.extras, key) {
 			unexpected = append(unexpected, key)
 		}
 	}
-	return unexpected
-}
-
-func (p *paramRule) verify(keys []string) ([]string, error) {
 	var err error
-	if unexpected := p.unexpected(keys); len(unexpected) > 0 {
-		err = fmt.Errorf("unexpected param key(s) '%s' - expected params: %s", strings.Join(unexpected, "', '"), p.hint())
+	if len(unexpected) > 0 {
+		err = fmt.Errorf("unexpected param(s) '%s': expecting %s", strings.Join(unexpected, "', '"), p.help())
 	}
-	missings, _ := p.rule.eval(keys)
+	missings, _ := p.tree.missings(keys)
 	return missings, err
 }
 
 type ruleNode interface {
-	hint() string
+	help() string
 	unexpected(string) bool
-	eval([]string) ([]string, int)
+	missings([]string) ([]string, int)
 }
 
 type oneOfNode struct {
 	children []ruleNode
 }
 
-func (o oneOfNode) hint() string {
+func (o oneOfNode) help() string {
 	var childrenHint []string
 	for _, c := range o.children {
-		childrenHint = append(childrenHint, c.hint())
+		childrenHint = append(childrenHint, c.help())
 	}
-	return fmt.Sprintf("(%s)", strings.Join(childrenHint, " OR "))
+	return fmt.Sprintf("(%s)", strings.Join(childrenHint, " or "))
 }
 
 func (o oneOfNode) unexpected(s string) bool {
@@ -130,33 +129,29 @@ func (o oneOfNode) unexpected(s string) bool {
 	return true
 }
 
-func (o oneOfNode) eval(keys []string) ([]string, int) {
-	var maxProcessed int
-	minSize := len(keys)
-	var minMissings []string
+func (o oneOfNode) missings(keys []string) ([]string, int) {
+	maxFound := -1
+	var missings []string
 	for _, child := range o.children {
-		missings, nbFound := child.eval(keys)
-		if nbFound > maxProcessed && len(missings) < minSize ||
-			nbFound == maxProcessed && len(missings) < minSize ||
-			nbFound > maxProcessed && len(missings) == minSize {
-			minMissings = missings
-			minSize = len(missings)
-			maxProcessed = nbFound
+		cMissings, nbFound := child.missings(keys)
+		if nbFound > maxFound {
+			missings = cMissings
+			maxFound = nbFound
 		}
 	}
-	return minMissings, maxProcessed
+	return missings, maxFound
 }
 
 type allOfNode struct {
 	children []ruleNode
 }
 
-func (a allOfNode) hint() string {
+func (a allOfNode) help() string {
 	var childrenHint []string
 	for _, c := range a.children {
-		childrenHint = append(childrenHint, c.hint())
+		childrenHint = append(childrenHint, c.help())
 	}
-	return fmt.Sprintf("(%s)", strings.Join(childrenHint, " AND "))
+	return fmt.Sprintf("(%s)", strings.Join(childrenHint, " and "))
 }
 
 func (a allOfNode) unexpected(s string) bool {
@@ -168,13 +163,14 @@ func (a allOfNode) unexpected(s string) bool {
 	return true
 }
 
-func (a allOfNode) eval(keys []string) (missings []string, nbFound int) {
+func (a allOfNode) missings(keys []string) (missings []string, nbFound int) {
 	for _, child := range a.children {
-		cMissings, cFound := child.eval(keys)
+		cMissings, cFound := child.missings(keys)
 		if len(cMissings) > 0 {
 			missings = append(missings, cMissings...)
+		} else {
+			nbFound += cFound
 		}
-		nbFound += cFound
 	}
 	return
 }
@@ -183,7 +179,7 @@ type stringNode struct {
 	key string
 }
 
-func (k stringNode) hint() string {
+func (k stringNode) help() string {
 	return fmt.Sprintf("\"%s\"", k.key)
 }
 
@@ -191,7 +187,7 @@ func (k stringNode) unexpected(s string) bool {
 	return k.key != s
 }
 
-func (k stringNode) eval(keys []string) (missings []string, nbFound int) {
+func (k stringNode) missings(keys []string) (missings []string, nbFound int) {
 	if contains(keys, k.key) {
 		nbFound++
 		return
@@ -200,24 +196,16 @@ func (k stringNode) eval(keys []string) (missings []string, nbFound int) {
 	return
 }
 
-func oneOf(ifaces ...*paramRule) *paramRule {
-	var children []ruleNode
-	for _, i := range ifaces {
-		children = append(children, i.rule)
-	}
-	return &paramRule{rule: oneOfNode{children: children}}
+func oneOf(nodes ...ruleNode) ruleNode {
+	return oneOfNode{children: nodes}
 }
 
-func allOf(ifaces ...*paramRule) *paramRule {
-	var children []ruleNode
-	for _, i := range ifaces {
-		children = append(children, i.rule)
-	}
-	return &paramRule{rule: allOfNode{children: children}}
+func allOf(nodes ...ruleNode) ruleNode {
+	return allOfNode{children: nodes}
 }
 
-func node(key string) *paramRule {
-	return &paramRule{rule: stringNode{key}}
+func node(key string) ruleNode {
+	return stringNode{key}
 }
 
 func String(v string) *string {
