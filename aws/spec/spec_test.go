@@ -115,3 +115,10 @@ func TestValidateParams(t *testing.T) {
 	}
 
 }
+
+func keys(m map[string]interface{}) (keys []string) {
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return
+}
