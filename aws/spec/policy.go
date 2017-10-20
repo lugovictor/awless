@@ -23,8 +23,7 @@ type AttachPolicy struct {
 
 func (cmd *AttachPolicy) ValidateParams(params []string) ([]string, error) {
 	return paramRule{
-		errPrefix: "attach policy: ",
-		tree:      allOf(oneOfE(node("user"), node("role"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))),
+		tree: allOf(oneOfE(node("user"), node("role"), node("group")), oneOf(node("arn"), allOf(node("access"), node("service")))),
 	}.verify(params)
 }
 
@@ -48,16 +47,12 @@ func (cmd *AttachPolicy) ConvertParams() ([]string, func(values map[string]inter
 
 func (cmd *AttachPolicy) ManualValidateCommand(params map[string]interface{}) (errs []error) {
 	if cmd.User == nil && cmd.Group == nil && cmd.Role == nil {
-		errs = append(errs, fmt.Errorf("attach policy: missing required field 'user', 'group' or 'role'"))
+		errs = append(errs, fmt.Errorf("missing required field 'user', 'group' or 'role'"))
 	}
 	if cmd.Arn == nil {
-		errs = append(errs, fmt.Errorf("attach policy: missing required field 'arn'"))
+		errs = append(errs, fmt.Errorf("missing required field 'arn'"))
 	}
 	return
-}
-
-func (cmd *AttachPolicy) ExtractResultString(i interface{}) string {
-	return ""
 }
 
 func (cmd *AttachPolicy) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {

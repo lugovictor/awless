@@ -43,7 +43,7 @@ func (ru *Runner) Run() error {
 	var err error
 	tplExec.Template, env, err = Compile(tplExec.Template, env, NewRunnerCompileMode)
 	if err != nil {
-		return fmt.Errorf("runner: compile: %s", err)
+		return err
 	}
 
 	tplExec.Fillers = env.GetProcessedFillers()

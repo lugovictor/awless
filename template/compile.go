@@ -1,6 +1,7 @@
 package template
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -168,10 +169,10 @@ func validateCommandsParamsPass(tpl *Template, env *Env) (*Template, *Env, error
 		}
 		if v, ok := cmd.(VP); ok {
 			if _, err := v.ValidateParams(node.Keys()); err != nil {
-				return err
+				return cmdErr(node, err)
 			}
 		} else {
-			return fmt.Errorf("command %s %s does not implement ValidateParams", node.Action, node.Entity)
+			return cmdErr(node, "command does not implement param validation")
 		}
 		return nil
 	}
@@ -193,14 +194,14 @@ func normalizeMissingRequiredParamsAsHolePass(tpl *Template, env *Env) (*Templat
 		if v, ok := cmd.(VP); ok {
 			missing, err := v.ValidateParams(node.Keys())
 			if err != nil {
-				return err
+				return cmdErr(node, err)
 			}
 			for _, e := range missing {
 				normalized := fmt.Sprintf("%s.%s", node.Entity, e)
 				node.Params[e] = ast.NewHoleValue(normalized)
 			}
 		} else {
-			return fmt.Errorf("command %s %s does not implement ValidateParams", node.Action, node.Entity)
+			return cmdErr(node, "command does not implement param normalization")
 		}
 		return nil
 	}
@@ -214,7 +215,7 @@ func convertParamsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 		key := fmt.Sprintf("%s%s", node.Action, node.Entity)
 		cmd := env.Lookuper(key)
 		if cmd == nil {
-			return fmt.Errorf("validate: cannot find command for '%s'", key)
+			return fmt.Errorf("convert: cannot find command for '%s'", key)
 		}
 
 		type C interface {
@@ -231,7 +232,7 @@ func convertParamsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 			}
 			converted, err := convFunc(values)
 			if err != nil {
-				return err
+				return cmdErr(node, err)
 			}
 			for _, k := range keys {
 				delete(node.Params, k)
@@ -554,4 +555,24 @@ func foundIn(key string, slice []string) (found bool) {
 		}
 	}
 	return
+}
+
+func cmdErr(cmd *ast.CommandNode, i interface{}, a ...interface{}) error {
+	var prefix string
+	if cmd != nil {
+		prefix = fmt.Sprintf("%s %s: ", cmd.Action, cmd.Entity)
+	}
+	var msg string
+	switch ii := i.(type) {
+	case nil:
+		return nil
+	case string:
+		msg = ii
+	case error:
+		msg = ii.Error()
+	}
+	if len(a) == 0 {
+		return errors.New(prefix + msg)
+	}
+	return fmt.Errorf("%s"+msg, append([]interface{}{prefix}, a...)...)
 }

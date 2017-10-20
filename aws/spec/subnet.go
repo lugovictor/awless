@@ -21,7 +21,7 @@ type CreateSubnet struct {
 }
 
 func (cmd *CreateSubnet) ValidateParams(params []string) ([]string, error) {
-	return validateParams("create subnet", cmd, params)
+	return validateParams(cmd, params)
 }
 
 func (cmd *CreateSubnet) ValidateCIDR() error {
@@ -29,15 +29,15 @@ func (cmd *CreateSubnet) ValidateCIDR() error {
 	return err
 }
 
-func (cmd *CreateSubnet) ExtractResultString(r *ec2.CreateSubnetOutput) string {
-	return awssdk.StringValue(r.Subnet.SubnetId)
+func (cmd *CreateSubnet) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ec2.CreateSubnetOutput).Subnet.SubnetId)
 }
 
 func (cmd *CreateSubnet) AfterRun(ctx map[string]interface{}, output interface{}) error {
 	createTag := NewCommandFuncs["createtag"]().(*CreateTag)
 	createTag.Key = awssdk.String("Name")
 	createTag.Value = cmd.Name
-	createTag.Resource = awssdk.String(cmd.ExtractResultString(output.(*ec2.CreateSubnetOutput)))
+	createTag.Resource = awssdk.String(cmd.ExtractResult(output))
 	if errs := createTag.ValidateCommand(nil); len(errs) > 0 {
 		return fmt.Errorf("%v", errs)
 	}

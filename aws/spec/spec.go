@@ -24,6 +24,10 @@ type AfterRunner interface {
 	AfterRun(ctx map[string]interface{}, output interface{}) error
 }
 
+type ResultExtractor interface {
+	ExtractResult(interface{}) string
+}
+
 type ManualValidator interface {
 	ManualValidateCommand(params map[string]interface{}) []error
 }
@@ -51,7 +55,12 @@ func implementsManualValidator(i interface{}) (ManualValidator, bool) {
 	return v, ok
 }
 
-func validateParams(cmdName string, cmd command, params []string) ([]string, error) {
+func implementsResultExtractor(i interface{}) (ResultExtractor, bool) {
+	v, ok := i.(ResultExtractor)
+	return v, ok
+}
+
+func validateParams(cmd command, params []string) ([]string, error) {
 	paramsDefinitions := structListParamsKeys(cmd)
 	var missing []string
 	for n, isRequired := range paramsDefinitions {
@@ -68,10 +77,15 @@ func validateParams(cmdName string, cmd command, params []string) ([]string, err
 		}
 	}
 
-	if len(unexpected) > 0 {
-		return missing, fmt.Errorf("%s: unexpected param(s) '%s'\n%s", cmdName, strings.Join(unexpected, "', '"), cmd.ParamsHelp())
+	switch len(unexpected) {
+	case 0:
+		return missing, nil
+	case 1:
+		return missing, fmt.Errorf("unexpected '%s' param\n%s", unexpected[0], cmd.ParamsHelp())
+	default:
+		return missing, fmt.Errorf("unexpected '%s' params\n%s", strings.Join(unexpected, "', '"), cmd.ParamsHelp())
 	}
-	return missing, nil
+
 }
 
 func generateParamsHelp(commandKey string, params map[string]bool) string {
@@ -137,9 +151,8 @@ func fakeDryRunId(entity string) string {
 }
 
 type paramRule struct {
-	errPrefix string
-	tree      ruleNode
-	extras    []string
+	tree   ruleNode
+	extras []string
 }
 
 func (p paramRule) help() string {
@@ -160,16 +173,22 @@ func (p paramRule) verify(keys []string) ([]string, error) {
 			unexpected = append(unexpected, key)
 		}
 	}
-	if len(unexpected) > 0 {
-		return nil, fmt.Errorf("%sunexpected param(s) '%s': expecting %s", p.errPrefix, strings.Join(unexpected, "', '"), p.help())
+	switch len(unexpected) {
+	case 0:
+		break
+	case 1:
+		return nil, fmt.Errorf("unexpected '%s' param\n%s", unexpected[0], p.help())
+	default:
+		return nil, fmt.Errorf("unexpected '%s' params\n%s", strings.Join(unexpected, "', '"), p.help())
 	}
+
 	missings, _, errs := p.tree.missings(keys)
 	if len(errs) > 0 {
 		var errStr bytes.Buffer
 		for _, e := range errs {
 			errStr.WriteString(e.Error())
 		}
-		return nil, errors.New(p.errPrefix + errStr.String())
+		return nil, errors.New(errStr.String())
 	}
 	return missings, nil
 }

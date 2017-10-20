@@ -53,7 +53,7 @@ func generateNewDrivers() {
 		panic(err)
 	}
 
-	if err := ioutil.WriteFile(filepath.Join(SPEC_DIR, "gen_runs.go"), buff.Bytes(), 0666); err != nil {
+	if err = ioutil.WriteFile(filepath.Join(SPEC_DIR, "gen_runs.go"), buff.Bytes(), 0666); err != nil {
 		panic(err)
 	}
 
@@ -155,40 +155,43 @@ func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
-			return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: BeforeRun: %s", brErr)
+			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 	
 	{{ if $tag.Call }}
 	input := &{{ $tag.Input }}{}
 	if err := structInjector(cmd, input) ; err != nil {
-		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: cannot inject in {{ $tag.Input }}: %s", err)
+		return nil, fmt.Errorf("cannot inject in {{ $tag.Input }}: %s", err)
 	}
 	start := time.Now()
 	output, err := cmd.api.{{ $tag.Call }}(input)
 	cmd.logger.ExtraVerbosef("{{ $tag.API }}.{{ $tag.Call }} call took %s", time.Since(start))
 	if err != nil {
-		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: %s", err)
+		return nil, err
 	}
 	{{- else }}
 	
 	output, err := cmd.ManualRun(ctx, params)
 	if err != nil {
-		return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: %s", err)
+		return nil, err
 	}
 	{{- end }}
 
 	if v, ok := implementsAfterRun(cmd); ok {
 		if brErr := v.AfterRun(ctx, output); brErr != nil {
-			return nil, fmt.Errorf("{{ $tag.Action }} {{ $tag.Entity }}: AfterRun: %s", brErr)
+			return nil, fmt.Errorf("after run: %s", brErr)
 		}
 	}
 
-	return cmd.ExtractResultString(output), nil
+	if v, ok := implementsResultExtractor(cmd);ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
 }
 
 func (cmd *{{ $cmdName }}) ValidateCommand(params map[string]interface{}) (errs []error) {
@@ -209,13 +212,13 @@ func (cmd *{{ $cmdName }}) ValidateCommand(params map[string]interface{}) (errs 
 {{ if $tag.HasDryRun }}
 func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("dry run: {{ $tag.Action }} {{ $tag.Entity }}: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
 	}
 
 	input := &{{ $tag.Input }}{}
 	input.SetDryRun(true)
 	if err := structInjector(cmd, input) ; err != nil {
-		return nil, fmt.Errorf("dry run: {{ $tag.Action }} {{ $tag.Entity }}: cannot inject in {{ $tag.Input }}: %s", err)
+		return nil, fmt.Errorf("dry run: cannot inject in {{ $tag.Input }}: %s", err)
 	}
 
 	start := time.Now()
@@ -229,7 +232,7 @@ func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface
 		}
 	}
 
-	return nil, fmt.Errorf("dry run: {{ $tag.Action }} {{ $tag.Entity }} : %s", err) 
+	return nil, fmt.Errorf("dry run: %s", err) 
 }
 {{- end }}
 

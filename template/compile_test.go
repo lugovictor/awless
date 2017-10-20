@@ -644,6 +644,26 @@ func TestResolveHolesPass(t *testing.T) {
 	assertCmdParams(t, tpl, map[string]interface{}{"type": "t2.micro", "count": 3})
 }
 
+func TestCmdErr(t *testing.T) {
+	tcases := []struct {
+		cmd    *ast.CommandNode
+		err    interface{}
+		ifaces []interface{}
+		expErr error
+	}{
+		{&ast.CommandNode{Action: "create", Entity: "instance"}, nil, nil, nil},
+		{&ast.CommandNode{Action: "create", Entity: "instance"}, "my error", nil, errors.New("create instance: my error")},
+		{&ast.CommandNode{Action: "create", Entity: "instance"}, errors.New("my error"), nil, errors.New("create instance: my error")},
+		{nil, "my error", nil, errors.New("my error")},
+		{&ast.CommandNode{Action: "create", Entity: "instance"}, "my error with %s %d", []interface{}{"Donald", 1}, errors.New("create instance: my error with Donald 1")},
+	}
+	for i, tcase := range tcases {
+		if got, want := cmdErr(tcase.cmd, tcase.err, tcase.ifaces...), tcase.expErr; !reflect.DeepEqual(got, want) {
+			t.Fatalf("%d: got %#v, want %#v", i+1, got, want)
+		}
+	}
+}
+
 type params map[string]interface{}
 type holes map[string][]string
 type refs map[string][]string

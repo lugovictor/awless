@@ -27,18 +27,18 @@ type CreateInstance struct {
 }
 
 func (cmd *CreateInstance) ValidateParams(params []string) ([]string, error) {
-	return validateParams("create instance", cmd, params)
+	return validateParams(cmd, params)
 }
 
-func (cmd *CreateInstance) ExtractResultString(r *ec2.Reservation) string {
-	return awssdk.StringValue(r.Instances[0].InstanceId)
+func (cmd *CreateInstance) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ec2.Reservation).Instances[0].InstanceId)
 }
 
 func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface{}) error {
 	createTag := NewCommandFuncs["createtag"]().(*CreateTag)
 	createTag.Key = awssdk.String("Name")
 	createTag.Value = cmd.Name
-	createTag.Resource = awssdk.String(cmd.ExtractResultString(output.(*ec2.Reservation)))
+	createTag.Resource = awssdk.String(cmd.ExtractResult(output))
 	if errs := createTag.ValidateCommand(nil); len(errs) > 0 {
 		return fmt.Errorf("%v", errs)
 	}
@@ -46,4 +46,26 @@ func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface
 		return err
 	}
 	return nil
+}
+
+type DeleteInstance struct {
+	_      string `action:"delete" entity:"instance" awsAPI:"ec2" awsCall:"TerminateInstances" awsInput:"ec2.TerminateInstancesInput" awsOutput:"ec2.TerminateInstancesOutput" awsDryRun:""`
+	logger *logger.Logger
+	api    ec2iface.EC2API
+	IDs    []*string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"ids"`
+}
+
+func (cmd *DeleteInstance) ConvertParams() ([]string, func(values map[string]interface{}) (map[string]interface{}, error)) {
+	return []string{"id"},
+		func(values map[string]interface{}) (map[string]interface{}, error) {
+			if id, hasID := values["id"]; hasID {
+				return map[string]interface{}{"ids": id}, nil
+			} else {
+				return nil, nil
+			}
+		}
+}
+
+func (cmd *DeleteInstance) ValidateParams(params []string) ([]string, error) {
+	return paramRule{tree: oneOf(node("ids"), node("id"))}.verify(params)
 }

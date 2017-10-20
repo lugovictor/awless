@@ -26,20 +26,18 @@ type CreateTag struct {
 }
 
 func (cmd *CreateTag) ValidateParams(params []string) ([]string, error) {
-	return validateParams("create tag", cmd, params)
+	return validateParams(cmd, params)
 }
-
-func (cmd *CreateTag) ExtractResultString(i interface{}) string { return "" }
 
 func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("dry run: create tag: cannot set params on command struct: %s", err)
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateTagsInput{}
 	input.SetDryRun(true)
 	if err := structInjector(cmd, input); err != nil {
-		return nil, fmt.Errorf("create tag: cannot inject in ec2.CreateTagsInput: %s", err)
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.CreateTagsInput: %s", err)
 	}
 	input.Tags = []*ec2.Tag{{Key: cmd.Key, Value: cmd.Value}}
 
@@ -54,13 +52,13 @@ func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, e
 		}
 	}
 
-	return nil, fmt.Errorf("dry run: create tag : %s", err)
+	return nil, fmt.Errorf("dry run: %s", err)
 }
 
 func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
 	input := &ec2.CreateTagsInput{}
 	if err := structInjector(cmd, input); err != nil {
-		return nil, fmt.Errorf("create tag: cannot inject in ec2.CreateTagsInput: %s", err)
+		return nil, fmt.Errorf("cannot inject in ec2.CreateTagsInput: %s", err)
 	}
 	input.Tags = []*ec2.Tag{{Key: cmd.Key, Value: cmd.Value}}
 
@@ -68,7 +66,7 @@ func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}
 	req, _ := cmd.api.CreateTagsRequest(input)
 	req.Retryer = createTagRetryer{}
 	if err := req.Send(); err != nil {
-		return nil, fmt.Errorf("CreateTag: %s", err)
+		return nil, err
 	}
 	cmd.logger.ExtraVerbosef("ec2.CreateTags call took %s", time.Since(start))
 	return cmd.result, nil

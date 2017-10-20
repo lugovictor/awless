@@ -94,7 +94,7 @@ func TestValidateParams(t *testing.T) {
 	}
 
 	for i, tcase := range tcases {
-		missing, err := validateParams("", tcase.cmd, tcase.params)
+		missing, err := validateParams(tcase.cmd, tcase.params)
 		if len(tcase.expErrContains) == 0 {
 			if err != nil {
 				t.Fatalf("%d: %s", i+1, err)
