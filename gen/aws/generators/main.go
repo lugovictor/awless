@@ -1,4 +1,4 @@
-//go:generate go run $GOFILE drivers.go properties.go paramsdoc.go mocks.go fetchers.go services.go new_drivers.go
+//go:generate go run $GOFILE drivers.go properties.go paramsdoc.go mocks.go fetchers.go services.go new_drivers.go new_driverstests.go
 //go:generate gofmt -s -w ../../../aws
 //go:generate goimports -w ../../../aws
 
@@ -48,6 +48,7 @@ func main() {
 
 	// drivers, templates
 	generateNewDrivers()
+	generateNewDriversTests()
 	generateDriverFuncs()
 	generateTemplateTemplates()
 	generateDriverTypes()

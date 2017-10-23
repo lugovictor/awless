@@ -36,7 +36,7 @@ func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, e
 
 	input := &ec2.CreateTagsInput{}
 	input.SetDryRun(true)
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("dry run: cannot inject in ec2.CreateTagsInput: %s", err)
 	}
 	input.Tags = []*ec2.Tag{{Key: cmd.Key, Value: cmd.Value}}
@@ -57,7 +57,7 @@ func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, e
 
 func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
 	input := &ec2.CreateTagsInput{}
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("cannot inject in ec2.CreateTagsInput: %s", err)
 	}
 	input.Tags = []*ec2.Tag{{Key: cmd.Key, Value: cmd.Value}}

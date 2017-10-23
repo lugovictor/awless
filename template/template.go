@@ -42,15 +42,19 @@ func (s *Template) DoRun(env *Env) (*Template, error) {
 	for _, sts := range s.Statements {
 		clone := sts.Clone()
 		current.Statements = append(current.Statements, clone)
+		ctx := map[string]interface{}{
+			"Variables":  env.ResolvedVariables,
+			"References": env.ResolvedVariables, // retro-compatibility with v0.1.2
+		}
 		switch n := clone.Node.(type) {
 		case *ast.CommandNode:
 			n.ProcessRefs(vars)
 			if env.IsDryRun {
 				if v, ok := n.Command.(dryRunner); ok {
-					n.CmdResult, n.CmdErr = v.DryRun(env.ResolvedVariables, n.ToDriverParams())
+					n.CmdResult, n.CmdErr = v.DryRun(ctx, n.ToDriverParams())
 				}
 			} else {
-				n.CmdResult, n.CmdErr = n.Run(env.ResolvedVariables, n.ToDriverParams())
+				n.CmdResult, n.CmdErr = n.Run(ctx, n.ToDriverParams())
 				if n.CmdErr != nil {
 					return current, nil
 				}

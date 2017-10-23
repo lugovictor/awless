@@ -106,7 +106,7 @@ func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{},
 	}
 
 	input := &ec2.RunInstancesInput{}
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("cannot inject in ec2.RunInstancesInput: %s", err)
 	}
 	start := time.Now()
@@ -150,7 +150,7 @@ func (cmd *CreateInstance) DryRun(ctx, params map[string]interface{}) (interface
 
 	input := &ec2.RunInstancesInput{}
 	input.SetDryRun(true)
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("dry run: cannot inject in ec2.RunInstancesInput: %s", err)
 	}
 
@@ -195,7 +195,7 @@ func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	input := &ec2.CreateSubnetInput{}
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("cannot inject in ec2.CreateSubnetInput: %s", err)
 	}
 	start := time.Now()
@@ -239,7 +239,7 @@ func (cmd *CreateSubnet) DryRun(ctx, params map[string]interface{}) (interface{}
 
 	input := &ec2.CreateSubnetInput{}
 	input.SetDryRun(true)
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("dry run: cannot inject in ec2.CreateSubnetInput: %s", err)
 	}
 
@@ -342,7 +342,7 @@ func (cmd *DeleteInstance) Run(ctx, params map[string]interface{}) (interface{},
 	}
 
 	input := &ec2.TerminateInstancesInput{}
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("cannot inject in ec2.TerminateInstancesInput: %s", err)
 	}
 	start := time.Now()
@@ -386,7 +386,7 @@ func (cmd *DeleteInstance) DryRun(ctx, params map[string]interface{}) (interface
 
 	input := &ec2.TerminateInstancesInput{}
 	input.SetDryRun(true)
-	if err := structInjector(cmd, input); err != nil {
+	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("dry run: cannot inject in ec2.TerminateInstancesInput: %s", err)
 	}
 

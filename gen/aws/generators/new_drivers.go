@@ -165,7 +165,7 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	
 	{{ if $tag.Call }}
 	input := &{{ $tag.Input }}{}
-	if err := structInjector(cmd, input) ; err != nil {
+	if err := structInjector(cmd, input, ctx) ; err != nil {
 		return nil, fmt.Errorf("cannot inject in {{ $tag.Input }}: %s", err)
 	}
 	start := time.Now()
@@ -217,7 +217,7 @@ func (cmd *{{ $cmdName }}) DryRun(ctx, params map[string]interface{}) (interface
 
 	input := &{{ $tag.Input }}{}
 	input.SetDryRun(true)
-	if err := structInjector(cmd, input) ; err != nil {
+	if err := structInjector(cmd, input, ctx) ; err != nil {
 		return nil, fmt.Errorf("dry run: cannot inject in {{ $tag.Input }}: %s", err)
 	}
 

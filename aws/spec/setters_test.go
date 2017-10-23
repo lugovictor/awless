@@ -760,7 +760,7 @@ func TestStructInjector(t *testing.T) {
 
 	out := new(outStruct)
 
-	err := structInjector(in, out)
+	err := structInjector(in, out, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

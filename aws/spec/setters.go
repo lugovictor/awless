@@ -95,14 +95,7 @@ func setFieldWithType(v, i interface{}, fieldPath string, destType string, inter
 	}
 	switch destType {
 	case awsstr:
-		switch vv := v.(type) {
-		case []string:
-			v = strings.Join(vv, ",")
-		case *string:
-			v = *vv
-		default:
-			v = fmt.Sprint(v)
-		}
+		v = castString(v)
 	case awsint64:
 		v, err = castInt64(v)
 		if err != nil {
@@ -353,6 +346,17 @@ func setFieldWithType(v, i interface{}, fieldPath string, destType string, inter
 	return nil
 }
 
+func castString(v interface{}) string {
+	switch vv := v.(type) {
+	case []string:
+		return strings.Join(vv, ",")
+	case *string:
+		return *vv
+	default:
+		return fmt.Sprint(v)
+	}
+}
+
 func castFloat(v interface{}) (float64, error) {
 	switch vv := v.(type) {
 	case string:
@@ -473,7 +477,7 @@ func castStringPointerSlice(v interface{}) []*string {
 }
 
 func fileOrRemoteFileAsBase64(v interface{}, tplData interface{}) (string, error) {
-	path := fmt.Sprint(v)
+	path := castString(v)
 
 	var readErr error
 	var content []byte
@@ -510,6 +514,8 @@ func fileOrRemoteFileAsBase64(v interface{}, tplData interface{}) (string, error
 			content = buf.Bytes()
 		}
 	}
+	fmt.Println(string(content))
+	fmt.Println("tplData", tplData)
 
 	return base64.StdEncoding.EncodeToString(content), nil
 }
@@ -571,7 +577,7 @@ func structListParamsKeys(src interface{}) map[string]bool {
 	return result
 }
 
-func structInjector(src, dest interface{}) error {
+func structInjector(src, dest interface{}, ctx map[string]interface{}) error {
 	val := reflect.ValueOf(src).Elem()
 	stru := val.Type()
 
@@ -584,7 +590,7 @@ func structInjector(src, dest interface{}) error {
 				if dstType, tok := field.Tag.Lookup("awsType"); tok {
 					fieldValue := val.Field(i)
 					if fieldValue.IsValid() && fieldValue.Interface() != nil && !fieldValue.IsNil() {
-						if err := setFieldWithType(fieldValue.Interface(), dest, destName, dstType); err != nil {
+						if err := setFieldWithType(fieldValue.Interface(), dest, destName, dstType, ctx); err != nil {
 							return err
 						}
 					}

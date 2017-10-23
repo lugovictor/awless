@@ -1,78 +1,70 @@
 package awsspec
 
 import (
-	"reflect"
-	"testing"
+	"encoding/base64"
+	"io/ioutil"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/client/metadata"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
-	"github.com/wallix/awless/logger"
 )
 
-func TestCreateInstance(t *testing.T) {
-	newCmd := func() *CreateInstance {
-		return &CreateInstance{api: &mockInstance{t: t}, logger: logger.DiscardLogger}
+func init() {
+	userdataFile := generateTmpFile("this is my content with {{ .GoTemplateVar }} content")
+	genTestsContext["createinstance"] = map[string]interface{}{"GoTemplateVar": "awesome"}
+	genTestsParams["createinstance"] = map[string]interface{}{
+		"count":         3,
+		"image":         "ami-1234",
+		"name":          "myinstance",
+		"subnet":        "sub_1",
+		"type":          "t2.nano",
+		"keypair":       "mykp",
+		"ip":            "10.2.3.4",
+		"userdata":      userdataFile,
+		"securitygroup": "sg-1234",
+		"lock":          "true",
+		"role":          "myrole",
 	}
-	NewCommandFuncs["createinstance"] = func() interface{} { return newCmd() }
-	NewCommandFuncs["createtag"] = func() interface{} { return &CreateTag{api: &mockInstance{t: t}, logger: logger.DiscardLogger} }
+	genTestsCleanupFunc["createinstance"] = func() { os.Remove(userdataFile) }
+	genTestsExpected["createinstance"] = &ec2.RunInstancesInput{
+		SubnetId:              String("sub_1"),
+		ImageId:               String("ami-1234"),
+		InstanceType:          String("t2.nano"),
+		MinCount:              Int64(3),
+		MaxCount:              Int64(3),
+		KeyName:               String("mykp"),
+		PrivateIpAddress:      String("10.2.3.4"),
+		SecurityGroupIds:      []*string{String("sg-1234")},
+		DisableApiTermination: Bool(true),
+		IamInstanceProfile:    &ec2.IamInstanceProfileSpecification{Name: String("myrole")},
+		UserData:              String(base64.StdEncoding.EncodeToString([]byte("this is my content with awesome content"))),
+	}
+	genTestsOutputExtractFunc["createinstance"] = func() interface{} {
+		return &ec2.Reservation{Instances: []*ec2.Instance{{InstanceId: String("id-my-instance")}}}
+	}
+	genTestsOutput["createinstance"] = "id-my-instance"
 
-	params := map[string]interface{}{
-		"name":   "myinstance",
-		"subnet": "sub_1",
-		"image":  "ami-1234",
-		"type":   "t2.nano",
-		"count":  3,
+	genTestsParams["deleteinstance"] = map[string]interface{}{
+		"id": []interface{}{"my-instance-id1", "my-instance-id2"},
 	}
-	missings, err := newCmd().ValidateParams(keys(params))
+	genTestsExpected["deleteinstance"] = &ec2.TerminateInstancesInput{
+		InstanceIds: []*string{String("my-instance-id1"), String("my-instance-id2")},
+	}
+}
+
+func generateTmpFile(content string) (path string) {
+	file, err := ioutil.TempFile(".", "tmpfile")
 	if err != nil {
-		t.Fatal(err)
+		panic(err)
 	}
-	if got, want := len(missings), 0; got != want {
-		t.Fatalf("got %d, want %d", got, want)
-	}
-	if errs := newCmd().ValidateCommand(params); len(errs) > 0 {
-		t.Fatalf("%v", errs)
-	}
-	res, err := newCmd().Run(nil, params)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if got, want := res, "id-my-instance"; got != want {
-		t.Fatalf("got %s, want %s", got, want)
-	}
+	ioutil.WriteFile(file.Name(), []byte(content), 0644)
+	return file.Name()
 }
 
-type mockInstance struct {
-	ec2iface.EC2API
-	t *testing.T
-}
-
-func (m *mockInstance) RunInstances(got *ec2.RunInstancesInput) (*ec2.Reservation, error) {
-	want := &ec2.RunInstancesInput{
-		SubnetId:     String("sub_1"),
-		ImageId:      String("ami-1234"),
-		InstanceType: String("t2.nano"),
-		MinCount:     Int64(3),
-		MaxCount:     Int64(3),
-	}
-	if !reflect.DeepEqual(got, want) {
-		m.t.Fatalf("got %#v, want %#v", got, want)
-	}
-	return &ec2.Reservation{Instances: []*ec2.Instance{{InstanceId: String("id-my-instance")}}}, nil
-}
-
-func (m *mockInstance) CreateTagsRequest(got *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput) {
-	want := &ec2.CreateTagsInput{
-		Resources: []*string{String("id-my-instance")},
-		Tags:      []*ec2.Tag{{Key: String("Name"), Value: String("myinstance")}},
-	}
-	if !reflect.DeepEqual(got, want) {
-		m.t.Fatalf("got %#v, want %#v", got, want)
-	}
-
+//Not tested
+func (m *mockEc2) CreateTagsRequest(got *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput) {
 	output = &ec2.CreateTagsOutput{}
 	req = request.New(aws.Config{}, metadata.ClientInfo{}, request.Handlers{}, nil, &request.Operation{}, got, output)
 	return

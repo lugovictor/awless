@@ -122,3 +122,29 @@ func keys(m map[string]interface{}) (keys []string) {
 	}
 	return
 }
+
+func convertParamsIfAvailable(cmd interface{}, params map[string]interface{}) (map[string]interface{}, error) {
+	type C interface {
+		ConvertParams() ([]string, func(values map[string]interface{}) (map[string]interface{}, error))
+	}
+	if v, ok := cmd.(C); ok {
+		keys, convFunc := v.ConvertParams()
+		values := make(map[string]interface{})
+		for _, k := range keys {
+			if vv, ok := params[k]; ok {
+				values[k] = vv
+			}
+		}
+		converted, err := convFunc(values)
+		if err != nil {
+			return params, err
+		}
+		for _, k := range keys {
+			delete(params, k)
+		}
+		for k, v := range converted {
+			params[k] = v
+		}
+	}
+	return params, nil
+}
