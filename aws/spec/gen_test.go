@@ -44,6 +44,7 @@ var (
 	newCreateInternetgateway = func() *CreateInternetgateway {
 		return &CreateInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newCreateRoute           = func() *CreateRoute { return &CreateRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateRoutetable      = func() *CreateRoutetable { return &CreateRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateSubnet          = func() *CreateSubnet { return &CreateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateTag             = func() *CreateTag { return &CreateTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
@@ -52,6 +53,7 @@ var (
 	newDeleteInternetgateway = func() *DeleteInternetgateway {
 		return &DeleteInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newDeleteRoute           = func() *DeleteRoute { return &DeleteRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteRoutetable      = func() *DeleteRoutetable { return &DeleteRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteSubnet          = func() *DeleteSubnet { return &DeleteSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVpc             = func() *DeleteVpc { return &DeleteVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
@@ -69,12 +71,14 @@ func init() {
 	NewCommandFuncs["attachroutetable"] = func() interface{} { return newAttachRoutetable() }
 	NewCommandFuncs["createinstance"] = func() interface{} { return newCreateInstance() }
 	NewCommandFuncs["createinternetgateway"] = func() interface{} { return newCreateInternetgateway() }
+	NewCommandFuncs["createroute"] = func() interface{} { return newCreateRoute() }
 	NewCommandFuncs["createroutetable"] = func() interface{} { return newCreateRoutetable() }
 	NewCommandFuncs["createsubnet"] = func() interface{} { return newCreateSubnet() }
 	NewCommandFuncs["createtag"] = func() interface{} { return newCreateTag() }
 	NewCommandFuncs["createvpc"] = func() interface{} { return newCreateVpc() }
 	NewCommandFuncs["deleteinstance"] = func() interface{} { return newDeleteInstance() }
 	NewCommandFuncs["deleteinternetgateway"] = func() interface{} { return newDeleteInternetgateway() }
+	NewCommandFuncs["deleteroute"] = func() interface{} { return newDeleteRoute() }
 	NewCommandFuncs["deleteroutetable"] = func() interface{} { return newDeleteRoutetable() }
 	NewCommandFuncs["deletesubnet"] = func() interface{} { return newDeleteSubnet() }
 	NewCommandFuncs["deletevpc"] = func() interface{} { return newDeleteVpc() }
@@ -189,6 +193,32 @@ func TestGenCreateInternetgateway(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["createinternetgateway"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenCreateRoute(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["createroute"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["createroute"]
+	missings, err := newCreateRoute().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCreateRoute(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCreateRoute().ValidateCommand(genTestsParams["createroute"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCreateRoute().Run(genTestsContext["createroute"], genTestsParams["createroute"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["createroute"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -345,6 +375,32 @@ func TestGenDeleteInternetgateway(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["deleteinternetgateway"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDeleteRoute(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["deleteroute"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["deleteroute"]
+	missings, err := newDeleteRoute().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDeleteRoute(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDeleteRoute().ValidateCommand(genTestsParams["deleteroute"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDeleteRoute().Run(genTestsContext["deleteroute"], genTestsParams["deleteroute"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["deleteroute"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -576,6 +632,16 @@ func (m *mockEc2) CreateInternetGateway(input *ec2.CreateInternetGatewayInput) (
 	return nil, nil
 }
 
+func (m *mockEc2) CreateRoute(input *ec2.CreateRouteInput) (*ec2.CreateRouteOutput, error) {
+	if got, want := input, genTestsExpected["createroute"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createroute"]; ok {
+		return outFunc().(*ec2.CreateRouteOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) CreateRouteTable(input *ec2.CreateRouteTableInput) (*ec2.CreateRouteTableOutput, error) {
 	if got, want := input, genTestsExpected["createroutetable"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -622,6 +688,16 @@ func (m *mockEc2) DeleteInternetGateway(input *ec2.DeleteInternetGatewayInput) (
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteinternetgateway"]; ok {
 		return outFunc().(*ec2.DeleteInternetGatewayOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DeleteRoute(input *ec2.DeleteRouteInput) (*ec2.DeleteRouteOutput, error) {
+	if got, want := input, genTestsExpected["deleteroute"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteroute"]; ok {
+		return outFunc().(*ec2.DeleteRouteOutput), nil
 	}
 	return nil, nil
 }

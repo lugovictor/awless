@@ -443,6 +443,95 @@ func (cmd *CreateInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateRoute(l *logger.Logger, sess *session.Session) *CreateRoute {
+	cmd := new(CreateRoute)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *CreateRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateRouteInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.CreateRouteInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateRoute(input)
+	cmd.logger.ExtraVerbosef("ec2.CreateRoute call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateRoute) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *CreateRoute) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateRouteInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.CreateRouteInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.CreateRoute(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.CreateRoute call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: create route ok")
+			return fakeDryRunId("route"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *CreateRoute) ParamsHelp() string {
+	return generateParamsHelp("createroute", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateRoute) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateRoutetable(l *logger.Logger, sess *session.Session) *CreateRoutetable {
 	cmd := new(CreateRoutetable)
 	cmd.api = ec2.New(sess)
@@ -943,6 +1032,95 @@ func (cmd *DeleteInternetgateway) ParamsHelp() string {
 }
 
 func (cmd *DeleteInternetgateway) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteRoute(l *logger.Logger, sess *session.Session) *DeleteRoute {
+	cmd := new(DeleteRoute)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *DeleteRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteRouteInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DeleteRouteInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteRoute(input)
+	cmd.logger.ExtraVerbosef("ec2.DeleteRoute call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteRoute) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteRoute) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteRouteInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.DeleteRouteInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.DeleteRoute(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.DeleteRoute call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: delete route ok")
+			return fakeDryRunId("route"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DeleteRoute) ParamsHelp() string {
+	return generateParamsHelp("deleteroute", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteRoute) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
