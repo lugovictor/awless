@@ -1,4 +1,4 @@
-//go:generate go run $GOFILE drivers.go properties.go paramsdoc.go mocks.go fetchers.go services.go new_drivers.go new_driverstests.go
+//go:generate go run $GOFILE drivers.go properties.go paramsdoc.go mocks.go fetchers.go services.go new_drivers.go new_driverstests.go new_commands_from_deprecated_definitions.go
 //go:generate gofmt -s -w ../../../aws
 //go:generate goimports -w ../../../aws
 
@@ -17,6 +17,12 @@
 //go:generate gofmt -s -w ../../../cloud/rdf
 //go:generate goimports -w ../../../cloud/rdf
 
+//go:generate gofmt -s -w ../../../aws/spec
+//go:generate goimports -w ../../../aws/spec
+
+//go:generate gofmt -s -w ../../../aws/spec/gen
+//go:generate goimports -w ../../../aws/spec/gen
+
 package main
 
 import (
@@ -31,6 +37,7 @@ var (
 	SERVICES_DIR         = filepath.Join(ROOT_DIR, "aws", "services")
 	DRIVERS_DIR          = filepath.Join(ROOT_DIR, "aws", "driver")
 	SPEC_DIR             = filepath.Join(ROOT_DIR, "aws", "spec")
+	GEN_SPEC_DIR         = filepath.Join(SPEC_DIR, "gen")
 	DOC_DIR              = filepath.Join(ROOT_DIR, "aws", "doc")
 	CLOUD_PROPERTIES_DIR = filepath.Join(ROOT_DIR, "cloud", "properties")
 	CLOUD_RDF_DIR        = filepath.Join(ROOT_DIR, "cloud", "rdf")
@@ -52,6 +59,9 @@ func main() {
 	generateDriverFuncs()
 	generateTemplateTemplates()
 	generateDriverTypes()
+
+	//New commands from deprecated defintions
+	generateNewCommands()
 
 	// properties
 	generateProperties()
