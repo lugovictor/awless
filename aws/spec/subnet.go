@@ -46,3 +46,26 @@ func (cmd *CreateSubnet) AfterRun(ctx map[string]interface{}, output interface{}
 	}
 	return nil
 }
+
+type UpdateSubnet struct {
+	_      string `action:"update" entity:"subnet" awsAPI:"ec2" awsCall:"ModifySubnetAttribute" awsInput:"ec2.ModifySubnetAttributeInput" awsOutput:"ec2.ModifySubnetAttributeOutput"`
+	logger *logger.Logger
+	api    ec2iface.EC2API
+	Id     *string `awsName:"SubnetId" awsType:"awsstr" templateName:"id" required:""`
+	Public *bool   `awsName:"MapPublicIpOnLaunch" awsType:"awsboolattribute" templateName:"public"`
+}
+
+func (cmd *UpdateSubnet) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+type DeleteSubnet struct {
+	_      string `action:"delete" entity:"subnet" awsAPI:"ec2" awsCall:"DeleteSubnet" awsInput:"ec2.DeleteSubnetInput" awsOutput:"ec2.DeleteSubnetOutput" awsDryRun:""`
+	logger *logger.Logger
+	api    ec2iface.EC2API
+	Id     *string `awsName:"SubnetId" awsType:"awsstr" templateName:"id" required:""`
+}
+
+func (cmd *DeleteSubnet) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}

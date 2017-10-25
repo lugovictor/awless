@@ -22,6 +22,22 @@ func init() {
 		return &ec2.CreateSubnetOutput{Subnet: &ec2.Subnet{SubnetId: String("id-my-subnet")}}
 	}
 	genTestsOutput["createsubnet"] = "id-my-subnet"
+
+	genTestsParams["updatesubnet"] = map[string]interface{}{
+		"id":     "my-subnet-id",
+		"public": "true",
+	}
+	genTestsExpected["updatesubnet"] = &ec2.ModifySubnetAttributeInput{
+		MapPublicIpOnLaunch: &ec2.AttributeBooleanValue{Value: Bool(true)},
+		SubnetId:            String("my-subnet-id"),
+	}
+
+	genTestsParams["deletesubnet"] = map[string]interface{}{
+		"id": "my-subnet-id",
+	}
+	genTestsExpected["deletesubnet"] = &ec2.DeleteSubnetInput{
+		SubnetId: String("my-subnet-id"),
+	}
 }
 
 func TestCreateSubnet(t *testing.T) {

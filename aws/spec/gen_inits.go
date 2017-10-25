@@ -25,21 +25,41 @@ import (
 var NewCommandFuncs = map[string]func() interface{}{}
 
 func InitCommands(l *logger.Logger, sess *session.Session) {
+	NewCommandFuncs["attachinternetgateway"] = func() interface{} { return NewAttachInternetgateway(l, sess) }
 	NewCommandFuncs["attachpolicy"] = func() interface{} { return NewAttachPolicy(l, sess) }
+	NewCommandFuncs["attachroutetable"] = func() interface{} { return NewAttachRoutetable(l, sess) }
 	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
+	NewCommandFuncs["createinternetgateway"] = func() interface{} { return NewCreateInternetgateway(l, sess) }
+	NewCommandFuncs["createroutetable"] = func() interface{} { return NewCreateRoutetable(l, sess) }
 	NewCommandFuncs["createsubnet"] = func() interface{} { return NewCreateSubnet(l, sess) }
 	NewCommandFuncs["createtag"] = func() interface{} { return NewCreateTag(l, sess) }
 	NewCommandFuncs["createvpc"] = func() interface{} { return NewCreateVpc(l, sess) }
 	NewCommandFuncs["deleteinstance"] = func() interface{} { return NewDeleteInstance(l, sess) }
+	NewCommandFuncs["deleteinternetgateway"] = func() interface{} { return NewDeleteInternetgateway(l, sess) }
+	NewCommandFuncs["deleteroutetable"] = func() interface{} { return NewDeleteRoutetable(l, sess) }
+	NewCommandFuncs["deletesubnet"] = func() interface{} { return NewDeleteSubnet(l, sess) }
 	NewCommandFuncs["deletevpc"] = func() interface{} { return NewDeleteVpc(l, sess) }
+	NewCommandFuncs["detachinternetgateway"] = func() interface{} { return NewDetachInternetgateway(l, sess) }
+	NewCommandFuncs["detachroutetable"] = func() interface{} { return NewDetachRoutetable(l, sess) }
+	NewCommandFuncs["updatesubnet"] = func() interface{} { return NewUpdateSubnet(l, sess) }
 }
 
 var (
+	_ command = &AttachInternetgateway{}
 	_ command = &AttachPolicy{}
+	_ command = &AttachRoutetable{}
 	_ command = &CreateInstance{}
+	_ command = &CreateInternetgateway{}
+	_ command = &CreateRoutetable{}
 	_ command = &CreateSubnet{}
 	_ command = &CreateTag{}
 	_ command = &CreateVpc{}
 	_ command = &DeleteInstance{}
+	_ command = &DeleteInternetgateway{}
+	_ command = &DeleteRoutetable{}
+	_ command = &DeleteSubnet{}
 	_ command = &DeleteVpc{}
+	_ command = &DetachInternetgateway{}
+	_ command = &DetachRoutetable{}
+	_ command = &UpdateSubnet{}
 )
