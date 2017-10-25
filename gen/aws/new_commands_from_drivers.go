@@ -22,9 +22,9 @@ type NewCommandParam struct {
 }
 
 type NewCommand struct {
-	Action, Entity, API, Call, Input, Output string
-	DryRun                                   bool
-	Params                                   []NewCommandParam
+	Action, Entity, API, Call, Input, Output, OutputExtractor string
+	DryRun                                                    bool
+	Params                                                    []NewCommandParam
 }
 
 func BuildNewCommandsFromDriversDeprecatedDefs(defs []driversDef) map[string][]NewCommand {
@@ -57,14 +57,15 @@ func BuildNewCommandsFromDriversDeprecatedDefs(defs []driversDef) map[string][]N
 				})
 			} else {
 				commands[driver.Entity] = append(commands[driver.Entity], NewCommand{
-					Action: driver.Action,
-					Entity: driver.Entity,
-					API:    def.Api,
-					Call:   driver.ApiMethod,
-					Input:  driver.Input,
-					Output: driver.Output,
-					DryRun: !driver.DryRunUnsupported,
-					Params: params,
+					Action:          driver.Action,
+					Entity:          driver.Entity,
+					API:             def.Api,
+					Call:            driver.ApiMethod,
+					Input:           driver.Input,
+					Output:          driver.Output,
+					OutputExtractor: driver.OutputExtractor,
+					DryRun:          !driver.DryRunUnsupported,
+					Params:          params,
 				})
 			}
 		}

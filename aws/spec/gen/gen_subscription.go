@@ -18,21 +18,36 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/aws/aws-sdk-go/service/sns/snsiface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateSubscription struct {
-	_        string `action: "create" entity: "subscription" awsAPI: "sns" awsCall: "Subscribe" awsInput: "SubscribeInput" awsOutput: "SubscribeOutput"`
+	_        string `action:"create" entity:"subscription" awsAPI:"sns" awsCall:"Subscribe" awsInput:"sns.SubscribeInput" awsOutput:"sns.SubscribeOutput"`
 	logger   *logger.Logger
 	api      snsiface.SNSAPI
-	Topic    *string `awsName: "TopicArn" awsType: "awsstr" templateName: "topic" required: ""`
-	Endpoint *string `awsName: "Endpoint" awsType: "awsstr" templateName: "endpoint" required: ""`
-	Protocol *string `awsName: "Protocol" awsType: "awsstr" templateName: "protocol" required: ""`
+	Topic    *string `awsName:"TopicArn" awsType:"awsstr" templateName:"topic" required:""`
+	Endpoint *string `awsName:"Endpoint" awsType:"awsstr" templateName:"endpoint" required:""`
+	Protocol *string `awsName:"Protocol" awsType:"awsstr" templateName:"protocol" required:""`
 }
+
+func (cmd *CreateSubscription) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateSubscription) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*sns.SubscribeOutput).SubscriptionArn)
+}
+
 type DeleteSubscription struct {
-	_      string `action: "delete" entity: "subscription" awsAPI: "sns" awsCall: "Unsubscribe" awsInput: "UnsubscribeInput" awsOutput: "UnsubscribeOutput"`
+	_      string `action:"delete" entity:"subscription" awsAPI:"sns" awsCall:"Unsubscribe" awsInput:"sns.UnsubscribeInput" awsOutput:"sns.UnsubscribeOutput"`
 	logger *logger.Logger
 	api    snsiface.SNSAPI
-	Id     *string `awsName: "SubscriptionArn" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"SubscriptionArn" awsType:"awsstr" templateName:"id" required:""`
+}
+
+func (cmd *DeleteSubscription) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

@@ -18,25 +18,40 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/elbv2"
 	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateListener struct {
-	_            string `action: "create" entity: "listener" awsAPI: "elbv2" awsCall: "CreateListener" awsInput: "CreateListenerInput" awsOutput: "CreateListenerOutput"`
+	_            string `action:"create" entity:"listener" awsAPI:"elbv2" awsCall:"CreateListener" awsInput:"elbv2.CreateListenerInput" awsOutput:"elbv2.CreateListenerOutput"`
 	logger       *logger.Logger
 	api          elbv2iface.ELBV2API
-	Actiontype   *struct{} `awsName: "DefaultActions[0]Type" awsType: "awsslicestruct" templateName: "actiontype" required: ""`
-	Targetgroup  *struct{} `awsName: "DefaultActions[0]TargetGroupArn" awsType: "awsslicestruct" templateName: "targetgroup" required: ""`
-	Loadbalancer *string   `awsName: "LoadBalancerArn" awsType: "awsstr" templateName: "loadbalancer" required: ""`
-	Port         *int64    `awsName: "Port" awsType: "awsint64" templateName: "port" required: ""`
-	Protocol     *string   `awsName: "Protocol" awsType: "awsstr" templateName: "protocol" required: ""`
-	Certificate  *struct{} `awsName: "Certificates[0]CertificateArn" awsType: "awsslicestruct" templateName: "certificate"`
-	Sslpolicy    *string   `awsName: "SslPolicy" awsType: "awsstr" templateName: "sslpolicy"`
+	Actiontype   *struct{} `awsName:"DefaultActions[0]Type" awsType:"awsslicestruct" templateName:"actiontype" required:""`
+	Targetgroup  *struct{} `awsName:"DefaultActions[0]TargetGroupArn" awsType:"awsslicestruct" templateName:"targetgroup" required:""`
+	Loadbalancer *string   `awsName:"LoadBalancerArn" awsType:"awsstr" templateName:"loadbalancer" required:""`
+	Port         *int64    `awsName:"Port" awsType:"awsint64" templateName:"port" required:""`
+	Protocol     *string   `awsName:"Protocol" awsType:"awsstr" templateName:"protocol" required:""`
+	Certificate  *struct{} `awsName:"Certificates[0]CertificateArn" awsType:"awsslicestruct" templateName:"certificate"`
+	Sslpolicy    *string   `awsName:"SslPolicy" awsType:"awsstr" templateName:"sslpolicy"`
 }
+
+func (cmd *CreateListener) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateListener) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*elbv2.CreateListenerOutput).Listeners[0].ListenerArn)
+}
+
 type DeleteListener struct {
-	_      string `action: "delete" entity: "listener" awsAPI: "elbv2" awsCall: "DeleteListener" awsInput: "DeleteListenerInput" awsOutput: "DeleteListenerOutput"`
+	_      string `action:"delete" entity:"listener" awsAPI:"elbv2" awsCall:"DeleteListener" awsInput:"elbv2.DeleteListenerInput" awsOutput:"elbv2.DeleteListenerOutput"`
 	logger *logger.Logger
 	api    elbv2iface.ELBV2API
-	Id     *string `awsName: "ListenerArn" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"ListenerArn" awsType:"awsstr" templateName:"id" required:""`
+}
+
+func (cmd *DeleteListener) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

@@ -23,26 +23,40 @@ import (
 )
 
 type CreateBucket struct {
-	_      string `action: "create" entity: "bucket" awsAPI: "s3" awsCall: "CreateBucket" awsInput: "CreateBucketInput" awsOutput: "CreateBucketOutput"`
+	_      string `action:"create" entity:"bucket" awsAPI:"s3" awsCall:"CreateBucket" awsInput:"s3.CreateBucketInput" awsOutput:"s3.CreateBucketOutput"`
 	logger *logger.Logger
 	api    s3iface.S3API
-	Name   *string `awsName: "Bucket" awsType: "awsstr" templateName: "name" required: ""`
-	Acl    *string `awsName: "ACL" awsType: "awsstr" templateName: "acl"`
+	Name   *string `awsName:"Bucket" awsType:"awsstr" templateName:"name" required:""`
+	Acl    *string `awsName:"ACL" awsType:"awsstr" templateName:"acl"`
 }
+
+func (cmd *CreateBucket) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateBucket) ExtractResult(i interface{}) string {
+	return params["name"]
+}
+
 type UpdateBucket struct {
-	_                string `action: "update" entity: "bucket" awsAPI: "s3"`
+	_                string `action:"update" entity:"bucket" awsAPI:"s3"`
 	logger           *logger.Logger
 	api              s3iface.S3API
-	Name             *struct{} `templateName: "name" required: ""`
-	Acl              *struct{} `templateName: "acl"`
-	PublicWebsite    *struct{} `templateName: "public-website"`
-	RedirectHostname *struct{} `templateName: "redirect-hostname"`
-	IndexSuffix      *struct{} `templateName: "index-suffix"`
-	EnforceHttps     *struct{} `templateName: "enforce-https"`
+	Name             *struct{} `templateName:"name" required:""`
+	Acl              *struct{} `templateName:"acl"`
+	PublicWebsite    *struct{} `templateName:"public-website"`
+	RedirectHostname *struct{} `templateName:"redirect-hostname"`
+	IndexSuffix      *struct{} `templateName:"index-suffix"`
+	EnforceHttps     *struct{} `templateName:"enforce-https"`
 }
+
 type DeleteBucket struct {
-	_      string `action: "delete" entity: "bucket" awsAPI: "s3" awsCall: "DeleteBucket" awsInput: "DeleteBucketInput" awsOutput: "DeleteBucketOutput"`
+	_      string `action:"delete" entity:"bucket" awsAPI:"s3" awsCall:"DeleteBucket" awsInput:"s3.DeleteBucketInput" awsOutput:"s3.DeleteBucketOutput"`
 	logger *logger.Logger
 	api    s3iface.S3API
-	Name   *string `awsName: "Bucket" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"Bucket" awsType:"awsstr" templateName:"name" required:""`
+}
+
+func (cmd *DeleteBucket) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

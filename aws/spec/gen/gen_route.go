@@ -23,17 +23,26 @@ import (
 )
 
 type CreateRoute struct {
-	_       string `action: "create" entity: "route" awsAPI: "ec2" awsCall: "CreateRoute" awsInput: "CreateRouteInput" awsOutput: "CreateRouteOutput" awsDryRun: ""`
+	_       string `action:"create" entity:"route" awsAPI:"ec2" awsCall:"CreateRoute" awsInput:"ec2.CreateRouteInput" awsOutput:"ec2.CreateRouteOutput" awsDryRun:""`
 	logger  *logger.Logger
 	api     ec2iface.EC2API
-	Table   *string `awsName: "RouteTableId" awsType: "awsstr" templateName: "table" required: ""`
-	Cidr    *string `awsName: "DestinationCidrBlock" awsType: "awsstr" templateName: "cidr" required: ""`
-	Gateway *string `awsName: "GatewayId" awsType: "awsstr" templateName: "gateway" required: ""`
+	Table   *string `awsName:"RouteTableId" awsType:"awsstr" templateName:"table" required:""`
+	Cidr    *string `awsName:"DestinationCidrBlock" awsType:"awsstr" templateName:"cidr" required:""`
+	Gateway *string `awsName:"GatewayId" awsType:"awsstr" templateName:"gateway" required:""`
 }
+
+func (cmd *CreateRoute) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type DeleteRoute struct {
-	_      string `action: "delete" entity: "route" awsAPI: "ec2" awsCall: "DeleteRoute" awsInput: "DeleteRouteInput" awsOutput: "DeleteRouteOutput" awsDryRun: ""`
+	_      string `action:"delete" entity:"route" awsAPI:"ec2" awsCall:"DeleteRoute" awsInput:"ec2.DeleteRouteInput" awsOutput:"ec2.DeleteRouteOutput" awsDryRun:""`
 	logger *logger.Logger
 	api    ec2iface.EC2API
-	Table  *string `awsName: "RouteTableId" awsType: "awsstr" templateName: "table" required: ""`
-	Cidr   *string `awsName: "DestinationCidrBlock" awsType: "awsstr" templateName: "cidr" required: ""`
+	Table  *string `awsName:"RouteTableId" awsType:"awsstr" templateName:"table" required:""`
+	Cidr   *string `awsName:"DestinationCidrBlock" awsType:"awsstr" templateName:"cidr" required:""`
+}
+
+func (cmd *DeleteRoute) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

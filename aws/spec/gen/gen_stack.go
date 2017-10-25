@@ -18,45 +18,69 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/cloudformation"
 	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateStack struct {
-	_               string `action: "create" entity: "stack" awsAPI: "cloudformation" awsCall: "CreateStack" awsInput: "CreateStackInput" awsOutput: "CreateStackOutput"`
+	_               string `action:"create" entity:"stack" awsAPI:"cloudformation" awsCall:"CreateStack" awsInput:"cloudformation.CreateStackInput" awsOutput:"cloudformation.CreateStackOutput"`
 	logger          *logger.Logger
 	api             cloudformationiface.CloudFormationAPI
-	Name            *string   `awsName: "StackName" awsType: "awsstr" templateName: "name" required: ""`
-	TemplateFile    *string   `awsName: "TemplateBody" awsType: "awsfiletostring" templateName: "template-file" required: ""`
-	Capabilities    *[]string `awsName: "Capabilities" awsType: "awsstringslice" templateName: "capabilities"`
-	DisableRollback *bool     `awsName: "DisableRollback" awsType: "awsbool" templateName: "disable-rollback"`
-	Notifications   *[]string `awsName: "NotificationARNs" awsType: "awsstringslice" templateName: "notifications"`
-	OnFailure       *string   `awsName: "OnFailure" awsType: "awsstr" templateName: "on-failure"`
-	Parameters      *struct{} `awsName: "Parameters" awsType: "awsparameterslice" templateName: "parameters"`
-	ResourceTypes   *[]string `awsName: "ResourceTypes" awsType: "awsstringslice" templateName: "resource-types"`
-	Role            *string   `awsName: "RoleARN" awsType: "awsstr" templateName: "role"`
-	PolicyFile      *string   `awsName: "StackPolicyBody" awsType: "awsfiletostring" templateName: "policy-file"`
-	Timeout         *int64    `awsName: "TimeoutInMinutes" awsType: "awsint64" templateName: "timeout"`
+	Name            *string   `awsName:"StackName" awsType:"awsstr" templateName:"name" required:""`
+	TemplateFile    *string   `awsName:"TemplateBody" awsType:"awsfiletostring" templateName:"template-file" required:""`
+	Capabilities    *[]string `awsName:"Capabilities" awsType:"awsstringslice" templateName:"capabilities"`
+	DisableRollback *bool     `awsName:"DisableRollback" awsType:"awsbool" templateName:"disable-rollback"`
+	Notifications   *[]string `awsName:"NotificationARNs" awsType:"awsstringslice" templateName:"notifications"`
+	OnFailure       *string   `awsName:"OnFailure" awsType:"awsstr" templateName:"on-failure"`
+	Parameters      *struct{} `awsName:"Parameters" awsType:"awsparameterslice" templateName:"parameters"`
+	ResourceTypes   *[]string `awsName:"ResourceTypes" awsType:"awsstringslice" templateName:"resource-types"`
+	Role            *string   `awsName:"RoleARN" awsType:"awsstr" templateName:"role"`
+	PolicyFile      *string   `awsName:"StackPolicyBody" awsType:"awsfiletostring" templateName:"policy-file"`
+	Timeout         *int64    `awsName:"TimeoutInMinutes" awsType:"awsint64" templateName:"timeout"`
 }
+
+func (cmd *CreateStack) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateStack) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*cloudformation.CreateStackOutput).StackId)
+}
+
 type UpdateStack struct {
-	_                   string `action: "update" entity: "stack" awsAPI: "cloudformation" awsCall: "UpdateStack" awsInput: "UpdateStackInput" awsOutput: "UpdateStackOutput"`
+	_                   string `action:"update" entity:"stack" awsAPI:"cloudformation" awsCall:"UpdateStack" awsInput:"cloudformation.UpdateStackInput" awsOutput:"cloudformation.UpdateStackOutput"`
 	logger              *logger.Logger
 	api                 cloudformationiface.CloudFormationAPI
-	Name                *string   `awsName: "StackName" awsType: "awsstr" templateName: "name" required: ""`
-	Capabilities        *[]string `awsName: "Capabilities" awsType: "awsstringslice" templateName: "capabilities"`
-	Notifications       *[]string `awsName: "NotificationARNs" awsType: "awsstringslice" templateName: "notifications"`
-	Parameters          *struct{} `awsName: "Parameters" awsType: "awsparameterslice" templateName: "parameters"`
-	ResourceTypes       *[]string `awsName: "ResourceTypes" awsType: "awsstringslice" templateName: "resource-types"`
-	Role                *string   `awsName: "RoleARN" awsType: "awsstr" templateName: "role"`
-	PolicyFile          *string   `awsName: "StackPolicyBody" awsType: "awsfiletostring" templateName: "policy-file"`
-	PolicyUpdateFile    *string   `awsName: "StackPolicyDuringUpdateBody" awsType: "awsfiletostring" templateName: "policy-update-file"`
-	TemplateFile        *string   `awsName: "TemplateBody" awsType: "awsfiletostring" templateName: "template-file"`
-	UsePreviousTemplate *bool     `awsName: "UsePreviousTemplate" awsType: "awsbool" templateName: "use-previous-template"`
+	Name                *string   `awsName:"StackName" awsType:"awsstr" templateName:"name" required:""`
+	Capabilities        *[]string `awsName:"Capabilities" awsType:"awsstringslice" templateName:"capabilities"`
+	Notifications       *[]string `awsName:"NotificationARNs" awsType:"awsstringslice" templateName:"notifications"`
+	Parameters          *struct{} `awsName:"Parameters" awsType:"awsparameterslice" templateName:"parameters"`
+	ResourceTypes       *[]string `awsName:"ResourceTypes" awsType:"awsstringslice" templateName:"resource-types"`
+	Role                *string   `awsName:"RoleARN" awsType:"awsstr" templateName:"role"`
+	PolicyFile          *string   `awsName:"StackPolicyBody" awsType:"awsfiletostring" templateName:"policy-file"`
+	PolicyUpdateFile    *string   `awsName:"StackPolicyDuringUpdateBody" awsType:"awsfiletostring" templateName:"policy-update-file"`
+	TemplateFile        *string   `awsName:"TemplateBody" awsType:"awsfiletostring" templateName:"template-file"`
+	UsePreviousTemplate *bool     `awsName:"UsePreviousTemplate" awsType:"awsbool" templateName:"use-previous-template"`
 }
+
+func (cmd *UpdateStack) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *UpdateStack) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*cloudformation.UpdateStackOutput).StackId)
+}
+
 type DeleteStack struct {
-	_               string `action: "delete" entity: "stack" awsAPI: "cloudformation" awsCall: "DeleteStack" awsInput: "DeleteStackInput" awsOutput: "DeleteStackOutput"`
+	_               string `action:"delete" entity:"stack" awsAPI:"cloudformation" awsCall:"DeleteStack" awsInput:"cloudformation.DeleteStackInput" awsOutput:"cloudformation.DeleteStackOutput"`
 	logger          *logger.Logger
 	api             cloudformationiface.CloudFormationAPI
-	Name            *string   `awsName: "StackName" awsType: "awsstr" templateName: "name" required: ""`
-	RetainResources *[]string `awsName: "RetainResources" awsType: "awsstringslice" templateName: "retain-resources"`
+	Name            *string   `awsName:"StackName" awsType:"awsstr" templateName:"name" required:""`
+	RetainResources *[]string `awsName:"RetainResources" awsType:"awsstringslice" templateName:"retain-resources"`
+}
+
+func (cmd *DeleteStack) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

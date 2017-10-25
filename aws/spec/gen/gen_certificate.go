@@ -23,23 +23,29 @@ import (
 )
 
 type CreateCertificate struct {
-	_                 string `action: "create" entity: "certificate" awsAPI: "acm"`
+	_                 string `action:"create" entity:"certificate" awsAPI:"acm"`
 	logger            *logger.Logger
 	api               acmiface.ACMAPI
-	Domains           *struct{} `templateName: "domains" required: ""`
-	ValidationDomains *struct{} `templateName: "validation-domains"`
+	Domains           *struct{} `templateName:"domains" required:""`
+	ValidationDomains *struct{} `templateName:"validation-domains"`
 }
+
 type DeleteCertificate struct {
-	_      string `action: "delete" entity: "certificate" awsAPI: "acm" awsCall: "DeleteCertificate" awsInput: "DeleteCertificateInput" awsOutput: "DeleteCertificateOutput"`
+	_      string `action:"delete" entity:"certificate" awsAPI:"acm" awsCall:"DeleteCertificate" awsInput:"acm.DeleteCertificateInput" awsOutput:"acm.DeleteCertificateOutput"`
 	logger *logger.Logger
 	api    acmiface.ACMAPI
-	Arn    *string `awsName: "CertificateArn" awsType: "awsstr" templateName: "arn" required: ""`
+	Arn    *string `awsName:"CertificateArn" awsType:"awsstr" templateName:"arn" required:""`
 }
+
+func (cmd *DeleteCertificate) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type CheckCertificate struct {
-	_       string `action: "check" entity: "certificate" awsAPI: "acm"`
+	_       string `action:"check" entity:"certificate" awsAPI:"acm"`
 	logger  *logger.Logger
 	api     acmiface.ACMAPI
-	Arn     *struct{} `templateName: "arn" required: ""`
-	State   *struct{} `templateName: "state" required: ""`
-	Timeout *struct{} `templateName: "timeout" required: ""`
+	Arn     *struct{} `templateName:"arn" required:""`
+	State   *struct{} `templateName:"state" required:""`
+	Timeout *struct{} `templateName:"timeout" required:""`
 }

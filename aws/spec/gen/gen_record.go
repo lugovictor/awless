@@ -23,33 +23,35 @@ import (
 )
 
 type CreateRecord struct {
-	_       string `action: "create" entity: "record" awsAPI: "route53"`
+	_       string `action:"create" entity:"record" awsAPI:"route53"`
 	logger  *logger.Logger
 	api     route53iface.Route53API
-	Zone    *struct{} `templateName: "zone" required: ""`
-	Name    *struct{} `templateName: "name" required: ""`
-	Type    *struct{} `templateName: "type" required: ""`
-	Value   *struct{} `templateName: "value" required: ""`
-	Ttl     *struct{} `templateName: "ttl" required: ""`
-	Comment *struct{} `templateName: "comment"`
+	Zone    *struct{} `templateName:"zone" required:""`
+	Name    *struct{} `templateName:"name" required:""`
+	Type    *struct{} `templateName:"type" required:""`
+	Value   *struct{} `templateName:"value" required:""`
+	Ttl     *struct{} `templateName:"ttl" required:""`
+	Comment *struct{} `templateName:"comment"`
 }
+
 type DeleteRecord struct {
-	_      string `action: "delete" entity: "record" awsAPI: "route53"`
+	_      string `action:"delete" entity:"record" awsAPI:"route53"`
 	logger *logger.Logger
 	api    route53iface.Route53API
-	Zone   *struct{} `templateName: "zone" required: ""`
-	Name   *struct{} `templateName: "name" required: ""`
-	Type   *struct{} `templateName: "type" required: ""`
-	Value  *struct{} `templateName: "value" required: ""`
-	Ttl    *struct{} `templateName: "ttl" required: ""`
+	Zone   *struct{} `templateName:"zone" required:""`
+	Name   *struct{} `templateName:"name" required:""`
+	Type   *struct{} `templateName:"type" required:""`
+	Value  *struct{} `templateName:"value" required:""`
+	Ttl    *struct{} `templateName:"ttl" required:""`
 }
+
 type UpdateRecord struct {
-	_      string `action: "update" entity: "record" awsAPI: "route53"`
+	_      string `action:"update" entity:"record" awsAPI:"route53"`
 	logger *logger.Logger
 	api    route53iface.Route53API
-	Zone   *struct{} `templateName: "zone" required: ""`
-	Name   *struct{} `templateName: "name" required: ""`
-	Type   *struct{} `templateName: "type" required: ""`
-	Value  *struct{} `templateName: "value" required: ""`
-	Ttl    *struct{} `templateName: "ttl" required: ""`
+	Zone   *struct{} `templateName:"zone" required:""`
+	Name   *struct{} `templateName:"name" required:""`
+	Type   *struct{} `templateName:"type" required:""`
+	Value  *struct{} `templateName:"value" required:""`
+	Ttl    *struct{} `templateName:"ttl" required:""`
 }

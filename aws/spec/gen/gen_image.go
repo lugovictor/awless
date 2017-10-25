@@ -18,38 +18,58 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
 )
 
 type CopyImage struct {
-	_            string `action: "copy" entity: "image" awsAPI: "ec2" awsCall: "CopyImage" awsInput: "CopyImageInput" awsOutput: "CopyImageOutput" awsDryRun: ""`
+	_            string `action:"copy" entity:"image" awsAPI:"ec2" awsCall:"CopyImage" awsInput:"ec2.CopyImageInput" awsOutput:"ec2.CopyImageOutput" awsDryRun:""`
 	logger       *logger.Logger
 	api          ec2iface.EC2API
-	Name         *string `awsName: "Name" awsType: "awsstr" templateName: "name" required: ""`
-	SourceId     *string `awsName: "SourceImageId" awsType: "awsstr" templateName: "source-id" required: ""`
-	SourceRegion *string `awsName: "SourceRegion" awsType: "awsstr" templateName: "source-region" required: ""`
-	Encrypted    *bool   `awsName: "Encrypted" awsType: "awsbool" templateName: "encrypted"`
-	Description  *string `awsName: "Description" awsType: "awsstr" templateName: "description"`
+	Name         *string `awsName:"Name" awsType:"awsstr" templateName:"name" required:""`
+	SourceId     *string `awsName:"SourceImageId" awsType:"awsstr" templateName:"source-id" required:""`
+	SourceRegion *string `awsName:"SourceRegion" awsType:"awsstr" templateName:"source-region" required:""`
+	Encrypted    *bool   `awsName:"Encrypted" awsType:"awsbool" templateName:"encrypted"`
+	Description  *string `awsName:"Description" awsType:"awsstr" templateName:"description"`
 }
+
+func (cmd *CopyImage) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CopyImage) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ec2.CopyImageOutput).ImageId)
+}
+
 type ImportImage struct {
-	_            string `action: "import" entity: "image" awsAPI: "ec2" awsCall: "ImportImage" awsInput: "ImportImageInput" awsOutput: "ImportImageOutput" awsDryRun: ""`
+	_            string `action:"import" entity:"image" awsAPI:"ec2" awsCall:"ImportImage" awsInput:"ec2.ImportImageInput" awsOutput:"ec2.ImportImageOutput" awsDryRun:""`
 	logger       *logger.Logger
 	api          ec2iface.EC2API
-	Architecture *string   `awsName: "Architecture" awsType: "awsstr" templateName: "architecture"`
-	Description  *string   `awsName: "Description" awsType: "awsstr" templateName: "description"`
-	License      *string   `awsName: "LicenseType" awsType: "awsstr" templateName: "license"`
-	Platform     *string   `awsName: "Platform" awsType: "awsstr" templateName: "platform"`
-	Role         *string   `awsName: "RoleName" awsType: "awsstr" templateName: "role"`
-	Snapshot     *struct{} `awsName: "DiskContainers[0]SnapshotId" awsType: "awsslicestruct" templateName: "snapshot"`
-	Url          *struct{} `awsName: "DiskContainers[0]Url" awsType: "awsslicestruct" templateName: "url"`
-	Bucket       *struct{} `awsName: "DiskContainers[0]UserBucket.S3Bucket" awsType: "awsslicestruct" templateName: "bucket"`
-	S3object     *struct{} `awsName: "DiskContainers[0]UserBucket.S3Key" awsType: "awsslicestruct" templateName: "s3object"`
+	Architecture *string   `awsName:"Architecture" awsType:"awsstr" templateName:"architecture"`
+	Description  *string   `awsName:"Description" awsType:"awsstr" templateName:"description"`
+	License      *string   `awsName:"LicenseType" awsType:"awsstr" templateName:"license"`
+	Platform     *string   `awsName:"Platform" awsType:"awsstr" templateName:"platform"`
+	Role         *string   `awsName:"RoleName" awsType:"awsstr" templateName:"role"`
+	Snapshot     *struct{} `awsName:"DiskContainers[0]SnapshotId" awsType:"awsslicestruct" templateName:"snapshot"`
+	Url          *struct{} `awsName:"DiskContainers[0]Url" awsType:"awsslicestruct" templateName:"url"`
+	Bucket       *struct{} `awsName:"DiskContainers[0]UserBucket.S3Bucket" awsType:"awsslicestruct" templateName:"bucket"`
+	S3object     *struct{} `awsName:"DiskContainers[0]UserBucket.S3Key" awsType:"awsslicestruct" templateName:"s3object"`
 }
+
+func (cmd *ImportImage) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *ImportImage) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ec2.ImportImageOutput).ImportTaskId)
+}
+
 type DeleteImage struct {
-	_               string `action: "delete" entity: "image" awsAPI: "ec2"`
+	_               string `action:"delete" entity:"image" awsAPI:"ec2"`
 	logger          *logger.Logger
 	api             ec2iface.EC2API
-	Id              *struct{} `templateName: "id" required: ""`
-	DeleteSnapshots *struct{} `templateName: "delete-snapshots" required: ""`
+	Id              *struct{} `templateName:"id" required:""`
+	DeleteSnapshots *struct{} `templateName:"delete-snapshots" required:""`
 }

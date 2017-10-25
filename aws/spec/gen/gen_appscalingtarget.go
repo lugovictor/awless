@@ -23,21 +23,30 @@ import (
 )
 
 type CreateAppscalingtarget struct {
-	_                string `action: "create" entity: "appscalingtarget" awsAPI: "applicationautoscaling" awsCall: "RegisterScalableTarget" awsInput: "RegisterScalableTargetInput" awsOutput: "RegisterScalableTargetOutput"`
+	_                string `action:"create" entity:"appscalingtarget" awsAPI:"applicationautoscaling" awsCall:"RegisterScalableTarget" awsInput:"applicationautoscaling.RegisterScalableTargetInput" awsOutput:"applicationautoscaling.RegisterScalableTargetOutput"`
 	logger           *logger.Logger
 	api              applicationautoscalingiface.ApplicationAutoScalingAPI
-	MaxCapacity      *int64  `awsName: "MaxCapacity" awsType: "awsint64" templateName: "max-capacity" required: ""`
-	MinCapacity      *int64  `awsName: "MinCapacity" awsType: "awsint64" templateName: "min-capacity" required: ""`
-	Resource         *string `awsName: "ResourceId" awsType: "awsstr" templateName: "resource" required: ""`
-	Role             *string `awsName: "RoleARN" awsType: "awsstr" templateName: "role" required: ""`
-	Dimension        *string `awsName: "ScalableDimension" awsType: "awsstr" templateName: "dimension" required: ""`
-	ServiceNamespace *string `awsName: "ServiceNamespace" awsType: "awsstr" templateName: "service-namespace" required: ""`
+	MaxCapacity      *int64  `awsName:"MaxCapacity" awsType:"awsint64" templateName:"max-capacity" required:""`
+	MinCapacity      *int64  `awsName:"MinCapacity" awsType:"awsint64" templateName:"min-capacity" required:""`
+	Resource         *string `awsName:"ResourceId" awsType:"awsstr" templateName:"resource" required:""`
+	Role             *string `awsName:"RoleARN" awsType:"awsstr" templateName:"role" required:""`
+	Dimension        *string `awsName:"ScalableDimension" awsType:"awsstr" templateName:"dimension" required:""`
+	ServiceNamespace *string `awsName:"ServiceNamespace" awsType:"awsstr" templateName:"service-namespace" required:""`
 }
+
+func (cmd *CreateAppscalingtarget) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type DeleteAppscalingtarget struct {
-	_                string `action: "delete" entity: "appscalingtarget" awsAPI: "applicationautoscaling" awsCall: "DeregisterScalableTarget" awsInput: "DeregisterScalableTargetInput" awsOutput: "DeregisterScalableTargetOutput"`
+	_                string `action:"delete" entity:"appscalingtarget" awsAPI:"applicationautoscaling" awsCall:"DeregisterScalableTarget" awsInput:"applicationautoscaling.DeregisterScalableTargetInput" awsOutput:"applicationautoscaling.DeregisterScalableTargetOutput"`
 	logger           *logger.Logger
 	api              applicationautoscalingiface.ApplicationAutoScalingAPI
-	Resource         *string `awsName: "ResourceId" awsType: "awsstr" templateName: "resource" required: ""`
-	Dimension        *string `awsName: "ScalableDimension" awsType: "awsstr" templateName: "dimension" required: ""`
-	ServiceNamespace *string `awsName: "ServiceNamespace" awsType: "awsstr" templateName: "service-namespace" required: ""`
+	Resource         *string `awsName:"ResourceId" awsType:"awsstr" templateName:"resource" required:""`
+	Dimension        *string `awsName:"ScalableDimension" awsType:"awsstr" templateName:"dimension" required:""`
+	ServiceNamespace *string `awsName:"ServiceNamespace" awsType:"awsstr" templateName:"service-namespace" required:""`
+}
+
+func (cmd *DeleteAppscalingtarget) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

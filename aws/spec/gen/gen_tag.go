@@ -23,18 +23,19 @@ import (
 )
 
 type CreateTag struct {
-	_        string `action: "create" entity: "tag" awsAPI: "ec2"`
+	_        string `action:"create" entity:"tag" awsAPI:"ec2"`
 	logger   *logger.Logger
 	api      ec2iface.EC2API
-	Resource *struct{} `templateName: "resource" required: ""`
-	Key      *struct{} `templateName: "key" required: ""`
-	Value    *struct{} `templateName: "value" required: ""`
+	Resource *struct{} `templateName:"resource" required:""`
+	Key      *struct{} `templateName:"key" required:""`
+	Value    *struct{} `templateName:"value" required:""`
 }
+
 type DeleteTag struct {
-	_        string `action: "delete" entity: "tag" awsAPI: "ec2"`
+	_        string `action:"delete" entity:"tag" awsAPI:"ec2"`
 	logger   *logger.Logger
 	api      ec2iface.EC2API
-	Resource *struct{} `templateName: "resource" required: ""`
-	Key      *struct{} `templateName: "key" required: ""`
-	Value    *struct{} `templateName: "value" required: ""`
+	Resource *struct{} `templateName:"resource" required:""`
+	Key      *struct{} `templateName:"key" required:""`
+	Value    *struct{} `templateName:"value" required:""`
 }

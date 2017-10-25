@@ -18,6 +18,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -102,25 +103,36 @@ func (v *findStructs) Visit(node ast.Node) (w ast.Visitor) {
 
 func extractTag(s string) (t cmdData) {
 	splits := strings.Split(s[1:len(s)-1], " ")
-	for i, e := range splits {
+	tags := make(map[string]string)
+	for _, e := range splits {
 		el := strings.Split(e, ":")
-		ell := el[1][1 : len(el[1])-1]
-		switch {
-		case i == 0:
-			t.Action = ell
-		case i == 1:
-			t.Entity = ell
-		case i == 2:
-			t.API = ell
-		case i == 3:
-			t.Call = ell
-		case i == 4:
-			t.Input = ell
-		case i == 5:
-			t.Output = ell
-		case i == 6:
-			t.HasDryRun = true
+		if len(el) > 1 {
+			if len(el[1]) < 2 || el[1][0] != '"' || el[1][len(el[1])-1] != '"' {
+				panic(fmt.Sprintf("malformed tag: '%s':'%s'", el[0], el[1]))
+			}
+			tags[el[0]] = el[1][1 : len(el[1])-1]
 		}
+	}
+	if v, ok := tags["action"]; ok {
+		t.Action = v
+	}
+	if v, ok := tags["entity"]; ok {
+		t.Entity = v
+	}
+	if v, ok := tags["awsAPI"]; ok {
+		t.API = v
+	}
+	if v, ok := tags["awsCall"]; ok {
+		t.Call = v
+	}
+	if v, ok := tags["awsInput"]; ok {
+		t.Input = v
+	}
+	if v, ok := tags["awsOutput"]; ok {
+		t.Output = v
+	}
+	if _, ok := tags["awsDryRun"]; ok {
+		t.HasDryRun = true
 	}
 	return
 }

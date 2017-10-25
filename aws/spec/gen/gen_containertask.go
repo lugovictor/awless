@@ -23,62 +23,71 @@ import (
 )
 
 type StartContainertask struct {
-	_              string `action: "start" entity: "containertask" awsAPI: "ecs"`
+	_              string `action:"start" entity:"containertask" awsAPI:"ecs"`
 	logger         *logger.Logger
 	api            ecsiface.ECSAPI
-	Cluster        *struct{} `templateName: "cluster" required: ""`
-	DesiredCount   *struct{} `templateName: "desired-count" required: ""`
-	Name           *struct{} `templateName: "name" required: ""`
-	Type           *struct{} `templateName: "type" required: ""`
-	Role           *struct{} `templateName: "role"`
-	DeploymentName *struct{} `templateName: "deployment-name"`
-	ContainerName  *struct{} `templateName: "loadbalancer.container-name"`
-	ContainerPort  *struct{} `templateName: "loadbalancer.container-port"`
-	Targetgroup    *struct{} `templateName: "loadbalancer.targetgroup"`
+	Cluster        *struct{} `templateName:"cluster" required:""`
+	DesiredCount   *struct{} `templateName:"desired-count" required:""`
+	Name           *struct{} `templateName:"name" required:""`
+	Type           *struct{} `templateName:"type" required:""`
+	Role           *struct{} `templateName:"role"`
+	DeploymentName *struct{} `templateName:"deployment-name"`
+	ContainerName  *struct{} `templateName:"loadbalancer.container-name"`
+	ContainerPort  *struct{} `templateName:"loadbalancer.container-port"`
+	Targetgroup    *struct{} `templateName:"loadbalancer.targetgroup"`
 }
+
 type StopContainertask struct {
-	_              string `action: "stop" entity: "containertask" awsAPI: "ecs"`
+	_              string `action:"stop" entity:"containertask" awsAPI:"ecs"`
 	logger         *logger.Logger
 	api            ecsiface.ECSAPI
-	Cluster        *struct{} `templateName: "cluster" required: ""`
-	Type           *struct{} `templateName: "type" required: ""`
-	DeploymentName *struct{} `templateName: "deployment-name"`
-	RunArn         *struct{} `templateName: "run-arn"`
+	Cluster        *struct{} `templateName:"cluster" required:""`
+	Type           *struct{} `templateName:"type" required:""`
+	DeploymentName *struct{} `templateName:"deployment-name"`
+	RunArn         *struct{} `templateName:"run-arn"`
 }
+
 type UpdateContainertask struct {
-	_              string `action: "update" entity: "containertask" awsAPI: "ecs" awsCall: "UpdateService" awsInput: "UpdateServiceInput" awsOutput: "UpdateServiceOutput"`
+	_              string `action:"update" entity:"containertask" awsAPI:"ecs" awsCall:"UpdateService" awsInput:"ecs.UpdateServiceInput" awsOutput:"ecs.UpdateServiceOutput"`
 	logger         *logger.Logger
 	api            ecsiface.ECSAPI
-	Cluster        *string `awsName: "Cluster" awsType: "awsstr" templateName: "cluster" required: ""`
-	DeploymentName *string `awsName: "Service" awsType: "awsstr" templateName: "deployment-name" required: ""`
-	DesiredCount   *int64  `awsName: "DesiredCount" awsType: "awsint64" templateName: "desired-count"`
-	Name           *string `awsName: "TaskDefinition" awsType: "awsstr" templateName: "name"`
+	Cluster        *string `awsName:"Cluster" awsType:"awsstr" templateName:"cluster" required:""`
+	DeploymentName *string `awsName:"Service" awsType:"awsstr" templateName:"deployment-name" required:""`
+	DesiredCount   *int64  `awsName:"DesiredCount" awsType:"awsint64" templateName:"desired-count"`
+	Name           *string `awsName:"TaskDefinition" awsType:"awsstr" templateName:"name"`
 }
+
+func (cmd *UpdateContainertask) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type AttachContainertask struct {
-	_               string `action: "attach" entity: "containertask" awsAPI: "ecs"`
+	_               string `action:"attach" entity:"containertask" awsAPI:"ecs"`
 	logger          *logger.Logger
 	api             ecsiface.ECSAPI
-	Name            *struct{} `templateName: "name" required: ""`
-	ContainerName   *struct{} `templateName: "container-name" required: ""`
-	Image           *struct{} `templateName: "image" required: ""`
-	MemoryHardLimit *struct{} `templateName: "memory-hard-limit" required: ""`
-	Command         *struct{} `templateName: "command"`
-	Env             *struct{} `templateName: "env"`
-	Privileged      *struct{} `templateName: "privileged"`
-	Workdir         *struct{} `templateName: "workdir"`
-	Ports           *struct{} `templateName: "ports"`
+	Name            *struct{} `templateName:"name" required:""`
+	ContainerName   *struct{} `templateName:"container-name" required:""`
+	Image           *struct{} `templateName:"image" required:""`
+	MemoryHardLimit *struct{} `templateName:"memory-hard-limit" required:""`
+	Command         *struct{} `templateName:"command"`
+	Env             *struct{} `templateName:"env"`
+	Privileged      *struct{} `templateName:"privileged"`
+	Workdir         *struct{} `templateName:"workdir"`
+	Ports           *struct{} `templateName:"ports"`
 }
+
 type DetachContainertask struct {
-	_             string `action: "detach" entity: "containertask" awsAPI: "ecs"`
+	_             string `action:"detach" entity:"containertask" awsAPI:"ecs"`
 	logger        *logger.Logger
 	api           ecsiface.ECSAPI
-	Name          *struct{} `templateName: "name" required: ""`
-	ContainerName *struct{} `templateName: "container-name" required: ""`
+	Name          *struct{} `templateName:"name" required:""`
+	ContainerName *struct{} `templateName:"container-name" required:""`
 }
+
 type DeleteContainertask struct {
-	_           string `action: "delete" entity: "containertask" awsAPI: "ecs"`
+	_           string `action:"delete" entity:"containertask" awsAPI:"ecs"`
 	logger      *logger.Logger
 	api         ecsiface.ECSAPI
-	Name        *struct{} `templateName: "name" required: ""`
-	AllVersions *struct{} `templateName: "all-versions"`
+	Name        *struct{} `templateName:"name" required:""`
+	AllVersions *struct{} `templateName:"all-versions"`
 }

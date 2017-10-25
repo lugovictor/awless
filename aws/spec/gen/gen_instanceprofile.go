@@ -24,30 +24,41 @@ import (
 )
 
 type AttachInstanceprofile struct {
-	_        string `action: "attach" entity: "instanceprofile" awsAPI: "ec2"`
+	_        string `action:"attach" entity:"instanceprofile" awsAPI:"ec2"`
 	logger   *logger.Logger
 	api      ec2iface.EC2API
-	Instance *string   `awsName: "InstanceId" awsType: "awsstr" templateName: "instance" required: ""`
-	Name     *string   `awsName: "IamInstanceProfile.Name" awsType: "awsstr" templateName: "name" required: ""`
-	Replace  *struct{} `templateName: "replace"`
+	Instance *string   `awsName:"InstanceId" awsType:"awsstr" templateName:"instance" required:""`
+	Name     *string   `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"name" required:""`
+	Replace  *struct{} `templateName:"replace"`
 }
+
 type DetachInstanceprofile struct {
-	_        string `action: "detach" entity: "instanceprofile" awsAPI: "ec2"`
+	_        string `action:"detach" entity:"instanceprofile" awsAPI:"ec2"`
 	logger   *logger.Logger
 	api      ec2iface.EC2API
-	Instance *struct{} `templateName: "instance" required: ""`
-	Name     *struct{} `templateName: "name" required: ""`
-	Replace  *struct{} `templateName: "replace"`
+	Instance *struct{} `templateName:"instance" required:""`
+	Name     *struct{} `templateName:"name" required:""`
+	Replace  *struct{} `templateName:"replace"`
 }
+
 type CreateInstanceprofile struct {
-	_      string `action: "create" entity: "instanceprofile" awsAPI: "iam" awsCall: "CreateInstanceProfile" awsInput: "CreateInstanceProfileInput" awsOutput: "CreateInstanceProfileOutput"`
+	_      string `action:"create" entity:"instanceprofile" awsAPI:"iam" awsCall:"CreateInstanceProfile" awsInput:"iam.CreateInstanceProfileInput" awsOutput:"iam.CreateInstanceProfileOutput"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Name   *string `awsName: "InstanceProfileName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"InstanceProfileName" awsType:"awsstr" templateName:"name" required:""`
 }
+
+func (cmd *CreateInstanceprofile) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type DeleteInstanceprofile struct {
-	_      string `action: "delete" entity: "instanceprofile" awsAPI: "iam" awsCall: "DeleteInstanceProfile" awsInput: "DeleteInstanceProfileInput" awsOutput: "DeleteInstanceProfileOutput"`
+	_      string `action:"delete" entity:"instanceprofile" awsAPI:"iam" awsCall:"DeleteInstanceProfile" awsInput:"iam.DeleteInstanceProfileInput" awsOutput:"iam.DeleteInstanceProfileOutput"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Name   *string `awsName: "InstanceProfileName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"InstanceProfileName" awsType:"awsstr" templateName:"name" required:""`
+}
+
+func (cmd *DeleteInstanceprofile) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

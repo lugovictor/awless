@@ -514,9 +514,6 @@ func fileOrRemoteFileAsBase64(v interface{}, tplData interface{}) (string, error
 			content = buf.Bytes()
 		}
 	}
-	fmt.Println(string(content))
-	fmt.Println("tplData", tplData)
-
 	return base64.StdEncoding.EncodeToString(content), nil
 }
 

@@ -29,7 +29,9 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
 	NewCommandFuncs["createsubnet"] = func() interface{} { return NewCreateSubnet(l, sess) }
 	NewCommandFuncs["createtag"] = func() interface{} { return NewCreateTag(l, sess) }
+	NewCommandFuncs["createvpc"] = func() interface{} { return NewCreateVpc(l, sess) }
 	NewCommandFuncs["deleteinstance"] = func() interface{} { return NewDeleteInstance(l, sess) }
+	NewCommandFuncs["deletevpc"] = func() interface{} { return NewDeleteVpc(l, sess) }
 }
 
 var (
@@ -37,5 +39,7 @@ var (
 	_ command = &CreateInstance{}
 	_ command = &CreateSubnet{}
 	_ command = &CreateTag{}
+	_ command = &CreateVpc{}
 	_ command = &DeleteInstance{}
+	_ command = &DeleteVpc{}
 )

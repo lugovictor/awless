@@ -18,26 +18,41 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateQueue struct {
-	_                 string `action: "create" entity: "queue" awsAPI: "sqs" awsCall: "CreateQueue" awsInput: "CreateQueueInput" awsOutput: "CreateQueueOutput"`
+	_                 string `action:"create" entity:"queue" awsAPI:"sqs" awsCall:"CreateQueue" awsInput:"sqs.CreateQueueInput" awsOutput:"sqs.CreateQueueOutput"`
 	logger            *logger.Logger
 	api               sqsiface.SQSAPI
-	Name              *string   `awsName: "QueueName" awsType: "awsstr" templateName: "name" required: ""`
-	Delay             *struct{} `awsName: "Attributes[DelaySeconds]" awsType: "awsstringpointermap" templateName: "delay"`
-	MaxMsgSize        *struct{} `awsName: "Attributes[MaximumMessageSize]" awsType: "awsstringpointermap" templateName: "max-msg-size"`
-	RetentionPeriod   *struct{} `awsName: "Attributes[MessageRetentionPeriod]" awsType: "awsstringpointermap" templateName: "retention-period"`
-	Policy            *struct{} `awsName: "Attributes[Policy]" awsType: "awsstringpointermap" templateName: "policy"`
-	MsgWait           *struct{} `awsName: "Attributes[ReceiveMessageWaitTimeSeconds]" awsType: "awsstringpointermap" templateName: "msg-wait"`
-	RedrivePolicy     *struct{} `awsName: "Attributes[RedrivePolicy]" awsType: "awsstringpointermap" templateName: "redrive-policy"`
-	VisibilityTimeout *struct{} `awsName: "Attributes[VisibilityTimeout]" awsType: "awsstringpointermap" templateName: "visibility-timeout"`
+	Name              *string   `awsName:"QueueName" awsType:"awsstr" templateName:"name" required:""`
+	Delay             *struct{} `awsName:"Attributes[DelaySeconds]" awsType:"awsstringpointermap" templateName:"delay"`
+	MaxMsgSize        *struct{} `awsName:"Attributes[MaximumMessageSize]" awsType:"awsstringpointermap" templateName:"max-msg-size"`
+	RetentionPeriod   *struct{} `awsName:"Attributes[MessageRetentionPeriod]" awsType:"awsstringpointermap" templateName:"retention-period"`
+	Policy            *struct{} `awsName:"Attributes[Policy]" awsType:"awsstringpointermap" templateName:"policy"`
+	MsgWait           *struct{} `awsName:"Attributes[ReceiveMessageWaitTimeSeconds]" awsType:"awsstringpointermap" templateName:"msg-wait"`
+	RedrivePolicy     *struct{} `awsName:"Attributes[RedrivePolicy]" awsType:"awsstringpointermap" templateName:"redrive-policy"`
+	VisibilityTimeout *struct{} `awsName:"Attributes[VisibilityTimeout]" awsType:"awsstringpointermap" templateName:"visibility-timeout"`
 }
+
+func (cmd *CreateQueue) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateQueue) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*sqs.CreateQueueOutput).QueueUrl)
+}
+
 type DeleteQueue struct {
-	_      string `action: "delete" entity: "queue" awsAPI: "sqs" awsCall: "DeleteQueue" awsInput: "DeleteQueueInput" awsOutput: "DeleteQueueOutput"`
+	_      string `action:"delete" entity:"queue" awsAPI:"sqs" awsCall:"DeleteQueue" awsInput:"sqs.DeleteQueueInput" awsOutput:"sqs.DeleteQueueOutput"`
 	logger *logger.Logger
 	api    sqsiface.SQSAPI
-	Url    *string `awsName: "QueueUrl" awsType: "awsstr" templateName: "url" required: ""`
+	Url    *string `awsName:"QueueUrl" awsType:"awsstr" templateName:"url" required:""`
+}
+
+func (cmd *DeleteQueue) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

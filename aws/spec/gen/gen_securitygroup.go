@@ -18,55 +18,74 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateSecuritygroup struct {
-	_           string `action: "create" entity: "securitygroup" awsAPI: "ec2" awsCall: "CreateSecurityGroup" awsInput: "CreateSecurityGroupInput" awsOutput: "CreateSecurityGroupOutput" awsDryRun: ""`
+	_           string `action:"create" entity:"securitygroup" awsAPI:"ec2" awsCall:"CreateSecurityGroup" awsInput:"ec2.CreateSecurityGroupInput" awsOutput:"ec2.CreateSecurityGroupOutput" awsDryRun:""`
 	logger      *logger.Logger
 	api         ec2iface.EC2API
-	Name        *string `awsName: "GroupName" awsType: "awsstr" templateName: "name" required: ""`
-	Vpc         *string `awsName: "VpcId" awsType: "awsstr" templateName: "vpc" required: ""`
-	Description *string `awsName: "Description" awsType: "awsstr" templateName: "description" required: ""`
+	Name        *string `awsName:"GroupName" awsType:"awsstr" templateName:"name" required:""`
+	Vpc         *string `awsName:"VpcId" awsType:"awsstr" templateName:"vpc" required:""`
+	Description *string `awsName:"Description" awsType:"awsstr" templateName:"description" required:""`
 }
+
+func (cmd *CreateSecuritygroup) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateSecuritygroup) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ec2.CreateSecurityGroupOutput).GroupId)
+}
+
 type UpdateSecuritygroup struct {
-	_             string `action: "update" entity: "securitygroup" awsAPI: "ec2"`
+	_             string `action:"update" entity:"securitygroup" awsAPI:"ec2"`
 	logger        *logger.Logger
 	api           ec2iface.EC2API
-	Id            *struct{} `templateName: "id" required: ""`
-	Protocol      *struct{} `templateName: "protocol" required: ""`
-	Cidr          *struct{} `templateName: "cidr"`
-	Securitygroup *struct{} `templateName: "securitygroup"`
-	Inbound       *struct{} `templateName: "inbound"`
-	Outbound      *struct{} `templateName: "outbound"`
-	Portrange     *struct{} `templateName: "portrange"`
+	Id            *struct{} `templateName:"id" required:""`
+	Protocol      *struct{} `templateName:"protocol" required:""`
+	Cidr          *struct{} `templateName:"cidr"`
+	Securitygroup *struct{} `templateName:"securitygroup"`
+	Inbound       *struct{} `templateName:"inbound"`
+	Outbound      *struct{} `templateName:"outbound"`
+	Portrange     *struct{} `templateName:"portrange"`
 }
+
 type DeleteSecuritygroup struct {
-	_      string `action: "delete" entity: "securitygroup" awsAPI: "ec2" awsCall: "DeleteSecurityGroup" awsInput: "DeleteSecurityGroupInput" awsOutput: "DeleteSecurityGroupOutput" awsDryRun: ""`
+	_      string `action:"delete" entity:"securitygroup" awsAPI:"ec2" awsCall:"DeleteSecurityGroup" awsInput:"ec2.DeleteSecurityGroupInput" awsOutput:"ec2.DeleteSecurityGroupOutput" awsDryRun:""`
 	logger *logger.Logger
 	api    ec2iface.EC2API
-	Id     *string `awsName: "GroupId" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"GroupId" awsType:"awsstr" templateName:"id" required:""`
 }
+
+func (cmd *DeleteSecuritygroup) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type CheckSecuritygroup struct {
-	_       string `action: "check" entity: "securitygroup" awsAPI: "ec2"`
+	_       string `action:"check" entity:"securitygroup" awsAPI:"ec2"`
 	logger  *logger.Logger
 	api     ec2iface.EC2API
-	Id      *struct{} `templateName: "id" required: ""`
-	State   *struct{} `templateName: "state" required: ""`
-	Timeout *struct{} `templateName: "timeout" required: ""`
+	Id      *struct{} `templateName:"id" required:""`
+	State   *struct{} `templateName:"state" required:""`
+	Timeout *struct{} `templateName:"timeout" required:""`
 }
+
 type AttachSecuritygroup struct {
-	_        string `action: "attach" entity: "securitygroup" awsAPI: "ec2"`
+	_        string `action:"attach" entity:"securitygroup" awsAPI:"ec2"`
 	logger   *logger.Logger
 	api      ec2iface.EC2API
-	Id       *struct{} `templateName: "id" required: ""`
-	Instance *struct{} `templateName: "instance"`
+	Id       *struct{} `templateName:"id" required:""`
+	Instance *struct{} `templateName:"instance"`
 }
+
 type DetachSecuritygroup struct {
-	_        string `action: "detach" entity: "securitygroup" awsAPI: "ec2"`
+	_        string `action:"detach" entity:"securitygroup" awsAPI:"ec2"`
 	logger   *logger.Logger
 	api      ec2iface.EC2API
-	Id       *struct{} `templateName: "id" required: ""`
-	Instance *struct{} `templateName: "instance"`
+	Id       *struct{} `templateName:"id" required:""`
+	Instance *struct{} `templateName:"instance"`
 }

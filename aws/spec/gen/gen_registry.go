@@ -23,9 +23,9 @@ import (
 )
 
 type AuthenticateRegistry struct {
-	_         string `action: "authenticate" entity: "registry" awsAPI: "ecr"`
+	_         string `action:"authenticate" entity:"registry" awsAPI:"ecr"`
 	logger    *logger.Logger
 	api       ecriface.ECRAPI
-	Accounts  *struct{} `templateName: "accounts"`
-	NoConfirm *struct{} `templateName: "no-confirm"`
+	Accounts  *struct{} `templateName:"accounts"`
+	NoConfirm *struct{} `templateName:"no-confirm"`
 }

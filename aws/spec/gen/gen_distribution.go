@@ -23,40 +23,43 @@ import (
 )
 
 type CreateDistribution struct {
-	_              string `action: "create" entity: "distribution" awsAPI: "cloudfront"`
+	_              string `action:"create" entity:"distribution" awsAPI:"cloudfront"`
 	logger         *logger.Logger
 	api            cloudfrontiface.CloudFrontAPI
-	OriginDomain   *struct{} `templateName: "origin-domain" required: ""`
-	Certificate    *struct{} `templateName: "certificate"`
-	Comment        *struct{} `templateName: "comment"`
-	DefaultFile    *struct{} `templateName: "default-file"`
-	DomainAliases  *struct{} `templateName: "domain-aliases"`
-	Enable         *struct{} `templateName: "enable"`
-	ForwardCookies *struct{} `templateName: "forward-cookies"`
-	ForwardQueries *struct{} `templateName: "forward-queries"`
-	HttpsBehaviour *struct{} `templateName: "https-behaviour"`
-	OriginPath     *struct{} `templateName: "origin-path"`
-	PriceClass     *struct{} `templateName: "price-class"`
-	MinTtl         *struct{} `templateName: "min-ttl"`
+	OriginDomain   *struct{} `templateName:"origin-domain" required:""`
+	Certificate    *struct{} `templateName:"certificate"`
+	Comment        *struct{} `templateName:"comment"`
+	DefaultFile    *struct{} `templateName:"default-file"`
+	DomainAliases  *struct{} `templateName:"domain-aliases"`
+	Enable         *struct{} `templateName:"enable"`
+	ForwardCookies *struct{} `templateName:"forward-cookies"`
+	ForwardQueries *struct{} `templateName:"forward-queries"`
+	HttpsBehaviour *struct{} `templateName:"https-behaviour"`
+	OriginPath     *struct{} `templateName:"origin-path"`
+	PriceClass     *struct{} `templateName:"price-class"`
+	MinTtl         *struct{} `templateName:"min-ttl"`
 }
+
 type CheckDistribution struct {
-	_       string `action: "check" entity: "distribution" awsAPI: "cloudfront"`
+	_       string `action:"check" entity:"distribution" awsAPI:"cloudfront"`
 	logger  *logger.Logger
 	api     cloudfrontiface.CloudFrontAPI
-	Id      *struct{} `templateName: "id" required: ""`
-	State   *struct{} `templateName: "state" required: ""`
-	Timeout *struct{} `templateName: "timeout" required: ""`
+	Id      *struct{} `templateName:"id" required:""`
+	State   *struct{} `templateName:"state" required:""`
+	Timeout *struct{} `templateName:"timeout" required:""`
 }
+
 type UpdateDistribution struct {
-	_      string `action: "update" entity: "distribution" awsAPI: "cloudfront"`
+	_      string `action:"update" entity:"distribution" awsAPI:"cloudfront"`
 	logger *logger.Logger
 	api    cloudfrontiface.CloudFrontAPI
-	Id     *string `awsName: "Id" awsType: "awsstr" templateName: "id" required: ""`
-	Enable *bool   `awsName: "DistributionConfig.Enabled" awsType: "awsbool" templateName: "enable" required: ""`
+	Id     *string `awsName:"Id" awsType:"awsstr" templateName:"id" required:""`
+	Enable *bool   `awsName:"DistributionConfig.Enabled" awsType:"awsbool" templateName:"enable" required:""`
 }
+
 type DeleteDistribution struct {
-	_      string `action: "delete" entity: "distribution" awsAPI: "cloudfront"`
+	_      string `action:"delete" entity:"distribution" awsAPI:"cloudfront"`
 	logger *logger.Logger
 	api    cloudfrontiface.CloudFrontAPI
-	Id     *string `awsName: "Id" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"Id" awsType:"awsstr" templateName:"id" required:""`
 }

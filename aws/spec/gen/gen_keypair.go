@@ -23,15 +23,20 @@ import (
 )
 
 type CreateKeypair struct {
-	_         string `action: "create" entity: "keypair" awsAPI: "ec2"`
+	_         string `action:"create" entity:"keypair" awsAPI:"ec2"`
 	logger    *logger.Logger
 	api       ec2iface.EC2API
-	Name      *struct{} `templateName: "name" required: ""`
-	Encrypted *struct{} `templateName: "encrypted"`
+	Name      *struct{} `templateName:"name" required:""`
+	Encrypted *struct{} `templateName:"encrypted"`
 }
+
 type DeleteKeypair struct {
-	_      string `action: "delete" entity: "keypair" awsAPI: "ec2" awsCall: "DeleteKeyPair" awsInput: "DeleteKeyPairInput" awsOutput: "DeleteKeyPairOutput" awsDryRun: ""`
+	_      string `action:"delete" entity:"keypair" awsAPI:"ec2" awsCall:"DeleteKeyPair" awsInput:"ec2.DeleteKeyPairInput" awsOutput:"ec2.DeleteKeyPairOutput" awsDryRun:""`
 	logger *logger.Logger
 	api    ec2iface.EC2API
-	Name   *string `awsName: "KeyName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"KeyName" awsType:"awsstr" templateName:"name" required:""`
+}
+
+func (cmd *DeleteKeypair) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

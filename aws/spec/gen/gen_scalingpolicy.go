@@ -18,24 +18,39 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/autoscaling"
 	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateScalingpolicy struct {
-	_                   string `action: "create" entity: "scalingpolicy" awsAPI: "autoscaling" awsCall: "PutScalingPolicy" awsInput: "PutScalingPolicyInput" awsOutput: "PutScalingPolicyOutput"`
+	_                   string `action:"create" entity:"scalingpolicy" awsAPI:"autoscaling" awsCall:"PutScalingPolicy" awsInput:"autoscaling.PutScalingPolicyInput" awsOutput:"autoscaling.PutScalingPolicyOutput"`
 	logger              *logger.Logger
 	api                 autoscalingiface.AutoScalingAPI
-	AdjustmentType      *string `awsName: "AdjustmentType" awsType: "awsstr" templateName: "adjustment-type" required: ""`
-	Scalinggroup        *string `awsName: "AutoScalingGroupName" awsType: "awsstr" templateName: "scalinggroup" required: ""`
-	Name                *string `awsName: "PolicyName" awsType: "awsstr" templateName: "name" required: ""`
-	AdjustmentScaling   *int64  `awsName: "ScalingAdjustment" awsType: "awsint64" templateName: "adjustment-scaling" required: ""`
-	Cooldown            *int64  `awsName: "Cooldown" awsType: "awsint64" templateName: "cooldown"`
-	AdjustmentMagnitude *int64  `awsName: "MinAdjustmentMagnitude" awsType: "awsint64" templateName: "adjustment-magnitude"`
+	AdjustmentType      *string `awsName:"AdjustmentType" awsType:"awsstr" templateName:"adjustment-type" required:""`
+	Scalinggroup        *string `awsName:"AutoScalingGroupName" awsType:"awsstr" templateName:"scalinggroup" required:""`
+	Name                *string `awsName:"PolicyName" awsType:"awsstr" templateName:"name" required:""`
+	AdjustmentScaling   *int64  `awsName:"ScalingAdjustment" awsType:"awsint64" templateName:"adjustment-scaling" required:""`
+	Cooldown            *int64  `awsName:"Cooldown" awsType:"awsint64" templateName:"cooldown"`
+	AdjustmentMagnitude *int64  `awsName:"MinAdjustmentMagnitude" awsType:"awsint64" templateName:"adjustment-magnitude"`
 }
+
+func (cmd *CreateScalingpolicy) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateScalingpolicy) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*autoscaling.PutScalingPolicyOutput).PolicyARN)
+}
+
 type DeleteScalingpolicy struct {
-	_      string `action: "delete" entity: "scalingpolicy" awsAPI: "autoscaling" awsCall: "DeletePolicy" awsInput: "DeletePolicyInput" awsOutput: "DeletePolicyOutput"`
+	_      string `action:"delete" entity:"scalingpolicy" awsAPI:"autoscaling" awsCall:"DeletePolicy" awsInput:"autoscaling.DeletePolicyInput" awsOutput:"autoscaling.DeletePolicyOutput"`
 	logger *logger.Logger
 	api    autoscalingiface.AutoScalingAPI
-	Id     *string `awsName: "PolicyName" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"PolicyName" awsType:"awsstr" templateName:"id" required:""`
+}
+
+func (cmd *DeleteScalingpolicy) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

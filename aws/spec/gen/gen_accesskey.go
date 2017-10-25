@@ -23,16 +23,21 @@ import (
 )
 
 type CreateAccesskey struct {
-	_        string `action: "create" entity: "accesskey" awsAPI: "iam"`
+	_        string `action:"create" entity:"accesskey" awsAPI:"iam"`
 	logger   *logger.Logger
 	api      iamiface.IAMAPI
-	User     *struct{} `templateName: "user" required: ""`
-	NoPrompt *struct{} `templateName: "no-prompt"`
+	User     *struct{} `templateName:"user" required:""`
+	NoPrompt *struct{} `templateName:"no-prompt"`
 }
+
 type DeleteAccesskey struct {
-	_      string `action: "delete" entity: "accesskey" awsAPI: "iam" awsCall: "DeleteAccessKey" awsInput: "DeleteAccessKeyInput" awsOutput: "DeleteAccessKeyOutput"`
+	_      string `action:"delete" entity:"accesskey" awsAPI:"iam" awsCall:"DeleteAccessKey" awsInput:"iam.DeleteAccessKeyInput" awsOutput:"iam.DeleteAccessKeyOutput"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Id     *string `awsName: "AccessKeyId" awsType: "awsstr" templateName: "id" required: ""`
-	User   *string `awsName: "UserName" awsType: "awsstr" templateName: "user"`
+	Id     *string `awsName:"AccessKeyId" awsType:"awsstr" templateName:"id" required:""`
+	User   *string `awsName:"UserName" awsType:"awsstr" templateName:"user"`
+}
+
+func (cmd *DeleteAccesskey) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

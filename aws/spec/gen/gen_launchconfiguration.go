@@ -23,22 +23,35 @@ import (
 )
 
 type CreateLaunchconfiguration struct {
-	_              string `action: "create" entity: "launchconfiguration" awsAPI: "autoscaling" awsCall: "CreateLaunchConfiguration" awsInput: "CreateLaunchConfigurationInput" awsOutput: "CreateLaunchConfigurationOutput"`
+	_              string `action:"create" entity:"launchconfiguration" awsAPI:"autoscaling" awsCall:"CreateLaunchConfiguration" awsInput:"autoscaling.CreateLaunchConfigurationInput" awsOutput:"autoscaling.CreateLaunchConfigurationOutput"`
 	logger         *logger.Logger
 	api            autoscalingiface.AutoScalingAPI
-	Image          *string   `awsName: "ImageId" awsType: "awsstr" templateName: "image" required: ""`
-	Type           *string   `awsName: "InstanceType" awsType: "awsstr" templateName: "type" required: ""`
-	Name           *string   `awsName: "LaunchConfigurationName" awsType: "awsstr" templateName: "name" required: ""`
-	Public         *bool     `awsName: "AssociatePublicIpAddress" awsType: "awsbool" templateName: "public"`
-	Keypair        *string   `awsName: "KeyName" awsType: "awsstr" templateName: "keypair"`
-	Userdata       *string   `awsName: "UserData" awsType: "awsfiletobase64" templateName: "userdata"`
-	Securitygroups *[]string `awsName: "SecurityGroups" awsType: "awsstringslice" templateName: "securitygroups"`
-	Role           *string   `awsName: "IamInstanceProfile" awsType: "awsstr" templateName: "role"`
-	Spotprice      *string   `awsName: "SpotPrice" awsType: "awsstr" templateName: "spotprice"`
+	Image          *string   `awsName:"ImageId" awsType:"awsstr" templateName:"image" required:""`
+	Type           *string   `awsName:"InstanceType" awsType:"awsstr" templateName:"type" required:""`
+	Name           *string   `awsName:"LaunchConfigurationName" awsType:"awsstr" templateName:"name" required:""`
+	Public         *bool     `awsName:"AssociatePublicIpAddress" awsType:"awsbool" templateName:"public"`
+	Keypair        *string   `awsName:"KeyName" awsType:"awsstr" templateName:"keypair"`
+	Userdata       *string   `awsName:"UserData" awsType:"awsfiletobase64" templateName:"userdata"`
+	Securitygroups *[]string `awsName:"SecurityGroups" awsType:"awsstringslice" templateName:"securitygroups"`
+	Role           *string   `awsName:"IamInstanceProfile" awsType:"awsstr" templateName:"role"`
+	Spotprice      *string   `awsName:"SpotPrice" awsType:"awsstr" templateName:"spotprice"`
 }
+
+func (cmd *CreateLaunchconfiguration) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateLaunchconfiguration) ExtractResult(i interface{}) string {
+	return params["name"]
+}
+
 type DeleteLaunchconfiguration struct {
-	_      string `action: "delete" entity: "launchconfiguration" awsAPI: "autoscaling" awsCall: "DeleteLaunchConfiguration" awsInput: "DeleteLaunchConfigurationInput" awsOutput: "DeleteLaunchConfigurationOutput"`
+	_      string `action:"delete" entity:"launchconfiguration" awsAPI:"autoscaling" awsCall:"DeleteLaunchConfiguration" awsInput:"autoscaling.DeleteLaunchConfigurationInput" awsOutput:"autoscaling.DeleteLaunchConfigurationOutput"`
 	logger *logger.Logger
 	api    autoscalingiface.AutoScalingAPI
-	Name   *string `awsName: "LaunchConfigurationName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"LaunchConfigurationName" awsType:"awsstr" templateName:"name" required:""`
+}
+
+func (cmd *DeleteLaunchconfiguration) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

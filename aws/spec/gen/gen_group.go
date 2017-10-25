@@ -18,19 +18,34 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateGroup struct {
-	_      string `action: "create" entity: "group" awsAPI: "iam" awsCall: "CreateGroup" awsInput: "CreateGroupInput" awsOutput: "CreateGroupOutput"`
+	_      string `action:"create" entity:"group" awsAPI:"iam" awsCall:"CreateGroup" awsInput:"iam.CreateGroupInput" awsOutput:"iam.CreateGroupOutput"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Name   *string `awsName: "GroupName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"GroupName" awsType:"awsstr" templateName:"name" required:""`
 }
+
+func (cmd *CreateGroup) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateGroup) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*iam.CreateGroupOutput).Group.GroupId)
+}
+
 type DeleteGroup struct {
-	_      string `action: "delete" entity: "group" awsAPI: "iam" awsCall: "DeleteGroup" awsInput: "DeleteGroupInput" awsOutput: "DeleteGroupOutput"`
+	_      string `action:"delete" entity:"group" awsAPI:"iam" awsCall:"DeleteGroup" awsInput:"iam.DeleteGroupInput" awsOutput:"iam.DeleteGroupOutput"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Name   *string `awsName: "GroupName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"GroupName" awsType:"awsstr" templateName:"name" required:""`
+}
+
+func (cmd *DeleteGroup) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

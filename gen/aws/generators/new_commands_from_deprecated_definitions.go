@@ -31,12 +31,13 @@ func generateNewCommands() {
 	cmdsByEntity := aws.BuildNewCommandsFromDriversDeprecatedDefs(aws.DriversDefs)
 	for entity, cmds := range cmdsByEntity {
 		templ, err := template.New("new_commands").Funcs(template.FuncMap{
-			"GenerateCmdTag":   GenerateCmdTag,
-			"GenerateParamTag": GenerateParamTag,
-			"ApiToInterface":   aws.ApiToInterface,
-			"Title":            strings.Title,
-			"AwsTypeToGoType":  AwsTypeToGoType,
-			"ToParamName":      ToParamName,
+			"GenerateCmdTag":           GenerateCmdTag,
+			"GenerateParamTag":         GenerateParamTag,
+			"ApiToInterface":           aws.ApiToInterface,
+			"CommandName":              CommandName,
+			"AwsTypeToGoType":          AwsTypeToGoType,
+			"ToParamName":              ToParamName,
+			"GenerateResultExtraction": GenerateResultExtraction,
 		}).Parse(generatedNewCommands)
 		if err != nil {
 			panic(err)
@@ -63,28 +64,32 @@ func ToParamName(name string) string {
 	return clean
 }
 
+func CommandName(c aws.NewCommand) string {
+	return strings.Title(c.Action) + strings.Title(c.Entity)
+}
+
 func GenerateCmdTag(c aws.NewCommand) (string, error) {
 	var tags []string
 	if c.Action != "" {
-		tags = append(tags, fmt.Sprintf("action: \"%s\"", c.Action))
+		tags = append(tags, fmt.Sprintf("action:\"%s\"", c.Action))
 	}
 	if c.Entity != "" {
-		tags = append(tags, fmt.Sprintf("entity: \"%s\"", c.Entity))
+		tags = append(tags, fmt.Sprintf("entity:\"%s\"", c.Entity))
 	}
 	if c.API != "" {
-		tags = append(tags, fmt.Sprintf("awsAPI: \"%s\"", c.API))
+		tags = append(tags, fmt.Sprintf("awsAPI:\"%s\"", c.API))
 	}
 	if c.Call != "" {
-		tags = append(tags, fmt.Sprintf("awsCall: \"%s\"", c.Call))
+		tags = append(tags, fmt.Sprintf("awsCall:\"%s\"", c.Call))
 	}
 	if c.Input != "" {
-		tags = append(tags, fmt.Sprintf("awsInput: \"%s\"", c.Input))
+		tags = append(tags, fmt.Sprintf("awsInput:\"%s.%s\"", c.API, c.Input))
 	}
 	if c.Output != "" {
-		tags = append(tags, fmt.Sprintf("awsOutput: \"%s\"", c.Output))
+		tags = append(tags, fmt.Sprintf("awsOutput:\"%s.%s\"", c.API, c.Output))
 	}
 	if c.DryRun {
-		tags = append(tags, "awsDryRun: \"\"")
+		tags = append(tags, "awsDryRun:\"\"")
 	}
 	if len(tags) > 0 {
 		return "`" + strings.Join(tags, " ") + "`", nil
@@ -95,16 +100,16 @@ func GenerateCmdTag(c aws.NewCommand) (string, error) {
 func GenerateParamTag(p aws.NewCommandParam) (string, error) {
 	var tags []string
 	if p.AwsName != "" {
-		tags = append(tags, fmt.Sprintf("awsName: \"%s\"", p.AwsName))
+		tags = append(tags, fmt.Sprintf("awsName:\"%s\"", p.AwsName))
 	}
 	if p.AwsType != "" {
-		tags = append(tags, fmt.Sprintf("awsType: \"%s\"", p.AwsType))
+		tags = append(tags, fmt.Sprintf("awsType:\"%s\"", p.AwsType))
 	}
 	if p.Name != "" {
-		tags = append(tags, fmt.Sprintf("templateName: \"%s\"", p.Name))
+		tags = append(tags, fmt.Sprintf("templateName:\"%s\"", p.Name))
 	}
 	if p.IsRequired {
-		tags = append(tags, "required: \"\"")
+		tags = append(tags, "required:\"\"")
 	}
 	if len(tags) > 0 {
 		return "`" + strings.Join(tags, " ") + "`", nil
@@ -136,6 +141,13 @@ func AwsTypeToGoType(awstype string) (string, error) {
 	}
 }
 
+func GenerateResultExtraction(cmd aws.NewCommand) string {
+	out := strings.Replace(cmd.OutputExtractor, "aws.", "awssdk.", 1)
+	out = strings.Replace(out, "output.", fmt.Sprintf("i.(*%s.%s).", cmd.API, cmd.Output), 1)
+
+	return out
+}
+
 const generatedNewCommands = `/* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -157,10 +169,11 @@ package awsspec
 
 import (
 	"github.com/wallix/awless/template"
+	awssdk "github.com/aws/aws-sdk-go/aws"
 )
 
 {{- range $, $cmd := . }}
-type {{ Title $cmd.Action }}{{ Title $cmd.Entity }} struct {
+type {{ CommandName $cmd }} struct {
   _              string {{ GenerateCmdTag $cmd }}
   logger         *logger.Logger
   api            {{ $cmd.API }}iface.{{ ApiToInterface $cmd.API }}
@@ -168,5 +181,16 @@ type {{ Title $cmd.Action }}{{ Title $cmd.Entity }} struct {
     {{ToParamName $param.Name }} {{ AwsTypeToGoType $param.AwsType }} {{ GenerateParamTag $param }}
   {{- end }}
 }
+{{ if $cmd.Call }}
+func (cmd *{{ CommandName $cmd }}) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+{{ end }}
+{{ if $cmd.OutputExtractor }}
+func (cmd *{{ CommandName $cmd }}) ExtractResult(i interface{}) string {
+	return {{ GenerateResultExtraction $cmd }}
+}
+{{ end }}
+
 {{- end }}
 `

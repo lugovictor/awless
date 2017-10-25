@@ -23,30 +23,45 @@ import (
 )
 
 type CreateMfadevice struct {
-	_      string `action: "create" entity: "mfadevice" awsAPI: "iam"`
+	_      string `action:"create" entity:"mfadevice" awsAPI:"iam"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Name   *struct{} `templateName: "name" required: ""`
+	Name   *struct{} `templateName:"name" required:""`
 }
+
 type DeleteMfadevice struct {
-	_      string `action: "delete" entity: "mfadevice" awsAPI: "iam" awsCall: "DeleteVirtualMFADevice" awsInput: "DeleteVirtualMFADeviceInput" awsOutput: "DeleteVirtualMFADeviceOutput"`
+	_      string `action:"delete" entity:"mfadevice" awsAPI:"iam" awsCall:"DeleteVirtualMFADevice" awsInput:"iam.DeleteVirtualMFADeviceInput" awsOutput:"iam.DeleteVirtualMFADeviceOutput"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Id     *string `awsName: "SerialNumber" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"SerialNumber" awsType:"awsstr" templateName:"id" required:""`
 }
+
+func (cmd *DeleteMfadevice) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type AttachMfadevice struct {
-	_        string `action: "attach" entity: "mfadevice" awsAPI: "iam" awsCall: "EnableMFADevice" awsInput: "EnableMFADeviceInput" awsOutput: "EnableMFADeviceOutput"`
+	_        string `action:"attach" entity:"mfadevice" awsAPI:"iam" awsCall:"EnableMFADevice" awsInput:"iam.EnableMFADeviceInput" awsOutput:"iam.EnableMFADeviceOutput"`
 	logger   *logger.Logger
 	api      iamiface.IAMAPI
-	Id       *string `awsName: "SerialNumber" awsType: "awsstr" templateName: "id" required: ""`
-	User     *string `awsName: "UserName" awsType: "awsstr" templateName: "user" required: ""`
-	MfaCode1 *string `awsName: "AuthenticationCode1" awsType: "aws6digitsstring" templateName: "mfa-code-1" required: ""`
-	MfaCode2 *string `awsName: "AuthenticationCode2" awsType: "aws6digitsstring" templateName: "mfa-code-2" required: ""`
+	Id       *string `awsName:"SerialNumber" awsType:"awsstr" templateName:"id" required:""`
+	User     *string `awsName:"UserName" awsType:"awsstr" templateName:"user" required:""`
+	MfaCode1 *string `awsName:"AuthenticationCode1" awsType:"aws6digitsstring" templateName:"mfa-code-1" required:""`
+	MfaCode2 *string `awsName:"AuthenticationCode2" awsType:"aws6digitsstring" templateName:"mfa-code-2" required:""`
 }
+
+func (cmd *AttachMfadevice) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type DetachMfadevice struct {
-	_      string `action: "detach" entity: "mfadevice" awsAPI: "iam" awsCall: "DeactivateMFADevice" awsInput: "DeactivateMFADeviceInput" awsOutput: "DeactivateMFADeviceOutput"`
+	_      string `action:"detach" entity:"mfadevice" awsAPI:"iam" awsCall:"DeactivateMFADevice" awsInput:"iam.DeactivateMFADeviceInput" awsOutput:"iam.DeactivateMFADeviceOutput"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Id     *string `awsName: "SerialNumber" awsType: "awsstr" templateName: "id" required: ""`
-	User   *string `awsName: "UserName" awsType: "awsstr" templateName: "user" required: ""`
+	Id     *string `awsName:"SerialNumber" awsType:"awsstr" templateName:"id" required:""`
+	User   *string `awsName:"UserName" awsType:"awsstr" templateName:"user" required:""`
+}
+
+func (cmd *DetachMfadevice) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

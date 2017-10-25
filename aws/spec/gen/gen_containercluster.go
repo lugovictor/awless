@@ -18,19 +18,34 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateContainercluster struct {
-	_      string `action: "create" entity: "containercluster" awsAPI: "ecs" awsCall: "CreateCluster" awsInput: "CreateClusterInput" awsOutput: "CreateClusterOutput"`
+	_      string `action:"create" entity:"containercluster" awsAPI:"ecs" awsCall:"CreateCluster" awsInput:"ecs.CreateClusterInput" awsOutput:"ecs.CreateClusterOutput"`
 	logger *logger.Logger
 	api    ecsiface.ECSAPI
-	Name   *string `awsName: "ClusterName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"ClusterName" awsType:"awsstr" templateName:"name" required:""`
 }
+
+func (cmd *CreateContainercluster) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateContainercluster) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ecs.CreateClusterOutput).Cluster.ClusterArn)
+}
+
 type DeleteContainercluster struct {
-	_      string `action: "delete" entity: "containercluster" awsAPI: "ecs" awsCall: "DeleteCluster" awsInput: "DeleteClusterInput" awsOutput: "DeleteClusterOutput"`
+	_      string `action:"delete" entity:"containercluster" awsAPI:"ecs" awsCall:"DeleteCluster" awsInput:"ecs.DeleteClusterInput" awsOutput:"ecs.DeleteClusterOutput"`
 	logger *logger.Logger
 	api    ecsiface.ECSAPI
-	Id     *string `awsName: "Cluster" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"Cluster" awsType:"awsstr" templateName:"id" required:""`
+}
+
+func (cmd *DeleteContainercluster) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

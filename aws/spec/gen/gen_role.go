@@ -23,33 +23,44 @@ import (
 )
 
 type CreateRole struct {
-	_                string `action: "create" entity: "role" awsAPI: "iam"`
+	_                string `action:"create" entity:"role" awsAPI:"iam"`
 	logger           *logger.Logger
 	api              iamiface.IAMAPI
-	Name             *string   `awsName: "RoleName" awsType: "awsstr" templateName: "name" required: ""`
-	PrincipalAccount *struct{} `templateName: "principal-account"`
-	PrincipalUser    *struct{} `templateName: "principal-user"`
-	PrincipalService *struct{} `templateName: "principal-service"`
-	Conditions       *struct{} `templateName: "conditions"`
-	SleepAfter       *struct{} `templateName: "sleep-after"`
+	Name             *string   `awsName:"RoleName" awsType:"awsstr" templateName:"name" required:""`
+	PrincipalAccount *struct{} `templateName:"principal-account"`
+	PrincipalUser    *struct{} `templateName:"principal-user"`
+	PrincipalService *struct{} `templateName:"principal-service"`
+	Conditions       *struct{} `templateName:"conditions"`
+	SleepAfter       *struct{} `templateName:"sleep-after"`
 }
+
 type DeleteRole struct {
-	_      string `action: "delete" entity: "role" awsAPI: "iam"`
+	_      string `action:"delete" entity:"role" awsAPI:"iam"`
 	logger *logger.Logger
 	api    iamiface.IAMAPI
-	Name   *string `awsName: "RoleName" awsType: "awsstr" templateName: "name" required: ""`
+	Name   *string `awsName:"RoleName" awsType:"awsstr" templateName:"name" required:""`
 }
+
 type AttachRole struct {
-	_               string `action: "attach" entity: "role" awsAPI: "iam" awsCall: "AddRoleToInstanceProfile" awsInput: "AddRoleToInstanceProfileInput" awsOutput: "AddRoleToInstanceProfileOutput"`
+	_               string `action:"attach" entity:"role" awsAPI:"iam" awsCall:"AddRoleToInstanceProfile" awsInput:"iam.AddRoleToInstanceProfileInput" awsOutput:"iam.AddRoleToInstanceProfileOutput"`
 	logger          *logger.Logger
 	api             iamiface.IAMAPI
-	Instanceprofile *string `awsName: "InstanceProfileName" awsType: "awsstr" templateName: "instanceprofile" required: ""`
-	Name            *string `awsName: "RoleName" awsType: "awsstr" templateName: "name" required: ""`
+	Instanceprofile *string `awsName:"InstanceProfileName" awsType:"awsstr" templateName:"instanceprofile" required:""`
+	Name            *string `awsName:"RoleName" awsType:"awsstr" templateName:"name" required:""`
 }
+
+func (cmd *AttachRole) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type DetachRole struct {
-	_               string `action: "detach" entity: "role" awsAPI: "iam" awsCall: "RemoveRoleFromInstanceProfile" awsInput: "RemoveRoleFromInstanceProfileInput" awsOutput: "RemoveRoleFromInstanceProfileOutput"`
+	_               string `action:"detach" entity:"role" awsAPI:"iam" awsCall:"RemoveRoleFromInstanceProfile" awsInput:"iam.RemoveRoleFromInstanceProfileInput" awsOutput:"iam.RemoveRoleFromInstanceProfileOutput"`
 	logger          *logger.Logger
 	api             iamiface.IAMAPI
-	Instanceprofile *string `awsName: "InstanceProfileName" awsType: "awsstr" templateName: "instanceprofile" required: ""`
-	Name            *string `awsName: "RoleName" awsType: "awsstr" templateName: "name" required: ""`
+	Instanceprofile *string `awsName:"InstanceProfileName" awsType:"awsstr" templateName:"instanceprofile" required:""`
+	Name            *string `awsName:"RoleName" awsType:"awsstr" templateName:"name" required:""`
+}
+
+func (cmd *DetachRole) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

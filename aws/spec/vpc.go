@@ -18,6 +18,8 @@ limitations under the License.
 package awsspec
 
 import (
+	"net"
+
 	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
@@ -28,12 +30,17 @@ type CreateVpc struct {
 	_      string `action:"create" entity:"vpc" awsAPI:"ec2" awsCall:"CreateVpc" awsInput:"ec2.CreateVpcInput" awsOutput:"ec2.CreateVpcOutput" awsDryRun:""`
 	logger *logger.Logger
 	api    ec2iface.EC2API
-	Cidr   *string   `awsName:"CidrBlock" awsType:"awsstr" templateName:"cidr" required:""`
-	Name   *struct{} `awsName:"Name" templateName:"name"`
+	CIDR   *string `awsName:"CidrBlock" awsType:"awsstr" templateName:"cidr" required:""`
+	Name   *string `awsName:"Name" templateName:"name"`
 }
 
 func (cmd *CreateVpc) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
+}
+
+func (cmd *CreateVpc) ValidateCIDR() error {
+	_, _, err := net.ParseCIDR(StringValue(cmd.CIDR))
+	return err
 }
 
 func (cmd *CreateVpc) ExtractResult(i interface{}) string {

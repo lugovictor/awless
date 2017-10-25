@@ -18,28 +18,44 @@ limitations under the License.
 package awsspec
 
 import (
+	awssdk "github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/logger"
 )
 
 type CreateNatgateway struct {
-	_           string `action: "create" entity: "natgateway" awsAPI: "ec2" awsCall: "CreateNatGateway" awsInput: "CreateNatGatewayInput" awsOutput: "CreateNatGatewayOutput"`
+	_           string `action:"create" entity:"natgateway" awsAPI:"ec2" awsCall:"CreateNatGateway" awsInput:"ec2.CreateNatGatewayInput" awsOutput:"ec2.CreateNatGatewayOutput"`
 	logger      *logger.Logger
 	api         ec2iface.EC2API
-	ElasticipId *string `awsName: "AllocationId" awsType: "awsstr" templateName: "elasticip-id" required: ""`
-	Subnet      *string `awsName: "SubnetId" awsType: "awsstr" templateName: "subnet" required: ""`
+	ElasticipId *string `awsName:"AllocationId" awsType:"awsstr" templateName:"elasticip-id" required:""`
+	Subnet      *string `awsName:"SubnetId" awsType:"awsstr" templateName:"subnet" required:""`
 }
+
+func (cmd *CreateNatgateway) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *CreateNatgateway) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ec2.CreateNatGatewayOutput).NatGateway.NatGatewayId)
+}
+
 type DeleteNatgateway struct {
-	_      string `action: "delete" entity: "natgateway" awsAPI: "ec2" awsCall: "DeleteNatGateway" awsInput: "DeleteNatGatewayInput" awsOutput: "DeleteNatGatewayOutput"`
+	_      string `action:"delete" entity:"natgateway" awsAPI:"ec2" awsCall:"DeleteNatGateway" awsInput:"ec2.DeleteNatGatewayInput" awsOutput:"ec2.DeleteNatGatewayOutput"`
 	logger *logger.Logger
 	api    ec2iface.EC2API
-	Id     *string `awsName: "NatGatewayId" awsType: "awsstr" templateName: "id" required: ""`
+	Id     *string `awsName:"NatGatewayId" awsType:"awsstr" templateName:"id" required:""`
 }
+
+func (cmd *DeleteNatgateway) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type CheckNatgateway struct {
-	_       string `action: "check" entity: "natgateway" awsAPI: "ec2"`
+	_       string `action:"check" entity:"natgateway" awsAPI:"ec2"`
 	logger  *logger.Logger
 	api     ec2iface.EC2API
-	Id      *struct{} `templateName: "id" required: ""`
-	State   *struct{} `templateName: "state" required: ""`
-	Timeout *struct{} `templateName: "timeout" required: ""`
+	Id      *struct{} `templateName:"id" required:""`
+	State   *struct{} `templateName:"state" required:""`
+	Timeout *struct{} `templateName:"timeout" required:""`
 }

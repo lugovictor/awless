@@ -23,27 +23,37 @@ import (
 )
 
 type CreateS3object struct {
-	_      string `action: "create" entity: "s3object" awsAPI: "s3"`
+	_      string `action:"create" entity:"s3object" awsAPI:"s3"`
 	logger *logger.Logger
 	api    s3iface.S3API
-	Bucket *string `awsName: "Bucket" awsType: "awsstr" templateName: "bucket" required: ""`
-	File   *string `awsName: "Body" awsType: "awsstr" templateName: "file" required: ""`
-	Name   *string `awsName: "Key" awsType: "awsstr" templateName: "name"`
-	Acl    *string `awsName: "ACL" awsType: "awsstr" templateName: "acl"`
+	Bucket *string `awsName:"Bucket" awsType:"awsstr" templateName:"bucket" required:""`
+	File   *string `awsName:"Body" awsType:"awsstr" templateName:"file" required:""`
+	Name   *string `awsName:"Key" awsType:"awsstr" templateName:"name"`
+	Acl    *string `awsName:"ACL" awsType:"awsstr" templateName:"acl"`
 }
+
 type UpdateS3object struct {
-	_       string `action: "update" entity: "s3object" awsAPI: "s3" awsCall: "PutObjectAcl" awsInput: "PutObjectAclInput" awsOutput: "PutObjectAclOutput"`
+	_       string `action:"update" entity:"s3object" awsAPI:"s3" awsCall:"PutObjectAcl" awsInput:"s3.PutObjectAclInput" awsOutput:"s3.PutObjectAclOutput"`
 	logger  *logger.Logger
 	api     s3iface.S3API
-	Bucket  *string `awsName: "Bucket" awsType: "awsstr" templateName: "bucket" required: ""`
-	Name    *string `awsName: "Key" awsType: "awsstr" templateName: "name" required: ""`
-	Acl     *string `awsName: "ACL" awsType: "awsstr" templateName: "acl" required: ""`
-	Version *string `awsName: "VersionId" awsType: "awsstr" templateName: "version"`
+	Bucket  *string `awsName:"Bucket" awsType:"awsstr" templateName:"bucket" required:""`
+	Name    *string `awsName:"Key" awsType:"awsstr" templateName:"name" required:""`
+	Acl     *string `awsName:"ACL" awsType:"awsstr" templateName:"acl" required:""`
+	Version *string `awsName:"VersionId" awsType:"awsstr" templateName:"version"`
 }
+
+func (cmd *UpdateS3object) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type DeleteS3object struct {
-	_      string `action: "delete" entity: "s3object" awsAPI: "s3" awsCall: "DeleteObject" awsInput: "DeleteObjectInput" awsOutput: "DeleteObjectOutput"`
+	_      string `action:"delete" entity:"s3object" awsAPI:"s3" awsCall:"DeleteObject" awsInput:"s3.DeleteObjectInput" awsOutput:"s3.DeleteObjectOutput"`
 	logger *logger.Logger
 	api    s3iface.S3API
-	Bucket *string `awsName: "Bucket" awsType: "awsstr" templateName: "bucket" required: ""`
-	Name   *string `awsName: "Key" awsType: "awsstr" templateName: "name" required: ""`
+	Bucket *string `awsName:"Bucket" awsType:"awsstr" templateName:"bucket" required:""`
+	Name   *string `awsName:"Key" awsType:"awsstr" templateName:"name" required:""`
+}
+
+func (cmd *DeleteS3object) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

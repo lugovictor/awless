@@ -323,6 +323,95 @@ func (cmd *CreateTag) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateVpc(l *logger.Logger, sess *session.Session) *CreateVpc {
+	cmd := new(CreateVpc)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *CreateVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateVpcInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.CreateVpcInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateVpc(input)
+	cmd.logger.ExtraVerbosef("ec2.CreateVpc call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateVpc) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *CreateVpc) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateVpcInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.CreateVpcInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.CreateVpc(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.CreateVpc call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: create vpc ok")
+			return fakeDryRunId("vpc"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *CreateVpc) ParamsHelp() string {
+	return generateParamsHelp("createvpc", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateVpc) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteInstance(l *logger.Logger, sess *session.Session) *DeleteInstance {
 	cmd := new(DeleteInstance)
 	cmd.api = ec2.New(sess)
@@ -409,5 +498,94 @@ func (cmd *DeleteInstance) ParamsHelp() string {
 }
 
 func (cmd *DeleteInstance) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteVpc(l *logger.Logger, sess *session.Session) *DeleteVpc {
+	cmd := new(DeleteVpc)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *DeleteVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteVpcInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DeleteVpcInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteVpc(input)
+	cmd.logger.ExtraVerbosef("ec2.DeleteVpc call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteVpc) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteVpc) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteVpcInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.DeleteVpcInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.DeleteVpc(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.DeleteVpc call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: delete vpc ok")
+			return fakeDryRunId("vpc"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DeleteVpc) ParamsHelp() string {
+	return generateParamsHelp("deletevpc", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteVpc) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }

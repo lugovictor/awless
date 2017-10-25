@@ -39,7 +39,9 @@ var (
 	newCreateInstance = func() *CreateInstance { return &CreateInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateSubnet   = func() *CreateSubnet { return &CreateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateTag      = func() *CreateTag { return &CreateTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateVpc      = func() *CreateVpc { return &CreateVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteInstance = func() *DeleteInstance { return &DeleteInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteVpc      = func() *DeleteVpc { return &DeleteVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newAttachPolicy   = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 )
 
@@ -48,7 +50,9 @@ func init() {
 	NewCommandFuncs["createinstance"] = func() interface{} { return newCreateInstance() }
 	NewCommandFuncs["createsubnet"] = func() interface{} { return newCreateSubnet() }
 	NewCommandFuncs["createtag"] = func() interface{} { return newCreateTag() }
+	NewCommandFuncs["createvpc"] = func() interface{} { return newCreateVpc() }
 	NewCommandFuncs["deleteinstance"] = func() interface{} { return newDeleteInstance() }
+	NewCommandFuncs["deletevpc"] = func() interface{} { return newDeleteVpc() }
 	NewCommandFuncs["attachpolicy"] = func() interface{} { return newAttachPolicy() }
 }
 
@@ -134,6 +138,32 @@ func TestGenCreateTag(t *testing.T) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
+func TestGenCreateVpc(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["createvpc"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["createvpc"]
+	missings, err := newCreateVpc().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCreateVpc(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCreateVpc().ValidateCommand(genTestsParams["createvpc"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCreateVpc().Run(genTestsContext["createvpc"], genTestsParams["createvpc"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["createvpc"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
 func TestGenDeleteInstance(t *testing.T) {
 	if cleanFn, ok := genTestsCleanupFunc["deleteinstance"]; ok {
 		defer cleanFn()
@@ -157,6 +187,32 @@ func TestGenDeleteInstance(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["deleteinstance"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDeleteVpc(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["deletevpc"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["deletevpc"]
+	missings, err := newDeleteVpc().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDeleteVpc(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDeleteVpc().ValidateCommand(genTestsParams["deletevpc"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDeleteVpc().Run(genTestsContext["deletevpc"], genTestsParams["deletevpc"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["deletevpc"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -212,12 +268,32 @@ func (m *mockEc2) CreateSubnet(input *ec2.CreateSubnetInput) (*ec2.CreateSubnetO
 	return nil, nil
 }
 
+func (m *mockEc2) CreateVpc(input *ec2.CreateVpcInput) (*ec2.CreateVpcOutput, error) {
+	if got, want := input, genTestsExpected["createvpc"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createvpc"]; ok {
+		return outFunc().(*ec2.CreateVpcOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) TerminateInstances(input *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) {
 	if got, want := input, genTestsExpected["deleteinstance"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteinstance"]; ok {
 		return outFunc().(*ec2.TerminateInstancesOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DeleteVpc(input *ec2.DeleteVpcInput) (*ec2.DeleteVpcOutput, error) {
+	if got, want := input, genTestsExpected["deletevpc"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletevpc"]; ok {
+		return outFunc().(*ec2.DeleteVpcOutput), nil
 	}
 	return nil, nil
 }

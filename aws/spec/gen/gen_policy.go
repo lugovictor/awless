@@ -23,52 +23,56 @@ import (
 )
 
 type CreatePolicy struct {
-	_           string `action: "create" entity: "policy" awsAPI: "iam"`
+	_           string `action:"create" entity:"policy" awsAPI:"iam"`
 	logger      *logger.Logger
 	api         iamiface.IAMAPI
-	Name        *string   `awsName: "PolicyName" awsType: "awsstr" templateName: "name" required: ""`
-	Effect      *struct{} `templateName: "effect" required: ""`
-	Action      *struct{} `templateName: "action" required: ""`
-	Resource    *struct{} `templateName: "resource" required: ""`
-	Description *string   `awsName: "Description" awsType: "awsstr" templateName: "description"`
-	Conditions  *struct{} `templateName: "conditions"`
+	Name        *string   `awsName:"PolicyName" awsType:"awsstr" templateName:"name" required:""`
+	Effect      *struct{} `templateName:"effect" required:""`
+	Action      *struct{} `templateName:"action" required:""`
+	Resource    *struct{} `templateName:"resource" required:""`
+	Description *string   `awsName:"Description" awsType:"awsstr" templateName:"description"`
+	Conditions  *struct{} `templateName:"conditions"`
 }
+
 type UpdatePolicy struct {
-	_          string `action: "update" entity: "policy" awsAPI: "iam"`
+	_          string `action:"update" entity:"policy" awsAPI:"iam"`
 	logger     *logger.Logger
 	api        iamiface.IAMAPI
-	Arn        *struct{} `templateName: "arn" required: ""`
-	Effect     *struct{} `templateName: "effect" required: ""`
-	Action     *struct{} `templateName: "action" required: ""`
-	Resource   *struct{} `templateName: "resource" required: ""`
-	Conditions *struct{} `templateName: "conditions"`
+	Arn        *struct{} `templateName:"arn" required:""`
+	Effect     *struct{} `templateName:"effect" required:""`
+	Action     *struct{} `templateName:"action" required:""`
+	Resource   *struct{} `templateName:"resource" required:""`
+	Conditions *struct{} `templateName:"conditions"`
 }
+
 type DeletePolicy struct {
-	_           string `action: "delete" entity: "policy" awsAPI: "iam"`
+	_           string `action:"delete" entity:"policy" awsAPI:"iam"`
 	logger      *logger.Logger
 	api         iamiface.IAMAPI
-	Arn         *string   `awsName: "PolicyArn" awsType: "awsstr" templateName: "arn" required: ""`
-	AllVersions *struct{} `templateName: "all-versions"`
+	Arn         *string   `awsName:"PolicyArn" awsType:"awsstr" templateName:"arn" required:""`
+	AllVersions *struct{} `templateName:"all-versions"`
 }
+
 type AttachPolicy struct {
-	_       string `action: "attach" entity: "policy" awsAPI: "iam"`
+	_       string `action:"attach" entity:"policy" awsAPI:"iam"`
 	logger  *logger.Logger
 	api     iamiface.IAMAPI
-	Arn     *struct{} `templateName: "arn"`
-	Service *struct{} `templateName: "service"`
-	Access  *struct{} `templateName: "access"`
-	User    *struct{} `templateName: "user"`
-	Group   *struct{} `templateName: "group"`
-	Role    *struct{} `templateName: "role"`
+	Arn     *struct{} `templateName:"arn"`
+	Service *struct{} `templateName:"service"`
+	Access  *struct{} `templateName:"access"`
+	User    *struct{} `templateName:"user"`
+	Group   *struct{} `templateName:"group"`
+	Role    *struct{} `templateName:"role"`
 }
+
 type DetachPolicy struct {
-	_       string `action: "detach" entity: "policy" awsAPI: "iam"`
+	_       string `action:"detach" entity:"policy" awsAPI:"iam"`
 	logger  *logger.Logger
 	api     iamiface.IAMAPI
-	Arn     *struct{} `templateName: "arn"`
-	Service *struct{} `templateName: "service"`
-	Access  *struct{} `templateName: "access"`
-	User    *struct{} `templateName: "user"`
-	Group   *struct{} `templateName: "group"`
-	Role    *struct{} `templateName: "role"`
+	Arn     *struct{} `templateName:"arn"`
+	Service *struct{} `templateName:"service"`
+	Access  *struct{} `templateName:"access"`
+	User    *struct{} `templateName:"user"`
+	Group   *struct{} `templateName:"group"`
+	Role    *struct{} `templateName:"role"`
 }
