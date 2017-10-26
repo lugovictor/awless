@@ -89,7 +89,7 @@ func (cmd *CreateKeypair) ManualRun(ctx, params map[string]interface{}) (interfa
 
 	start = time.Now()
 	output, err := cmd.api.ImportKeyPair(input)
-	cmd.logger.ExtraVerbosef("ec2.ImportKeyPairInput call took %s", time.Since(start))
+	cmd.logger.ExtraVerbosef("ec2.ImportKeyPair call took %s", time.Since(start))
 	return output, err
 }
 

@@ -617,6 +617,64 @@ func (cmd *CreateKeypair) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreatePolicy(l *logger.Logger, sess *session.Session) *CreatePolicy {
+	cmd := new(CreatePolicy)
+	cmd.api = iam.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *CreatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreatePolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *CreatePolicy) ParamsHelp() string {
+	return generateParamsHelp("createpolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *CreatePolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateRoute(l *logger.Logger, sess *session.Session) *CreateRoute {
 	cmd := new(CreateRoute)
 	cmd.api = ec2.New(sess)
@@ -1387,6 +1445,64 @@ func (cmd *DeleteKeypair) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeletePolicy(l *logger.Logger, sess *session.Session) *DeletePolicy {
+	cmd := new(DeletePolicy)
+	cmd.api = iam.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *DeletePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeletePolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *DeletePolicy) ParamsHelp() string {
+	return generateParamsHelp("deletepolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *DeletePolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteRoute(l *logger.Logger, sess *session.Session) *DeleteRoute {
 	cmd := new(DeleteRoute)
 	cmd.api = ec2.New(sess)
@@ -1921,6 +2037,64 @@ func (cmd *DetachInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDetachPolicy(l *logger.Logger, sess *session.Session) *DetachPolicy {
+	cmd := new(DetachPolicy)
+	cmd.api = iam.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *DetachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachPolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *DetachPolicy) ParamsHelp() string {
+	return generateParamsHelp("detachpolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachPolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDetachRoutetable(l *logger.Logger, sess *session.Session) *DetachRoutetable {
 	cmd := new(DetachRoutetable)
 	cmd.api = ec2.New(sess)
@@ -2065,6 +2239,64 @@ func (cmd *DetachSecuritygroup) ParamsHelp() string {
 }
 
 func (cmd *DetachSecuritygroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdatePolicy(l *logger.Logger, sess *session.Session) *UpdatePolicy {
+	cmd := new(UpdatePolicy)
+	cmd.api = iam.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *UpdatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdatePolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *UpdatePolicy) ParamsHelp() string {
+	return generateParamsHelp("updatepolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdatePolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

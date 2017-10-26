@@ -81,6 +81,10 @@ var (
 	}
 	newUpdateSubnet = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newAttachPolicy = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreatePolicy = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeletePolicy = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachPolicy = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newUpdatePolicy = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 )
 
 func init() {
@@ -112,6 +116,10 @@ func init() {
 	NewCommandFuncs["updatesecuritygroup"] = func() interface{} { return newUpdateSecuritygroup() }
 	NewCommandFuncs["updatesubnet"] = func() interface{} { return newUpdateSubnet() }
 	NewCommandFuncs["attachpolicy"] = func() interface{} { return newAttachPolicy() }
+	NewCommandFuncs["createpolicy"] = func() interface{} { return newCreatePolicy() }
+	NewCommandFuncs["deletepolicy"] = func() interface{} { return newDeletePolicy() }
+	NewCommandFuncs["detachpolicy"] = func() interface{} { return newDetachPolicy() }
+	NewCommandFuncs["updatepolicy"] = func() interface{} { return newUpdatePolicy() }
 }
 
 type mockEc2 struct {
@@ -133,10 +141,10 @@ func TestGenAttachInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachInternetgateway().ValidateCommand(genTestsParams["attachinternetgateway"]); len(errs) > 0 {
+	if errs := newAttachInternetgateway().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newAttachInternetgateway().Run(genTestsContext["attachinternetgateway"], genTestsParams["attachinternetgateway"])
+	res, err := newAttachInternetgateway().Run(genTestsContext["attachinternetgateway"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -159,10 +167,10 @@ func TestGenAttachRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachRoutetable().ValidateCommand(genTestsParams["attachroutetable"]); len(errs) > 0 {
+	if errs := newAttachRoutetable().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newAttachRoutetable().Run(genTestsContext["attachroutetable"], genTestsParams["attachroutetable"])
+	res, err := newAttachRoutetable().Run(genTestsContext["attachroutetable"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -185,10 +193,10 @@ func TestGenAttachSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachSecuritygroup().ValidateCommand(genTestsParams["attachsecuritygroup"]); len(errs) > 0 {
+	if errs := newAttachSecuritygroup().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newAttachSecuritygroup().Run(genTestsContext["attachsecuritygroup"], genTestsParams["attachsecuritygroup"])
+	res, err := newAttachSecuritygroup().Run(genTestsContext["attachsecuritygroup"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -211,10 +219,10 @@ func TestGenCheckSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCheckSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCheckSecuritygroup().ValidateCommand(genTestsParams["checksecuritygroup"]); len(errs) > 0 {
+	if errs := newCheckSecuritygroup().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCheckSecuritygroup().Run(genTestsContext["checksecuritygroup"], genTestsParams["checksecuritygroup"])
+	res, err := newCheckSecuritygroup().Run(genTestsContext["checksecuritygroup"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -237,10 +245,10 @@ func TestGenCreateInstance(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateInstance(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateInstance().ValidateCommand(genTestsParams["createinstance"]); len(errs) > 0 {
+	if errs := newCreateInstance().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateInstance().Run(genTestsContext["createinstance"], genTestsParams["createinstance"])
+	res, err := newCreateInstance().Run(genTestsContext["createinstance"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -263,10 +271,10 @@ func TestGenCreateInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateInternetgateway().ValidateCommand(genTestsParams["createinternetgateway"]); len(errs) > 0 {
+	if errs := newCreateInternetgateway().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateInternetgateway().Run(genTestsContext["createinternetgateway"], genTestsParams["createinternetgateway"])
+	res, err := newCreateInternetgateway().Run(genTestsContext["createinternetgateway"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -289,10 +297,10 @@ func TestGenCreateKeypair(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateKeypair(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateKeypair().ValidateCommand(genTestsParams["createkeypair"]); len(errs) > 0 {
+	if errs := newCreateKeypair().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateKeypair().Run(genTestsContext["createkeypair"], genTestsParams["createkeypair"])
+	res, err := newCreateKeypair().Run(genTestsContext["createkeypair"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -315,10 +323,10 @@ func TestGenCreateRoute(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateRoute(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateRoute().ValidateCommand(genTestsParams["createroute"]); len(errs) > 0 {
+	if errs := newCreateRoute().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateRoute().Run(genTestsContext["createroute"], genTestsParams["createroute"])
+	res, err := newCreateRoute().Run(genTestsContext["createroute"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -341,10 +349,10 @@ func TestGenCreateRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateRoutetable().ValidateCommand(genTestsParams["createroutetable"]); len(errs) > 0 {
+	if errs := newCreateRoutetable().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateRoutetable().Run(genTestsContext["createroutetable"], genTestsParams["createroutetable"])
+	res, err := newCreateRoutetable().Run(genTestsContext["createroutetable"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -367,10 +375,10 @@ func TestGenCreateSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateSecuritygroup().ValidateCommand(genTestsParams["createsecuritygroup"]); len(errs) > 0 {
+	if errs := newCreateSecuritygroup().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateSecuritygroup().Run(genTestsContext["createsecuritygroup"], genTestsParams["createsecuritygroup"])
+	res, err := newCreateSecuritygroup().Run(genTestsContext["createsecuritygroup"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -393,10 +401,10 @@ func TestGenCreateSubnet(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateSubnet(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateSubnet().ValidateCommand(genTestsParams["createsubnet"]); len(errs) > 0 {
+	if errs := newCreateSubnet().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateSubnet().Run(genTestsContext["createsubnet"], genTestsParams["createsubnet"])
+	res, err := newCreateSubnet().Run(genTestsContext["createsubnet"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -419,10 +427,10 @@ func TestGenCreateTag(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateTag(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateTag().ValidateCommand(genTestsParams["createtag"]); len(errs) > 0 {
+	if errs := newCreateTag().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateTag().Run(genTestsContext["createtag"], genTestsParams["createtag"])
+	res, err := newCreateTag().Run(genTestsContext["createtag"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -445,10 +453,10 @@ func TestGenCreateVpc(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateVpc(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateVpc().ValidateCommand(genTestsParams["createvpc"]); len(errs) > 0 {
+	if errs := newCreateVpc().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newCreateVpc().Run(genTestsContext["createvpc"], genTestsParams["createvpc"])
+	res, err := newCreateVpc().Run(genTestsContext["createvpc"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -471,10 +479,10 @@ func TestGenDeleteInstance(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteInstance(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteInstance().ValidateCommand(genTestsParams["deleteinstance"]); len(errs) > 0 {
+	if errs := newDeleteInstance().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteInstance().Run(genTestsContext["deleteinstance"], genTestsParams["deleteinstance"])
+	res, err := newDeleteInstance().Run(genTestsContext["deleteinstance"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -497,10 +505,10 @@ func TestGenDeleteInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteInternetgateway().ValidateCommand(genTestsParams["deleteinternetgateway"]); len(errs) > 0 {
+	if errs := newDeleteInternetgateway().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteInternetgateway().Run(genTestsContext["deleteinternetgateway"], genTestsParams["deleteinternetgateway"])
+	res, err := newDeleteInternetgateway().Run(genTestsContext["deleteinternetgateway"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -523,10 +531,10 @@ func TestGenDeleteKeypair(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteKeypair(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteKeypair().ValidateCommand(genTestsParams["deletekeypair"]); len(errs) > 0 {
+	if errs := newDeleteKeypair().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteKeypair().Run(genTestsContext["deletekeypair"], genTestsParams["deletekeypair"])
+	res, err := newDeleteKeypair().Run(genTestsContext["deletekeypair"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -549,10 +557,10 @@ func TestGenDeleteRoute(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteRoute(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteRoute().ValidateCommand(genTestsParams["deleteroute"]); len(errs) > 0 {
+	if errs := newDeleteRoute().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteRoute().Run(genTestsContext["deleteroute"], genTestsParams["deleteroute"])
+	res, err := newDeleteRoute().Run(genTestsContext["deleteroute"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -575,10 +583,10 @@ func TestGenDeleteRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteRoutetable().ValidateCommand(genTestsParams["deleteroutetable"]); len(errs) > 0 {
+	if errs := newDeleteRoutetable().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteRoutetable().Run(genTestsContext["deleteroutetable"], genTestsParams["deleteroutetable"])
+	res, err := newDeleteRoutetable().Run(genTestsContext["deleteroutetable"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -601,10 +609,10 @@ func TestGenDeleteSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteSecuritygroup().ValidateCommand(genTestsParams["deletesecuritygroup"]); len(errs) > 0 {
+	if errs := newDeleteSecuritygroup().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteSecuritygroup().Run(genTestsContext["deletesecuritygroup"], genTestsParams["deletesecuritygroup"])
+	res, err := newDeleteSecuritygroup().Run(genTestsContext["deletesecuritygroup"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -627,10 +635,10 @@ func TestGenDeleteSubnet(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteSubnet(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteSubnet().ValidateCommand(genTestsParams["deletesubnet"]); len(errs) > 0 {
+	if errs := newDeleteSubnet().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteSubnet().Run(genTestsContext["deletesubnet"], genTestsParams["deletesubnet"])
+	res, err := newDeleteSubnet().Run(genTestsContext["deletesubnet"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -653,10 +661,10 @@ func TestGenDeleteVpc(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteVpc(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteVpc().ValidateCommand(genTestsParams["deletevpc"]); len(errs) > 0 {
+	if errs := newDeleteVpc().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDeleteVpc().Run(genTestsContext["deletevpc"], genTestsParams["deletevpc"])
+	res, err := newDeleteVpc().Run(genTestsContext["deletevpc"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -679,10 +687,10 @@ func TestGenDetachInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDetachInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDetachInternetgateway().ValidateCommand(genTestsParams["detachinternetgateway"]); len(errs) > 0 {
+	if errs := newDetachInternetgateway().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDetachInternetgateway().Run(genTestsContext["detachinternetgateway"], genTestsParams["detachinternetgateway"])
+	res, err := newDetachInternetgateway().Run(genTestsContext["detachinternetgateway"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -705,10 +713,10 @@ func TestGenDetachRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDetachRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDetachRoutetable().ValidateCommand(genTestsParams["detachroutetable"]); len(errs) > 0 {
+	if errs := newDetachRoutetable().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDetachRoutetable().Run(genTestsContext["detachroutetable"], genTestsParams["detachroutetable"])
+	res, err := newDetachRoutetable().Run(genTestsContext["detachroutetable"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -731,10 +739,10 @@ func TestGenDetachSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDetachSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDetachSecuritygroup().ValidateCommand(genTestsParams["detachsecuritygroup"]); len(errs) > 0 {
+	if errs := newDetachSecuritygroup().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newDetachSecuritygroup().Run(genTestsContext["detachsecuritygroup"], genTestsParams["detachsecuritygroup"])
+	res, err := newDetachSecuritygroup().Run(genTestsContext["detachsecuritygroup"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -757,10 +765,10 @@ func TestGenUpdateSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newUpdateSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newUpdateSecuritygroup().ValidateCommand(genTestsParams["updatesecuritygroup"]); len(errs) > 0 {
+	if errs := newUpdateSecuritygroup().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newUpdateSecuritygroup().Run(genTestsContext["updatesecuritygroup"], genTestsParams["updatesecuritygroup"])
+	res, err := newUpdateSecuritygroup().Run(genTestsContext["updatesecuritygroup"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -783,10 +791,10 @@ func TestGenUpdateSubnet(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newUpdateSubnet(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newUpdateSubnet().ValidateCommand(genTestsParams["updatesubnet"]); len(errs) > 0 {
+	if errs := newUpdateSubnet().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newUpdateSubnet().Run(genTestsContext["updatesubnet"], genTestsParams["updatesubnet"])
+	res, err := newUpdateSubnet().Run(genTestsContext["updatesubnet"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -814,14 +822,118 @@ func TestGenAttachPolicy(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachPolicy(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachPolicy().ValidateCommand(genTestsParams["attachpolicy"]); len(errs) > 0 {
+	if errs := newAttachPolicy().ValidateCommand(params); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
-	res, err := newAttachPolicy().Run(genTestsContext["attachpolicy"], genTestsParams["attachpolicy"])
+	res, err := newAttachPolicy().Run(genTestsContext["attachpolicy"], params)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["attachpolicy"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenCreatePolicy(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["createpolicy"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["createpolicy"]
+	missings, err := newCreatePolicy().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCreatePolicy(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCreatePolicy().ValidateCommand(params); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCreatePolicy().Run(genTestsContext["createpolicy"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["createpolicy"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDeletePolicy(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["deletepolicy"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["deletepolicy"]
+	missings, err := newDeletePolicy().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDeletePolicy(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDeletePolicy().ValidateCommand(params); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDeletePolicy().Run(genTestsContext["deletepolicy"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["deletepolicy"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDetachPolicy(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["detachpolicy"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["detachpolicy"]
+	missings, err := newDetachPolicy().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDetachPolicy(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDetachPolicy().ValidateCommand(params); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDetachPolicy().Run(genTestsContext["detachpolicy"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["detachpolicy"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenUpdatePolicy(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["updatepolicy"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["updatepolicy"]
+	missings, err := newUpdatePolicy().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newUpdatePolicy(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newUpdatePolicy().ValidateCommand(params); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newUpdatePolicy().Run(genTestsContext["updatepolicy"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["updatepolicy"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
