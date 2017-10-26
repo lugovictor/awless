@@ -24,6 +24,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/logger"
 )
@@ -81,7 +82,9 @@ var (
 	}
 	newUpdateSubnet = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newAttachPolicy = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateGroup  = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreatePolicy = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteGroup  = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeletePolicy = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachPolicy = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdatePolicy = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -116,7 +119,9 @@ func init() {
 	NewCommandFuncs["updatesecuritygroup"] = func() interface{} { return newUpdateSecuritygroup() }
 	NewCommandFuncs["updatesubnet"] = func() interface{} { return newUpdateSubnet() }
 	NewCommandFuncs["attachpolicy"] = func() interface{} { return newAttachPolicy() }
+	NewCommandFuncs["creategroup"] = func() interface{} { return newCreateGroup() }
 	NewCommandFuncs["createpolicy"] = func() interface{} { return newCreatePolicy() }
+	NewCommandFuncs["deletegroup"] = func() interface{} { return newDeleteGroup() }
 	NewCommandFuncs["deletepolicy"] = func() interface{} { return newDeletePolicy() }
 	NewCommandFuncs["detachpolicy"] = func() interface{} { return newDetachPolicy() }
 	NewCommandFuncs["updatepolicy"] = func() interface{} { return newUpdatePolicy() }
@@ -833,6 +838,32 @@ func TestGenAttachPolicy(t *testing.T) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
+func TestGenCreateGroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["creategroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["creategroup"]
+	missings, err := newCreateGroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCreateGroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCreateGroup().ValidateCommand(params); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCreateGroup().Run(genTestsContext["creategroup"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["creategroup"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
 func TestGenCreatePolicy(t *testing.T) {
 	if cleanFn, ok := genTestsCleanupFunc["createpolicy"]; ok {
 		defer cleanFn()
@@ -856,6 +887,32 @@ func TestGenCreatePolicy(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["createpolicy"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDeleteGroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["deletegroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["deletegroup"]
+	missings, err := newDeleteGroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDeleteGroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDeleteGroup().ValidateCommand(params); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDeleteGroup().Run(genTestsContext["deletegroup"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["deletegroup"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -1134,6 +1191,26 @@ func (m *mockEc2) ModifySubnetAttribute(input *ec2.ModifySubnetAttributeInput) (
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["updatesubnet"]; ok {
 		return outFunc().(*ec2.ModifySubnetAttributeOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) CreateGroup(input *iam.CreateGroupInput) (*iam.CreateGroupOutput, error) {
+	if got, want := input, genTestsExpected["creategroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["creategroup"]; ok {
+		return outFunc().(*iam.CreateGroupOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) DeleteGroup(input *iam.DeleteGroupInput) (*iam.DeleteGroupOutput, error) {
+	if got, want := input, genTestsExpected["deletegroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletegroup"]; ok {
+		return outFunc().(*iam.DeleteGroupOutput), nil
 	}
 	return nil, nil
 }

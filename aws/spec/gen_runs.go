@@ -381,6 +381,70 @@ func (cmd *CheckSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateGroup(l *logger.Logger, sess *session.Session) *CreateGroup {
+	cmd := new(CreateGroup)
+	cmd.api = iam.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *CreateGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	input := &iam.CreateGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.CreateGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateGroup(input)
+	cmd.logger.ExtraVerbosef("iam.CreateGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateGroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *CreateGroup) ParamsHelp() string {
+	return generateParamsHelp("creategroup", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateGroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
 	cmd := new(CreateInstance)
 	cmd.api = ec2.New(sess)
@@ -1175,6 +1239,70 @@ func (cmd *CreateVpc) ParamsHelp() string {
 }
 
 func (cmd *CreateVpc) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteGroup(l *logger.Logger, sess *session.Session) *DeleteGroup {
+	cmd := new(DeleteGroup)
+	cmd.api = iam.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *DeleteGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	input := &iam.DeleteGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.DeleteGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteGroup(input)
+	cmd.logger.ExtraVerbosef("iam.DeleteGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteGroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteGroup) ParamsHelp() string {
+	return generateParamsHelp("deletegroup", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteGroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
