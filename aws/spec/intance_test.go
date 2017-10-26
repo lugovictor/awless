@@ -55,7 +55,7 @@ func init() {
 }
 
 func generateTmpFile(content string) (path string) {
-	file, err := ioutil.TempFile(".", "tmpfile")
+	file, err := ioutil.TempFile("", "tmpfile")
 	if err != nil {
 		panic(err)
 	}

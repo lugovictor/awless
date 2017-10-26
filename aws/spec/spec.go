@@ -427,3 +427,10 @@ func Int64AsIntValue(v *int64) int {
 func Bool(v bool) *bool {
 	return &v
 }
+
+func BoolValue(v *bool) bool {
+	if v != nil {
+		return *v
+	}
+	return false
+}

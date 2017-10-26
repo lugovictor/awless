@@ -32,6 +32,7 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["checksecuritygroup"] = func() interface{} { return NewCheckSecuritygroup(l, sess) }
 	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
 	NewCommandFuncs["createinternetgateway"] = func() interface{} { return NewCreateInternetgateway(l, sess) }
+	NewCommandFuncs["createkeypair"] = func() interface{} { return NewCreateKeypair(l, sess) }
 	NewCommandFuncs["createroute"] = func() interface{} { return NewCreateRoute(l, sess) }
 	NewCommandFuncs["createroutetable"] = func() interface{} { return NewCreateRoutetable(l, sess) }
 	NewCommandFuncs["createsecuritygroup"] = func() interface{} { return NewCreateSecuritygroup(l, sess) }
@@ -40,6 +41,7 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["createvpc"] = func() interface{} { return NewCreateVpc(l, sess) }
 	NewCommandFuncs["deleteinstance"] = func() interface{} { return NewDeleteInstance(l, sess) }
 	NewCommandFuncs["deleteinternetgateway"] = func() interface{} { return NewDeleteInternetgateway(l, sess) }
+	NewCommandFuncs["deletekeypair"] = func() interface{} { return NewDeleteKeypair(l, sess) }
 	NewCommandFuncs["deleteroute"] = func() interface{} { return NewDeleteRoute(l, sess) }
 	NewCommandFuncs["deleteroutetable"] = func() interface{} { return NewDeleteRoutetable(l, sess) }
 	NewCommandFuncs["deletesecuritygroup"] = func() interface{} { return NewDeleteSecuritygroup(l, sess) }
@@ -60,6 +62,7 @@ var (
 	_ command = &CheckSecuritygroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
+	_ command = &CreateKeypair{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
 	_ command = &CreateSecuritygroup{}
@@ -68,6 +71,7 @@ var (
 	_ command = &CreateVpc{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
+	_ command = &DeleteKeypair{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteSecuritygroup{}

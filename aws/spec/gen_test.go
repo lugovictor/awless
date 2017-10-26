@@ -48,6 +48,7 @@ var (
 	newCreateInternetgateway = func() *CreateInternetgateway {
 		return &CreateInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newCreateKeypair       = func() *CreateKeypair { return &CreateKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateRoute         = func() *CreateRoute { return &CreateRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateRoutetable    = func() *CreateRoutetable { return &CreateRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateSecuritygroup = func() *CreateSecuritygroup {
@@ -60,6 +61,7 @@ var (
 	newDeleteInternetgateway = func() *DeleteInternetgateway {
 		return &DeleteInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newDeleteKeypair       = func() *DeleteKeypair { return &DeleteKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteRoute         = func() *DeleteRoute { return &DeleteRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteRoutetable    = func() *DeleteRoutetable { return &DeleteRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteSecuritygroup = func() *DeleteSecuritygroup {
@@ -89,6 +91,7 @@ func init() {
 	NewCommandFuncs["checksecuritygroup"] = func() interface{} { return newCheckSecuritygroup() }
 	NewCommandFuncs["createinstance"] = func() interface{} { return newCreateInstance() }
 	NewCommandFuncs["createinternetgateway"] = func() interface{} { return newCreateInternetgateway() }
+	NewCommandFuncs["createkeypair"] = func() interface{} { return newCreateKeypair() }
 	NewCommandFuncs["createroute"] = func() interface{} { return newCreateRoute() }
 	NewCommandFuncs["createroutetable"] = func() interface{} { return newCreateRoutetable() }
 	NewCommandFuncs["createsecuritygroup"] = func() interface{} { return newCreateSecuritygroup() }
@@ -97,6 +100,7 @@ func init() {
 	NewCommandFuncs["createvpc"] = func() interface{} { return newCreateVpc() }
 	NewCommandFuncs["deleteinstance"] = func() interface{} { return newDeleteInstance() }
 	NewCommandFuncs["deleteinternetgateway"] = func() interface{} { return newDeleteInternetgateway() }
+	NewCommandFuncs["deletekeypair"] = func() interface{} { return newDeleteKeypair() }
 	NewCommandFuncs["deleteroute"] = func() interface{} { return newDeleteRoute() }
 	NewCommandFuncs["deleteroutetable"] = func() interface{} { return newDeleteRoutetable() }
 	NewCommandFuncs["deletesecuritygroup"] = func() interface{} { return newDeleteSecuritygroup() }
@@ -267,6 +271,32 @@ func TestGenCreateInternetgateway(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["createinternetgateway"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenCreateKeypair(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["createkeypair"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["createkeypair"]
+	missings, err := newCreateKeypair().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCreateKeypair(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCreateKeypair().ValidateCommand(genTestsParams["createkeypair"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCreateKeypair().Run(genTestsContext["createkeypair"], genTestsParams["createkeypair"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["createkeypair"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -475,6 +505,32 @@ func TestGenDeleteInternetgateway(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["deleteinternetgateway"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDeleteKeypair(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["deletekeypair"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["deletekeypair"]
+	missings, err := newDeleteKeypair().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDeleteKeypair(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDeleteKeypair().ValidateCommand(genTestsParams["deletekeypair"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDeleteKeypair().Run(genTestsContext["deletekeypair"], genTestsParams["deletekeypair"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["deletekeypair"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -876,6 +932,16 @@ func (m *mockEc2) DeleteInternetGateway(input *ec2.DeleteInternetGatewayInput) (
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteinternetgateway"]; ok {
 		return outFunc().(*ec2.DeleteInternetGatewayOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DeleteKeyPair(input *ec2.DeleteKeyPairInput) (*ec2.DeleteKeyPairOutput, error) {
+	if got, want := input, genTestsExpected["deletekeypair"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletekeypair"]; ok {
+		return outFunc().(*ec2.DeleteKeyPairOutput), nil
 	}
 	return nil, nil
 }

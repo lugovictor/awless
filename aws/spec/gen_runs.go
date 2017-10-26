@@ -559,6 +559,64 @@ func (cmd *CreateInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateKeypair(l *logger.Logger, sess *session.Session) *CreateKeypair {
+	cmd := new(CreateKeypair)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *CreateKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateKeypair) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *CreateKeypair) ParamsHelp() string {
+	return generateParamsHelp("createkeypair", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateKeypair) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateRoute(l *logger.Logger, sess *session.Session) *CreateRoute {
 	cmd := new(CreateRoute)
 	cmd.api = ec2.New(sess)
@@ -1237,6 +1295,95 @@ func (cmd *DeleteInternetgateway) ParamsHelp() string {
 }
 
 func (cmd *DeleteInternetgateway) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteKeypair(l *logger.Logger, sess *session.Session) *DeleteKeypair {
+	cmd := new(DeleteKeypair)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *DeleteKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteKeyPairInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DeleteKeyPairInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteKeyPair(input)
+	cmd.logger.ExtraVerbosef("ec2.DeleteKeyPair call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteKeypair) ValidateCommand(params map[string]interface{}) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteKeypair) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteKeyPairInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.DeleteKeyPairInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.DeleteKeyPair(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.DeleteKeyPair call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: delete keypair ok")
+			return fakeDryRunId("keypair"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DeleteKeypair) ParamsHelp() string {
+	return generateParamsHelp("deletekeypair", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteKeypair) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
