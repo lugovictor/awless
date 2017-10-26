@@ -5,10 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"reflect"
 	"strings"
+	"time"
 
 	"github.com/wallix/awless/aws/doc"
 	"github.com/wallix/awless/cloud"
+	"github.com/wallix/awless/logger"
 )
 
 const (
@@ -325,6 +328,80 @@ func node(key string) ruleNode {
 	return stringNode{key}
 }
 
+type awsCall struct {
+	fn      interface{}
+	logger  *logger.Logger
+	desc    string
+	setters []setter
+}
+
+func (dc *awsCall) execute(input interface{}) (output interface{}, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			output = nil
+			err = fmt.Errorf("%s", e)
+		}
+	}()
+
+	for _, s := range dc.setters {
+		if err = s.set(input); err != nil {
+			return nil, err
+		}
+	}
+
+	fnVal := reflect.ValueOf(dc.fn)
+	values := []reflect.Value{reflect.ValueOf(input)}
+
+	start := time.Now()
+	results := fnVal.Call(values)
+
+	if err, ok := results[1].Interface().(error); ok && err != nil {
+		return nil, fmt.Errorf("%s: %s", dc.desc, err)
+	}
+
+	dc.logger.ExtraVerbosef("%s call took %s", dc.desc, time.Since(start))
+	dc.logger.Verbosef("%s done", dc.desc)
+
+	output = results[0].Interface()
+
+	return
+}
+
+type checker struct {
+	description string
+	timeout     time.Duration
+	frequency   time.Duration
+	fetchFunc   func() (string, error)
+	expect      string
+	logger      *logger.Logger
+	checkName   string
+}
+
+func (c *checker) check() error {
+	timer := time.NewTimer(c.timeout)
+	if c.checkName == "" {
+		c.checkName = "status"
+	}
+	defer timer.Stop()
+	for {
+		select {
+		case <-timer.C:
+			return fmt.Errorf("timeout of %s expired", c.timeout)
+		default:
+		}
+		got, err := c.fetchFunc()
+		if err != nil {
+			return fmt.Errorf("check %s: %s", c.description, err)
+		}
+		if strings.ToLower(got) == strings.ToLower(c.expect) {
+			c.logger.Infof("check %s %s '%s' done", c.description, c.checkName, c.expect)
+			return nil
+		}
+		c.logger.Infof("%s %s '%s', expect '%s', retry in %s (timeout %s).", c.description, c.checkName, got, c.expect, c.frequency, c.timeout)
+		time.Sleep(c.frequency)
+	}
+}
+
 func String(v string) *string {
 	return &v
 }
@@ -338,6 +415,13 @@ func StringValue(v *string) string {
 
 func Int64(v int64) *int64 {
 	return &v
+}
+
+func Int64AsIntValue(v *int64) int {
+	if v != nil {
+		return int(*v)
+	}
+	return 0
 }
 
 func Bool(v bool) *bool {

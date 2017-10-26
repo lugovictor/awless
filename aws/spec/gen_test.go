@@ -39,13 +39,20 @@ var (
 	newAttachInternetgateway = func() *AttachInternetgateway {
 		return &AttachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newAttachRoutetable      = func() *AttachRoutetable { return &AttachRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newAttachRoutetable    = func() *AttachRoutetable { return &AttachRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newAttachSecuritygroup = func() *AttachSecuritygroup {
+		return &AttachSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
+	newCheckSecuritygroup    = func() *CheckSecuritygroup { return &CheckSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInstance        = func() *CreateInstance { return &CreateInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInternetgateway = func() *CreateInternetgateway {
 		return &CreateInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newCreateRoute           = func() *CreateRoute { return &CreateRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
-	newCreateRoutetable      = func() *CreateRoutetable { return &CreateRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateRoute         = func() *CreateRoute { return &CreateRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateRoutetable    = func() *CreateRoutetable { return &CreateRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateSecuritygroup = func() *CreateSecuritygroup {
+		return &CreateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newCreateSubnet          = func() *CreateSubnet { return &CreateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateTag             = func() *CreateTag { return &CreateTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateVpc             = func() *CreateVpc { return &CreateVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
@@ -53,26 +60,38 @@ var (
 	newDeleteInternetgateway = func() *DeleteInternetgateway {
 		return &DeleteInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newDeleteRoute           = func() *DeleteRoute { return &DeleteRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
-	newDeleteRoutetable      = func() *DeleteRoutetable { return &DeleteRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteRoute         = func() *DeleteRoute { return &DeleteRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteRoutetable    = func() *DeleteRoutetable { return &DeleteRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteSecuritygroup = func() *DeleteSecuritygroup {
+		return &DeleteSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newDeleteSubnet          = func() *DeleteSubnet { return &DeleteSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVpc             = func() *DeleteVpc { return &DeleteVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDetachInternetgateway = func() *DetachInternetgateway {
 		return &DetachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newDetachRoutetable = func() *DetachRoutetable { return &DetachRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
-	newUpdateSubnet     = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
-	newAttachPolicy     = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachRoutetable    = func() *DetachRoutetable { return &DetachRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDetachSecuritygroup = func() *DetachSecuritygroup {
+		return &DetachSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
+	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
+		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
+	newUpdateSubnet = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newAttachPolicy = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 )
 
 func init() {
 
 	NewCommandFuncs["attachinternetgateway"] = func() interface{} { return newAttachInternetgateway() }
 	NewCommandFuncs["attachroutetable"] = func() interface{} { return newAttachRoutetable() }
+	NewCommandFuncs["attachsecuritygroup"] = func() interface{} { return newAttachSecuritygroup() }
+	NewCommandFuncs["checksecuritygroup"] = func() interface{} { return newCheckSecuritygroup() }
 	NewCommandFuncs["createinstance"] = func() interface{} { return newCreateInstance() }
 	NewCommandFuncs["createinternetgateway"] = func() interface{} { return newCreateInternetgateway() }
 	NewCommandFuncs["createroute"] = func() interface{} { return newCreateRoute() }
 	NewCommandFuncs["createroutetable"] = func() interface{} { return newCreateRoutetable() }
+	NewCommandFuncs["createsecuritygroup"] = func() interface{} { return newCreateSecuritygroup() }
 	NewCommandFuncs["createsubnet"] = func() interface{} { return newCreateSubnet() }
 	NewCommandFuncs["createtag"] = func() interface{} { return newCreateTag() }
 	NewCommandFuncs["createvpc"] = func() interface{} { return newCreateVpc() }
@@ -80,10 +99,13 @@ func init() {
 	NewCommandFuncs["deleteinternetgateway"] = func() interface{} { return newDeleteInternetgateway() }
 	NewCommandFuncs["deleteroute"] = func() interface{} { return newDeleteRoute() }
 	NewCommandFuncs["deleteroutetable"] = func() interface{} { return newDeleteRoutetable() }
+	NewCommandFuncs["deletesecuritygroup"] = func() interface{} { return newDeleteSecuritygroup() }
 	NewCommandFuncs["deletesubnet"] = func() interface{} { return newDeleteSubnet() }
 	NewCommandFuncs["deletevpc"] = func() interface{} { return newDeleteVpc() }
 	NewCommandFuncs["detachinternetgateway"] = func() interface{} { return newDetachInternetgateway() }
 	NewCommandFuncs["detachroutetable"] = func() interface{} { return newDetachRoutetable() }
+	NewCommandFuncs["detachsecuritygroup"] = func() interface{} { return newDetachSecuritygroup() }
+	NewCommandFuncs["updatesecuritygroup"] = func() interface{} { return newUpdateSecuritygroup() }
 	NewCommandFuncs["updatesubnet"] = func() interface{} { return newUpdateSubnet() }
 	NewCommandFuncs["attachpolicy"] = func() interface{} { return newAttachPolicy() }
 }
@@ -141,6 +163,58 @@ func TestGenAttachRoutetable(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["attachroutetable"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenAttachSecuritygroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["attachsecuritygroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["attachsecuritygroup"]
+	missings, err := newAttachSecuritygroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newAttachSecuritygroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newAttachSecuritygroup().ValidateCommand(genTestsParams["attachsecuritygroup"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newAttachSecuritygroup().Run(genTestsContext["attachsecuritygroup"], genTestsParams["attachsecuritygroup"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["attachsecuritygroup"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenCheckSecuritygroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["checksecuritygroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["checksecuritygroup"]
+	missings, err := newCheckSecuritygroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCheckSecuritygroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCheckSecuritygroup().ValidateCommand(genTestsParams["checksecuritygroup"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCheckSecuritygroup().Run(genTestsContext["checksecuritygroup"], genTestsParams["checksecuritygroup"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["checksecuritygroup"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -245,6 +319,32 @@ func TestGenCreateRoutetable(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["createroutetable"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenCreateSecuritygroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["createsecuritygroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["createsecuritygroup"]
+	missings, err := newCreateSecuritygroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCreateSecuritygroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCreateSecuritygroup().ValidateCommand(genTestsParams["createsecuritygroup"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCreateSecuritygroup().Run(genTestsContext["createsecuritygroup"], genTestsParams["createsecuritygroup"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["createsecuritygroup"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -430,6 +530,32 @@ func TestGenDeleteRoutetable(t *testing.T) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
+func TestGenDeleteSecuritygroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["deletesecuritygroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["deletesecuritygroup"]
+	missings, err := newDeleteSecuritygroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDeleteSecuritygroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDeleteSecuritygroup().ValidateCommand(genTestsParams["deletesecuritygroup"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDeleteSecuritygroup().Run(genTestsContext["deletesecuritygroup"], genTestsParams["deletesecuritygroup"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["deletesecuritygroup"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
 func TestGenDeleteSubnet(t *testing.T) {
 	if cleanFn, ok := genTestsCleanupFunc["deletesubnet"]; ok {
 		defer cleanFn()
@@ -531,6 +657,58 @@ func TestGenDetachRoutetable(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["detachroutetable"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDetachSecuritygroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["detachsecuritygroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["detachsecuritygroup"]
+	missings, err := newDetachSecuritygroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDetachSecuritygroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDetachSecuritygroup().ValidateCommand(genTestsParams["detachsecuritygroup"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDetachSecuritygroup().Run(genTestsContext["detachsecuritygroup"], genTestsParams["detachsecuritygroup"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["detachsecuritygroup"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenUpdateSecuritygroup(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["updatesecuritygroup"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["updatesecuritygroup"]
+	missings, err := newUpdateSecuritygroup().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newUpdateSecuritygroup(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newUpdateSecuritygroup().ValidateCommand(genTestsParams["updatesecuritygroup"]); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newUpdateSecuritygroup().Run(genTestsContext["updatesecuritygroup"], genTestsParams["updatesecuritygroup"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["updatesecuritygroup"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
@@ -652,6 +830,16 @@ func (m *mockEc2) CreateRouteTable(input *ec2.CreateRouteTableInput) (*ec2.Creat
 	return nil, nil
 }
 
+func (m *mockEc2) CreateSecurityGroup(input *ec2.CreateSecurityGroupInput) (*ec2.CreateSecurityGroupOutput, error) {
+	if got, want := input, genTestsExpected["createsecuritygroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createsecuritygroup"]; ok {
+		return outFunc().(*ec2.CreateSecurityGroupOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) CreateSubnet(input *ec2.CreateSubnetInput) (*ec2.CreateSubnetOutput, error) {
 	if got, want := input, genTestsExpected["createsubnet"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -708,6 +896,16 @@ func (m *mockEc2) DeleteRouteTable(input *ec2.DeleteRouteTableInput) (*ec2.Delet
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteroutetable"]; ok {
 		return outFunc().(*ec2.DeleteRouteTableOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DeleteSecurityGroup(input *ec2.DeleteSecurityGroupInput) (*ec2.DeleteSecurityGroupOutput, error) {
+	if got, want := input, genTestsExpected["deletesecuritygroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletesecuritygroup"]; ok {
+		return outFunc().(*ec2.DeleteSecurityGroupOutput), nil
 	}
 	return nil, nil
 }
