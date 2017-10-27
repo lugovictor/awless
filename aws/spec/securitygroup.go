@@ -77,24 +77,14 @@ func (cmd *UpdateSecuritygroup) ValidateInbound() error {
 	if cmd.Inbound == nil {
 		return nil
 	}
-	switch strings.ToLower(StringValue(cmd.Inbound)) {
-	case "authorize", "revoke":
-		return nil
-	default:
-		return fmt.Errorf("invalid value for 'inbound' parameter: expect 'authorize' or 'revoke'")
-	}
+	return NewEnumValidator("authorize", "revoke").Validate(cmd.Inbound)
 }
 
 func (cmd *UpdateSecuritygroup) ValidateOutbound() error {
 	if cmd.Outbound == nil {
 		return nil
 	}
-	switch strings.ToLower(StringValue(cmd.Outbound)) {
-	case "authorize", "revoke":
-		return nil
-	default:
-		return fmt.Errorf("invalid value for 'outbound' parameter: expect 'authorize' or 'revoke'")
-	}
+	return NewEnumValidator("authorize", "revoke").Validate(cmd.Outbound)
 }
 
 func (cmd *UpdateSecuritygroup) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
@@ -178,12 +168,7 @@ func (cmd *CheckSecuritygroup) ValidateParams(params []string) ([]string, error)
 }
 
 func (cmd *CheckSecuritygroup) ValidateState() error {
-	switch strings.ToLower(StringValue(cmd.State)) {
-	case "unused":
-		return nil
-	default:
-		return fmt.Errorf("invalid value '%s' for 'state' parameter: expect 'unused'", StringValue(cmd.State))
-	}
+	return NewEnumValidator("unused").Validate(cmd.State)
 }
 
 func (cmd *CheckSecuritygroup) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {

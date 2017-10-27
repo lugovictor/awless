@@ -2,7 +2,6 @@ package awsspec
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	awssdk "github.com/aws/aws-sdk-go/aws"
@@ -91,12 +90,7 @@ func (cmd *CheckInstance) ValidateParams(params []string) ([]string, error) {
 }
 
 func (cmd *CheckInstance) ValidateState() error {
-	switch strings.ToLower(StringValue(cmd.State)) {
-	case "pending", "running", "shutting-down", "terminated", "stopping", "stopped", "not-found":
-		return nil
-	default:
-		return fmt.Errorf("invalid value '%s' for 'state' parameter: expect 'pending', 'running', 'shutting-down', 'terminated', 'stopping', 'stopped' or 'not-found'", StringValue(cmd.State))
-	}
+	return NewEnumValidator("pending", "running", "shutting-down", "terminated", "stopping", "stopped", notFoundState).Validate(cmd.State)
 }
 
 func (cmd *CheckInstance) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
@@ -122,7 +116,7 @@ func (cmd *CheckInstance) ManualRun(ctx, params map[string]interface{}) (interfa
 				if res := output.Reservations; len(res) > 0 {
 					if instances := output.Reservations[0].Instances; len(instances) > 0 {
 						for _, inst := range instances {
-							if StringValue(inst.InstanceId) == params["id"] {
+							if StringValue(inst.InstanceId) == StringValue(cmd.Id) {
 								return StringValue(inst.State.Name), nil
 							}
 						}
@@ -131,7 +125,7 @@ func (cmd *CheckInstance) ManualRun(ctx, params map[string]interface{}) (interfa
 			}
 			return notFoundState, nil
 		},
-		expect: fmt.Sprint(params["state"]),
+		expect: StringValue(cmd.State),
 		logger: cmd.logger,
 	}
 	return nil, c.check()

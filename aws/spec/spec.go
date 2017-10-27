@@ -402,6 +402,35 @@ func (c *checker) check() error {
 	}
 }
 
+type enumValidator struct {
+	expected []string
+}
+
+func NewEnumValidator(expected ...string) *enumValidator {
+	return &enumValidator{expected: expected}
+}
+
+func (v *enumValidator) Validate(in *string) error {
+	val := strings.ToLower(StringValue(in))
+	for _, e := range v.expected {
+		if val == strings.ToLower(e) {
+			return nil
+		}
+	}
+	var expString string
+	switch len(v.expected) {
+	case 0:
+		return errors.New("empty enumeration")
+	case 1:
+		expString = fmt.Sprintf("'%s'", v.expected[0])
+	case 2:
+		expString = fmt.Sprintf("'%s' or '%s'", v.expected[0], v.expected[1])
+	default:
+		expString = fmt.Sprintf("'%s' or '%s'", strings.Join(v.expected[0:len(v.expected)-1], "', '"), v.expected[len(v.expected)-1])
+	}
+	return fmt.Errorf("invalid value '%s' expect %s", StringValue(in), expString)
+}
+
 func String(v string) *string {
 	return &v
 }
