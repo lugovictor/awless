@@ -2,8 +2,10 @@ package awsspec
 
 import (
 	"encoding/base64"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
@@ -55,6 +57,26 @@ func init() {
 	genTestsExpected["deleteinstance"] = &ec2.TerminateInstancesInput{
 		InstanceIds: []*string{String("my-instance-id1"), String("my-instance-id2")},
 	}
+	genTestsParams["checkinstance"] = map[string]interface{}{
+		"id":      "my-check-instance-id",
+		"state":   "running",
+		"timeout": 0,
+	}
+	genTestsExpected["checkinstance"] = &ec2.DescribeInstancesInput{
+		InstanceIds: []*string{String("my-check-instance-id")},
+	}
+}
+
+func (m *mockEc2) DescribeInstances(input *ec2.DescribeInstancesInput) (*ec2.DescribeInstancesOutput, error) {
+	if len(input.InstanceIds) > 0 && StringValue(input.InstanceIds[0]) == "my-check-instance-id" {
+		if got, want := input, genTestsExpected["checkinstance"]; !reflect.DeepEqual(got, want) {
+			return nil, fmt.Errorf("got %#v, want %#v", got, want)
+		}
+		return &ec2.DescribeInstancesOutput{Reservations: []*ec2.Reservation{
+			{Instances: []*ec2.Instance{{InstanceId: input.InstanceIds[0], State: &ec2.InstanceState{Name: String("running")}}}},
+		}}, nil
+	}
+	return nil, fmt.Errorf("DescribeInstances mock: invalid value for 'InstanceIds': %#v", input)
 }
 
 func generateTmpFile(content string) (path string) {

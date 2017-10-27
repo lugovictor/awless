@@ -323,6 +323,64 @@ func (cmd *AttachSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCheckInstance(l *logger.Logger, sess *session.Session) *CheckInstance {
+	cmd := new(CheckInstance)
+	cmd.api = ec2.New(sess)
+	cmd.logger = l
+	return cmd
+}
+
+func (cmd *CheckInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckInstance) ParamsHelp() string {
+	return generateParamsHelp("checkinstance", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckInstance) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCheckSecuritygroup(l *logger.Logger, sess *session.Session) *CheckSecuritygroup {
 	cmd := new(CheckSecuritygroup)
 	cmd.api = ec2.New(sess)

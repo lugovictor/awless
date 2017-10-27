@@ -44,6 +44,7 @@ var (
 	newAttachSecuritygroup = func() *AttachSecuritygroup {
 		return &AttachSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newCheckInstance         = func() *CheckInstance { return &CheckInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckSecuritygroup    = func() *CheckSecuritygroup { return &CheckSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInstance        = func() *CreateInstance { return &CreateInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInternetgateway = func() *CreateInternetgateway {
@@ -96,6 +97,7 @@ func init() {
 	NewCommandFuncs["attachinternetgateway"] = func() interface{} { return newAttachInternetgateway() }
 	NewCommandFuncs["attachroutetable"] = func() interface{} { return newAttachRoutetable() }
 	NewCommandFuncs["attachsecuritygroup"] = func() interface{} { return newAttachSecuritygroup() }
+	NewCommandFuncs["checkinstance"] = func() interface{} { return newCheckInstance() }
 	NewCommandFuncs["checksecuritygroup"] = func() interface{} { return newCheckSecuritygroup() }
 	NewCommandFuncs["createinstance"] = func() interface{} { return newCreateInstance() }
 	NewCommandFuncs["createinternetgateway"] = func() interface{} { return newCreateInternetgateway() }
@@ -208,6 +210,32 @@ func TestGenAttachSecuritygroup(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["attachsecuritygroup"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenCheckInstance(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["checkinstance"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["checkinstance"]
+	missings, err := newCheckInstance().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newCheckInstance(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newCheckInstance().ValidateCommand(params, nil); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newCheckInstance().Run(genTestsContext["checkinstance"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["checkinstance"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }

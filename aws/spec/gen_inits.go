@@ -29,6 +29,7 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["attachpolicy"] = func() interface{} { return NewAttachPolicy(l, sess) }
 	NewCommandFuncs["attachroutetable"] = func() interface{} { return NewAttachRoutetable(l, sess) }
 	NewCommandFuncs["attachsecuritygroup"] = func() interface{} { return NewAttachSecuritygroup(l, sess) }
+	NewCommandFuncs["checkinstance"] = func() interface{} { return NewCheckInstance(l, sess) }
 	NewCommandFuncs["checksecuritygroup"] = func() interface{} { return NewCheckSecuritygroup(l, sess) }
 	NewCommandFuncs["creategroup"] = func() interface{} { return NewCreateGroup(l, sess) }
 	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
@@ -66,6 +67,7 @@ var (
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
 	_ command = &AttachSecuritygroup{}
+	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
