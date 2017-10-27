@@ -70,16 +70,16 @@ func (cmd *AttachInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	return nil, nil
 }
 
-func (cmd *AttachInternetgateway) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *AttachInternetgateway) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -153,16 +153,16 @@ func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *AttachPolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *AttachPolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -217,16 +217,16 @@ func (cmd *AttachRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	return nil, nil
 }
 
-func (cmd *AttachRoutetable) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *AttachRoutetable) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -300,16 +300,16 @@ func (cmd *AttachSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	return nil, nil
 }
 
-func (cmd *AttachSecuritygroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *AttachSecuritygroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -358,16 +358,16 @@ func (cmd *CheckSecuritygroup) Run(ctx, params map[string]interface{}) (interfac
 	return nil, nil
 }
 
-func (cmd *CheckSecuritygroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CheckSecuritygroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -422,16 +422,16 @@ func (cmd *CreateGroup) Run(ctx, params map[string]interface{}) (interface{}, er
 	return nil, nil
 }
 
-func (cmd *CreateGroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateGroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -486,16 +486,16 @@ func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{},
 	return nil, nil
 }
 
-func (cmd *CreateInstance) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -575,16 +575,16 @@ func (cmd *CreateInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	return nil, nil
 }
 
-func (cmd *CreateInternetgateway) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateInternetgateway) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -658,16 +658,16 @@ func (cmd *CreateKeypair) Run(ctx, params map[string]interface{}) (interface{}, 
 	return nil, nil
 }
 
-func (cmd *CreateKeypair) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateKeypair) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -716,16 +716,16 @@ func (cmd *CreatePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *CreatePolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreatePolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -780,16 +780,16 @@ func (cmd *CreateRoute) Run(ctx, params map[string]interface{}) (interface{}, er
 	return nil, nil
 }
 
-func (cmd *CreateRoute) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateRoute) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -869,16 +869,16 @@ func (cmd *CreateRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	return nil, nil
 }
 
-func (cmd *CreateRoutetable) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateRoutetable) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -958,16 +958,16 @@ func (cmd *CreateSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	return nil, nil
 }
 
-func (cmd *CreateSecuritygroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateSecuritygroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1047,16 +1047,16 @@ func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *CreateSubnet) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateSubnet) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1130,16 +1130,16 @@ func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, erro
 	return nil, nil
 }
 
-func (cmd *CreateTag) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateTag) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1194,16 +1194,16 @@ func (cmd *CreateVpc) Run(ctx, params map[string]interface{}) (interface{}, erro
 	return nil, nil
 }
 
-func (cmd *CreateVpc) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *CreateVpc) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1283,16 +1283,16 @@ func (cmd *DeleteGroup) Run(ctx, params map[string]interface{}) (interface{}, er
 	return nil, nil
 }
 
-func (cmd *DeleteGroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteGroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1347,16 +1347,16 @@ func (cmd *DeleteInstance) Run(ctx, params map[string]interface{}) (interface{},
 	return nil, nil
 }
 
-func (cmd *DeleteInstance) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1436,16 +1436,16 @@ func (cmd *DeleteInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	return nil, nil
 }
 
-func (cmd *DeleteInternetgateway) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteInternetgateway) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1525,16 +1525,16 @@ func (cmd *DeleteKeypair) Run(ctx, params map[string]interface{}) (interface{}, 
 	return nil, nil
 }
 
-func (cmd *DeleteKeypair) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteKeypair) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1608,16 +1608,16 @@ func (cmd *DeletePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *DeletePolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeletePolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1672,16 +1672,16 @@ func (cmd *DeleteRoute) Run(ctx, params map[string]interface{}) (interface{}, er
 	return nil, nil
 }
 
-func (cmd *DeleteRoute) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteRoute) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1761,16 +1761,16 @@ func (cmd *DeleteRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	return nil, nil
 }
 
-func (cmd *DeleteRoutetable) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteRoutetable) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1850,16 +1850,16 @@ func (cmd *DeleteSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	return nil, nil
 }
 
-func (cmd *DeleteSecuritygroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteSecuritygroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -1939,16 +1939,16 @@ func (cmd *DeleteSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *DeleteSubnet) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteSubnet) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2028,16 +2028,16 @@ func (cmd *DeleteVpc) Run(ctx, params map[string]interface{}) (interface{}, erro
 	return nil, nil
 }
 
-func (cmd *DeleteVpc) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DeleteVpc) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2117,16 +2117,16 @@ func (cmd *DetachInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	return nil, nil
 }
 
-func (cmd *DetachInternetgateway) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DetachInternetgateway) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2200,16 +2200,16 @@ func (cmd *DetachPolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *DetachPolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DetachPolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2264,16 +2264,16 @@ func (cmd *DetachRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	return nil, nil
 }
 
-func (cmd *DetachRoutetable) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DetachRoutetable) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2347,16 +2347,16 @@ func (cmd *DetachSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	return nil, nil
 }
 
-func (cmd *DetachSecuritygroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DetachSecuritygroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2405,16 +2405,16 @@ func (cmd *UpdatePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *UpdatePolicy) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *UpdatePolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2463,16 +2463,16 @@ func (cmd *UpdateSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	return nil, nil
 }
 
-func (cmd *UpdateSecuritygroup) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *UpdateSecuritygroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return
@@ -2527,16 +2527,16 @@ func (cmd *UpdateSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	return nil, nil
 }
 
-func (cmd *UpdateSubnet) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *UpdateSubnet) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 
 	return

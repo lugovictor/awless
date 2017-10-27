@@ -152,7 +152,7 @@ func TestAttachPolicy(t *testing.T) {
 		"arn": "arn:1234:2345:3456",
 	}
 	t.Run("Validate", func(t *testing.T) {
-		errs := attach.ValidateCommand(params)
+		errs := attach.ValidateCommand(params, nil)
 		checkErrs(t, errs, 1, "user", "role", "group")
 	})
 }

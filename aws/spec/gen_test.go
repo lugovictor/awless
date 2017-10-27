@@ -146,7 +146,7 @@ func TestGenAttachInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachInternetgateway().ValidateCommand(params); len(errs) > 0 {
+	if errs := newAttachInternetgateway().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newAttachInternetgateway().Run(genTestsContext["attachinternetgateway"], params)
@@ -172,7 +172,7 @@ func TestGenAttachRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachRoutetable().ValidateCommand(params); len(errs) > 0 {
+	if errs := newAttachRoutetable().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newAttachRoutetable().Run(genTestsContext["attachroutetable"], params)
@@ -198,7 +198,7 @@ func TestGenAttachSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachSecuritygroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newAttachSecuritygroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newAttachSecuritygroup().Run(genTestsContext["attachsecuritygroup"], params)
@@ -224,7 +224,7 @@ func TestGenCheckSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCheckSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCheckSecuritygroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCheckSecuritygroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCheckSecuritygroup().Run(genTestsContext["checksecuritygroup"], params)
@@ -250,7 +250,7 @@ func TestGenCreateInstance(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateInstance(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateInstance().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateInstance().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateInstance().Run(genTestsContext["createinstance"], params)
@@ -276,7 +276,7 @@ func TestGenCreateInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateInternetgateway().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateInternetgateway().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateInternetgateway().Run(genTestsContext["createinternetgateway"], params)
@@ -302,7 +302,7 @@ func TestGenCreateKeypair(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateKeypair(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateKeypair().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateKeypair().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateKeypair().Run(genTestsContext["createkeypair"], params)
@@ -328,7 +328,7 @@ func TestGenCreateRoute(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateRoute(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateRoute().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateRoute().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateRoute().Run(genTestsContext["createroute"], params)
@@ -354,7 +354,7 @@ func TestGenCreateRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateRoutetable().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateRoutetable().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateRoutetable().Run(genTestsContext["createroutetable"], params)
@@ -380,7 +380,7 @@ func TestGenCreateSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateSecuritygroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateSecuritygroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateSecuritygroup().Run(genTestsContext["createsecuritygroup"], params)
@@ -406,7 +406,7 @@ func TestGenCreateSubnet(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateSubnet(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateSubnet().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateSubnet().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateSubnet().Run(genTestsContext["createsubnet"], params)
@@ -432,7 +432,7 @@ func TestGenCreateTag(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateTag(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateTag().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateTag().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateTag().Run(genTestsContext["createtag"], params)
@@ -458,7 +458,7 @@ func TestGenCreateVpc(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateVpc(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateVpc().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateVpc().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateVpc().Run(genTestsContext["createvpc"], params)
@@ -484,7 +484,7 @@ func TestGenDeleteInstance(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteInstance(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteInstance().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteInstance().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteInstance().Run(genTestsContext["deleteinstance"], params)
@@ -510,7 +510,7 @@ func TestGenDeleteInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteInternetgateway().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteInternetgateway().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteInternetgateway().Run(genTestsContext["deleteinternetgateway"], params)
@@ -536,7 +536,7 @@ func TestGenDeleteKeypair(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteKeypair(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteKeypair().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteKeypair().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteKeypair().Run(genTestsContext["deletekeypair"], params)
@@ -562,7 +562,7 @@ func TestGenDeleteRoute(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteRoute(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteRoute().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteRoute().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteRoute().Run(genTestsContext["deleteroute"], params)
@@ -588,7 +588,7 @@ func TestGenDeleteRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteRoutetable().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteRoutetable().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteRoutetable().Run(genTestsContext["deleteroutetable"], params)
@@ -614,7 +614,7 @@ func TestGenDeleteSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteSecuritygroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteSecuritygroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteSecuritygroup().Run(genTestsContext["deletesecuritygroup"], params)
@@ -640,7 +640,7 @@ func TestGenDeleteSubnet(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteSubnet(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteSubnet().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteSubnet().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteSubnet().Run(genTestsContext["deletesubnet"], params)
@@ -666,7 +666,7 @@ func TestGenDeleteVpc(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteVpc(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteVpc().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteVpc().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteVpc().Run(genTestsContext["deletevpc"], params)
@@ -692,7 +692,7 @@ func TestGenDetachInternetgateway(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDetachInternetgateway(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDetachInternetgateway().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDetachInternetgateway().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDetachInternetgateway().Run(genTestsContext["detachinternetgateway"], params)
@@ -718,7 +718,7 @@ func TestGenDetachRoutetable(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDetachRoutetable(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDetachRoutetable().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDetachRoutetable().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDetachRoutetable().Run(genTestsContext["detachroutetable"], params)
@@ -744,7 +744,7 @@ func TestGenDetachSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDetachSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDetachSecuritygroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDetachSecuritygroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDetachSecuritygroup().Run(genTestsContext["detachsecuritygroup"], params)
@@ -770,7 +770,7 @@ func TestGenUpdateSecuritygroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newUpdateSecuritygroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newUpdateSecuritygroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newUpdateSecuritygroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newUpdateSecuritygroup().Run(genTestsContext["updatesecuritygroup"], params)
@@ -796,7 +796,7 @@ func TestGenUpdateSubnet(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newUpdateSubnet(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newUpdateSubnet().ValidateCommand(params); len(errs) > 0 {
+	if errs := newUpdateSubnet().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newUpdateSubnet().Run(genTestsContext["updatesubnet"], params)
@@ -827,7 +827,7 @@ func TestGenAttachPolicy(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newAttachPolicy(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newAttachPolicy().ValidateCommand(params); len(errs) > 0 {
+	if errs := newAttachPolicy().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newAttachPolicy().Run(genTestsContext["attachpolicy"], params)
@@ -853,7 +853,7 @@ func TestGenCreateGroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreateGroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreateGroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreateGroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreateGroup().Run(genTestsContext["creategroup"], params)
@@ -879,7 +879,7 @@ func TestGenCreatePolicy(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newCreatePolicy(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newCreatePolicy().ValidateCommand(params); len(errs) > 0 {
+	if errs := newCreatePolicy().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newCreatePolicy().Run(genTestsContext["createpolicy"], params)
@@ -905,7 +905,7 @@ func TestGenDeleteGroup(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeleteGroup(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeleteGroup().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeleteGroup().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeleteGroup().Run(genTestsContext["deletegroup"], params)
@@ -931,7 +931,7 @@ func TestGenDeletePolicy(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDeletePolicy(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDeletePolicy().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDeletePolicy().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDeletePolicy().Run(genTestsContext["deletepolicy"], params)
@@ -957,7 +957,7 @@ func TestGenDetachPolicy(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newDetachPolicy(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newDetachPolicy().ValidateCommand(params); len(errs) > 0 {
+	if errs := newDetachPolicy().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newDetachPolicy().Run(genTestsContext["detachpolicy"], params)
@@ -983,7 +983,7 @@ func TestGenUpdatePolicy(t *testing.T) {
 	if params, err = convertParamsIfAvailable(newUpdatePolicy(), params); err != nil {
 		t.Fatal(err)
 	}
-	if errs := newUpdatePolicy().ValidateCommand(params); len(errs) > 0 {
+	if errs := newUpdatePolicy().ValidateCommand(params, nil); len(errs) > 0 {
 		t.Fatalf("%v", errs)
 	}
 	res, err := newUpdatePolicy().Run(genTestsContext["updatepolicy"], params)

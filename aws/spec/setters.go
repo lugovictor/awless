@@ -598,7 +598,7 @@ func structInjector(src, dest interface{}, ctx map[string]interface{}) error {
 	return nil
 }
 
-func validateStruct(s interface{}) error {
+func validateStruct(s interface{}, ignoredParams []string) error {
 	val := reflect.ValueOf(s)
 	stru := val.Elem().Type()
 
@@ -606,12 +606,16 @@ func validateStruct(s interface{}) error {
 	for i := 0; i < stru.NumField(); i++ {
 		field := stru.Field(i)
 		if _, ok := field.Tag.Lookup("required"); ok {
-			if val.Elem().Field(i).IsNil() {
-				messages = append(messages, fmt.Sprintf("missing required field %s", field.Name))
+			fieldName := field.Name
+			if tplName, ok := field.Tag.Lookup("templateName"); ok {
+				fieldName = tplName
+			}
+			if val.Elem().Field(i).IsNil() && !contains(ignoredParams, fieldName) {
+				messages = append(messages, fmt.Sprintf("missing required field '%s'", fieldName))
 			}
 		}
 
-		if tplName, ok := field.Tag.Lookup("templateName"); ok {
+		if tplName, ok := field.Tag.Lookup("templateName"); ok && !contains(ignoredParams, tplName) {
 			methName := fmt.Sprintf("Validate%s", field.Name)
 			meth := val.MethodByName(methName)
 

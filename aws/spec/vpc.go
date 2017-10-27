@@ -53,7 +53,7 @@ func (cmd *CreateVpc) AfterRun(ctx map[string]interface{}, output interface{}) e
 	createTag.Key = awssdk.String("Name")
 	createTag.Value = cmd.Name
 	createTag.Resource = awssdk.String(cmd.ExtractResult(output))
-	if errs := createTag.ValidateCommand(nil); len(errs) > 0 {
+	if errs := createTag.ValidateCommand(nil, nil); len(errs) > 0 {
 		return fmt.Errorf("%v", errs)
 	}
 	if _, err := createTag.Run(nil, nil); err != nil {

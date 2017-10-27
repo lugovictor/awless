@@ -137,7 +137,7 @@ type mock{{ Title $api}} struct {
 			if params, err = convertParamsIfAvailable(new{{ $cmdName }}(), params); err != nil {
 				t.Fatal(err)
 			}
-			if errs := new{{ $cmdName }}().ValidateCommand(params); len(errs) > 0 {
+			if errs := new{{ $cmdName }}().ValidateCommand(params, nil); len(errs) > 0 {
 				t.Fatalf("%v", errs)
 			}
 			res, err := new{{ $cmdName }}().Run(genTestsContext["{{ ToLower $cmdName }}"], params)

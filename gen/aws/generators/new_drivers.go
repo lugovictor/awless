@@ -206,16 +206,16 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	return nil, nil
 }
 
-func (cmd *{{ $cmdName }}) ValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *{{ $cmdName }}) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if err := cmd.inject(params); err != nil {
 		return []error{err}
 	}
-	if err := validateStruct(cmd); err != nil {
+	if err := validateStruct(cmd, refs); err != nil {
 		errs = append(errs, err)
 	}
 	
 	if mv, ok := implementsManualValidator(cmd); ok {
-		errs = append(errs, mv.ManualValidateCommand(params)...)
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
 	}
 	
 	return

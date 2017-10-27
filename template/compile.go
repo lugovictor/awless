@@ -257,10 +257,18 @@ func validateCommandsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 			return fmt.Errorf("validate: cannot find command for '%s'", key)
 		}
 		type V interface {
-			ValidateCommand(map[string]interface{}) []error
+			ValidateCommand(map[string]interface{}, []string) []error
 		}
 		if v, ok := cmd.(V); ok {
-			errs = append(errs, v.ValidateCommand(node.ToDriverParams())...)
+			var refsKey []string
+			for k, p := range node.Params {
+				if ref, isRef := p.(ast.WithRefs); isRef && len(ref.GetRefs()) > 0 {
+					refsKey = append(refsKey, k)
+				}
+			}
+			for _, validErr := range v.ValidateCommand(node.ToDriverParams(), refsKey) {
+				errs = append(errs, fmt.Errorf("%s %s: %s", node.Action, node.Entity, validErr.Error()))
+			}
 		}
 		return nil
 	}

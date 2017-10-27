@@ -243,7 +243,7 @@ func (cmd *AttachPolicy) ConvertParams() ([]string, func(values map[string]inter
 		}
 }
 
-func (cmd *AttachPolicy) ManualValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *AttachPolicy) ManualValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if cmd.User == nil && cmd.Group == nil && cmd.Role == nil {
 		errs = append(errs, fmt.Errorf("missing required field 'user', 'group' or 'role'"))
 	}
@@ -323,7 +323,7 @@ func (cmd *DetachPolicy) ConvertParams() ([]string, func(values map[string]inter
 		}
 }
 
-func (cmd *DetachPolicy) ManualValidateCommand(params map[string]interface{}) (errs []error) {
+func (cmd *DetachPolicy) ManualValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
 	if cmd.User == nil && cmd.Group == nil && cmd.Role == nil {
 		errs = append(errs, fmt.Errorf("missing required field 'user', 'group' or 'role'"))
 	}

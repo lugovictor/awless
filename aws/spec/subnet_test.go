@@ -62,7 +62,7 @@ func TestCreateSubnet(t *testing.T) {
 	}
 	t.Run("Validate", func(t *testing.T) {
 		params["cidr"] = "10.10.10.10/128"
-		errs := create.ValidateCommand(params)
+		errs := create.ValidateCommand(params, nil)
 		checkErrs(t, errs, 1, "cidr")
 
 	})

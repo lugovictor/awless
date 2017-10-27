@@ -39,7 +39,7 @@ func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface
 	createTag.Key = awssdk.String("Name")
 	createTag.Value = cmd.Name
 	createTag.Resource = awssdk.String(cmd.ExtractResult(output))
-	if errs := createTag.ValidateCommand(nil); len(errs) > 0 {
+	if errs := createTag.ValidateCommand(nil, nil); len(errs) > 0 {
 		return fmt.Errorf("%v", errs)
 	}
 	if _, err := createTag.Run(ctx, nil); err != nil {

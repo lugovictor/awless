@@ -657,18 +657,19 @@ func (ts *TestStruct) ValidateFieldInt64() (err error) {
 func TestValidateStruct(t *testing.T) {
 	tcases := []struct {
 		stru        *TestStruct
+		ignored     []string
 		contains    []string
 		notContains []string
 		err         bool
 	}{
 		{
 			stru:     &TestStruct{FieldString: awssdk.String(""), FieldInt64: awssdk.Int64(12)},
-			contains: []string{"fstring should not be empty", "fint should not exceed 10", "missing required field FieldBool"},
+			contains: []string{"fstring should not be empty", "fint should not exceed 10", "missing required field 'fbool'"},
 			err:      true,
 		},
 		{
 			stru:        &TestStruct{FieldString: awssdk.String("not empty"), FieldInt64: awssdk.Int64(12)},
-			contains:    []string{"fint should not exceed 10", "missing required field FieldBool"},
+			contains:    []string{"fint should not exceed 10", "missing required field 'fbool'"},
 			notContains: []string{"fstring"},
 			err:         true,
 		},
@@ -680,7 +681,7 @@ func TestValidateStruct(t *testing.T) {
 		},
 		{
 			stru:        &TestStruct{FieldString: awssdk.String("non empty"), FieldInt64: awssdk.Int64(8)},
-			contains:    []string{"missing required field FieldBool"},
+			contains:    []string{"missing required field 'fbool'"},
 			notContains: []string{"fint", "fstring"},
 			err:         true,
 		},
@@ -688,10 +689,15 @@ func TestValidateStruct(t *testing.T) {
 			stru: &TestStruct{FieldString: awssdk.String("non empty"), FieldInt64: awssdk.Int64(8), FieldBool: awssdk.Bool(true)},
 			err:  false,
 		},
+		{
+			stru:    &TestStruct{FieldString: awssdk.String("non empty"), FieldInt64: awssdk.Int64(8)},
+			ignored: []string{"fbool"},
+			err:     false,
+		},
 	}
 
 	for i, tcase := range tcases {
-		err := validateStruct(tcase.stru)
+		err := validateStruct(tcase.stru, tcase.ignored)
 		if tcase.err && err == nil {
 			t.Fatalf("%d. expected err got none", i+1)
 		}

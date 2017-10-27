@@ -32,13 +32,13 @@ type ResultExtractor interface {
 }
 
 type ManualValidator interface {
-	ManualValidateCommand(params map[string]interface{}) []error
+	ManualValidateCommand(params map[string]interface{}, refs []string) []error
 }
 
 type command interface {
 	ParamsHelp() string
 	ValidateParams([]string) ([]string, error)
-	ValidateCommand(map[string]interface{}) []error
+	ValidateCommand(map[string]interface{}, []string) []error
 	inject(params map[string]interface{}) error
 	Run(ctx map[string]interface{}, params map[string]interface{}) (interface{}, error)
 }
