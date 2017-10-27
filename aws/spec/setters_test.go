@@ -173,6 +173,7 @@ func TestSetFieldWithMultiType(t *testing.T) {
 		StepAdjustments   []*applicationautoscaling.StepAdjustment
 		CSVString         *string
 		SixDigitsString   *string
+		ByteSlice         []byte
 	}{Field: "initial", MapAttribute: map[string]*string{"test": awssdk.String("1234")}}
 
 	err := setFieldWithType("expected", &any, "Field", awsstr)
@@ -627,6 +628,13 @@ func TestSetFieldWithMultiType(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := *any.SixDigitsString, "002345"; got != want {
+		t.Fatalf("got %s, want %s", got, want)
+	}
+	err = setFieldWithType([]byte("hello"), &any, "ByteSlice", awsbyteslice)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := any.ByteSlice, []byte("hello"); !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %s, want %s", got, want)
 	}
 }

@@ -37,14 +37,14 @@ func NewAttachInternetgateway(l *logger.Logger, sess *session.Session) *AttachIn
 }
 
 func (cmd *AttachInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.AttachInternetGatewayInput{}
@@ -126,14 +126,14 @@ func NewAttachPolicy(l *logger.Logger, sess *session.Session) *AttachPolicy {
 }
 
 func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -184,14 +184,14 @@ func NewAttachRoutetable(l *logger.Logger, sess *session.Session) *AttachRouteta
 }
 
 func (cmd *AttachRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.AssociateRouteTableInput{}
@@ -273,14 +273,14 @@ func NewAttachSecuritygroup(l *logger.Logger, sess *session.Session) *AttachSecu
 }
 
 func (cmd *AttachSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -331,14 +331,14 @@ func NewCheckInstance(l *logger.Logger, sess *session.Session) *CheckInstance {
 }
 
 func (cmd *CheckInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -389,14 +389,14 @@ func NewCheckSecuritygroup(l *logger.Logger, sess *session.Session) *CheckSecuri
 }
 
 func (cmd *CheckSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -447,14 +447,14 @@ func NewCreateGroup(l *logger.Logger, sess *session.Session) *CreateGroup {
 }
 
 func (cmd *CreateGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &iam.CreateGroupInput{}
@@ -511,14 +511,14 @@ func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance 
 }
 
 func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.RunInstancesInput{}
@@ -600,14 +600,14 @@ func NewCreateInternetgateway(l *logger.Logger, sess *session.Session) *CreateIn
 }
 
 func (cmd *CreateInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateInternetGatewayInput{}
@@ -689,17 +689,23 @@ func NewCreateKeypair(l *logger.Logger, sess *session.Session) *CreateKeypair {
 }
 
 func (cmd *CreateKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	input := &ec2.ImportKeyPairInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.ImportKeyPairInput: %s", err)
 	}
-
-	output, err := cmd.ManualRun(ctx, params)
+	start := time.Now()
+	output, err := cmd.api.ImportKeyPair(input)
+	cmd.logger.ExtraVerbosef("ec2.ImportKeyPair call took %s", time.Since(start))
 	if err != nil {
 		return nil, err
 	}
@@ -747,14 +753,14 @@ func NewCreatePolicy(l *logger.Logger, sess *session.Session) *CreatePolicy {
 }
 
 func (cmd *CreatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -805,14 +811,14 @@ func NewCreateRoute(l *logger.Logger, sess *session.Session) *CreateRoute {
 }
 
 func (cmd *CreateRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateRouteInput{}
@@ -894,14 +900,14 @@ func NewCreateRoutetable(l *logger.Logger, sess *session.Session) *CreateRouteta
 }
 
 func (cmd *CreateRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateRouteTableInput{}
@@ -983,14 +989,14 @@ func NewCreateSecuritygroup(l *logger.Logger, sess *session.Session) *CreateSecu
 }
 
 func (cmd *CreateSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateSecurityGroupInput{}
@@ -1072,14 +1078,14 @@ func NewCreateSubnet(l *logger.Logger, sess *session.Session) *CreateSubnet {
 }
 
 func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateSubnetInput{}
@@ -1161,14 +1167,14 @@ func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
 }
 
 func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -1219,14 +1225,14 @@ func NewCreateVpc(l *logger.Logger, sess *session.Session) *CreateVpc {
 }
 
 func (cmd *CreateVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.CreateVpcInput{}
@@ -1308,14 +1314,14 @@ func NewDeleteGroup(l *logger.Logger, sess *session.Session) *DeleteGroup {
 }
 
 func (cmd *DeleteGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &iam.DeleteGroupInput{}
@@ -1372,14 +1378,14 @@ func NewDeleteInstance(l *logger.Logger, sess *session.Session) *DeleteInstance 
 }
 
 func (cmd *DeleteInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.TerminateInstancesInput{}
@@ -1461,14 +1467,14 @@ func NewDeleteInternetgateway(l *logger.Logger, sess *session.Session) *DeleteIn
 }
 
 func (cmd *DeleteInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DeleteInternetGatewayInput{}
@@ -1550,14 +1556,14 @@ func NewDeleteKeypair(l *logger.Logger, sess *session.Session) *DeleteKeypair {
 }
 
 func (cmd *DeleteKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DeleteKeyPairInput{}
@@ -1639,14 +1645,14 @@ func NewDeletePolicy(l *logger.Logger, sess *session.Session) *DeletePolicy {
 }
 
 func (cmd *DeletePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -1697,14 +1703,14 @@ func NewDeleteRoute(l *logger.Logger, sess *session.Session) *DeleteRoute {
 }
 
 func (cmd *DeleteRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DeleteRouteInput{}
@@ -1786,14 +1792,14 @@ func NewDeleteRoutetable(l *logger.Logger, sess *session.Session) *DeleteRouteta
 }
 
 func (cmd *DeleteRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DeleteRouteTableInput{}
@@ -1875,14 +1881,14 @@ func NewDeleteSecuritygroup(l *logger.Logger, sess *session.Session) *DeleteSecu
 }
 
 func (cmd *DeleteSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DeleteSecurityGroupInput{}
@@ -1964,14 +1970,14 @@ func NewDeleteSubnet(l *logger.Logger, sess *session.Session) *DeleteSubnet {
 }
 
 func (cmd *DeleteSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DeleteSubnetInput{}
@@ -2053,14 +2059,14 @@ func NewDeleteTag(l *logger.Logger, sess *session.Session) *DeleteTag {
 }
 
 func (cmd *DeleteTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -2111,14 +2117,14 @@ func NewDeleteVpc(l *logger.Logger, sess *session.Session) *DeleteVpc {
 }
 
 func (cmd *DeleteVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DeleteVpcInput{}
@@ -2200,14 +2206,14 @@ func NewDetachInternetgateway(l *logger.Logger, sess *session.Session) *DetachIn
 }
 
 func (cmd *DetachInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DetachInternetGatewayInput{}
@@ -2289,14 +2295,14 @@ func NewDetachPolicy(l *logger.Logger, sess *session.Session) *DetachPolicy {
 }
 
 func (cmd *DetachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -2347,14 +2353,14 @@ func NewDetachRoutetable(l *logger.Logger, sess *session.Session) *DetachRouteta
 }
 
 func (cmd *DetachRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.DisassociateRouteTableInput{}
@@ -2436,14 +2442,14 @@ func NewDetachSecuritygroup(l *logger.Logger, sess *session.Session) *DetachSecu
 }
 
 func (cmd *DetachSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -2494,14 +2500,14 @@ func NewUpdatePolicy(l *logger.Logger, sess *session.Session) *UpdatePolicy {
 }
 
 func (cmd *UpdatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -2552,14 +2558,14 @@ func NewUpdateSecuritygroup(l *logger.Logger, sess *session.Session) *UpdateSecu
 }
 
 func (cmd *UpdateSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	output, err := cmd.ManualRun(ctx, params)
@@ -2610,14 +2616,14 @@ func NewUpdateSubnet(l *logger.Logger, sess *session.Session) *UpdateSubnet {
 }
 
 func (cmd *UpdateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 
 	input := &ec2.ModifySubnetAttributeInput{}

@@ -16,10 +16,8 @@ limitations under the License.
 package awsspec
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
-	"reflect"
 
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
@@ -61,14 +59,4 @@ func init() {
 	genTestsExpected["deletekeypair"] = &ec2.DeleteKeyPairInput{
 		KeyName: String("my-kp"),
 	}
-}
-
-func (m *mockEc2) ImportKeyPair(input *ec2.ImportKeyPairInput) (*ec2.ImportKeyPairOutput, error) {
-	if got, want := input, genTestsExpected["createkeypair"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	if outFunc, ok := genTestsOutputExtractFunc["createkeypair"]; ok {
-		return outFunc().(*ec2.ImportKeyPairOutput), nil
-	}
-	return nil, nil
 }

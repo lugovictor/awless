@@ -1091,6 +1091,16 @@ func (m *mockEc2) CreateInternetGateway(input *ec2.CreateInternetGatewayInput) (
 	return nil, nil
 }
 
+func (m *mockEc2) ImportKeyPair(input *ec2.ImportKeyPairInput) (*ec2.ImportKeyPairOutput, error) {
+	if got, want := input, genTestsExpected["createkeypair"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createkeypair"]; ok {
+		return outFunc().(*ec2.ImportKeyPairOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) CreateRoute(input *ec2.CreateRouteInput) (*ec2.CreateRouteOutput, error) {
 	if got, want := input, genTestsExpected["createroute"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)

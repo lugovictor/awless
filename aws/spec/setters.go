@@ -67,6 +67,7 @@ const (
 	awsstepadjustments  = "awsstepadjustments"
 	awscsvstr           = "awscsvstr"
 	aws6digitsstring    = "aws6digitsstring"
+	awsbyteslice        = "awsbyteslice"
 )
 
 var (
@@ -124,6 +125,7 @@ func setFieldWithType(v, i interface{}, fieldPath string, destType string, inter
 		}
 	case awsstringslice:
 		v = castStringPointerSlice(v)
+	case awsbyteslice:
 	case awscsvstr:
 		v = strings.Join(castStringSlice(v), ",")
 	case awsdimensionslice:

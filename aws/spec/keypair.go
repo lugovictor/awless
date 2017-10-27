@@ -33,11 +33,12 @@ import (
 const keyDirEnv = "__AWLESS_KEYS_DIR"
 
 type CreateKeypair struct {
-	_         string `action:"create" entity:"keypair" awsAPI:"ec2"`
-	logger    *logger.Logger
-	api       ec2iface.EC2API
-	Name      *string `templateName:"name" required:""`
-	Encrypted *bool   `templateName:"encrypted"`
+	_                 string `action:"create" entity:"keypair" awsAPI:"ec2" awsCall:"ImportKeyPair" awsInput:"ec2.ImportKeyPairInput" awsOutput:"ec2.ImportKeyPairOutput"`
+	logger            *logger.Logger
+	api               ec2iface.EC2API
+	Name              *string `awsName:"KeyName" awsType:"awsstr" templateName:"name" required:""`
+	Encrypted         *bool   `templateName:"encrypted"`
+	PublicKeyMaterial []byte  `awsName:"PublicKeyMaterial" awsType:"awsbyteslice"`
 }
 
 func (cmd *CreateKeypair) ValidateParams(params []string) ([]string, error) {
@@ -59,12 +60,10 @@ func (cmd *CreateKeypair) ValidateName() error {
 
 var keyGenerationFunction func(size int, encryptKey bool) ([]byte, []byte, error) = console.GenerateSSHKeyPair
 
-func (cmd *CreateKeypair) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
-	input := &ec2.ImportKeyPairInput{
-		KeyName: cmd.Name,
-	}
+func (cmd *CreateKeypair) BeforeRun(ctx, params map[string]interface{}) error {
 	var encryptedMsg string
 	var encrypted bool
+
 	if BoolValue(cmd.Encrypted) {
 		encrypted = true
 		encryptedMsg = " encrypted"
@@ -75,22 +74,18 @@ func (cmd *CreateKeypair) ManualRun(ctx, params map[string]interface{}) (interfa
 	pub, priv, err := keyGenerationFunction(4096, encrypted)
 	cmd.logger.ExtraVerbosef("4096 bits key generation took %s", time.Since(start))
 	if err != nil {
-		return nil, fmt.Errorf("generating key: %s", err)
+		return fmt.Errorf("generating key: %s", err)
 	}
 	privKeyPath := filepath.Join(os.Getenv(keyDirEnv), StringValue(cmd.Name)+".pem")
 	if _, err = os.Stat(privKeyPath); err == nil {
-		return nil, fmt.Errorf("saving private key: file already exists at path: %s", privKeyPath)
+		return fmt.Errorf("saving private key: file already exists at path: %s", privKeyPath)
 	}
 	if err = ioutil.WriteFile(privKeyPath, priv, 0400); err != nil {
-		return nil, fmt.Errorf("saving private key: %s", err)
+		return fmt.Errorf("saving private key: %s", err)
 	}
+	cmd.PublicKeyMaterial = pub
 	cmd.logger.Infof("4096 RSA keypair generated locally and stored%s in '%s'", encryptedMsg, privKeyPath)
-	input.PublicKeyMaterial = pub
-
-	start = time.Now()
-	output, err := cmd.api.ImportKeyPair(input)
-	cmd.logger.ExtraVerbosef("ec2.ImportKeyPair call took %s", time.Since(start))
-	return output, err
+	return nil
 }
 
 func (cmd *CreateKeypair) ExtractResult(i interface{}) string {

@@ -165,14 +165,14 @@ func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 }
 
 func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+	
 	if v, ok := implementsBeforeRun(cmd); ok {
 		if brErr := v.BeforeRun(ctx, params); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
-	}
-
-	if err := cmd.inject(params); err != nil {
-		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
 	}
 	
 	{{ if $tag.Call }}
