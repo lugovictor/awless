@@ -1290,3 +1290,23 @@ func (m *mockIam) DeleteGroup(input *iam.DeleteGroupInput) (*iam.DeleteGroupOutp
 	}
 	return nil, nil
 }
+
+func (m *mockIam) DeletePolicy(input *iam.DeletePolicyInput) (*iam.DeletePolicyOutput, error) {
+	if got, want := input, genTestsExpected["deletepolicy"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletepolicy"]; ok {
+		return outFunc().(*iam.DeletePolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) CreatePolicyVersion(input *iam.CreatePolicyVersionInput) (*iam.CreatePolicyVersionOutput, error) {
+	if got, want := input, genTestsExpected["updatepolicy"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["updatepolicy"]; ok {
+		return outFunc().(*iam.CreatePolicyVersionOutput), nil
+	}
+	return nil, nil
+}

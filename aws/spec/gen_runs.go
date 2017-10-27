@@ -1661,7 +1661,13 @@ func (cmd *DeletePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	input := &iam.DeletePolicyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.DeletePolicyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeletePolicy(input)
+	cmd.logger.ExtraVerbosef("iam.DeletePolicy call took %s", time.Since(start))
 	if err != nil {
 		return nil, err
 	}
@@ -2516,7 +2522,13 @@ func (cmd *UpdatePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	input := &iam.CreatePolicyVersionInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.CreatePolicyVersionInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreatePolicyVersion(input)
+	cmd.logger.ExtraVerbosef("iam.CreatePolicyVersion call took %s", time.Since(start))
 	if err != nil {
 		return nil, err
 	}

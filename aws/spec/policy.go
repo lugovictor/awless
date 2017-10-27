@@ -29,7 +29,7 @@ type CreatePolicy struct {
 	Action      *string   `templateName:"action" required:""`
 	Resource    *string   `templateName:"resource" required:""`
 	Description *string   `awsName:"Description" awsType:"awsstr" templateName:"description"`
-	Document    *string   `awsName:"PolicyDocument" awsType:"awsstr"	`
+	Document    *string   `awsName:"PolicyDocument" awsType:"awsstr"`
 	Conditions  []*string `templateName:"conditions"`
 }
 
@@ -61,24 +61,26 @@ func (cmd *CreatePolicy) ExtractResult(i interface{}) string {
 }
 
 type UpdatePolicy struct {
-	_          string `action:"update" entity:"policy" awsAPI:"iam"`
-	logger     *logger.Logger
-	api        iamiface.IAMAPI
-	Arn        *string   `templateName:"arn" required:""`
-	Effect     *string   `templateName:"effect" required:""`
-	Action     *string   `templateName:"action" required:""`
-	Resource   *string   `templateName:"resource" required:""`
-	Conditions []*string `templateName:"conditions"`
+	_              string `action:"update" entity:"policy" awsAPI:"iam" awsCall:"CreatePolicyVersion" awsInput:"iam.CreatePolicyVersionInput" awsOutput:"iam.CreatePolicyVersionOutput"`
+	logger         *logger.Logger
+	api            iamiface.IAMAPI
+	Arn            *string   `awsName:"PolicyArn" awsType:"awsstr" templateName:"arn" required:""`
+	Effect         *string   `templateName:"effect" required:""`
+	Action         *string   `templateName:"action" required:""`
+	Resource       *string   `templateName:"resource" required:""`
+	Conditions     []*string `templateName:"conditions"`
+	Document       *string   `awsName:"PolicyDocument" awsType:"awsstr"`
+	DefaultVersion *bool     `awsName:"SetAsDefault" awsType:"awsbool"`
 }
 
 func (cmd *UpdatePolicy) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *UpdatePolicy) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *UpdatePolicy) BeforeRun(ctx, params map[string]interface{}) error {
 	document, err := cmd.getPolicyLastVersionDocument(cmd.Arn)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	var defaultPolicyDocument *struct {
 		Version    string             `json:",omitempty"`
@@ -87,41 +89,27 @@ func (cmd *UpdatePolicy) ManualRun(ctx, params map[string]interface{}) (interfac
 	}
 
 	if err = json.Unmarshal([]byte(document), &defaultPolicyDocument); err != nil {
-		return nil, err
+		return err
 	}
 	stat, err := buildStatementFromParams(params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	var newStatement json.RawMessage
 	if newStatement, err = json.Marshal(stat); err != nil {
-		return nil, err
+		return err
 	}
 	defaultPolicyDocument.Statements = append(defaultPolicyDocument.Statements, &newStatement)
 
 	b, err := json.MarshalIndent(defaultPolicyDocument, "", " ")
 	if err != nil {
-		return nil, fmt.Errorf("cannot marshal policy document: %s", err)
+		return fmt.Errorf("cannot marshal policy document: %s", err)
 	}
-
+	cmd.Document = String(string(b))
+	cmd.DefaultVersion = aws.Bool(true)
 	cmd.logger.ExtraVerbosef("policy document json:\n%s\n", string(b))
-
-	call := &awsCall{
-		desc:   "update policy",
-		fn:     cmd.api.CreatePolicyVersion,
-		logger: cmd.logger,
-		setters: []setter{
-			{val: params["arn"], fieldPath: "PolicyArn", fieldType: awsstr},
-			{val: true, fieldPath: "SetAsDefault", fieldType: awsbool},
-			{val: string(b), fieldPath: "PolicyDocument", fieldType: awsstr},
-		},
-	}
-
-	start := time.Now()
-	_, err = call.execute(&iam.CreatePolicyVersionInput{})
-	cmd.logger.ExtraVerbosef("ec2.CreatePolicyVersion call took %s", time.Since(start))
-	return nil, err
+	return nil
 }
 
 func (cmd *UpdatePolicy) getPolicyLastVersionDocument(arn *string) (string, error) {
@@ -140,8 +128,7 @@ func (cmd *UpdatePolicy) getPolicyLastVersionDocument(arn *string) (string, erro
 				PolicyArn: arn,
 			}
 			var policyDetailOutput *iam.GetPolicyVersionOutput
-			policyDetailOutput, err = cmd.api.GetPolicyVersion(policyDetailInput)
-			if err != nil {
+			if policyDetailOutput, err = cmd.api.GetPolicyVersion(policyDetailInput); err != nil {
 				return "", err
 			}
 			defaultVersion = policyDetailOutput.PolicyVersion
@@ -158,7 +145,7 @@ func (cmd *UpdatePolicy) getPolicyLastVersionDocument(arn *string) (string, erro
 }
 
 type DeletePolicy struct {
-	_           string `action:"delete" entity:"policy" awsAPI:"iam"`
+	_           string `action:"delete" entity:"policy" awsAPI:"iam"  awsCall:"DeletePolicy" awsInput:"iam.DeletePolicyInput" awsOutput:"iam.DeletePolicyOutput"`
 	logger      *logger.Logger
 	api         iamiface.IAMAPI
 	Arn         *string `awsName:"PolicyArn" awsType:"awsstr" templateName:"arn" required:""`
@@ -169,31 +156,22 @@ func (cmd *DeletePolicy) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *DeletePolicy) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *DeletePolicy) BeforeRun(ctx, params map[string]interface{}) error {
 	if BoolValue(cmd.AllVersions) {
 		list, err := cmd.api.ListPolicyVersions(&iam.ListPolicyVersionsInput{PolicyArn: cmd.Arn})
 		if err != nil {
-			return nil, fmt.Errorf("list all policy versions: %s", err)
+			return fmt.Errorf("list all policy versions: %s", err)
 		}
 		for _, v := range list.Versions {
 			if !aws.BoolValue(v.IsDefaultVersion) {
 				cmd.logger.Verbosef("deleting version '%s' of policy '%s'", aws.StringValue(v.VersionId), StringValue(cmd.Arn))
-				_, err := cmd.api.DeletePolicyVersion(&iam.DeletePolicyVersionInput{PolicyArn: cmd.Arn, VersionId: v.VersionId})
-				if err != nil {
-					return nil, fmt.Errorf("delete version %s: %s", aws.StringValue(v.VersionId), err)
+				if _, err := cmd.api.DeletePolicyVersion(&iam.DeletePolicyVersionInput{PolicyArn: cmd.Arn, VersionId: v.VersionId}); err != nil {
+					return fmt.Errorf("delete version %s: %s", aws.StringValue(v.VersionId), err)
 				}
 			}
 		}
 	}
-
-	input := &iam.DeletePolicyInput{
-		PolicyArn: cmd.Arn,
-	}
-
-	start := time.Now()
-	output, err := cmd.api.DeletePolicy(input)
-	cmd.logger.ExtraVerbosef("iam.DeletePolicy call took %s", time.Since(start))
-	return output, err
+	return nil
 }
 
 type AttachPolicy struct {
@@ -538,6 +516,4 @@ func parseCondition(condition string) (*policyCondition, error) {
 			return nil, fmt.Errorf("invalid operator '%s' for string value '%s', expected either '==', '!=', '=~' or '!~'", operator, value)
 		}
 	}
-
-	return nil, nil
 }

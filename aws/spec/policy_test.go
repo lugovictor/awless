@@ -215,22 +215,8 @@ func (m *mockIam) GetPolicyVersion(input *iam.GetPolicyVersionInput) (*iam.GetPo
 	return nil, fmt.Errorf("GetPolicyVersion mock: can not find policy with arn '%s'", StringValue(input.PolicyArn))
 }
 
-func (m *mockIam) CreatePolicyVersion(input *iam.CreatePolicyVersionInput) (*iam.CreatePolicyVersionOutput, error) {
-	if got, want := input, genTestsExpected["updatepolicy"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	return nil, nil
-}
-
 func (m *mockIam) DeletePolicyVersion(input *iam.DeletePolicyVersionInput) (*iam.DeletePolicyVersionOutput, error) {
 	if got, want := input, genTestsExpected["deletepolicy.v1"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	return nil, nil
-}
-
-func (m *mockIam) DeletePolicy(input *iam.DeletePolicyInput) (*iam.DeletePolicyOutput, error) {
-	if got, want := input, genTestsExpected["deletepolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
 	}
 	return nil, nil
