@@ -157,16 +157,6 @@ func TestAttachPolicy(t *testing.T) {
 	})
 }
 
-func (m *mockIam) CreatePolicy(input *iam.CreatePolicyInput) (*iam.CreatePolicyOutput, error) {
-	if got, want := input, genTestsExpected["createpolicy"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	if outFunc, ok := genTestsOutputExtractFunc["createpolicy"]; ok {
-		return outFunc().(*iam.CreatePolicyOutput), nil
-	}
-	return nil, nil
-}
-
 func (m *mockIam) ListPolicyVersions(input *iam.ListPolicyVersionsInput) (*iam.ListPolicyVersionsOutput, error) {
 	if StringValue(input.PolicyArn) == "updatepolicy-arn-policy" {
 		return &iam.ListPolicyVersionsOutput{Versions: []*iam.PolicyVersion{

@@ -21,7 +21,7 @@ import (
 )
 
 type CreatePolicy struct {
-	_           string `action:"create" entity:"policy" awsAPI:"iam"`
+	_           string `action:"create" entity:"policy" awsAPI:"iam" awsCall:"CreatePolicy" awsInput:"iam.CreatePolicyInput" awsOutput:"iam.CreatePolicyOutput"`
 	logger      *logger.Logger
 	api         iamiface.IAMAPI
 	Name        *string   `awsName:"PolicyName" awsType:"awsstr" templateName:"name" required:""`
@@ -29,6 +29,7 @@ type CreatePolicy struct {
 	Action      *string   `templateName:"action" required:""`
 	Resource    *string   `templateName:"resource" required:""`
 	Description *string   `awsName:"Description" awsType:"awsstr" templateName:"description"`
+	Document    *string   `awsName:"PolicyDocument" awsType:"awsstr"	`
 	Conditions  []*string `templateName:"conditions"`
 }
 
@@ -36,10 +37,10 @@ func (cmd *CreatePolicy) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *CreatePolicy) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *CreatePolicy) BeforeRun(ctx, params map[string]interface{}) error {
 	stat, err := buildStatementFromParams(params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	policy := &policyBody{
 		Version:   "2012-10-17",
@@ -48,25 +49,11 @@ func (cmd *CreatePolicy) ManualRun(ctx, params map[string]interface{}) (interfac
 
 	b, err := json.MarshalIndent(policy, "", " ")
 	if err != nil {
-		return nil, fmt.Errorf("cannot marshal policy document: %s", err)
+		return fmt.Errorf("cannot marshal policy document: %s", err)
 	}
-
+	cmd.Document = String(string(b))
 	cmd.logger.ExtraVerbosef("policy document json:\n%s\n", string(b))
-
-	call := &awsCall{
-		desc:   "create policy",
-		fn:     cmd.api.CreatePolicy,
-		logger: cmd.logger,
-		setters: []setter{
-			{val: params["name"], fieldPath: "PolicyName", fieldType: awsstr},
-			{val: params["description"], fieldPath: "Description", fieldType: awsstr},
-			{val: string(b), fieldPath: "PolicyDocument", fieldType: awsstr},
-		},
-	}
-	start := time.Now()
-	output, err := call.execute(&iam.CreatePolicyInput{})
-	cmd.logger.ExtraVerbosef("ec2.CreatePolicy call took %s", time.Since(start))
-	return output, err
+	return nil
 }
 
 func (cmd *CreatePolicy) ExtractResult(i interface{}) string {

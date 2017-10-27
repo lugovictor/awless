@@ -763,7 +763,13 @@ func (cmd *CreatePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	input := &iam.CreatePolicyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.CreatePolicyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreatePolicy(input)
+	cmd.logger.ExtraVerbosef("iam.CreatePolicy call took %s", time.Since(start))
 	if err != nil {
 		return nil, err
 	}
