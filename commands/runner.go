@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -76,7 +77,7 @@ func NewRunner(tpl *template.Template, msg, tplPath string, fillers ...map[strin
 			return true, nil
 		}
 
-		return false, nil
+		return false, errors.New("Did not confirm template execution")
 	}
 
 	runner.AfterRun = func(tplExec *template.TemplateExecution) error {
