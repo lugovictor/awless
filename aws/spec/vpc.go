@@ -18,7 +18,6 @@ limitations under the License.
 package awsspec
 
 import (
-	"fmt"
 	"net"
 
 	awssdk "github.com/aws/aws-sdk-go/aws"
@@ -49,17 +48,7 @@ func (cmd *CreateVpc) ExtractResult(i interface{}) string {
 }
 
 func (cmd *CreateVpc) AfterRun(ctx map[string]interface{}, output interface{}) error {
-	createTag := NewCommandFuncs["createtag"]().(*CreateTag)
-	createTag.Key = awssdk.String("Name")
-	createTag.Value = cmd.Name
-	createTag.Resource = awssdk.String(cmd.ExtractResult(output))
-	if errs := createTag.ValidateCommand(nil, nil); len(errs) > 0 {
-		return fmt.Errorf("%v", errs)
-	}
-	if _, err := createTag.Run(nil, nil); err != nil {
-		return err
-	}
-	return nil
+	return createNameTag(awssdk.String(cmd.ExtractResult(output)), cmd.Name, ctx)
 }
 
 type DeleteVpc struct {

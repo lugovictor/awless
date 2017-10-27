@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
@@ -33,21 +32,11 @@ func (cmd *CreateInstance) ValidateParams(params []string) ([]string, error) {
 }
 
 func (cmd *CreateInstance) ExtractResult(i interface{}) string {
-	return awssdk.StringValue(i.(*ec2.Reservation).Instances[0].InstanceId)
+	return StringValue(i.(*ec2.Reservation).Instances[0].InstanceId)
 }
 
 func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface{}) error {
-	createTag := NewCommandFuncs["createtag"]().(*CreateTag)
-	createTag.Key = awssdk.String("Name")
-	createTag.Value = cmd.Name
-	createTag.Resource = awssdk.String(cmd.ExtractResult(output))
-	if errs := createTag.ValidateCommand(nil, nil); len(errs) > 0 {
-		return fmt.Errorf("%v", errs)
-	}
-	if _, err := createTag.Run(ctx, nil); err != nil {
-		return err
-	}
-	return nil
+	return createNameTag(String(cmd.ExtractResult(output)), cmd.Name, ctx)
 }
 
 type DeleteInstance struct {

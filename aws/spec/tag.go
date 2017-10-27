@@ -126,6 +126,18 @@ func (cmd *DeleteTag) ManualRun(ctx, params map[string]interface{}) (interface{}
 	return nil, err
 }
 
+func createNameTag(resource, name *string, ctx map[string]interface{}) error {
+	createTag := NewCommandFuncs["createtag"]().(*CreateTag)
+	createTag.Key = String("Name")
+	createTag.Value = name
+	createTag.Resource = resource
+	if errs := createTag.ValidateCommand(nil, nil); len(errs) > 0 {
+		return fmt.Errorf("%v", errs)
+	}
+	_, err := createTag.Run(ctx, nil)
+	return err
+}
+
 type createTagRetryer struct {
 	client.DefaultRetryer
 }
