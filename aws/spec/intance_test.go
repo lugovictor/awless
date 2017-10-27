@@ -5,9 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/client/metadata"
-	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
@@ -42,9 +39,15 @@ func init() {
 		UserData:              String(base64.StdEncoding.EncodeToString([]byte("this is my content with awesome content"))),
 	}
 	genTestsOutputExtractFunc["createinstance"] = func() interface{} {
-		return &ec2.Reservation{Instances: []*ec2.Instance{{InstanceId: String("id-my-instance")}}}
+		return &ec2.Reservation{Instances: []*ec2.Instance{{InstanceId: String("res.createinstance")}}}
 	}
-	genTestsOutput["createinstance"] = "id-my-instance"
+	genTestsOutput["createinstance"] = "res.createinstance"
+	genTestsExpected["createinstance.createtag"] = &ec2.CreateTagsInput{
+		Resources: []*string{String("res.createinstance")},
+		Tags: []*ec2.Tag{
+			{Key: String("Name"), Value: String("myinstance")},
+		},
+	}
 
 	genTestsParams["deleteinstance"] = map[string]interface{}{
 		"id": []interface{}{"my-instance-id1", "my-instance-id2"},
@@ -61,11 +64,4 @@ func generateTmpFile(content string) (path string) {
 	}
 	ioutil.WriteFile(file.Name(), []byte(content), 0644)
 	return file.Name()
-}
-
-//Not tested
-func (m *mockEc2) CreateTagsRequest(got *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput) {
-	output = &ec2.CreateTagsOutput{}
-	req = request.New(aws.Config{}, metadata.ClientInfo{}, request.Handlers{}, nil, &request.Operation{}, got, output)
-	return
 }

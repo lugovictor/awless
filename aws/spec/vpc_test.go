@@ -28,9 +28,15 @@ func init() {
 		CidrBlock: String("10.0.0.0/16"),
 	}
 	genTestsOutputExtractFunc["createvpc"] = func() interface{} {
-		return &ec2.CreateVpcOutput{Vpc: &ec2.Vpc{VpcId: String("id-my-vpc")}}
+		return &ec2.CreateVpcOutput{Vpc: &ec2.Vpc{VpcId: String("res.createvpc")}}
 	}
-	genTestsOutput["createvpc"] = "id-my-vpc"
+	genTestsOutput["createvpc"] = "res.createvpc"
+	genTestsExpected["createvpc.createtag"] = &ec2.CreateTagsInput{
+		Resources: []*string{String("res.createvpc")},
+		Tags: []*ec2.Tag{
+			{Key: String("Name"), Value: String("myvpc")},
+		},
+	}
 
 	genTestsParams["deletevpc"] = map[string]interface{}{
 		"id": "my-vpc-id",

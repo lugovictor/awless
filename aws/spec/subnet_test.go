@@ -33,9 +33,15 @@ func init() {
 		VpcId:            String("my-vpc-id"),
 	}
 	genTestsOutputExtractFunc["createsubnet"] = func() interface{} {
-		return &ec2.CreateSubnetOutput{Subnet: &ec2.Subnet{SubnetId: String("id-my-subnet")}}
+		return &ec2.CreateSubnetOutput{Subnet: &ec2.Subnet{SubnetId: String("res.createsubnet")}}
 	}
-	genTestsOutput["createsubnet"] = "id-my-subnet"
+	genTestsOutput["createsubnet"] = "res.createsubnet"
+	genTestsExpected["createsubnet.createtag"] = &ec2.CreateTagsInput{
+		Resources: []*string{String("res.createsubnet")},
+		Tags: []*ec2.Tag{
+			{Key: String("Name"), Value: String("mysubnet")},
+		},
+	}
 
 	genTestsParams["updatesubnet"] = map[string]interface{}{
 		"id":     "my-subnet-id",

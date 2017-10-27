@@ -50,6 +50,7 @@ func InitCommands(l *logger.Logger, sess *session.Session) {
 	NewCommandFuncs["deleteroutetable"] = func() interface{} { return NewDeleteRoutetable(l, sess) }
 	NewCommandFuncs["deletesecuritygroup"] = func() interface{} { return NewDeleteSecuritygroup(l, sess) }
 	NewCommandFuncs["deletesubnet"] = func() interface{} { return NewDeleteSubnet(l, sess) }
+	NewCommandFuncs["deletetag"] = func() interface{} { return NewDeleteTag(l, sess) }
 	NewCommandFuncs["deletevpc"] = func() interface{} { return NewDeleteVpc(l, sess) }
 	NewCommandFuncs["detachinternetgateway"] = func() interface{} { return NewDetachInternetgateway(l, sess) }
 	NewCommandFuncs["detachpolicy"] = func() interface{} { return NewDetachPolicy(l, sess) }
@@ -86,6 +87,7 @@ var (
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteSecuritygroup{}
 	_ command = &DeleteSubnet{}
+	_ command = &DeleteTag{}
 	_ command = &DeleteVpc{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachPolicy{}

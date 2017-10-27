@@ -69,6 +69,7 @@ var (
 		return &DeleteSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
 	newDeleteSubnet          = func() *DeleteSubnet { return &DeleteSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteTag             = func() *DeleteTag { return &DeleteTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVpc             = func() *DeleteVpc { return &DeleteVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDetachInternetgateway = func() *DetachInternetgateway {
 		return &DetachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
@@ -112,6 +113,7 @@ func init() {
 	NewCommandFuncs["deleteroutetable"] = func() interface{} { return newDeleteRoutetable() }
 	NewCommandFuncs["deletesecuritygroup"] = func() interface{} { return newDeleteSecuritygroup() }
 	NewCommandFuncs["deletesubnet"] = func() interface{} { return newDeleteSubnet() }
+	NewCommandFuncs["deletetag"] = func() interface{} { return newDeleteTag() }
 	NewCommandFuncs["deletevpc"] = func() interface{} { return newDeleteVpc() }
 	NewCommandFuncs["detachinternetgateway"] = func() interface{} { return newDetachInternetgateway() }
 	NewCommandFuncs["detachroutetable"] = func() interface{} { return newDetachRoutetable() }
@@ -648,6 +650,32 @@ func TestGenDeleteSubnet(t *testing.T) {
 		t.Fatal(err)
 	}
 	if got, want := res, genTestsOutput["deletesubnet"]; !reflect.DeepEqual(got, want) {
+		t.Fatalf("got %+v, want %+v", got, want)
+	}
+}
+func TestGenDeleteTag(t *testing.T) {
+	if cleanFn, ok := genTestsCleanupFunc["deletetag"]; ok {
+		defer cleanFn()
+	}
+	params := genTestsParams["deletetag"]
+	missings, err := newDeleteTag().ValidateParams(keys(params))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := len(missings), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+	if params, err = convertParamsIfAvailable(newDeleteTag(), params); err != nil {
+		t.Fatal(err)
+	}
+	if errs := newDeleteTag().ValidateCommand(params, nil); len(errs) > 0 {
+		t.Fatalf("%v", errs)
+	}
+	res, err := newDeleteTag().Run(genTestsContext["deletetag"], params)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := res, genTestsOutput["deletetag"]; !reflect.DeepEqual(got, want) {
 		t.Fatalf("got %+v, want %+v", got, want)
 	}
 }
