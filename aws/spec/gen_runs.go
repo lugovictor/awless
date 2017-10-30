@@ -25,7 +25,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
+	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -34,6 +36,10 @@ func NewAttachInternetgateway(l *logger.Logger, sess *session.Session) *AttachIn
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *AttachInternetgateway) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *AttachInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -125,6 +131,10 @@ func NewAttachPolicy(l *logger.Logger, sess *session.Session) *AttachPolicy {
 	return cmd
 }
 
+func (cmd *AttachPolicy) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
 func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -181,6 +191,10 @@ func NewAttachRoutetable(l *logger.Logger, sess *session.Session) *AttachRouteta
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *AttachRoutetable) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *AttachRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -272,6 +286,10 @@ func NewAttachSecuritygroup(l *logger.Logger, sess *session.Session) *AttachSecu
 	return cmd
 }
 
+func (cmd *AttachSecuritygroup) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *AttachSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -328,6 +346,10 @@ func NewCheckInstance(l *logger.Logger, sess *session.Session) *CheckInstance {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *CheckInstance) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *CheckInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -388,6 +410,10 @@ func NewCheckSecuritygroup(l *logger.Logger, sess *session.Session) *CheckSecuri
 	return cmd
 }
 
+func (cmd *CheckSecuritygroup) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *CheckSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -444,6 +470,10 @@ func NewCreateGroup(l *logger.Logger, sess *session.Session) *CreateGroup {
 	cmd.api = iam.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *CreateGroup) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
 }
 
 func (cmd *CreateGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -508,6 +538,10 @@ func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance 
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *CreateInstance) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -599,6 +633,10 @@ func NewCreateInternetgateway(l *logger.Logger, sess *session.Session) *CreateIn
 	return cmd
 }
 
+func (cmd *CreateInternetgateway) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *CreateInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -688,6 +726,10 @@ func NewCreateKeypair(l *logger.Logger, sess *session.Session) *CreateKeypair {
 	return cmd
 }
 
+func (cmd *CreateKeypair) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *CreateKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -752,6 +794,10 @@ func NewCreatePolicy(l *logger.Logger, sess *session.Session) *CreatePolicy {
 	return cmd
 }
 
+func (cmd *CreatePolicy) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
 func (cmd *CreatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -814,6 +860,10 @@ func NewCreateRoute(l *logger.Logger, sess *session.Session) *CreateRoute {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *CreateRoute) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *CreateRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -905,6 +955,10 @@ func NewCreateRoutetable(l *logger.Logger, sess *session.Session) *CreateRouteta
 	return cmd
 }
 
+func (cmd *CreateRoutetable) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *CreateRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -992,6 +1046,10 @@ func NewCreateSecuritygroup(l *logger.Logger, sess *session.Session) *CreateSecu
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *CreateSecuritygroup) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *CreateSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1083,6 +1141,10 @@ func NewCreateSubnet(l *logger.Logger, sess *session.Session) *CreateSubnet {
 	return cmd
 }
 
+func (cmd *CreateSubnet) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -1172,6 +1234,10 @@ func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
 	return cmd
 }
 
+func (cmd *CreateTag) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -1228,6 +1294,10 @@ func NewCreateVpc(l *logger.Logger, sess *session.Session) *CreateVpc {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *CreateVpc) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *CreateVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1319,6 +1389,10 @@ func NewDeleteGroup(l *logger.Logger, sess *session.Session) *DeleteGroup {
 	return cmd
 }
 
+func (cmd *DeleteGroup) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
 func (cmd *DeleteGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -1381,6 +1455,10 @@ func NewDeleteInstance(l *logger.Logger, sess *session.Session) *DeleteInstance 
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *DeleteInstance) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *DeleteInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1472,6 +1550,10 @@ func NewDeleteInternetgateway(l *logger.Logger, sess *session.Session) *DeleteIn
 	return cmd
 }
 
+func (cmd *DeleteInternetgateway) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *DeleteInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -1559,6 +1641,10 @@ func NewDeleteKeypair(l *logger.Logger, sess *session.Session) *DeleteKeypair {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *DeleteKeypair) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *DeleteKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1650,6 +1736,10 @@ func NewDeletePolicy(l *logger.Logger, sess *session.Session) *DeletePolicy {
 	return cmd
 }
 
+func (cmd *DeletePolicy) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
 func (cmd *DeletePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -1712,6 +1802,10 @@ func NewDeleteRoute(l *logger.Logger, sess *session.Session) *DeleteRoute {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *DeleteRoute) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *DeleteRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1803,6 +1897,10 @@ func NewDeleteRoutetable(l *logger.Logger, sess *session.Session) *DeleteRouteta
 	return cmd
 }
 
+func (cmd *DeleteRoutetable) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *DeleteRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -1890,6 +1988,10 @@ func NewDeleteSecuritygroup(l *logger.Logger, sess *session.Session) *DeleteSecu
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *DeleteSecuritygroup) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *DeleteSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1981,6 +2083,10 @@ func NewDeleteSubnet(l *logger.Logger, sess *session.Session) *DeleteSubnet {
 	return cmd
 }
 
+func (cmd *DeleteSubnet) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *DeleteSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -2070,6 +2176,10 @@ func NewDeleteTag(l *logger.Logger, sess *session.Session) *DeleteTag {
 	return cmd
 }
 
+func (cmd *DeleteTag) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *DeleteTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -2126,6 +2236,10 @@ func NewDeleteVpc(l *logger.Logger, sess *session.Session) *DeleteVpc {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *DeleteVpc) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *DeleteVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2217,6 +2331,10 @@ func NewDetachInternetgateway(l *logger.Logger, sess *session.Session) *DetachIn
 	return cmd
 }
 
+func (cmd *DetachInternetgateway) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *DetachInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -2306,6 +2424,10 @@ func NewDetachPolicy(l *logger.Logger, sess *session.Session) *DetachPolicy {
 	return cmd
 }
 
+func (cmd *DetachPolicy) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
 func (cmd *DetachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -2362,6 +2484,10 @@ func NewDetachRoutetable(l *logger.Logger, sess *session.Session) *DetachRouteta
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *DetachRoutetable) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *DetachRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2453,6 +2579,10 @@ func NewDetachSecuritygroup(l *logger.Logger, sess *session.Session) *DetachSecu
 	return cmd
 }
 
+func (cmd *DetachSecuritygroup) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *DetachSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -2509,6 +2639,10 @@ func NewUpdatePolicy(l *logger.Logger, sess *session.Session) *UpdatePolicy {
 	cmd.api = iam.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *UpdatePolicy) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
 }
 
 func (cmd *UpdatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2575,6 +2709,10 @@ func NewUpdateSecuritygroup(l *logger.Logger, sess *session.Session) *UpdateSecu
 	return cmd
 }
 
+func (cmd *UpdateSecuritygroup) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
 func (cmd *UpdateSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
@@ -2631,6 +2769,10 @@ func NewUpdateSubnet(l *logger.Logger, sess *session.Session) *UpdateSubnet {
 	cmd.api = ec2.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *UpdateSubnet) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
 }
 
 func (cmd *UpdateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {

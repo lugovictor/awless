@@ -27,6 +27,8 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/wallix/awless/gen/aws"
 )
 
 func generateNewDrivers() {
@@ -43,7 +45,11 @@ func generateNewDrivers() {
 		}
 	}
 
-	templ, err := template.New("cmdRuns").Parse(cmdRuns)
+	templ, err := template.New("cmdRuns").Funcs(
+		template.FuncMap{
+			"ApiToInterface": aws.ApiToInterface,
+		},
+	).Parse(cmdRuns)
 	if err != nil {
 		panic(err)
 	}
@@ -162,6 +168,10 @@ func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
 	cmd.api = {{ $tag.API }}.New(sess)
 	cmd.logger = l
 	return cmd
+}
+
+func (cmd *{{ $cmdName }}) SetApi(api {{$tag.API}}iface.{{ ApiToInterface $tag.API }}) {
+	cmd.api = api
 }
 
 func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
