@@ -5,6 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/wallix/awless/aws/spec"
+	"github.com/wallix/awless/logger"
 )
 
 var MockCommands map[string]func(interface{}) interface{}
@@ -14,6 +15,7 @@ func init() {
 	MockCommands["createinstance"] = func(api interface{}) interface{} {
 		cmd := new(awsspec.CreateInstance)
 		cmd.SetApi(api.(ec2iface.EC2API))
+		cmd.SetLogger(logger.DiscardLogger)
 		return cmd
 	}
 }

@@ -13,10 +13,10 @@ import (
 )
 
 func TestInstance(t *testing.T) {
-	userdataFile := generateTmpFile("this is my content with {{ .GoTemplateVar }} content")
+	userdataFile := generateTmpFile("this is my content with {{ .Variables.GoTemplateVar }} content")
 	defer os.Remove(userdataFile)
 
-	builder := Command("create instance count=3 image=ami-1234 "+
+	builder := Command("GoTemplateVar=awesome\ncreate instance count=3 image=ami-1234 "+
 		"name=myinstance subnet=sub_1 type=t2.nano keypair=mykp ip=10.2.3.4 "+
 		"userdata="+userdataFile+" securitygroup=sg-1234 lock=true role=myrole").
 		Input("RunInstances", &ec2.RunInstancesInput{

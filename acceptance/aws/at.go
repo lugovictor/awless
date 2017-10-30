@@ -6,6 +6,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/wallix/awless/aws/spec"
+	"github.com/wallix/awless/logger"
 	"github.com/wallix/awless/template"
 )
 
@@ -34,7 +37,7 @@ func (b *ATBuilder) VerifyInput(key string, i interface{}) {
 		b.t.Fatalf("no input to verify for key '%s'", key)
 	}
 	if got, want := i, v; !reflect.DeepEqual(got, want) {
-		b.t.Fatalf("got %#v, want %#v", got, want)
+		b.t.Fatalf("%s: got %#v, want %#v", key, got, want)
 	}
 }
 
@@ -44,6 +47,13 @@ func (b *ATBuilder) VerifyTemplateResult(key string) *ATBuilder {
 }
 
 func (b *ATBuilder) Run(t *testing.T) {
+	awsspec.NewCommandFuncs["createtag"] = func() interface{} {
+		cmd := new(awsspec.CreateTag)
+		cmd.SetApi(b.mock.(ec2iface.EC2API))
+		cmd.SetLogger(logger.DiscardLogger)
+		return cmd
+	}
+
 	tpl, err := template.Parse(b.template)
 	if err != nil {
 		t.Fatal(err)
@@ -64,7 +74,7 @@ func (b *ATBuilder) Run(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ran, err := compiled.Run(env)
+	ran, err := compiled.DoRun(env)
 	if err != nil {
 		t.Fatal(err)
 	}

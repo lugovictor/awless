@@ -174,6 +174,10 @@ func (cmd *{{ $cmdName }}) SetApi(api {{$tag.API}}iface.{{ ApiToInterface $tag.A
 	cmd.api = api
 }
 
+func (cmd *{{ $cmdName }}) SetLogger(l *logger.Logger) {
+	cmd.logger = l
+}
+
 func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
 	if err := cmd.inject(params); err != nil {
 		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
