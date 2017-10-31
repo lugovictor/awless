@@ -7,6 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/iam"
+	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/aws/spec"
 	"github.com/wallix/awless/logger"
 )
@@ -18,6 +20,12 @@ func init() {
 	MockCommands["createinstance"] = func(api interface{}) interface{} {
 		cmd := new(awsspec.CreateInstance)
 		cmd.SetApi(api.(ec2iface.EC2API))
+		cmd.SetLogger(logger.DiscardLogger)
+		return cmd
+	}
+	MockCommands["createpolicy"] = func(api interface{}) interface{} {
+		cmd := new(awsspec.CreatePolicy)
+		cmd.SetApi(api.(iamiface.IAMAPI))
 		cmd.SetLogger(logger.DiscardLogger)
 		return cmd
 	}
@@ -46,6 +54,18 @@ func (m *ec2Mock) CreateTagsRequest(input *ec2.CreateTagsInput) (*request.Reques
 	m.addCall("CreateTagsRequest")
 	m.verifyInput("CreateTagsRequest", input)
 	return m.CreateTagsRequestFunc(input)
+}
+
+type iamMock struct {
+	basicMock
+	iamiface.IAMAPI
+	CreatePolicyFunc func(input *iam.CreatePolicyInput) (*iam.CreatePolicyOutput, error)
+}
+
+func (m *iamMock) CreatePolicy(input *iam.CreatePolicyInput) (*iam.CreatePolicyOutput, error) {
+	m.addCall("CreatePolicy")
+	m.verifyInput("CreatePolicy", input)
+	return m.CreatePolicyFunc(input)
 }
 
 type basicMock struct {
