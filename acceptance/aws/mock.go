@@ -10,34 +10,53 @@ import (
 	"github.com/wallix/awless/logger"
 )
 
-var MockCommands map[string]func(interface{}) interface{}
+type AcceptanceFactory struct {
+	Mock interface{}
+}
 
-func init() {
-	MockCommands = make(map[string]func(interface{}) interface{})
-	MockCommands["createinstance"] = func(api interface{}) interface{} {
-		cmd := new(awsspec.CreateInstance)
-		cmd.SetApi(api.(ec2iface.EC2API))
-		cmd.SetLogger(logger.DiscardLogger)
-		return cmd
+func NewAcceptanceFactory(mock interface{}) *AcceptanceFactory {
+	return &AcceptanceFactory{Mock: mock}
+}
+
+func (f *AcceptanceFactory) Build(key string) func() interface{} {
+	switch key {
+	case "createinstance":
+		return func() interface{} {
+			cmd := new(awsspec.CreateInstance)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			cmd.SetLogger(logger.DiscardLogger)
+			return cmd
+		}
+	case "createtag":
+		return func() interface{} {
+			cmd := new(awsspec.CreateTag)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			cmd.SetLogger(logger.DiscardLogger)
+			return cmd
+		}
+	case "deleteinstance":
+		return func() interface{} {
+			cmd := new(awsspec.DeleteInstance)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			cmd.SetLogger(logger.DiscardLogger)
+			return cmd
+		}
+	case "checkinstance":
+		return func() interface{} {
+			cmd := new(awsspec.CheckInstance)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			cmd.SetLogger(logger.DiscardLogger)
+			return cmd
+		}
+	case "createpolicy":
+		return func() interface{} {
+			cmd := new(awsspec.CreatePolicy)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			cmd.SetLogger(logger.DiscardLogger)
+			return cmd
+		}
 	}
-	MockCommands["deleteinstance"] = func(api interface{}) interface{} {
-		cmd := new(awsspec.DeleteInstance)
-		cmd.SetApi(api.(ec2iface.EC2API))
-		cmd.SetLogger(logger.DiscardLogger)
-		return cmd
-	}
-	MockCommands["checkinstance"] = func(api interface{}) interface{} {
-		cmd := new(awsspec.CheckInstance)
-		cmd.SetApi(api.(ec2iface.EC2API))
-		cmd.SetLogger(logger.DiscardLogger)
-		return cmd
-	}
-	MockCommands["createpolicy"] = func(api interface{}) interface{} {
-		cmd := new(awsspec.CreatePolicy)
-		cmd.SetApi(api.(iamiface.IAMAPI))
-		cmd.SetLogger(logger.DiscardLogger)
-		return cmd
-	}
+	return nil
 }
 
 type mock interface {

@@ -22,44 +22,91 @@ import (
 	"github.com/wallix/awless/logger"
 )
 
-var NewCommandFuncs = map[string]func() interface{}{}
+type Factory interface {
+	Build(key string) func() interface{}
+}
 
-func InitCommands(l *logger.Logger, sess *session.Session) {
-	NewCommandFuncs["attachinternetgateway"] = func() interface{} { return NewAttachInternetgateway(l, sess) }
-	NewCommandFuncs["attachpolicy"] = func() interface{} { return NewAttachPolicy(l, sess) }
-	NewCommandFuncs["attachroutetable"] = func() interface{} { return NewAttachRoutetable(l, sess) }
-	NewCommandFuncs["attachsecuritygroup"] = func() interface{} { return NewAttachSecuritygroup(l, sess) }
-	NewCommandFuncs["checkinstance"] = func() interface{} { return NewCheckInstance(l, sess) }
-	NewCommandFuncs["checksecuritygroup"] = func() interface{} { return NewCheckSecuritygroup(l, sess) }
-	NewCommandFuncs["creategroup"] = func() interface{} { return NewCreateGroup(l, sess) }
-	NewCommandFuncs["createinstance"] = func() interface{} { return NewCreateInstance(l, sess) }
-	NewCommandFuncs["createinternetgateway"] = func() interface{} { return NewCreateInternetgateway(l, sess) }
-	NewCommandFuncs["createkeypair"] = func() interface{} { return NewCreateKeypair(l, sess) }
-	NewCommandFuncs["createpolicy"] = func() interface{} { return NewCreatePolicy(l, sess) }
-	NewCommandFuncs["createroute"] = func() interface{} { return NewCreateRoute(l, sess) }
-	NewCommandFuncs["createroutetable"] = func() interface{} { return NewCreateRoutetable(l, sess) }
-	NewCommandFuncs["createsecuritygroup"] = func() interface{} { return NewCreateSecuritygroup(l, sess) }
-	NewCommandFuncs["createsubnet"] = func() interface{} { return NewCreateSubnet(l, sess) }
-	NewCommandFuncs["createtag"] = func() interface{} { return NewCreateTag(l, sess) }
-	NewCommandFuncs["createvpc"] = func() interface{} { return NewCreateVpc(l, sess) }
-	NewCommandFuncs["deletegroup"] = func() interface{} { return NewDeleteGroup(l, sess) }
-	NewCommandFuncs["deleteinstance"] = func() interface{} { return NewDeleteInstance(l, sess) }
-	NewCommandFuncs["deleteinternetgateway"] = func() interface{} { return NewDeleteInternetgateway(l, sess) }
-	NewCommandFuncs["deletekeypair"] = func() interface{} { return NewDeleteKeypair(l, sess) }
-	NewCommandFuncs["deletepolicy"] = func() interface{} { return NewDeletePolicy(l, sess) }
-	NewCommandFuncs["deleteroute"] = func() interface{} { return NewDeleteRoute(l, sess) }
-	NewCommandFuncs["deleteroutetable"] = func() interface{} { return NewDeleteRoutetable(l, sess) }
-	NewCommandFuncs["deletesecuritygroup"] = func() interface{} { return NewDeleteSecuritygroup(l, sess) }
-	NewCommandFuncs["deletesubnet"] = func() interface{} { return NewDeleteSubnet(l, sess) }
-	NewCommandFuncs["deletetag"] = func() interface{} { return NewDeleteTag(l, sess) }
-	NewCommandFuncs["deletevpc"] = func() interface{} { return NewDeleteVpc(l, sess) }
-	NewCommandFuncs["detachinternetgateway"] = func() interface{} { return NewDetachInternetgateway(l, sess) }
-	NewCommandFuncs["detachpolicy"] = func() interface{} { return NewDetachPolicy(l, sess) }
-	NewCommandFuncs["detachroutetable"] = func() interface{} { return NewDetachRoutetable(l, sess) }
-	NewCommandFuncs["detachsecuritygroup"] = func() interface{} { return NewDetachSecuritygroup(l, sess) }
-	NewCommandFuncs["updatepolicy"] = func() interface{} { return NewUpdatePolicy(l, sess) }
-	NewCommandFuncs["updatesecuritygroup"] = func() interface{} { return NewUpdateSecuritygroup(l, sess) }
-	NewCommandFuncs["updatesubnet"] = func() interface{} { return NewUpdateSubnet(l, sess) }
+var CommandFactory Factory
+
+type AWSFactory struct {
+	Log  *logger.Logger
+	Sess *session.Session
+}
+
+func (f *AWSFactory) Build(key string) func() interface{} {
+	switch key {
+	case "attachinternetgateway":
+		return func() interface{} { return NewAttachInternetgateway(f.Log, f.Sess) }
+	case "attachpolicy":
+		return func() interface{} { return NewAttachPolicy(f.Log, f.Sess) }
+	case "attachroutetable":
+		return func() interface{} { return NewAttachRoutetable(f.Log, f.Sess) }
+	case "attachsecuritygroup":
+		return func() interface{} { return NewAttachSecuritygroup(f.Log, f.Sess) }
+	case "checkinstance":
+		return func() interface{} { return NewCheckInstance(f.Log, f.Sess) }
+	case "checksecuritygroup":
+		return func() interface{} { return NewCheckSecuritygroup(f.Log, f.Sess) }
+	case "creategroup":
+		return func() interface{} { return NewCreateGroup(f.Log, f.Sess) }
+	case "createinstance":
+		return func() interface{} { return NewCreateInstance(f.Log, f.Sess) }
+	case "createinternetgateway":
+		return func() interface{} { return NewCreateInternetgateway(f.Log, f.Sess) }
+	case "createkeypair":
+		return func() interface{} { return NewCreateKeypair(f.Log, f.Sess) }
+	case "createpolicy":
+		return func() interface{} { return NewCreatePolicy(f.Log, f.Sess) }
+	case "createroute":
+		return func() interface{} { return NewCreateRoute(f.Log, f.Sess) }
+	case "createroutetable":
+		return func() interface{} { return NewCreateRoutetable(f.Log, f.Sess) }
+	case "createsecuritygroup":
+		return func() interface{} { return NewCreateSecuritygroup(f.Log, f.Sess) }
+	case "createsubnet":
+		return func() interface{} { return NewCreateSubnet(f.Log, f.Sess) }
+	case "createtag":
+		return func() interface{} { return NewCreateTag(f.Log, f.Sess) }
+	case "createvpc":
+		return func() interface{} { return NewCreateVpc(f.Log, f.Sess) }
+	case "deletegroup":
+		return func() interface{} { return NewDeleteGroup(f.Log, f.Sess) }
+	case "deleteinstance":
+		return func() interface{} { return NewDeleteInstance(f.Log, f.Sess) }
+	case "deleteinternetgateway":
+		return func() interface{} { return NewDeleteInternetgateway(f.Log, f.Sess) }
+	case "deletekeypair":
+		return func() interface{} { return NewDeleteKeypair(f.Log, f.Sess) }
+	case "deletepolicy":
+		return func() interface{} { return NewDeletePolicy(f.Log, f.Sess) }
+	case "deleteroute":
+		return func() interface{} { return NewDeleteRoute(f.Log, f.Sess) }
+	case "deleteroutetable":
+		return func() interface{} { return NewDeleteRoutetable(f.Log, f.Sess) }
+	case "deletesecuritygroup":
+		return func() interface{} { return NewDeleteSecuritygroup(f.Log, f.Sess) }
+	case "deletesubnet":
+		return func() interface{} { return NewDeleteSubnet(f.Log, f.Sess) }
+	case "deletetag":
+		return func() interface{} { return NewDeleteTag(f.Log, f.Sess) }
+	case "deletevpc":
+		return func() interface{} { return NewDeleteVpc(f.Log, f.Sess) }
+	case "detachinternetgateway":
+		return func() interface{} { return NewDetachInternetgateway(f.Log, f.Sess) }
+	case "detachpolicy":
+		return func() interface{} { return NewDetachPolicy(f.Log, f.Sess) }
+	case "detachroutetable":
+		return func() interface{} { return NewDetachRoutetable(f.Log, f.Sess) }
+	case "detachsecuritygroup":
+		return func() interface{} { return NewDetachSecuritygroup(f.Log, f.Sess) }
+	case "updatepolicy":
+		return func() interface{} { return NewUpdatePolicy(f.Log, f.Sess) }
+	case "updatesecuritygroup":
+		return func() interface{} { return NewUpdateSecuritygroup(f.Log, f.Sess) }
+	case "updatesubnet":
+		return func() interface{} { return NewUpdateSubnet(f.Log, f.Sess) }
+	}
+	return nil
 }
 
 var (

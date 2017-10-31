@@ -108,14 +108,6 @@ var (
 	{{- end }}
 )
 
-func init() {
-	{{ range $api, $cmds := . }}
-		{{- range $cmdName, $cmd := . }}
-			NewCommandFuncs["{{ ToLower $cmdName }}"] = func() interface{} { return new{{ $cmdName }}() }
-		{{- end }}
-	{{- end }}
-}
-
 {{ range $api, $cmds := . }}
 type mock{{ Title $api}} struct {
 	{{$api}}iface.{{ ApiToInterface $api}}

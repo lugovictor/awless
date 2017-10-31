@@ -127,7 +127,7 @@ func (cmd *DeleteTag) ManualRun(ctx, params map[string]interface{}) (interface{}
 }
 
 func createNameTag(resource, name *string, ctx map[string]interface{}) error {
-	createTag := NewCommandFuncs["createtag"]().(*CreateTag)
+	createTag := CommandFactory.Build("createtag")().(*CreateTag)
 	createTag.Key = String("Name")
 	createTag.Value = name
 	createTag.Resource = resource

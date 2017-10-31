@@ -38,8 +38,8 @@ func NewRunner(tpl *template.Template, msg, tplPath string, fillers ...map[strin
 	}
 
 	runner.CmdLookuper = func(tokens ...string) interface{} {
-		newCommandFunc, ok := awsspec.NewCommandFuncs[strings.Join(tokens, "")]
-		if !ok {
+		newCommandFunc := awsspec.CommandFactory.Build(strings.Join(tokens, ""))
+		if newCommandFunc == nil {
 			return nil
 		}
 		return newCommandFunc()

@@ -66,7 +66,10 @@ func Init(conf map[string]interface{}, log *logger.Logger, profileSetterCallback
 	cloud.ServiceRegistry[CdnService.Name()] = CdnService
 	cloud.ServiceRegistry[CloudformationService.Name()] = CloudformationService
 
-	awsspec.InitCommands(log, sess)
+	awsspec.CommandFactory = &awsspec.AWSFactory{
+		Log:  log,
+		Sess: sess,
+	}
 
 	return nil
 }

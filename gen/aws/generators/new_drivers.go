@@ -291,12 +291,25 @@ limitations under the License.
 // This file was automatically generated with go generate
 package awsspec
 
-var NewCommandFuncs = map[string]func() interface{}{}
+type Factory interface {
+	Build(key string) func() interface{}
+}
 
-func InitCommands(l *logger.Logger, sess *session.Session) {
-{{- range $cmdName, $tag := . }}
-	NewCommandFuncs["{{ $tag.Action }}{{ $tag.Entity }}"] = func() interface{} { return New{{ $cmdName }}(l, sess) }
-{{- end }}
+var CommandFactory Factory
+
+type AWSFactory struct {
+	Log   *logger.Logger
+	Sess *session.Session
+}
+
+func (f *AWSFactory) Build(key string) func() interface{} {
+	switch key {
+	{{- range $cmdName, $tag := . }}
+	case "{{ $tag.Action }}{{ $tag.Entity }}":
+		return func() interface{} { return New{{ $cmdName }}(f.Log, f.Sess) }
+	{{- end}}
+	}
+	return nil
 }
 
 var (

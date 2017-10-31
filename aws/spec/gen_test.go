@@ -91,45 +91,6 @@ var (
 	newUpdatePolicy = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 )
 
-func init() {
-
-	NewCommandFuncs["attachinternetgateway"] = func() interface{} { return newAttachInternetgateway() }
-	NewCommandFuncs["attachroutetable"] = func() interface{} { return newAttachRoutetable() }
-	NewCommandFuncs["attachsecuritygroup"] = func() interface{} { return newAttachSecuritygroup() }
-	NewCommandFuncs["checkinstance"] = func() interface{} { return newCheckInstance() }
-	NewCommandFuncs["checksecuritygroup"] = func() interface{} { return newCheckSecuritygroup() }
-	NewCommandFuncs["createinstance"] = func() interface{} { return newCreateInstance() }
-	NewCommandFuncs["createinternetgateway"] = func() interface{} { return newCreateInternetgateway() }
-	NewCommandFuncs["createkeypair"] = func() interface{} { return newCreateKeypair() }
-	NewCommandFuncs["createroute"] = func() interface{} { return newCreateRoute() }
-	NewCommandFuncs["createroutetable"] = func() interface{} { return newCreateRoutetable() }
-	NewCommandFuncs["createsecuritygroup"] = func() interface{} { return newCreateSecuritygroup() }
-	NewCommandFuncs["createsubnet"] = func() interface{} { return newCreateSubnet() }
-	NewCommandFuncs["createtag"] = func() interface{} { return newCreateTag() }
-	NewCommandFuncs["createvpc"] = func() interface{} { return newCreateVpc() }
-	NewCommandFuncs["deleteinstance"] = func() interface{} { return newDeleteInstance() }
-	NewCommandFuncs["deleteinternetgateway"] = func() interface{} { return newDeleteInternetgateway() }
-	NewCommandFuncs["deletekeypair"] = func() interface{} { return newDeleteKeypair() }
-	NewCommandFuncs["deleteroute"] = func() interface{} { return newDeleteRoute() }
-	NewCommandFuncs["deleteroutetable"] = func() interface{} { return newDeleteRoutetable() }
-	NewCommandFuncs["deletesecuritygroup"] = func() interface{} { return newDeleteSecuritygroup() }
-	NewCommandFuncs["deletesubnet"] = func() interface{} { return newDeleteSubnet() }
-	NewCommandFuncs["deletetag"] = func() interface{} { return newDeleteTag() }
-	NewCommandFuncs["deletevpc"] = func() interface{} { return newDeleteVpc() }
-	NewCommandFuncs["detachinternetgateway"] = func() interface{} { return newDetachInternetgateway() }
-	NewCommandFuncs["detachroutetable"] = func() interface{} { return newDetachRoutetable() }
-	NewCommandFuncs["detachsecuritygroup"] = func() interface{} { return newDetachSecuritygroup() }
-	NewCommandFuncs["updatesecuritygroup"] = func() interface{} { return newUpdateSecuritygroup() }
-	NewCommandFuncs["updatesubnet"] = func() interface{} { return newUpdateSubnet() }
-	NewCommandFuncs["attachpolicy"] = func() interface{} { return newAttachPolicy() }
-	NewCommandFuncs["creategroup"] = func() interface{} { return newCreateGroup() }
-	NewCommandFuncs["createpolicy"] = func() interface{} { return newCreatePolicy() }
-	NewCommandFuncs["deletegroup"] = func() interface{} { return newDeleteGroup() }
-	NewCommandFuncs["deletepolicy"] = func() interface{} { return newDeletePolicy() }
-	NewCommandFuncs["detachpolicy"] = func() interface{} { return newDetachPolicy() }
-	NewCommandFuncs["updatepolicy"] = func() interface{} { return newUpdatePolicy() }
-}
-
 type mockEc2 struct {
 	ec2iface.EC2API
 }
