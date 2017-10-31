@@ -78,10 +78,21 @@ func (b *ATBuilder) Run(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(ran)
+	if b.tplResult != nil {
+		if got, want := fmt.Sprint(ran.CommandNodesIterator()[0].Result()), StringValue(b.tplResult); got != want {
+			b.t.Fatalf("got %s, want %s", got, want)
+		}
+	}
 }
 
 func (b *ATBuilder) Mock(i interface{}) *ATBuilder {
 	b.mock = i
 	return b
+}
+
+func StringValue(v *string) string {
+	if v != nil {
+		return *v
+	}
+	return ""
 }

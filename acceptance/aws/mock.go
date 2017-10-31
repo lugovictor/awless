@@ -1,6 +1,8 @@
 package awsat
 
 import (
+	"testing"
+
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
@@ -22,6 +24,7 @@ func init() {
 
 type ec2Mock struct {
 	ec2iface.EC2API
+	t                     *testing.T
 	RunInstancesFunc      func(input *ec2.RunInstancesInput) (*ec2.Reservation, error)
 	CreateTagsRequestFunc func(input *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput)
 }
