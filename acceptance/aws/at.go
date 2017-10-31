@@ -13,40 +13,37 @@ import (
 )
 
 type ATBuilder struct {
-	template      string
-	inputs        map[string]interface{}
-	inputToVerify map[string]interface{}
-	tplResult     *string
-	mock          interface{}
-	t             *testing.T
+	template    string
+	cmdResult   *string
+	expectCalls map[string]int
+	expectInput map[string]interface{}
+	mock        mock
 }
 
-func Command(template string) *ATBuilder {
-	return &ATBuilder{template: template, inputs: make(map[string]interface{})}
+func Template(template string) *ATBuilder {
+	return &ATBuilder{template: template, expectCalls: make(map[string]int), expectInput: make(map[string]interface{})}
 }
 
-func (b *ATBuilder) Input(key string, input interface{}) *ATBuilder {
-	b.inputs[key] = input
+func (b *ATBuilder) ExpectCommandResult(key string) *ATBuilder {
+	b.cmdResult = &key
 	return b
 }
 
-func (b *ATBuilder) VerifyInput(key string, i interface{}) {
-	b.t.Helper()
-	v, ok := b.inputs[key]
-	if !ok {
-		b.t.Fatalf("no input to verify for key '%s'", key)
+func (b *ATBuilder) ExpectCalls(expects ...string) *ATBuilder {
+	for _, expect := range expects {
+		b.expectCalls[expect]++
 	}
-	if got, want := i, v; !reflect.DeepEqual(got, want) {
-		b.t.Fatalf("%s: got %#v, want %#v", key, got, want)
-	}
+	return b
 }
 
-func (b *ATBuilder) VerifyTemplateResult(key string) *ATBuilder {
-	b.tplResult = &key
+func (b *ATBuilder) ExpectInput(call string, input interface{}) *ATBuilder {
+	b.expectInput[call] = input
 	return b
 }
 
 func (b *ATBuilder) Run(t *testing.T) {
+	b.mock.SetInputs(b.expectInput)
+	b.mock.SetTesting(t)
 	awsspec.NewCommandFuncs["createtag"] = func() interface{} {
 		cmd := new(awsspec.CreateTag)
 		cmd.SetApi(b.mock.(ec2iface.EC2API))
@@ -58,7 +55,6 @@ func (b *ATBuilder) Run(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	b.t = t
 
 	env := template.NewEnv()
 	env.Lookuper = func(tokens ...string) interface{} {
@@ -78,14 +74,19 @@ func (b *ATBuilder) Run(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if b.tplResult != nil {
-		if got, want := fmt.Sprint(ran.CommandNodesIterator()[0].Result()), StringValue(b.tplResult); got != want {
-			b.t.Fatalf("got %s, want %s", got, want)
+	if len(b.expectCalls) > 0 {
+		if got, want := b.mock.Calls(), b.expectCalls; !reflect.DeepEqual(got, want) {
+			t.Fatalf("got %#v, want %#v", got, want)
+		}
+	}
+	if b.cmdResult != nil {
+		if got, want := fmt.Sprint(ran.CommandNodesIterator()[0].Result()), StringValue(b.cmdResult); got != want {
+			t.Fatalf("got %s, want %s", got, want)
 		}
 	}
 }
 
-func (b *ATBuilder) Mock(i interface{}) *ATBuilder {
+func (b *ATBuilder) Mock(i mock) *ATBuilder {
 	b.mock = i
 	return b
 }

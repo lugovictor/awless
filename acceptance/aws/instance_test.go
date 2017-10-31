@@ -13,15 +13,23 @@ import (
 )
 
 func TestInstance(t *testing.T) {
-	userdataFile := generateTmpFile("this is my content with {{ .Variables.GoTemplateVar }} content")
+	userdataFile := generateTmpFile("this is my content with {{ .Variables.oneRef }} content")
 	defer os.Remove(userdataFile)
 
-	builder := Command("GoTemplateVar=awesome\n" +
-		"create instance count=3 image=ami-1234 " +
-		"name=myinstance subnet=sub_1 type=t2.nano keypair=mykp ip=10.2.3.4 " +
-		"userdata=" + userdataFile + " securitygroup=sg-1234 lock=true role=myrole")
-
-	builder.Input("RunInstances", &ec2.RunInstancesInput{
+	Template("oneRef=awesome\n"+
+		"create instance count=3 image=ami-1234 "+
+		"name=myinstance subnet=sub_1 type=t2.nano keypair=mykp ip=10.2.3.4 "+
+		"userdata="+userdataFile+" securitygroup=sg-1234 lock=true role=myrole").
+		Mock(&ec2Mock{
+			RunInstancesFunc: func(input *ec2.RunInstancesInput) (*ec2.Reservation, error) {
+				return &ec2.Reservation{Instances: []*ec2.Instance{{InstanceId: String("res.createinstance")}}}, nil
+			},
+			CreateTagsRequestFunc: func(input *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput) {
+				output = &ec2.CreateTagsOutput{}
+				req = request.New(aws.Config{}, metadata.ClientInfo{}, request.Handlers{}, nil, &request.Operation{}, input, output)
+				return
+			},
+		}).ExpectInput("RunInstances", &ec2.RunInstancesInput{
 		SubnetId:              String("sub_1"),
 		ImageId:               String("ami-1234"),
 		InstanceType:          String("t2.nano"),
@@ -33,23 +41,12 @@ func TestInstance(t *testing.T) {
 		DisableApiTermination: Bool(true),
 		IamInstanceProfile:    &ec2.IamInstanceProfileSpecification{Name: String("myrole")},
 		UserData:              String(base64.StdEncoding.EncodeToString([]byte("this is my content with awesome content"))),
-	}).Input("CreateTagsRequest", &ec2.CreateTagsInput{
+	}).ExpectInput("CreateTagsRequest", &ec2.CreateTagsInput{
 		Resources: []*string{String("res.createinstance")},
 		Tags: []*ec2.Tag{
 			{Key: String("Name"), Value: String("myinstance")},
 		},
-	}).Mock(&ec2Mock{
-		RunInstancesFunc: func(input *ec2.RunInstancesInput) (*ec2.Reservation, error) {
-			builder.VerifyInput("RunInstances", input)
-			return &ec2.Reservation{Instances: []*ec2.Instance{{InstanceId: String("res.createinstance")}}}, nil
-		},
-		CreateTagsRequestFunc: func(input *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput) {
-			builder.VerifyInput("CreateTagsRequest", input)
-			output = &ec2.CreateTagsOutput{}
-			req = request.New(aws.Config{}, metadata.ClientInfo{}, request.Handlers{}, nil, &request.Operation{}, input, output)
-			return
-		},
-	}).VerifyTemplateResult("res.createinstance").Run(t)
+	}).ExpectCommandResult("res.createinstance").ExpectCalls("RunInstances", "CreateTagsRequest").Run(t)
 }
 
 func generateTmpFile(content string) (path string) {
