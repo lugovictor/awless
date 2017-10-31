@@ -74,6 +74,13 @@ func (b *ATBuilder) Run(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if ran.HasErrors() {
+		for _, cmd := range ran.CommandNodesIterator() {
+			if cmd.Err() != nil {
+				t.Fatal(cmd.Err())
+			}
+		}
+	}
 	if len(b.expectCalls) > 0 {
 		if got, want := b.mock.Calls(), b.expectCalls; !reflect.DeepEqual(got, want) {
 			t.Fatalf("got %#v, want %#v", got, want)
@@ -96,4 +103,30 @@ func StringValue(v *string) string {
 		return *v
 	}
 	return ""
+}
+
+func String(v string) *string {
+	return &v
+}
+
+func Int64(v int64) *int64 {
+	return &v
+}
+
+func Int64AsIntValue(v *int64) int {
+	if v != nil {
+		return int(*v)
+	}
+	return 0
+}
+
+func Bool(v bool) *bool {
+	return &v
+}
+
+func BoolValue(v *bool) bool {
+	if v != nil {
+		return *v
+	}
+	return false
 }

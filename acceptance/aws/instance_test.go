@@ -49,6 +49,27 @@ func TestInstance(t *testing.T) {
 			},
 		}).ExpectCommandResult("new-instance-id").ExpectCalls("RunInstances", "CreateTagsRequest").Run(t)
 	})
+
+	t.Run("delete", func(t *testing.T) {
+		Template("delete instance id=id-1234").Mock(&ec2Mock{
+			TerminateInstancesFunc: func(param0 *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) { return nil, nil },
+		}).ExpectInput("TerminateInstances", &ec2.TerminateInstancesInput{InstanceIds: []*string{String("id-1234")}}).
+			ExpectCalls("TerminateInstances").Run(t)
+		Template("delete instance ids=id-1234,id-2345").Mock(&ec2Mock{
+			TerminateInstancesFunc: func(param0 *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) { return nil, nil },
+		}).ExpectInput("TerminateInstances", &ec2.TerminateInstancesInput{InstanceIds: []*string{String("id-1234"), String("id-2345")}}).
+			ExpectCalls("TerminateInstances").Run(t)
+	})
+
+	t.Run("check", func(t *testing.T) {
+		Template("check instance id=id-1234 state=running timeout=0").Mock(&ec2Mock{
+			DescribeInstancesFunc: func(input *ec2.DescribeInstancesInput) (*ec2.DescribeInstancesOutput, error) {
+				return &ec2.DescribeInstancesOutput{Reservations: []*ec2.Reservation{
+					{Instances: []*ec2.Instance{{InstanceId: input.InstanceIds[0], State: &ec2.InstanceState{Name: String("running")}}}},
+				}}, nil
+			}}).ExpectInput("DescribeInstances", &ec2.DescribeInstancesInput{InstanceIds: []*string{String("id-1234")}}).
+			ExpectCalls("DescribeInstances").Run(t)
+	})
 }
 
 func generateTmpFile(content string) (path string) {

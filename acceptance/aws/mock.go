@@ -20,6 +20,18 @@ func init() {
 		cmd.SetLogger(logger.DiscardLogger)
 		return cmd
 	}
+	MockCommands["deleteinstance"] = func(api interface{}) interface{} {
+		cmd := new(awsspec.DeleteInstance)
+		cmd.SetApi(api.(ec2iface.EC2API))
+		cmd.SetLogger(logger.DiscardLogger)
+		return cmd
+	}
+	MockCommands["checkinstance"] = func(api interface{}) interface{} {
+		cmd := new(awsspec.CheckInstance)
+		cmd.SetApi(api.(ec2iface.EC2API))
+		cmd.SetLogger(logger.DiscardLogger)
+		return cmd
+	}
 	MockCommands["createpolicy"] = func(api interface{}) interface{} {
 		cmd := new(awsspec.CreatePolicy)
 		cmd.SetApi(api.(iamiface.IAMAPI))
@@ -33,37 +45,6 @@ type mock interface {
 	SetInputs(map[string]interface{})
 	SetTesting(*testing.T)
 }
-
-// type ec2Mock struct {
-// 	basicMock
-// 	ec2iface.EC2API
-// 	RunInstancesFunc      func(input *ec2.RunInstancesInput) (*ec2.Reservation, error)
-// 	CreateTagsRequestFunc func(input *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput)
-// }
-//
-// func (m *ec2Mock) RunInstances(input *ec2.RunInstancesInput) (*ec2.Reservation, error) {
-// 	m.addCall("RunInstances")
-// 	m.verifyInput("RunInstances", input)
-// 	return m.RunInstancesFunc(input)
-// }
-//
-// func (m *ec2Mock) CreateTagsRequest(input *ec2.CreateTagsInput) (*request.Request, *ec2.CreateTagsOutput) {
-// 	m.addCall("CreateTagsRequest")
-// 	m.verifyInput("CreateTagsRequest", input)
-// 	return m.CreateTagsRequestFunc(input)
-// }
-//
-// type iamMock struct {
-// 	basicMock
-// 	iamiface.IAMAPI
-// 	CreatePolicyFunc func(input *iam.CreatePolicyInput) (*iam.CreatePolicyOutput, error)
-// }
-//
-// func (m *iamMock) CreatePolicy(input *iam.CreatePolicyInput) (*iam.CreatePolicyOutput, error) {
-// 	m.addCall("CreatePolicy")
-// 	m.verifyInput("CreatePolicy", input)
-// 	return m.CreatePolicyFunc(input)
-// }
 
 type basicMock struct {
 	t         *testing.T
