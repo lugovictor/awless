@@ -49,7 +49,7 @@ func generateNewCommands() {
 			panic(err)
 		}
 
-		if err := ioutil.WriteFile(filepath.Join(GEN_SPEC_DIR, fmt.Sprintf("gen_%s.go", entity)), buff.Bytes(), 0666); err != nil {
+		if err := ioutil.WriteFile(filepath.Join(GEN_SPEC_DIR, fmt.Sprintf("gen_%s.go.txt", entity)), buff.Bytes(), 0666); err != nil {
 			panic(err)
 		}
 	}
@@ -148,7 +148,8 @@ func GenerateResultExtraction(cmd aws.NewCommand) string {
 	return out
 }
 
-const generatedNewCommands = `/* Copyright 2017 WALLIX
+const generatedNewCommands = `// +build ignore
+/* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -163,7 +164,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// +build ignore
 
 // DO NOT EDIT
 // This file was automatically generated with go generate

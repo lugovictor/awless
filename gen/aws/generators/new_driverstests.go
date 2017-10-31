@@ -121,35 +121,6 @@ type mock{{ Title $api}} struct {
 	{{$api}}iface.{{ ApiToInterface $api}}
 }
 
-	{{- range $cmdName, $cmd := . }}
-		func TestGen{{ $cmdName }}(t *testing.T) {
-			if cleanFn, ok := genTestsCleanupFunc["{{ ToLower $cmdName }}"]; ok {
-				defer cleanFn()
-			}
-			params := genTestsParams["{{ ToLower $cmdName }}"]
-			missings, err := new{{ $cmdName }}().ValidateParams(keys(params))
-			if err != nil {
-				t.Fatal(err)
-			}
-			if got, want := len(missings), 0; got != want {
-				t.Fatalf("got %d, want %d", got, want)
-			}
-			if params, err = convertParamsIfAvailable(new{{ $cmdName }}(), params); err != nil {
-				t.Fatal(err)
-			}
-			if errs := new{{ $cmdName }}().ValidateCommand(params, nil); len(errs) > 0 {
-				t.Fatalf("%v", errs)
-			}
-			res, err := new{{ $cmdName }}().Run(genTestsContext["{{ ToLower $cmdName }}"], params)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if got, want := res, genTestsOutput["{{ ToLower $cmdName }}"]; ! reflect.DeepEqual(got, want) {
-				t.Fatalf("got %+v, want %+v", got, want)
-			}
-		}
-
-	{{- end }}
 {{- end }}
 
 {{ range $api, $cmds := . }}
