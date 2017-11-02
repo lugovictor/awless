@@ -40,6 +40,7 @@ func (b *ATBuilder) ExpectInput(call string, input interface{}) *ATBuilder {
 }
 
 func (b *ATBuilder) Run(t *testing.T) {
+	t.Helper()
 	b.mock.SetInputs(b.expectInput)
 	b.mock.SetTesting(t)
 
