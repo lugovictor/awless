@@ -31,19 +31,21 @@ import (
 	"github.com/wallix/awless/logger"
 )
 
-func NewAttachInternetgateway(l *logger.Logger, sess *session.Session) *AttachInternetgateway {
+func NewAttachInternetgateway(sess *session.Session, l ...*logger.Logger) *AttachInternetgateway {
 	cmd := new(AttachInternetgateway)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *AttachInternetgateway) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *AttachInternetgateway) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *AttachInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -128,19 +130,21 @@ func (cmd *AttachInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewAttachPolicy(l *logger.Logger, sess *session.Session) *AttachPolicy {
+func NewAttachPolicy(sess *session.Session, l ...*logger.Logger) *AttachPolicy {
 	cmd := new(AttachPolicy)
-	cmd.api = iam.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *AttachPolicy) SetApi(api iamiface.IAMAPI) {
 	cmd.api = api
-}
-
-func (cmd *AttachPolicy) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -194,19 +198,21 @@ func (cmd *AttachPolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewAttachRoutetable(l *logger.Logger, sess *session.Session) *AttachRoutetable {
+func NewAttachRoutetable(sess *session.Session, l ...*logger.Logger) *AttachRoutetable {
 	cmd := new(AttachRoutetable)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *AttachRoutetable) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *AttachRoutetable) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *AttachRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -291,19 +297,21 @@ func (cmd *AttachRoutetable) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewAttachSecuritygroup(l *logger.Logger, sess *session.Session) *AttachSecuritygroup {
+func NewAttachSecuritygroup(sess *session.Session, l ...*logger.Logger) *AttachSecuritygroup {
 	cmd := new(AttachSecuritygroup)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *AttachSecuritygroup) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *AttachSecuritygroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *AttachSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -357,19 +365,21 @@ func (cmd *AttachSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCheckInstance(l *logger.Logger, sess *session.Session) *CheckInstance {
+func NewCheckInstance(sess *session.Session, l ...*logger.Logger) *CheckInstance {
 	cmd := new(CheckInstance)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CheckInstance) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CheckInstance) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CheckInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -423,19 +433,21 @@ func (cmd *CheckInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCheckSecuritygroup(l *logger.Logger, sess *session.Session) *CheckSecuritygroup {
+func NewCheckSecuritygroup(sess *session.Session, l ...*logger.Logger) *CheckSecuritygroup {
 	cmd := new(CheckSecuritygroup)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CheckSecuritygroup) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CheckSecuritygroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CheckSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -489,19 +501,21 @@ func (cmd *CheckSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateGroup(l *logger.Logger, sess *session.Session) *CreateGroup {
+func NewCreateGroup(sess *session.Session, l ...*logger.Logger) *CreateGroup {
 	cmd := new(CreateGroup)
-	cmd.api = iam.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateGroup) SetApi(api iamiface.IAMAPI) {
 	cmd.api = api
-}
-
-func (cmd *CreateGroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -561,19 +575,21 @@ func (cmd *CreateGroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateInstance(l *logger.Logger, sess *session.Session) *CreateInstance {
+func NewCreateInstance(sess *session.Session, l ...*logger.Logger) *CreateInstance {
 	cmd := new(CreateInstance)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateInstance) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateInstance) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -658,19 +674,21 @@ func (cmd *CreateInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateInternetgateway(l *logger.Logger, sess *session.Session) *CreateInternetgateway {
+func NewCreateInternetgateway(sess *session.Session, l ...*logger.Logger) *CreateInternetgateway {
 	cmd := new(CreateInternetgateway)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateInternetgateway) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateInternetgateway) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -755,19 +773,21 @@ func (cmd *CreateInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateKeypair(l *logger.Logger, sess *session.Session) *CreateKeypair {
+func NewCreateKeypair(sess *session.Session, l ...*logger.Logger) *CreateKeypair {
 	cmd := new(CreateKeypair)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateKeypair) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateKeypair) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -827,19 +847,21 @@ func (cmd *CreateKeypair) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreatePolicy(l *logger.Logger, sess *session.Session) *CreatePolicy {
+func NewCreatePolicy(sess *session.Session, l ...*logger.Logger) *CreatePolicy {
 	cmd := new(CreatePolicy)
-	cmd.api = iam.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreatePolicy) SetApi(api iamiface.IAMAPI) {
 	cmd.api = api
-}
-
-func (cmd *CreatePolicy) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -899,19 +921,21 @@ func (cmd *CreatePolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateRoute(l *logger.Logger, sess *session.Session) *CreateRoute {
+func NewCreateRoute(sess *session.Session, l ...*logger.Logger) *CreateRoute {
 	cmd := new(CreateRoute)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateRoute) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateRoute) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -996,19 +1020,21 @@ func (cmd *CreateRoute) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateRoutetable(l *logger.Logger, sess *session.Session) *CreateRoutetable {
+func NewCreateRoutetable(sess *session.Session, l ...*logger.Logger) *CreateRoutetable {
 	cmd := new(CreateRoutetable)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateRoutetable) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateRoutetable) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1093,19 +1119,21 @@ func (cmd *CreateRoutetable) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateSecuritygroup(l *logger.Logger, sess *session.Session) *CreateSecuritygroup {
+func NewCreateSecuritygroup(sess *session.Session, l ...*logger.Logger) *CreateSecuritygroup {
 	cmd := new(CreateSecuritygroup)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateSecuritygroup) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateSecuritygroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1190,19 +1218,21 @@ func (cmd *CreateSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateSubnet(l *logger.Logger, sess *session.Session) *CreateSubnet {
+func NewCreateSubnet(sess *session.Session, l ...*logger.Logger) *CreateSubnet {
 	cmd := new(CreateSubnet)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateSubnet) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateSubnet) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1287,19 +1317,21 @@ func (cmd *CreateSubnet) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateTag(l *logger.Logger, sess *session.Session) *CreateTag {
+func NewCreateTag(sess *session.Session, l ...*logger.Logger) *CreateTag {
 	cmd := new(CreateTag)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateTag) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateTag) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1353,19 +1385,21 @@ func (cmd *CreateTag) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewCreateVpc(l *logger.Logger, sess *session.Session) *CreateVpc {
+func NewCreateVpc(sess *session.Session, l ...*logger.Logger) *CreateVpc {
 	cmd := new(CreateVpc)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *CreateVpc) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *CreateVpc) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *CreateVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1450,19 +1484,21 @@ func (cmd *CreateVpc) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteGroup(l *logger.Logger, sess *session.Session) *DeleteGroup {
+func NewDeleteGroup(sess *session.Session, l ...*logger.Logger) *DeleteGroup {
 	cmd := new(DeleteGroup)
-	cmd.api = iam.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteGroup) SetApi(api iamiface.IAMAPI) {
 	cmd.api = api
-}
-
-func (cmd *DeleteGroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteGroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1522,19 +1558,21 @@ func (cmd *DeleteGroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteInstance(l *logger.Logger, sess *session.Session) *DeleteInstance {
+func NewDeleteInstance(sess *session.Session, l ...*logger.Logger) *DeleteInstance {
 	cmd := new(DeleteInstance)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteInstance) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteInstance) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1619,19 +1657,21 @@ func (cmd *DeleteInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteInternetgateway(l *logger.Logger, sess *session.Session) *DeleteInternetgateway {
+func NewDeleteInternetgateway(sess *session.Session, l ...*logger.Logger) *DeleteInternetgateway {
 	cmd := new(DeleteInternetgateway)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteInternetgateway) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteInternetgateway) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1716,19 +1756,21 @@ func (cmd *DeleteInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteKeypair(l *logger.Logger, sess *session.Session) *DeleteKeypair {
+func NewDeleteKeypair(sess *session.Session, l ...*logger.Logger) *DeleteKeypair {
 	cmd := new(DeleteKeypair)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteKeypair) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteKeypair) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteKeypair) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1813,19 +1855,21 @@ func (cmd *DeleteKeypair) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeletePolicy(l *logger.Logger, sess *session.Session) *DeletePolicy {
+func NewDeletePolicy(sess *session.Session, l ...*logger.Logger) *DeletePolicy {
 	cmd := new(DeletePolicy)
-	cmd.api = iam.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeletePolicy) SetApi(api iamiface.IAMAPI) {
 	cmd.api = api
-}
-
-func (cmd *DeletePolicy) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeletePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1885,19 +1929,21 @@ func (cmd *DeletePolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteRoute(l *logger.Logger, sess *session.Session) *DeleteRoute {
+func NewDeleteRoute(sess *session.Session, l ...*logger.Logger) *DeleteRoute {
 	cmd := new(DeleteRoute)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteRoute) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteRoute) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteRoute) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -1982,19 +2028,21 @@ func (cmd *DeleteRoute) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteRoutetable(l *logger.Logger, sess *session.Session) *DeleteRoutetable {
+func NewDeleteRoutetable(sess *session.Session, l ...*logger.Logger) *DeleteRoutetable {
 	cmd := new(DeleteRoutetable)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteRoutetable) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteRoutetable) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2079,19 +2127,21 @@ func (cmd *DeleteRoutetable) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteSecuritygroup(l *logger.Logger, sess *session.Session) *DeleteSecuritygroup {
+func NewDeleteSecuritygroup(sess *session.Session, l ...*logger.Logger) *DeleteSecuritygroup {
 	cmd := new(DeleteSecuritygroup)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteSecuritygroup) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteSecuritygroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2176,19 +2226,21 @@ func (cmd *DeleteSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteSubnet(l *logger.Logger, sess *session.Session) *DeleteSubnet {
+func NewDeleteSubnet(sess *session.Session, l ...*logger.Logger) *DeleteSubnet {
 	cmd := new(DeleteSubnet)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteSubnet) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteSubnet) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2273,19 +2325,21 @@ func (cmd *DeleteSubnet) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteTag(l *logger.Logger, sess *session.Session) *DeleteTag {
+func NewDeleteTag(sess *session.Session, l ...*logger.Logger) *DeleteTag {
 	cmd := new(DeleteTag)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteTag) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteTag) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteTag) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2339,19 +2393,21 @@ func (cmd *DeleteTag) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDeleteVpc(l *logger.Logger, sess *session.Session) *DeleteVpc {
+func NewDeleteVpc(sess *session.Session, l ...*logger.Logger) *DeleteVpc {
 	cmd := new(DeleteVpc)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DeleteVpc) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DeleteVpc) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DeleteVpc) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2436,19 +2492,21 @@ func (cmd *DeleteVpc) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDetachInternetgateway(l *logger.Logger, sess *session.Session) *DetachInternetgateway {
+func NewDetachInternetgateway(sess *session.Session, l ...*logger.Logger) *DetachInternetgateway {
 	cmd := new(DetachInternetgateway)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DetachInternetgateway) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DetachInternetgateway) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DetachInternetgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2533,19 +2591,21 @@ func (cmd *DetachInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDetachPolicy(l *logger.Logger, sess *session.Session) *DetachPolicy {
+func NewDetachPolicy(sess *session.Session, l ...*logger.Logger) *DetachPolicy {
 	cmd := new(DetachPolicy)
-	cmd.api = iam.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DetachPolicy) SetApi(api iamiface.IAMAPI) {
 	cmd.api = api
-}
-
-func (cmd *DetachPolicy) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DetachPolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2599,19 +2659,21 @@ func (cmd *DetachPolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDetachRoutetable(l *logger.Logger, sess *session.Session) *DetachRoutetable {
+func NewDetachRoutetable(sess *session.Session, l ...*logger.Logger) *DetachRoutetable {
 	cmd := new(DetachRoutetable)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DetachRoutetable) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DetachRoutetable) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DetachRoutetable) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2696,19 +2758,21 @@ func (cmd *DetachRoutetable) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewDetachSecuritygroup(l *logger.Logger, sess *session.Session) *DetachSecuritygroup {
+func NewDetachSecuritygroup(sess *session.Session, l ...*logger.Logger) *DetachSecuritygroup {
 	cmd := new(DetachSecuritygroup)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *DetachSecuritygroup) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *DetachSecuritygroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *DetachSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2762,19 +2826,21 @@ func (cmd *DetachSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewUpdatePolicy(l *logger.Logger, sess *session.Session) *UpdatePolicy {
+func NewUpdatePolicy(sess *session.Session, l ...*logger.Logger) *UpdatePolicy {
 	cmd := new(UpdatePolicy)
-	cmd.api = iam.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *UpdatePolicy) SetApi(api iamiface.IAMAPI) {
 	cmd.api = api
-}
-
-func (cmd *UpdatePolicy) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *UpdatePolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2834,19 +2900,21 @@ func (cmd *UpdatePolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewUpdateSecuritygroup(l *logger.Logger, sess *session.Session) *UpdateSecuritygroup {
+func NewUpdateSecuritygroup(sess *session.Session, l ...*logger.Logger) *UpdateSecuritygroup {
 	cmd := new(UpdateSecuritygroup)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *UpdateSecuritygroup) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *UpdateSecuritygroup) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *UpdateSecuritygroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -2900,19 +2968,21 @@ func (cmd *UpdateSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
-func NewUpdateSubnet(l *logger.Logger, sess *session.Session) *UpdateSubnet {
+func NewUpdateSubnet(sess *session.Session, l ...*logger.Logger) *UpdateSubnet {
 	cmd := new(UpdateSubnet)
-	cmd.api = ec2.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *UpdateSubnet) SetApi(api ec2iface.EC2API) {
 	cmd.api = api
-}
-
-func (cmd *UpdateSubnet) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *UpdateSubnet) Run(ctx, params map[string]interface{}) (interface{}, error) {

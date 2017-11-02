@@ -3,61 +3,7 @@ package awsat
 import (
 	"reflect"
 	"testing"
-
-	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
-	"github.com/aws/aws-sdk-go/service/iam/iamiface"
-	"github.com/wallix/awless/aws/spec"
-	"github.com/wallix/awless/logger"
 )
-
-type AcceptanceFactory struct {
-	Mock interface{}
-}
-
-func NewAcceptanceFactory(mock interface{}) *AcceptanceFactory {
-	return &AcceptanceFactory{Mock: mock}
-}
-
-func (f *AcceptanceFactory) Build(key string) func() interface{} {
-	switch key {
-	case "createinstance":
-		return func() interface{} {
-			cmd := new(awsspec.CreateInstance)
-			cmd.SetApi(f.Mock.(ec2iface.EC2API))
-			cmd.SetLogger(logger.DiscardLogger)
-			return cmd
-		}
-	case "createtag":
-		return func() interface{} {
-			cmd := new(awsspec.CreateTag)
-			cmd.SetApi(f.Mock.(ec2iface.EC2API))
-			cmd.SetLogger(logger.DiscardLogger)
-			return cmd
-		}
-	case "deleteinstance":
-		return func() interface{} {
-			cmd := new(awsspec.DeleteInstance)
-			cmd.SetApi(f.Mock.(ec2iface.EC2API))
-			cmd.SetLogger(logger.DiscardLogger)
-			return cmd
-		}
-	case "checkinstance":
-		return func() interface{} {
-			cmd := new(awsspec.CheckInstance)
-			cmd.SetApi(f.Mock.(ec2iface.EC2API))
-			cmd.SetLogger(logger.DiscardLogger)
-			return cmd
-		}
-	case "createpolicy":
-		return func() interface{} {
-			cmd := new(awsspec.CreatePolicy)
-			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
-			cmd.SetLogger(logger.DiscardLogger)
-			return cmd
-		}
-	}
-	return nil
-}
 
 type mock interface {
 	Calls() map[string]int

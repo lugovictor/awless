@@ -163,19 +163,21 @@ limitations under the License.
 package awsspec
 
 {{ range $cmdName, $tag := . }}
-func New{{ $cmdName }}(l *logger.Logger, sess *session.Session) *{{ $cmdName }}{
+func New{{ $cmdName }}(sess *session.Session, l ...*logger.Logger) *{{ $cmdName }}{
 	cmd := new({{ $cmdName }})
-	cmd.api = {{ $tag.API }}.New(sess)
-	cmd.logger = l
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = {{ $tag.API }}.New(sess)
+	}
 	return cmd
 }
 
 func (cmd *{{ $cmdName }}) SetApi(api {{$tag.API}}iface.{{ ApiToInterface $tag.API }}) {
 	cmd.api = api
-}
-
-func (cmd *{{ $cmdName }}) SetLogger(l *logger.Logger) {
-	cmd.logger = l
 }
 
 func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{}, error) {
@@ -306,7 +308,7 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 	switch key {
 	{{- range $cmdName, $tag := . }}
 	case "{{ $tag.Action }}{{ $tag.Entity }}":
-		return func() interface{} { return New{{ $cmdName }}(f.Log, f.Sess) }
+		return func() interface{} { return New{{ $cmdName }}(f.Sess, f.Log) }
 	{{- end}}
 	}
 	return nil

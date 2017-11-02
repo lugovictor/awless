@@ -36,75 +36,75 @@ type AWSFactory struct {
 func (f *AWSFactory) Build(key string) func() interface{} {
 	switch key {
 	case "attachinternetgateway":
-		return func() interface{} { return NewAttachInternetgateway(f.Log, f.Sess) }
+		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
 	case "attachpolicy":
-		return func() interface{} { return NewAttachPolicy(f.Log, f.Sess) }
+		return func() interface{} { return NewAttachPolicy(f.Sess, f.Log) }
 	case "attachroutetable":
-		return func() interface{} { return NewAttachRoutetable(f.Log, f.Sess) }
+		return func() interface{} { return NewAttachRoutetable(f.Sess, f.Log) }
 	case "attachsecuritygroup":
-		return func() interface{} { return NewAttachSecuritygroup(f.Log, f.Sess) }
+		return func() interface{} { return NewAttachSecuritygroup(f.Sess, f.Log) }
 	case "checkinstance":
-		return func() interface{} { return NewCheckInstance(f.Log, f.Sess) }
+		return func() interface{} { return NewCheckInstance(f.Sess, f.Log) }
 	case "checksecuritygroup":
-		return func() interface{} { return NewCheckSecuritygroup(f.Log, f.Sess) }
+		return func() interface{} { return NewCheckSecuritygroup(f.Sess, f.Log) }
 	case "creategroup":
-		return func() interface{} { return NewCreateGroup(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
-		return func() interface{} { return NewCreateInstance(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateInstance(f.Sess, f.Log) }
 	case "createinternetgateway":
-		return func() interface{} { return NewCreateInternetgateway(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateInternetgateway(f.Sess, f.Log) }
 	case "createkeypair":
-		return func() interface{} { return NewCreateKeypair(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateKeypair(f.Sess, f.Log) }
 	case "createpolicy":
-		return func() interface{} { return NewCreatePolicy(f.Log, f.Sess) }
+		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
 	case "createroute":
-		return func() interface{} { return NewCreateRoute(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateRoute(f.Sess, f.Log) }
 	case "createroutetable":
-		return func() interface{} { return NewCreateRoutetable(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateRoutetable(f.Sess, f.Log) }
 	case "createsecuritygroup":
-		return func() interface{} { return NewCreateSecuritygroup(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateSecuritygroup(f.Sess, f.Log) }
 	case "createsubnet":
-		return func() interface{} { return NewCreateSubnet(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateSubnet(f.Sess, f.Log) }
 	case "createtag":
-		return func() interface{} { return NewCreateTag(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateTag(f.Sess, f.Log) }
 	case "createvpc":
-		return func() interface{} { return NewCreateVpc(f.Log, f.Sess) }
+		return func() interface{} { return NewCreateVpc(f.Sess, f.Log) }
 	case "deletegroup":
-		return func() interface{} { return NewDeleteGroup(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
-		return func() interface{} { return NewDeleteInstance(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteInstance(f.Sess, f.Log) }
 	case "deleteinternetgateway":
-		return func() interface{} { return NewDeleteInternetgateway(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteInternetgateway(f.Sess, f.Log) }
 	case "deletekeypair":
-		return func() interface{} { return NewDeleteKeypair(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteKeypair(f.Sess, f.Log) }
 	case "deletepolicy":
-		return func() interface{} { return NewDeletePolicy(f.Log, f.Sess) }
+		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
 	case "deleteroute":
-		return func() interface{} { return NewDeleteRoute(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteRoute(f.Sess, f.Log) }
 	case "deleteroutetable":
-		return func() interface{} { return NewDeleteRoutetable(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteRoutetable(f.Sess, f.Log) }
 	case "deletesecuritygroup":
-		return func() interface{} { return NewDeleteSecuritygroup(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteSecuritygroup(f.Sess, f.Log) }
 	case "deletesubnet":
-		return func() interface{} { return NewDeleteSubnet(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteSubnet(f.Sess, f.Log) }
 	case "deletetag":
-		return func() interface{} { return NewDeleteTag(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteTag(f.Sess, f.Log) }
 	case "deletevpc":
-		return func() interface{} { return NewDeleteVpc(f.Log, f.Sess) }
+		return func() interface{} { return NewDeleteVpc(f.Sess, f.Log) }
 	case "detachinternetgateway":
-		return func() interface{} { return NewDetachInternetgateway(f.Log, f.Sess) }
+		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
 	case "detachpolicy":
-		return func() interface{} { return NewDetachPolicy(f.Log, f.Sess) }
+		return func() interface{} { return NewDetachPolicy(f.Sess, f.Log) }
 	case "detachroutetable":
-		return func() interface{} { return NewDetachRoutetable(f.Log, f.Sess) }
+		return func() interface{} { return NewDetachRoutetable(f.Sess, f.Log) }
 	case "detachsecuritygroup":
-		return func() interface{} { return NewDetachSecuritygroup(f.Log, f.Sess) }
+		return func() interface{} { return NewDetachSecuritygroup(f.Sess, f.Log) }
 	case "updatepolicy":
-		return func() interface{} { return NewUpdatePolicy(f.Log, f.Sess) }
+		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
 	case "updatesecuritygroup":
-		return func() interface{} { return NewUpdateSecuritygroup(f.Log, f.Sess) }
+		return func() interface{} { return NewUpdateSecuritygroup(f.Sess, f.Log) }
 	case "updatesubnet":
-		return func() interface{} { return NewUpdateSubnet(f.Log, f.Sess) }
+		return func() interface{} { return NewUpdateSubnet(f.Sess, f.Log) }
 	}
 	return nil
 }

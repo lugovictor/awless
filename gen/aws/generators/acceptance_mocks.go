@@ -157,6 +157,40 @@ func generateAcceptanceMocks() {
 	}
 }
 
+func generateAcceptanceCommandsBuilder() {
+	fset := token.NewFileSet()
+	pkgs, err := parser.ParseDir(fset, SPEC_DIR, func(os.FileInfo) bool { return true }, 0)
+	if err != nil {
+		panic(err)
+	}
+
+	finder := &findStructs{}
+	for _, pkg := range pkgs {
+		for _, f := range pkg.Files {
+			ast.Walk(finder, f)
+		}
+	}
+
+	templ, err := template.New("mocksCmdBuilders").Funcs(
+		template.FuncMap{
+			"ApiToInterface": aws.ApiToInterface,
+		},
+	).Parse(atMocksCmdBuilders)
+	if err != nil {
+		panic(err)
+	}
+
+	var buff bytes.Buffer
+	err = templ.Execute(&buff, finder.result)
+	if err != nil {
+		panic(err)
+	}
+
+	if err = ioutil.WriteFile(filepath.Join(AWSAT_DIR, "gen_cmdbuilders.go"), buff.Bytes(), 0666); err != nil {
+		panic(err)
+	}
+}
+
 type apiInfo struct {
 	Name      string
 	IfaceName string
@@ -169,6 +203,50 @@ type functionInfo struct {
 	AnonymousSig string
 	ParamNames   []string
 }
+
+const atMocksCmdBuilders = `/* Copyright 2017 WALLIX
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// DO NOT EDIT
+// This file was automatically generated with go generate
+package awsat
+
+import "github.com/wallix/awless/aws/spec"
+
+type AcceptanceFactory struct {
+	Mock interface{}
+}
+
+func NewAcceptanceFactory(mock interface{}) *AcceptanceFactory {
+	return &AcceptanceFactory{Mock: mock}
+}
+
+func (f *AcceptanceFactory) Build(key string) func() interface{} {
+	switch key {
+		{{- range $cmdName, $cmd := . }}
+		case "{{ $cmd.Action }}{{ $cmd.Entity }}":
+			return func() interface{} {
+				cmd := awsspec.New{{ $cmdName }}(nil)
+				cmd.SetApi(f.Mock.({{$cmd.API}}iface.{{ ApiToInterface $cmd.API }}))
+				return cmd
+			}
+		{{- end}}
+	}
+	return nil
+}
+`
 
 const atMocksTemplate = `/* Copyright 2017 WALLIX
 

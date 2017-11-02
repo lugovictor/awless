@@ -62,6 +62,7 @@ func main() {
 	generateNewDrivers()
 	generateNewDriversTests()
 	generateAcceptanceMocks()
+	generateAcceptanceCommandsBuilder()
 	generateDriverFuncs()
 	generateTemplateTemplates()
 	generateDriverTypes()
