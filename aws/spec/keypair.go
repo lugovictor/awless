@@ -58,8 +58,6 @@ func (cmd *CreateKeypair) ValidateName() error {
 	return nil
 }
 
-var keyGenerationFunction func(size int, encryptKey bool) ([]byte, []byte, error) = console.GenerateSSHKeyPair
-
 func (cmd *CreateKeypair) BeforeRun(ctx, params map[string]interface{}) error {
 	var encryptedMsg string
 	var encrypted bool
@@ -71,7 +69,7 @@ func (cmd *CreateKeypair) BeforeRun(ctx, params map[string]interface{}) error {
 
 	cmd.logger.Infof("Generating locally a%s RSA 4096 bits keypair...", encryptedMsg)
 	start := time.Now()
-	pub, priv, err := keyGenerationFunction(4096, encrypted)
+	pub, priv, err := console.GenerateSSHKeyPair(4096, encrypted)
 	cmd.logger.ExtraVerbosef("4096 bits key generation took %s", time.Since(start))
 	if err != nil {
 		return fmt.Errorf("generating key: %s", err)
