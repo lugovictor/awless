@@ -1,150 +1,9 @@
 package awsspec
 
 import (
-	"fmt"
-	"net/url"
 	"reflect"
 	"testing"
-
-	"github.com/aws/aws-sdk-go/service/iam"
 )
-
-func init() {
-	genTestsParams["createpolicy"] = map[string]interface{}{
-		"name":        "AwlessInfraReadonlyPolicy",
-		"effect":      "Allow",
-		"action":      []interface{}{"ec2:Describe*", "autoscaling:Describe*", "elasticloadbalancing:Describe*"},
-		"resource":    []interface{}{"arn:aws:iam::0123456789:mfa/${aws:username}", "arn:aws:iam::0123456789:user/${aws:username}"},
-		"conditions":  []interface{}{"aws:MultiFactorAuthPresent==true", "aws:TokenIssueTime!=Null"},
-		"description": "Readonly access to infra resources",
-	}
-	genTestsExpected["createpolicy"] = &iam.CreatePolicyInput{
-		PolicyName:  String("AwlessInfraReadonlyPolicy"),
-		Description: String("Readonly access to infra resources"),
-		PolicyDocument: String(`{
- "Version": "2012-10-17",
- "Statement": [
-  {
-   "Effect": "Allow",
-   "Action": [
-    "ec2:Describe*",
-    "autoscaling:Describe*",
-    "elasticloadbalancing:Describe*"
-   ],
-   "Resource": [
-    "arn:aws:iam::0123456789:mfa/${aws:username}",
-    "arn:aws:iam::0123456789:user/${aws:username}"
-   ],
-   "Condition": {
-    "Bool": {
-     "aws:MultiFactorAuthPresent": "true"
-    },
-    "Null": {
-     "aws:TokenIssueTime": "false"
-    }
-   }
-  }
- ]
-}`),
-	}
-	genTestsOutputExtractFunc["createpolicy"] = func() interface{} {
-		return &iam.CreatePolicyOutput{Policy: &iam.Policy{Arn: String("mynewpolicy")}}
-	}
-	genTestsOutput["createpolicy"] = "mynewpolicy"
-
-	genTestsParams["updatepolicy"] = map[string]interface{}{
-		"arn":        "updatepolicy-arn-policy",
-		"effect":     "Deny",
-		"action":     []interface{}{"ec2:AttachVolume", "DescribeVolumeAttribute"},
-		"resource":   "arn:aws:ec2:eu-west-1:0123456789:volume/*",
-		"conditions": "aws:MultiFactorAuthPresent==true",
-	}
-	genTestsExpected["updatepolicy"] = &iam.CreatePolicyVersionInput{
-		PolicyArn:    String("updatepolicy-arn-policy"),
-		SetAsDefault: Bool(true),
-		PolicyDocument: String(`{
- "Version": "2012-10-17",
- "Statement": [
-  {
-   "Effect": "Allow",
-   "Action": [
-    "ec2:AttachVolume",
-    "ec2:DetachVolume"
-   ],
-   "Resource": "arn:aws:ec2:eu-west-1:0123456789:instance/*",
-   "Condition": {
-    "StringEquals": {
-     "ec2:ResourceTag/department": "dev"
-    },
-    "Null": {
-     "aws:TokenIssueTime": "false"
-    }
-   }
-  },
-  {
-   "Effect": "Allow",
-   "Action": [
-    "ec2:AttachVolume",
-    "ec2:DetachVolume"
-   ],
-   "Resource": "arn:aws:ec2:eu-west-1:0123456789:volume/*",
-   "Condition": {
-    "StringEquals": {
-     "ec2:ResourceTag/volume_user": "${aws:username}"
-    }
-   }
-  },
-  {
-   "Effect": "Deny",
-   "Action": [
-    "ec2:AttachVolume",
-    "DescribeVolumeAttribute"
-   ],
-   "Resource": [
-    "arn:aws:ec2:eu-west-1:0123456789:volume/*"
-   ],
-   "Condition": {
-    "Bool": {
-     "aws:MultiFactorAuthPresent": "true"
-    }
-   }
-  }
- ]
-}`),
-	}
-
-	genTestsParams["deletepolicy"] = map[string]interface{}{
-		"arn":          "arn-policy-to-delete",
-		"all-versions": "true",
-	}
-	genTestsExpected["deletepolicy"] = &iam.DeletePolicyInput{
-		PolicyArn: String("arn-policy-to-delete"),
-	}
-	genTestsExpected["deletepolicy.v1"] = &iam.DeletePolicyVersionInput{
-		VersionId: String("v1"),
-		PolicyArn: String("arn-policy-to-delete"),
-	}
-
-	genTestsParams["attachpolicy"] = map[string]interface{}{
-		"group":   "administrators",
-		"access":  "readonly",
-		"service": "ec2",
-	}
-	genTestsExpected["attachpolicy"] = &iam.AttachGroupPolicyInput{
-		GroupName: String("administrators"),
-		PolicyArn: String("arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"),
-	}
-
-	genTestsParams["detachpolicy"] = map[string]interface{}{
-		"group":   "administrators",
-		"access":  "readonly",
-		"service": "ec2",
-	}
-	genTestsExpected["detachpolicy"] = &iam.DetachGroupPolicyInput{
-		GroupName: String("administrators"),
-		PolicyArn: String("arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"),
-	}
-}
 
 func TestAttachPolicy(t *testing.T) {
 	attach := &AttachPolicy{}
@@ -157,81 +16,48 @@ func TestAttachPolicy(t *testing.T) {
 	})
 }
 
-func (m *mockIam) ListPolicyVersions(input *iam.ListPolicyVersionsInput) (*iam.ListPolicyVersionsOutput, error) {
-	if StringValue(input.PolicyArn) == "updatepolicy-arn-policy" {
-		return &iam.ListPolicyVersionsOutput{Versions: []*iam.PolicyVersion{
-			{VersionId: String("v2"), IsDefaultVersion: Bool(true)},
-		}}, nil
+func TestBuildPolicyConditions(t *testing.T) {
+	tcases := []struct {
+		input  string
+		output *policyCondition
+	}{
+		{"aws:UserAgent==Example Corp Java Client", &policyCondition{Type: "StringEquals", Key: "aws:UserAgent", Value: "Example Corp Java Client"}},
+		{"aws:UserAgent!=Example Corp Java Client", &policyCondition{Type: "StringNotEquals", Key: "aws:UserAgent", Value: "Example Corp Java Client"}},
+		{"s3:prefix=~'home/'", &policyCondition{Type: "StringLike", Key: "s3:prefix", Value: "home/"}},
+		{"s3:prefix!~\"\"", &policyCondition{Type: "StringNotLike", Key: "s3:prefix", Value: ""}},
+		{"s3:prefix!~", &policyCondition{Type: "StringNotLike", Key: "s3:prefix", Value: ""}},
+		{"s3:max-keys==10", &policyCondition{Type: "NumericEquals", Key: "s3:max-keys", Value: "10"}},
+		{"s3:max-keys!=10", &policyCondition{Type: "NumericNotEquals", Key: "s3:max-keys", Value: "10"}},
+		{"s3:max-keys<10", &policyCondition{Type: "NumericLessThan", Key: "s3:max-keys", Value: "10"}},
+		{"s3:max-keys<=10", &policyCondition{Type: "NumericLessThanEquals", Key: "s3:max-keys", Value: "10"}},
+		{"s3:max-keys>10", &policyCondition{Type: "NumericGreaterThan", Key: "s3:max-keys", Value: "10"}},
+		{"s3:max-keys>=10", &policyCondition{Type: "NumericGreaterThanEquals", Key: "s3:max-keys", Value: "10"}},
+		{"aws:CurrentTime==2013-06-30T00:00:00Z", &policyCondition{Type: "DateEquals", Key: "aws:CurrentTime", Value: "2013-06-30T00:00:00Z"}},
+		{"aws:CurrentTime!=2013-06-30T00:00:00Z", &policyCondition{Type: "DateNotEquals", Key: "aws:CurrentTime", Value: "2013-06-30T00:00:00Z"}},
+		{"aws:CurrentTime<2013-06-30T00:00:00Z", &policyCondition{Type: "DateLessThan", Key: "aws:CurrentTime", Value: "2013-06-30T00:00:00Z"}},
+		{"aws:CurrentTime<=2013-06-30T00:00:00Z", &policyCondition{Type: "DateLessThanEquals", Key: "aws:CurrentTime", Value: "2013-06-30T00:00:00Z"}},
+		{"aws:CurrentTime>2013-06-30T00:00:00Z", &policyCondition{Type: "DateGreaterThan", Key: "aws:CurrentTime", Value: "2013-06-30T00:00:00Z"}},
+		{"aws:CurrentTime>=2013-06-30T00:00:00Z", &policyCondition{Type: "DateGreaterThanEquals", Key: "aws:CurrentTime", Value: "2013-06-30T00:00:00Z"}},
+		{"aws:SecureTransport==true", &policyCondition{Type: "Bool", Key: "aws:SecureTransport", Value: "true"}},
+		{"aws:SecureTransport!=true", &policyCondition{Type: "Bool", Key: "aws:SecureTransport", Value: "false"}},
+		{"aws:binarykey==QmluYXJ5VmFsdWVJbkJhc2U2NA==", &policyCondition{Type: "BinaryEquals", Key: "aws:binarykey", Value: "QmluYXJ5VmFsdWVJbkJhc2U2NA=="}},
+		{"aws:SourceIp==203.0.113.0/24", &policyCondition{Type: "IpAddress", Key: "aws:SourceIp", Value: "203.0.113.0/24"}},
+		{"aws:SourceIp!=203.0.113.0", &policyCondition{Type: "NotIpAddress", Key: "aws:SourceIp", Value: "203.0.113.0"}},
+		{"aws:SourceIp==2001:DB8:1234:5678::/64", &policyCondition{Type: "IpAddress", Key: "aws:SourceIp", Value: "2001:DB8:1234:5678::/64"}},
+		{"aws:SourceArn==arn:aws:sns:REGION:123456789012:TOPIC-ID", &policyCondition{Type: "ArnEquals", Key: "aws:SourceArn", Value: "arn:aws:sns:REGION:123456789012:TOPIC-ID"}},
+		{"aws:SourceArn!=arn:aws:sns:*:*:TOPIC-ID", &policyCondition{Type: "ArnNotEquals", Key: "aws:SourceArn", Value: "arn:aws:sns:*:*:TOPIC-ID"}},
+		{"aws:SourceArn=~arn:aws:sns:*:*:TOPIC-ID", &policyCondition{Type: "ArnLike", Key: "aws:SourceArn", Value: "arn:aws:sns:*:*:TOPIC-ID"}},
+		{"aws:SourceArn!~arn:aws:sns:*:*:TOPIC-ID", &policyCondition{Type: "ArnNotLike", Key: "aws:SourceArn", Value: "arn:aws:sns:*:*:TOPIC-ID"}},
+		{"aws:TokenIssueTime==Null", &policyCondition{Type: "Null", Key: "aws:TokenIssueTime", Value: "true"}},
+		{"aws:TokenIssueTime!=Null", &policyCondition{Type: "Null", Key: "aws:TokenIssueTime", Value: "false"}},
 	}
-	if StringValue(input.PolicyArn) == "arn-policy-to-delete" {
-		return &iam.ListPolicyVersionsOutput{Versions: []*iam.PolicyVersion{
-			{VersionId: String("v1"), IsDefaultVersion: Bool(false)},
-			{VersionId: String("v2"), IsDefaultVersion: Bool(true)},
-		}}, nil
+	for i, tcase := range tcases {
+		cond, err := parseCondition(tcase.input)
+		if err != nil {
+			t.Fatalf("%d: %s", i+1, err)
+		}
+		if got, want := cond, tcase.output; !reflect.DeepEqual(got, want) {
+			t.Fatalf("%d: got %#v, want %#v", i+1, got, want)
+		}
 	}
-	return nil, fmt.Errorf("ListPolicyVersions mock: can not find policy with arn '%s'", StringValue(input.PolicyArn))
-}
-
-func (m *mockIam) GetPolicyVersion(input *iam.GetPolicyVersionInput) (*iam.GetPolicyVersionOutput, error) {
-	if StringValue(input.PolicyArn) == "updatepolicy-arn-policy" {
-		return &iam.GetPolicyVersionOutput{PolicyVersion: &iam.PolicyVersion{
-			Document: String(url.QueryEscape(`{
-		 "Version": "2012-10-17",
-		 "Statement": [
-		  {
-		   "Effect": "Allow",
-		   "Action": [
-		    "ec2:AttachVolume",
-		    "ec2:DetachVolume"
-		   ],
-		   "Resource": "arn:aws:ec2:eu-west-1:0123456789:instance/*",
-		   "Condition": {
-		    "StringEquals": {
-		     "ec2:ResourceTag/department": "dev"
-		    },
-		    "Null": {
-		     "aws:TokenIssueTime": "false"
-		    }
-		   }
-		  },
-		  {
-		   "Effect": "Allow",
-		   "Action": [
-		    "ec2:AttachVolume",
-		    "ec2:DetachVolume"
-		   ],
-		   "Resource": "arn:aws:ec2:eu-west-1:0123456789:volume/*",
-		   "Condition": {
-		    "StringEquals": {
-		     "ec2:ResourceTag/volume_user": "${aws:username}"}
-		    }
-		  }
-		 ]
-		}`)),
-			IsDefaultVersion: Bool(true),
-			VersionId:        String("v2"),
-		}}, nil
-	}
-	return nil, fmt.Errorf("GetPolicyVersion mock: can not find policy with arn '%s'", StringValue(input.PolicyArn))
-}
-
-func (m *mockIam) DeletePolicyVersion(input *iam.DeletePolicyVersionInput) (*iam.DeletePolicyVersionOutput, error) {
-	if got, want := input, genTestsExpected["deletepolicy.v1"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	return nil, nil
-}
-
-func (m *mockIam) AttachGroupPolicy(input *iam.AttachGroupPolicyInput) (*iam.AttachGroupPolicyOutput, error) {
-	if got, want := input, genTestsExpected["attachpolicy"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	return nil, nil
-}
-
-func (m *mockIam) DetachGroupPolicy(input *iam.DetachGroupPolicyInput) (*iam.DetachGroupPolicyOutput, error) {
-	if got, want := input, genTestsExpected["detachpolicy"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	return nil, nil
 }
