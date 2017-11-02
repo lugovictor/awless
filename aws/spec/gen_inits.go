@@ -47,6 +47,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCheckInstance(f.Sess, f.Log) }
 	case "checksecuritygroup":
 		return func() interface{} { return NewCheckSecuritygroup(f.Sess, f.Log) }
+	case "createaccesskey":
+		return func() interface{} { return NewCreateAccesskey(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -69,6 +71,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateTag(f.Sess, f.Log) }
 	case "createvpc":
 		return func() interface{} { return NewCreateVpc(f.Sess, f.Log) }
+	case "deleteaccesskey":
+		return func() interface{} { return NewDeleteAccesskey(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -116,6 +120,7 @@ var (
 	_ command = &AttachSecuritygroup{}
 	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
+	_ command = &CreateAccesskey{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -127,6 +132,7 @@ var (
 	_ command = &CreateSubnet{}
 	_ command = &CreateTag{}
 	_ command = &CreateVpc{}
+	_ command = &DeleteAccesskey{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}

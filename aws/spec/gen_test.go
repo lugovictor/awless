@@ -81,14 +81,16 @@ var (
 	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
 		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newUpdateSubnet = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
-	newAttachPolicy = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreateGroup  = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreatePolicy = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeleteGroup  = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeletePolicy = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDetachPolicy = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newUpdatePolicy = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newUpdateSubnet    = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newAttachPolicy    = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateAccesskey = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateGroup     = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreatePolicy    = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteAccesskey = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteGroup     = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeletePolicy    = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachPolicy    = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newUpdatePolicy    = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 )
 
 type mockEc2 struct {
@@ -308,6 +310,16 @@ func (m *mockEc2) ModifySubnetAttribute(input *ec2.ModifySubnetAttributeInput) (
 	return nil, nil
 }
 
+func (m *mockIam) CreateAccessKey(input *iam.CreateAccessKeyInput) (*iam.CreateAccessKeyOutput, error) {
+	if got, want := input, genTestsExpected["createaccesskey"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createaccesskey"]; ok {
+		return outFunc().(*iam.CreateAccessKeyOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) CreateGroup(input *iam.CreateGroupInput) (*iam.CreateGroupOutput, error) {
 	if got, want := input, genTestsExpected["creategroup"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -324,6 +336,16 @@ func (m *mockIam) CreatePolicy(input *iam.CreatePolicyInput) (*iam.CreatePolicyO
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["createpolicy"]; ok {
 		return outFunc().(*iam.CreatePolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) DeleteAccessKey(input *iam.DeleteAccessKeyInput) (*iam.DeleteAccessKeyOutput, error) {
+	if got, want := input, genTestsExpected["deleteaccesskey"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteaccesskey"]; ok {
+		return outFunc().(*iam.DeleteAccessKeyOutput), nil
 	}
 	return nil, nil
 }

@@ -69,6 +69,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createaccesskey":
+		return func() interface{} {
+			cmd := awsspec.NewCreateAccesskey(nil)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "creategroup":
 		return func() interface{} {
 			cmd := awsspec.NewCreateGroup(nil)
@@ -133,6 +139,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateVpc(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deleteaccesskey":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteAccesskey(nil)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
 	case "deletegroup":

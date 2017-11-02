@@ -501,6 +501,80 @@ func (cmd *CheckSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateAccesskey(sess *session.Session, l ...*logger.Logger) *CreateAccesskey {
+	cmd := new(CreateAccesskey)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateAccesskey) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateAccesskey) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.CreateAccessKeyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.CreateAccessKeyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateAccessKey(input)
+	cmd.logger.ExtraVerbosef("iam.CreateAccessKey call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateAccesskey) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateAccesskey) ParamsHelp() string {
+	return generateParamsHelp("createaccesskey", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateAccesskey) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateGroup(sess *session.Session, l ...*logger.Logger) *CreateGroup {
 	cmd := new(CreateGroup)
 	if len(l) > 0 {
@@ -1481,6 +1555,80 @@ func (cmd *CreateVpc) ParamsHelp() string {
 }
 
 func (cmd *CreateVpc) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteAccesskey(sess *session.Session, l ...*logger.Logger) *DeleteAccesskey {
+	cmd := new(DeleteAccesskey)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteAccesskey) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteAccesskey) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.DeleteAccessKeyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.DeleteAccessKeyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteAccessKey(input)
+	cmd.logger.ExtraVerbosef("iam.DeleteAccessKey call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteAccesskey) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteAccesskey) ParamsHelp() string {
+	return generateParamsHelp("deleteaccesskey", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteAccesskey) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
