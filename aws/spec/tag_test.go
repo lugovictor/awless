@@ -10,32 +10,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-func init() {
-	genTestsParams["createtag"] = map[string]interface{}{
-		"key":      "MyKey",
-		"resource": "res.createtag",
-		"value":    "MyValue",
-	}
-	genTestsExpected["createtag"] = &ec2.CreateTagsInput{
-		Resources: []*string{String("res.createtag")},
-		Tags: []*ec2.Tag{
-			{Key: String("MyKey"), Value: String("MyValue")},
-		},
-	}
-
-	genTestsParams["deletetag"] = map[string]interface{}{
-		"key":      "MyKey",
-		"resource": "my-vpc-id",
-		"value":    "MyValue",
-	}
-	genTestsExpected["deletetag"] = &ec2.DeleteTagsInput{
-		Resources: []*string{String("my-vpc-id")},
-		Tags: []*ec2.Tag{
-			{Key: String("MyKey"), Value: String("MyValue")},
-		},
-	}
-}
-
 func (m *mockEc2) CreateTagsRequest(input *ec2.CreateTagsInput) (req *request.Request, output *ec2.CreateTagsOutput) {
 	output = &ec2.CreateTagsOutput{}
 	req = request.New(aws.Config{}, metadata.ClientInfo{}, request.Handlers{}, nil, &request.Operation{}, input, output)

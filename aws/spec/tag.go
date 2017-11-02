@@ -78,7 +78,7 @@ type DeleteTag struct {
 	api      ec2iface.EC2API
 	Resource *string `awsName:"Resources" awsType:"awsstringslice" templateName:"resource" required:""`
 	Key      *string `templateName:"key" required:""`
-	Value    *string `templateName:"value" required:""`
+	Value    *string `templateName:"value"`
 }
 
 func (cmd *DeleteTag) ValidateParams(params []string) ([]string, error) {
