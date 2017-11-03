@@ -20,23 +20,74 @@ func TestSecuritygroup(t *testing.T) {
 	})
 
 	t.Run("update", func(t *testing.T) {
-		Template("update securitygroup id=my-secgroup-id inbound=authorize protocol=tcp cidr=10.10.10.0/24 portrange=10-22").Mock(&ec2Mock{
-			AuthorizeSecurityGroupIngressFunc: func(input *ec2.AuthorizeSecurityGroupIngressInput) (*ec2.AuthorizeSecurityGroupIngressOutput, error) {
-				return nil, nil
-			}}).
-			ExpectInput("AuthorizeSecurityGroupIngress", &ec2.AuthorizeSecurityGroupIngressInput{
-				GroupId: String("my-secgroup-id"),
-				IpPermissions: []*ec2.IpPermission{
-					{
-						IpProtocol: String("tcp"),
-						IpRanges: []*ec2.IpRange{
-							{CidrIp: String("10.10.10.0/24")},
+		t.Run("inbound authorize", func(t *testing.T) {
+			Template("update securitygroup id=my-secgroup-id inbound=authorize protocol=tcp cidr=10.10.10.0/24 portrange=10-22").Mock(&ec2Mock{
+				AuthorizeSecurityGroupIngressFunc: func(input *ec2.AuthorizeSecurityGroupIngressInput) (*ec2.AuthorizeSecurityGroupIngressOutput, error) {
+					return nil, nil
+				}}).
+				ExpectInput("AuthorizeSecurityGroupIngress", &ec2.AuthorizeSecurityGroupIngressInput{
+					GroupId: String("my-secgroup-id"),
+					IpPermissions: []*ec2.IpPermission{
+						{
+							IpProtocol: String("tcp"),
+							IpRanges:   []*ec2.IpRange{{CidrIp: String("10.10.10.0/24")}},
+							FromPort:   Int64(10),
+							ToPort:     Int64(22),
 						},
-						FromPort: Int64(10),
-						ToPort:   Int64(22),
 					},
-				},
-			}).ExpectCalls("AuthorizeSecurityGroupIngress").Run(t)
+				}).ExpectCalls("AuthorizeSecurityGroupIngress").Run(t)
+		})
+		t.Run("inbound revoke", func(t *testing.T) {
+			Template("update securitygroup id=my-secgroup-id inbound=revoke protocol=tcp cidr=10.10.10.0/24 portrange=10-22").Mock(&ec2Mock{
+				RevokeSecurityGroupIngressFunc: func(input *ec2.RevokeSecurityGroupIngressInput) (*ec2.RevokeSecurityGroupIngressOutput, error) {
+					return nil, nil
+				}}).
+				ExpectInput("RevokeSecurityGroupIngress", &ec2.RevokeSecurityGroupIngressInput{
+					GroupId: String("my-secgroup-id"),
+					IpPermissions: []*ec2.IpPermission{
+						{
+							IpProtocol: String("tcp"),
+							IpRanges:   []*ec2.IpRange{{CidrIp: String("10.10.10.0/24")}},
+							FromPort:   Int64(10),
+							ToPort:     Int64(22),
+						},
+					},
+				}).ExpectCalls("RevokeSecurityGroupIngress").Run(t)
+		})
+		t.Run("outbound authorize", func(t *testing.T) {
+			Template("update securitygroup id=my-secgroup-id outbound=authorize protocol=tcp cidr=10.10.10.0/24 portrange=10-22").Mock(&ec2Mock{
+				AuthorizeSecurityGroupEgressFunc: func(input *ec2.AuthorizeSecurityGroupEgressInput) (*ec2.AuthorizeSecurityGroupEgressOutput, error) {
+					return nil, nil
+				}}).
+				ExpectInput("AuthorizeSecurityGroupEgress", &ec2.AuthorizeSecurityGroupEgressInput{
+					GroupId: String("my-secgroup-id"),
+					IpPermissions: []*ec2.IpPermission{
+						{
+							IpProtocol: String("tcp"),
+							IpRanges:   []*ec2.IpRange{{CidrIp: String("10.10.10.0/24")}},
+							FromPort:   Int64(10),
+							ToPort:     Int64(22),
+						},
+					},
+				}).ExpectCalls("AuthorizeSecurityGroupEgress").Run(t)
+		})
+		t.Run("outbound revoke", func(t *testing.T) {
+			Template("update securitygroup id=my-secgroup-id outbound=revoke protocol=tcp cidr=10.10.10.0/24 portrange=10-22").Mock(&ec2Mock{
+				RevokeSecurityGroupEgressFunc: func(input *ec2.RevokeSecurityGroupEgressInput) (*ec2.RevokeSecurityGroupEgressOutput, error) {
+					return nil, nil
+				}}).
+				ExpectInput("RevokeSecurityGroupEgress", &ec2.RevokeSecurityGroupEgressInput{
+					GroupId: String("my-secgroup-id"),
+					IpPermissions: []*ec2.IpPermission{
+						{
+							IpProtocol: String("tcp"),
+							IpRanges:   []*ec2.IpRange{{CidrIp: String("10.10.10.0/24")}},
+							FromPort:   Int64(10),
+							ToPort:     Int64(22),
+						},
+					},
+				}).ExpectCalls("RevokeSecurityGroupEgress").Run(t)
+		})
 	})
 
 	t.Run("delete", func(t *testing.T) {
@@ -87,5 +138,16 @@ func TestSecuritygroup(t *testing.T) {
 				InstanceId: String("secgroup-instance-id"),
 				Groups:     []*string{String("secgroup-1")},
 			}).ExpectCalls("DescribeInstanceAttribute", "ModifyInstanceAttribute").Run(t)
+	})
+
+	t.Run("check", func(t *testing.T) {
+		Template("check securitygroup id=my-secgroup-id state=unused timeout=0").Mock(&ec2Mock{
+			DescribeNetworkInterfacesFunc: func(input *ec2.DescribeNetworkInterfacesInput) (*ec2.DescribeNetworkInterfacesOutput, error) {
+				return &ec2.DescribeNetworkInterfacesOutput{
+					NetworkInterfaces: []*ec2.NetworkInterface{},
+				}, nil
+			}}).ExpectInput("DescribeNetworkInterfaces", &ec2.DescribeNetworkInterfacesInput{
+			Filters: []*ec2.Filter{{Name: String("group-id"), Values: []*string{String("my-secgroup-id")}}},
+		}).ExpectCalls("DescribeNetworkInterfaces").Run(t)
 	})
 }
