@@ -797,6 +797,80 @@ func (cmd *CreateAppscalingpolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateAppscalingtarget(sess *session.Session, l ...*logger.Logger) *CreateAppscalingtarget {
+	cmd := new(CreateAppscalingtarget)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = applicationautoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateAppscalingtarget) SetApi(api applicationautoscalingiface.ApplicationAutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateAppscalingtarget) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &applicationautoscaling.RegisterScalableTargetInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in applicationautoscaling.RegisterScalableTargetInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.RegisterScalableTarget(input)
+	cmd.logger.ExtraVerbosef("applicationautoscaling.RegisterScalableTarget call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateAppscalingtarget) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateAppscalingtarget) ParamsHelp() string {
+	return generateParamsHelp("createappscalingtarget", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateAppscalingtarget) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateGroup(sess *session.Session, l ...*logger.Logger) *CreateGroup {
 	cmd := new(CreateGroup)
 	if len(l) > 0 {
@@ -2073,6 +2147,80 @@ func (cmd *DeleteAppscalingpolicy) ParamsHelp() string {
 }
 
 func (cmd *DeleteAppscalingpolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteAppscalingtarget(sess *session.Session, l ...*logger.Logger) *DeleteAppscalingtarget {
+	cmd := new(DeleteAppscalingtarget)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = applicationautoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteAppscalingtarget) SetApi(api applicationautoscalingiface.ApplicationAutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteAppscalingtarget) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &applicationautoscaling.DeregisterScalableTargetInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in applicationautoscaling.DeregisterScalableTargetInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeregisterScalableTarget(input)
+	cmd.logger.ExtraVerbosef("applicationautoscaling.DeregisterScalableTarget call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteAppscalingtarget) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteAppscalingtarget) ParamsHelp() string {
+	return generateParamsHelp("deleteappscalingtarget", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteAppscalingtarget) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

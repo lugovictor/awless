@@ -45,8 +45,14 @@ var (
 	newCreateAppscalingpolicy = func() *CreateAppscalingpolicy {
 		return &CreateAppscalingpolicy{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
 	}
+	newCreateAppscalingtarget = func() *CreateAppscalingtarget {
+		return &CreateAppscalingtarget{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
+	}
 	newDeleteAppscalingpolicy = func() *DeleteAppscalingpolicy {
 		return &DeleteAppscalingpolicy{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
+	}
+	newDeleteAppscalingtarget = func() *DeleteAppscalingtarget {
+		return &DeleteAppscalingtarget{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
 	}
 	newAttachAlarm           = func() *AttachAlarm { return &AttachAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newCreateAlarm           = func() *CreateAlarm { return &CreateAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
@@ -139,12 +145,32 @@ func (m *mockApplicationautoscaling) PutScalingPolicy(input *applicationautoscal
 	return nil, nil
 }
 
+func (m *mockApplicationautoscaling) RegisterScalableTarget(input *applicationautoscaling.RegisterScalableTargetInput) (*applicationautoscaling.RegisterScalableTargetOutput, error) {
+	if got, want := input, genTestsExpected["createappscalingtarget"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createappscalingtarget"]; ok {
+		return outFunc().(*applicationautoscaling.RegisterScalableTargetOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockApplicationautoscaling) DeleteScalingPolicy(input *applicationautoscaling.DeleteScalingPolicyInput) (*applicationautoscaling.DeleteScalingPolicyOutput, error) {
 	if got, want := input, genTestsExpected["deleteappscalingpolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteappscalingpolicy"]; ok {
 		return outFunc().(*applicationautoscaling.DeleteScalingPolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockApplicationautoscaling) DeregisterScalableTarget(input *applicationautoscaling.DeregisterScalableTargetInput) (*applicationautoscaling.DeregisterScalableTargetOutput, error) {
+	if got, want := input, genTestsExpected["deleteappscalingtarget"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteappscalingtarget"]; ok {
+		return outFunc().(*applicationautoscaling.DeregisterScalableTargetOutput), nil
 	}
 	return nil, nil
 }

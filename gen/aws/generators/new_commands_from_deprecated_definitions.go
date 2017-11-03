@@ -163,6 +163,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+package awsspec
+
 import (
 	"github.com/wallix/awless/template"
 	awssdk "github.com/aws/aws-sdk-go/aws"

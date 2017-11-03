@@ -96,6 +96,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
 			return cmd
 		}
+	case "createappscalingtarget":
+		return func() interface{} {
+			cmd := awsspec.NewCreateAppscalingtarget(nil)
+			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
+			return cmd
+		}
 	case "creategroup":
 		return func() interface{} {
 			cmd := awsspec.NewCreateGroup(nil)
@@ -183,6 +189,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "deleteappscalingpolicy":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteAppscalingpolicy(nil)
+			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
+			return cmd
+		}
+	case "deleteappscalingtarget":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteAppscalingtarget(nil)
 			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
 			return cmd
 		}
