@@ -13,8 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// DO NOT EDIT
-// This file was automatically generated with go generate
 package awsspec
 
 import (

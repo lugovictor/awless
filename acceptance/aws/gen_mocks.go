@@ -20,6 +20,8 @@ package awsat
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
+	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -29,6 +31,158 @@ import (
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 )
+
+type applicationautoscalingMock struct {
+	basicMock
+	applicationautoscalingiface.ApplicationAutoScalingAPI
+	DeleteScalingPolicyFunc                  func(param0 *applicationautoscaling.DeleteScalingPolicyInput) (*applicationautoscaling.DeleteScalingPolicyOutput, error)
+	DeleteScalingPolicyRequestFunc           func(param0 *applicationautoscaling.DeleteScalingPolicyInput) (*request.Request, *applicationautoscaling.DeleteScalingPolicyOutput)
+	DeleteScalingPolicyWithContextFunc       func(param0 aws.Context, param1 *applicationautoscaling.DeleteScalingPolicyInput, param2 ...request.Option) (*applicationautoscaling.DeleteScalingPolicyOutput, error)
+	DeregisterScalableTargetFunc             func(param0 *applicationautoscaling.DeregisterScalableTargetInput) (*applicationautoscaling.DeregisterScalableTargetOutput, error)
+	DeregisterScalableTargetRequestFunc      func(param0 *applicationautoscaling.DeregisterScalableTargetInput) (*request.Request, *applicationautoscaling.DeregisterScalableTargetOutput)
+	DeregisterScalableTargetWithContextFunc  func(param0 aws.Context, param1 *applicationautoscaling.DeregisterScalableTargetInput, param2 ...request.Option) (*applicationautoscaling.DeregisterScalableTargetOutput, error)
+	DescribeScalableTargetsFunc              func(param0 *applicationautoscaling.DescribeScalableTargetsInput) (*applicationautoscaling.DescribeScalableTargetsOutput, error)
+	DescribeScalableTargetsRequestFunc       func(param0 *applicationautoscaling.DescribeScalableTargetsInput) (*request.Request, *applicationautoscaling.DescribeScalableTargetsOutput)
+	DescribeScalableTargetsWithContextFunc   func(param0 aws.Context, param1 *applicationautoscaling.DescribeScalableTargetsInput, param2 ...request.Option) (*applicationautoscaling.DescribeScalableTargetsOutput, error)
+	DescribeScalingActivitiesFunc            func(param0 *applicationautoscaling.DescribeScalingActivitiesInput) (*applicationautoscaling.DescribeScalingActivitiesOutput, error)
+	DescribeScalingActivitiesRequestFunc     func(param0 *applicationautoscaling.DescribeScalingActivitiesInput) (*request.Request, *applicationautoscaling.DescribeScalingActivitiesOutput)
+	DescribeScalingActivitiesWithContextFunc func(param0 aws.Context, param1 *applicationautoscaling.DescribeScalingActivitiesInput, param2 ...request.Option) (*applicationautoscaling.DescribeScalingActivitiesOutput, error)
+	DescribeScalingPoliciesFunc              func(param0 *applicationautoscaling.DescribeScalingPoliciesInput) (*applicationautoscaling.DescribeScalingPoliciesOutput, error)
+	DescribeScalingPoliciesRequestFunc       func(param0 *applicationautoscaling.DescribeScalingPoliciesInput) (*request.Request, *applicationautoscaling.DescribeScalingPoliciesOutput)
+	DescribeScalingPoliciesWithContextFunc   func(param0 aws.Context, param1 *applicationautoscaling.DescribeScalingPoliciesInput, param2 ...request.Option) (*applicationautoscaling.DescribeScalingPoliciesOutput, error)
+	PutScalingPolicyFunc                     func(param0 *applicationautoscaling.PutScalingPolicyInput) (*applicationautoscaling.PutScalingPolicyOutput, error)
+	PutScalingPolicyRequestFunc              func(param0 *applicationautoscaling.PutScalingPolicyInput) (*request.Request, *applicationautoscaling.PutScalingPolicyOutput)
+	PutScalingPolicyWithContextFunc          func(param0 aws.Context, param1 *applicationautoscaling.PutScalingPolicyInput, param2 ...request.Option) (*applicationautoscaling.PutScalingPolicyOutput, error)
+	RegisterScalableTargetFunc               func(param0 *applicationautoscaling.RegisterScalableTargetInput) (*applicationautoscaling.RegisterScalableTargetOutput, error)
+	RegisterScalableTargetRequestFunc        func(param0 *applicationautoscaling.RegisterScalableTargetInput) (*request.Request, *applicationautoscaling.RegisterScalableTargetOutput)
+	RegisterScalableTargetWithContextFunc    func(param0 aws.Context, param1 *applicationautoscaling.RegisterScalableTargetInput, param2 ...request.Option) (*applicationautoscaling.RegisterScalableTargetOutput, error)
+}
+
+func (m *applicationautoscalingMock) DeleteScalingPolicy(param0 *applicationautoscaling.DeleteScalingPolicyInput) (*applicationautoscaling.DeleteScalingPolicyOutput, error) {
+	m.addCall("DeleteScalingPolicy")
+	m.verifyInput("DeleteScalingPolicy", param0)
+	return m.DeleteScalingPolicyFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DeleteScalingPolicyRequest(param0 *applicationautoscaling.DeleteScalingPolicyInput) (*request.Request, *applicationautoscaling.DeleteScalingPolicyOutput) {
+	m.addCall("DeleteScalingPolicyRequest")
+	m.verifyInput("DeleteScalingPolicyRequest", param0)
+	return m.DeleteScalingPolicyRequestFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DeleteScalingPolicyWithContext(param0 aws.Context, param1 *applicationautoscaling.DeleteScalingPolicyInput, param2 ...request.Option) (*applicationautoscaling.DeleteScalingPolicyOutput, error) {
+	m.addCall("DeleteScalingPolicyWithContext")
+	m.verifyInput("DeleteScalingPolicyWithContext", param0)
+	return m.DeleteScalingPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *applicationautoscalingMock) DeregisterScalableTarget(param0 *applicationautoscaling.DeregisterScalableTargetInput) (*applicationautoscaling.DeregisterScalableTargetOutput, error) {
+	m.addCall("DeregisterScalableTarget")
+	m.verifyInput("DeregisterScalableTarget", param0)
+	return m.DeregisterScalableTargetFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DeregisterScalableTargetRequest(param0 *applicationautoscaling.DeregisterScalableTargetInput) (*request.Request, *applicationautoscaling.DeregisterScalableTargetOutput) {
+	m.addCall("DeregisterScalableTargetRequest")
+	m.verifyInput("DeregisterScalableTargetRequest", param0)
+	return m.DeregisterScalableTargetRequestFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DeregisterScalableTargetWithContext(param0 aws.Context, param1 *applicationautoscaling.DeregisterScalableTargetInput, param2 ...request.Option) (*applicationautoscaling.DeregisterScalableTargetOutput, error) {
+	m.addCall("DeregisterScalableTargetWithContext")
+	m.verifyInput("DeregisterScalableTargetWithContext", param0)
+	return m.DeregisterScalableTargetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *applicationautoscalingMock) DescribeScalableTargets(param0 *applicationautoscaling.DescribeScalableTargetsInput) (*applicationautoscaling.DescribeScalableTargetsOutput, error) {
+	m.addCall("DescribeScalableTargets")
+	m.verifyInput("DescribeScalableTargets", param0)
+	return m.DescribeScalableTargetsFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DescribeScalableTargetsRequest(param0 *applicationautoscaling.DescribeScalableTargetsInput) (*request.Request, *applicationautoscaling.DescribeScalableTargetsOutput) {
+	m.addCall("DescribeScalableTargetsRequest")
+	m.verifyInput("DescribeScalableTargetsRequest", param0)
+	return m.DescribeScalableTargetsRequestFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DescribeScalableTargetsWithContext(param0 aws.Context, param1 *applicationautoscaling.DescribeScalableTargetsInput, param2 ...request.Option) (*applicationautoscaling.DescribeScalableTargetsOutput, error) {
+	m.addCall("DescribeScalableTargetsWithContext")
+	m.verifyInput("DescribeScalableTargetsWithContext", param0)
+	return m.DescribeScalableTargetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *applicationautoscalingMock) DescribeScalingActivities(param0 *applicationautoscaling.DescribeScalingActivitiesInput) (*applicationautoscaling.DescribeScalingActivitiesOutput, error) {
+	m.addCall("DescribeScalingActivities")
+	m.verifyInput("DescribeScalingActivities", param0)
+	return m.DescribeScalingActivitiesFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DescribeScalingActivitiesRequest(param0 *applicationautoscaling.DescribeScalingActivitiesInput) (*request.Request, *applicationautoscaling.DescribeScalingActivitiesOutput) {
+	m.addCall("DescribeScalingActivitiesRequest")
+	m.verifyInput("DescribeScalingActivitiesRequest", param0)
+	return m.DescribeScalingActivitiesRequestFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DescribeScalingActivitiesWithContext(param0 aws.Context, param1 *applicationautoscaling.DescribeScalingActivitiesInput, param2 ...request.Option) (*applicationautoscaling.DescribeScalingActivitiesOutput, error) {
+	m.addCall("DescribeScalingActivitiesWithContext")
+	m.verifyInput("DescribeScalingActivitiesWithContext", param0)
+	return m.DescribeScalingActivitiesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *applicationautoscalingMock) DescribeScalingPolicies(param0 *applicationautoscaling.DescribeScalingPoliciesInput) (*applicationautoscaling.DescribeScalingPoliciesOutput, error) {
+	m.addCall("DescribeScalingPolicies")
+	m.verifyInput("DescribeScalingPolicies", param0)
+	return m.DescribeScalingPoliciesFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DescribeScalingPoliciesRequest(param0 *applicationautoscaling.DescribeScalingPoliciesInput) (*request.Request, *applicationautoscaling.DescribeScalingPoliciesOutput) {
+	m.addCall("DescribeScalingPoliciesRequest")
+	m.verifyInput("DescribeScalingPoliciesRequest", param0)
+	return m.DescribeScalingPoliciesRequestFunc(param0)
+}
+
+func (m *applicationautoscalingMock) DescribeScalingPoliciesWithContext(param0 aws.Context, param1 *applicationautoscaling.DescribeScalingPoliciesInput, param2 ...request.Option) (*applicationautoscaling.DescribeScalingPoliciesOutput, error) {
+	m.addCall("DescribeScalingPoliciesWithContext")
+	m.verifyInput("DescribeScalingPoliciesWithContext", param0)
+	return m.DescribeScalingPoliciesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *applicationautoscalingMock) PutScalingPolicy(param0 *applicationautoscaling.PutScalingPolicyInput) (*applicationautoscaling.PutScalingPolicyOutput, error) {
+	m.addCall("PutScalingPolicy")
+	m.verifyInput("PutScalingPolicy", param0)
+	return m.PutScalingPolicyFunc(param0)
+}
+
+func (m *applicationautoscalingMock) PutScalingPolicyRequest(param0 *applicationautoscaling.PutScalingPolicyInput) (*request.Request, *applicationautoscaling.PutScalingPolicyOutput) {
+	m.addCall("PutScalingPolicyRequest")
+	m.verifyInput("PutScalingPolicyRequest", param0)
+	return m.PutScalingPolicyRequestFunc(param0)
+}
+
+func (m *applicationautoscalingMock) PutScalingPolicyWithContext(param0 aws.Context, param1 *applicationautoscaling.PutScalingPolicyInput, param2 ...request.Option) (*applicationautoscaling.PutScalingPolicyOutput, error) {
+	m.addCall("PutScalingPolicyWithContext")
+	m.verifyInput("PutScalingPolicyWithContext", param0)
+	return m.PutScalingPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *applicationautoscalingMock) RegisterScalableTarget(param0 *applicationautoscaling.RegisterScalableTargetInput) (*applicationautoscaling.RegisterScalableTargetOutput, error) {
+	m.addCall("RegisterScalableTarget")
+	m.verifyInput("RegisterScalableTarget", param0)
+	return m.RegisterScalableTargetFunc(param0)
+}
+
+func (m *applicationautoscalingMock) RegisterScalableTargetRequest(param0 *applicationautoscaling.RegisterScalableTargetInput) (*request.Request, *applicationautoscaling.RegisterScalableTargetOutput) {
+	m.addCall("RegisterScalableTargetRequest")
+	m.verifyInput("RegisterScalableTargetRequest", param0)
+	return m.RegisterScalableTargetRequestFunc(param0)
+}
+
+func (m *applicationautoscalingMock) RegisterScalableTargetWithContext(param0 aws.Context, param1 *applicationautoscaling.RegisterScalableTargetInput, param2 ...request.Option) (*applicationautoscaling.RegisterScalableTargetOutput, error) {
+	m.addCall("RegisterScalableTargetWithContext")
+	m.verifyInput("RegisterScalableTargetWithContext", param0)
+	return m.RegisterScalableTargetWithContextFunc(param0, param1, param2...)
+}
 
 type cloudwatchMock struct {
 	basicMock

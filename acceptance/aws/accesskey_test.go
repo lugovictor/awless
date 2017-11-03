@@ -1,6 +1,7 @@
 package awsat
 
 import (
+	"os"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/service/iam"
@@ -8,6 +9,15 @@ import (
 
 func TestAccesskey(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
+		originalStdErr := os.Stderr
+		defer func() {
+			os.Stderr = originalStdErr
+		}()
+		devNull, err := os.OpenFile(os.DevNull, os.O_RDWR, 0777)
+		if err != nil {
+			panic(err)
+		}
+		os.Stderr = devNull
 		Template("create accesskey user=jdoe no-prompt=true").
 			Mock(&iamMock{
 				CreateAccessKeyFunc: func(*iam.CreateAccessKeyInput) (*iam.CreateAccessKeyOutput, error) {

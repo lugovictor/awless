@@ -557,13 +557,6 @@ func structSetter(s interface{}, params map[string]interface{}) error {
 					fieldType = awsstringslice
 				case reflect.Int64:
 					fieldType = awsint64slice
-				case reflect.Struct:
-					switch field.Type.Elem().Elem() {
-					case reflect.TypeOf(cloudwatch.Dimension{}):
-						fieldType = awsdimensionslice
-					default:
-						return fmt.Errorf("unknown struct type in slice %s for parameter %s", field.Type.String(), tplName)
-					}
 				default:
 					return fmt.Errorf("unknown type in slice %s for parameter %s", field.Type.String(), tplName)
 				}

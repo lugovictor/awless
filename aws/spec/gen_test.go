@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
+	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -40,6 +42,12 @@ var (
 	genTestsCleanupFunc       = make(map[string]func())
 	genTestsOutputExtractFunc = make(map[string]func() interface{})
 
+	newCreateAppscalingpolicy = func() *CreateAppscalingpolicy {
+		return &CreateAppscalingpolicy{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
+	}
+	newDeleteAppscalingpolicy = func() *DeleteAppscalingpolicy {
+		return &DeleteAppscalingpolicy{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
+	}
 	newAttachAlarm           = func() *AttachAlarm { return &AttachAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newCreateAlarm           = func() *CreateAlarm { return &CreateAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newDeleteAlarm           = func() *DeleteAlarm { return &DeleteAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
@@ -105,6 +113,9 @@ var (
 	newDeleteZone      = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 )
 
+type mockApplicationautoscaling struct {
+	applicationautoscalingiface.ApplicationAutoScalingAPI
+}
 type mockCloudwatch struct {
 	cloudwatchiface.CloudWatchAPI
 }
@@ -116,6 +127,26 @@ type mockIam struct {
 }
 type mockRoute53 struct {
 	route53iface.Route53API
+}
+
+func (m *mockApplicationautoscaling) PutScalingPolicy(input *applicationautoscaling.PutScalingPolicyInput) (*applicationautoscaling.PutScalingPolicyOutput, error) {
+	if got, want := input, genTestsExpected["createappscalingpolicy"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createappscalingpolicy"]; ok {
+		return outFunc().(*applicationautoscaling.PutScalingPolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockApplicationautoscaling) DeleteScalingPolicy(input *applicationautoscaling.DeleteScalingPolicyInput) (*applicationautoscaling.DeleteScalingPolicyOutput, error) {
+	if got, want := input, genTestsExpected["deleteappscalingpolicy"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteappscalingpolicy"]; ok {
+		return outFunc().(*applicationautoscaling.DeleteScalingPolicyOutput), nil
+	}
+	return nil, nil
 }
 
 func (m *mockCloudwatch) PutMetricAlarm(input *cloudwatch.PutMetricAlarmInput) (*cloudwatch.PutMetricAlarmOutput, error) {

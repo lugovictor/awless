@@ -18,6 +18,7 @@ limitations under the License.
 package awsat
 
 import (
+	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
@@ -87,6 +88,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateAlarm(nil)
 			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
+			return cmd
+		}
+	case "createappscalingpolicy":
+		return func() interface{} {
+			cmd := awsspec.NewCreateAppscalingpolicy(nil)
+			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
 			return cmd
 		}
 	case "creategroup":
@@ -171,6 +178,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteAlarm(nil)
 			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
+			return cmd
+		}
+	case "deleteappscalingpolicy":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteAppscalingpolicy(nil)
+			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
 			return cmd
 		}
 	case "deletegroup":

@@ -53,6 +53,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateAccesskey(f.Sess, f.Log) }
 	case "createalarm":
 		return func() interface{} { return NewCreateAlarm(f.Sess, f.Log) }
+	case "createappscalingpolicy":
+		return func() interface{} { return NewCreateAppscalingpolicy(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -81,6 +83,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteAccesskey(f.Sess, f.Log) }
 	case "deletealarm":
 		return func() interface{} { return NewDeleteAlarm(f.Sess, f.Log) }
+	case "deleteappscalingpolicy":
+		return func() interface{} { return NewDeleteAppscalingpolicy(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -139,6 +143,7 @@ var (
 	_ command = &CheckSecuritygroup{}
 	_ command = &CreateAccesskey{}
 	_ command = &CreateAlarm{}
+	_ command = &CreateAppscalingpolicy{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -153,6 +158,7 @@ var (
 	_ command = &CreateZone{}
 	_ command = &DeleteAccesskey{}
 	_ command = &DeleteAlarm{}
+	_ command = &DeleteAppscalingpolicy{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}

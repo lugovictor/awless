@@ -24,6 +24,8 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
+	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -718,6 +720,80 @@ func (cmd *CreateAlarm) ParamsHelp() string {
 }
 
 func (cmd *CreateAlarm) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateAppscalingpolicy(sess *session.Session, l ...*logger.Logger) *CreateAppscalingpolicy {
+	cmd := new(CreateAppscalingpolicy)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = applicationautoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateAppscalingpolicy) SetApi(api applicationautoscalingiface.ApplicationAutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateAppscalingpolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &applicationautoscaling.PutScalingPolicyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in applicationautoscaling.PutScalingPolicyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.PutScalingPolicy(input)
+	cmd.logger.ExtraVerbosef("applicationautoscaling.PutScalingPolicy call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateAppscalingpolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateAppscalingpolicy) ParamsHelp() string {
+	return generateParamsHelp("createappscalingpolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateAppscalingpolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -1923,6 +1999,80 @@ func (cmd *DeleteAlarm) ParamsHelp() string {
 }
 
 func (cmd *DeleteAlarm) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteAppscalingpolicy(sess *session.Session, l ...*logger.Logger) *DeleteAppscalingpolicy {
+	cmd := new(DeleteAppscalingpolicy)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = applicationautoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteAppscalingpolicy) SetApi(api applicationautoscalingiface.ApplicationAutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteAppscalingpolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &applicationautoscaling.DeleteScalingPolicyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in applicationautoscaling.DeleteScalingPolicyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteScalingPolicy(input)
+	cmd.logger.ExtraVerbosef("applicationautoscaling.DeleteScalingPolicy call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteAppscalingpolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteAppscalingpolicy) ParamsHelp() string {
+	return generateParamsHelp("deleteappscalingpolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteAppscalingpolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
