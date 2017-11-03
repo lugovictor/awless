@@ -30,6 +30,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
 type applicationautoscalingMock struct {
@@ -9743,4 +9745,1619 @@ func (m *route53Mock) WaitUntilResourceRecordSetsChangedWithContext(param0 aws.C
 	m.addCall("WaitUntilResourceRecordSetsChangedWithContext")
 	m.verifyInput("WaitUntilResourceRecordSetsChangedWithContext", param0)
 	return m.WaitUntilResourceRecordSetsChangedWithContextFunc(param0, param1, param2...)
+}
+
+type s3Mock struct {
+	basicMock
+	s3iface.S3API
+	AbortMultipartUploadFunc                          func(param0 *s3.AbortMultipartUploadInput) (*s3.AbortMultipartUploadOutput, error)
+	AbortMultipartUploadRequestFunc                   func(param0 *s3.AbortMultipartUploadInput) (*request.Request, *s3.AbortMultipartUploadOutput)
+	AbortMultipartUploadWithContextFunc               func(param0 aws.Context, param1 *s3.AbortMultipartUploadInput, param2 ...request.Option) (*s3.AbortMultipartUploadOutput, error)
+	CompleteMultipartUploadFunc                       func(param0 *s3.CompleteMultipartUploadInput) (*s3.CompleteMultipartUploadOutput, error)
+	CompleteMultipartUploadRequestFunc                func(param0 *s3.CompleteMultipartUploadInput) (*request.Request, *s3.CompleteMultipartUploadOutput)
+	CompleteMultipartUploadWithContextFunc            func(param0 aws.Context, param1 *s3.CompleteMultipartUploadInput, param2 ...request.Option) (*s3.CompleteMultipartUploadOutput, error)
+	CopyObjectFunc                                    func(param0 *s3.CopyObjectInput) (*s3.CopyObjectOutput, error)
+	CopyObjectRequestFunc                             func(param0 *s3.CopyObjectInput) (*request.Request, *s3.CopyObjectOutput)
+	CopyObjectWithContextFunc                         func(param0 aws.Context, param1 *s3.CopyObjectInput, param2 ...request.Option) (*s3.CopyObjectOutput, error)
+	CreateBucketFunc                                  func(param0 *s3.CreateBucketInput) (*s3.CreateBucketOutput, error)
+	CreateBucketRequestFunc                           func(param0 *s3.CreateBucketInput) (*request.Request, *s3.CreateBucketOutput)
+	CreateBucketWithContextFunc                       func(param0 aws.Context, param1 *s3.CreateBucketInput, param2 ...request.Option) (*s3.CreateBucketOutput, error)
+	CreateMultipartUploadFunc                         func(param0 *s3.CreateMultipartUploadInput) (*s3.CreateMultipartUploadOutput, error)
+	CreateMultipartUploadRequestFunc                  func(param0 *s3.CreateMultipartUploadInput) (*request.Request, *s3.CreateMultipartUploadOutput)
+	CreateMultipartUploadWithContextFunc              func(param0 aws.Context, param1 *s3.CreateMultipartUploadInput, param2 ...request.Option) (*s3.CreateMultipartUploadOutput, error)
+	DeleteBucketFunc                                  func(param0 *s3.DeleteBucketInput) (*s3.DeleteBucketOutput, error)
+	DeleteBucketAnalyticsConfigurationFunc            func(param0 *s3.DeleteBucketAnalyticsConfigurationInput) (*s3.DeleteBucketAnalyticsConfigurationOutput, error)
+	DeleteBucketAnalyticsConfigurationRequestFunc     func(param0 *s3.DeleteBucketAnalyticsConfigurationInput) (*request.Request, *s3.DeleteBucketAnalyticsConfigurationOutput)
+	DeleteBucketAnalyticsConfigurationWithContextFunc func(param0 aws.Context, param1 *s3.DeleteBucketAnalyticsConfigurationInput, param2 ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error)
+	DeleteBucketCorsFunc                              func(param0 *s3.DeleteBucketCorsInput) (*s3.DeleteBucketCorsOutput, error)
+	DeleteBucketCorsRequestFunc                       func(param0 *s3.DeleteBucketCorsInput) (*request.Request, *s3.DeleteBucketCorsOutput)
+	DeleteBucketCorsWithContextFunc                   func(param0 aws.Context, param1 *s3.DeleteBucketCorsInput, param2 ...request.Option) (*s3.DeleteBucketCorsOutput, error)
+	DeleteBucketInventoryConfigurationFunc            func(param0 *s3.DeleteBucketInventoryConfigurationInput) (*s3.DeleteBucketInventoryConfigurationOutput, error)
+	DeleteBucketInventoryConfigurationRequestFunc     func(param0 *s3.DeleteBucketInventoryConfigurationInput) (*request.Request, *s3.DeleteBucketInventoryConfigurationOutput)
+	DeleteBucketInventoryConfigurationWithContextFunc func(param0 aws.Context, param1 *s3.DeleteBucketInventoryConfigurationInput, param2 ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error)
+	DeleteBucketLifecycleFunc                         func(param0 *s3.DeleteBucketLifecycleInput) (*s3.DeleteBucketLifecycleOutput, error)
+	DeleteBucketLifecycleRequestFunc                  func(param0 *s3.DeleteBucketLifecycleInput) (*request.Request, *s3.DeleteBucketLifecycleOutput)
+	DeleteBucketLifecycleWithContextFunc              func(param0 aws.Context, param1 *s3.DeleteBucketLifecycleInput, param2 ...request.Option) (*s3.DeleteBucketLifecycleOutput, error)
+	DeleteBucketMetricsConfigurationFunc              func(param0 *s3.DeleteBucketMetricsConfigurationInput) (*s3.DeleteBucketMetricsConfigurationOutput, error)
+	DeleteBucketMetricsConfigurationRequestFunc       func(param0 *s3.DeleteBucketMetricsConfigurationInput) (*request.Request, *s3.DeleteBucketMetricsConfigurationOutput)
+	DeleteBucketMetricsConfigurationWithContextFunc   func(param0 aws.Context, param1 *s3.DeleteBucketMetricsConfigurationInput, param2 ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error)
+	DeleteBucketPolicyFunc                            func(param0 *s3.DeleteBucketPolicyInput) (*s3.DeleteBucketPolicyOutput, error)
+	DeleteBucketPolicyRequestFunc                     func(param0 *s3.DeleteBucketPolicyInput) (*request.Request, *s3.DeleteBucketPolicyOutput)
+	DeleteBucketPolicyWithContextFunc                 func(param0 aws.Context, param1 *s3.DeleteBucketPolicyInput, param2 ...request.Option) (*s3.DeleteBucketPolicyOutput, error)
+	DeleteBucketReplicationFunc                       func(param0 *s3.DeleteBucketReplicationInput) (*s3.DeleteBucketReplicationOutput, error)
+	DeleteBucketReplicationRequestFunc                func(param0 *s3.DeleteBucketReplicationInput) (*request.Request, *s3.DeleteBucketReplicationOutput)
+	DeleteBucketReplicationWithContextFunc            func(param0 aws.Context, param1 *s3.DeleteBucketReplicationInput, param2 ...request.Option) (*s3.DeleteBucketReplicationOutput, error)
+	DeleteBucketRequestFunc                           func(param0 *s3.DeleteBucketInput) (*request.Request, *s3.DeleteBucketOutput)
+	DeleteBucketTaggingFunc                           func(param0 *s3.DeleteBucketTaggingInput) (*s3.DeleteBucketTaggingOutput, error)
+	DeleteBucketTaggingRequestFunc                    func(param0 *s3.DeleteBucketTaggingInput) (*request.Request, *s3.DeleteBucketTaggingOutput)
+	DeleteBucketTaggingWithContextFunc                func(param0 aws.Context, param1 *s3.DeleteBucketTaggingInput, param2 ...request.Option) (*s3.DeleteBucketTaggingOutput, error)
+	DeleteBucketWebsiteFunc                           func(param0 *s3.DeleteBucketWebsiteInput) (*s3.DeleteBucketWebsiteOutput, error)
+	DeleteBucketWebsiteRequestFunc                    func(param0 *s3.DeleteBucketWebsiteInput) (*request.Request, *s3.DeleteBucketWebsiteOutput)
+	DeleteBucketWebsiteWithContextFunc                func(param0 aws.Context, param1 *s3.DeleteBucketWebsiteInput, param2 ...request.Option) (*s3.DeleteBucketWebsiteOutput, error)
+	DeleteBucketWithContextFunc                       func(param0 aws.Context, param1 *s3.DeleteBucketInput, param2 ...request.Option) (*s3.DeleteBucketOutput, error)
+	DeleteObjectFunc                                  func(param0 *s3.DeleteObjectInput) (*s3.DeleteObjectOutput, error)
+	DeleteObjectRequestFunc                           func(param0 *s3.DeleteObjectInput) (*request.Request, *s3.DeleteObjectOutput)
+	DeleteObjectTaggingFunc                           func(param0 *s3.DeleteObjectTaggingInput) (*s3.DeleteObjectTaggingOutput, error)
+	DeleteObjectTaggingRequestFunc                    func(param0 *s3.DeleteObjectTaggingInput) (*request.Request, *s3.DeleteObjectTaggingOutput)
+	DeleteObjectTaggingWithContextFunc                func(param0 aws.Context, param1 *s3.DeleteObjectTaggingInput, param2 ...request.Option) (*s3.DeleteObjectTaggingOutput, error)
+	DeleteObjectWithContextFunc                       func(param0 aws.Context, param1 *s3.DeleteObjectInput, param2 ...request.Option) (*s3.DeleteObjectOutput, error)
+	DeleteObjectsFunc                                 func(param0 *s3.DeleteObjectsInput) (*s3.DeleteObjectsOutput, error)
+	DeleteObjectsRequestFunc                          func(param0 *s3.DeleteObjectsInput) (*request.Request, *s3.DeleteObjectsOutput)
+	DeleteObjectsWithContextFunc                      func(param0 aws.Context, param1 *s3.DeleteObjectsInput, param2 ...request.Option) (*s3.DeleteObjectsOutput, error)
+	GetBucketAccelerateConfigurationFunc              func(param0 *s3.GetBucketAccelerateConfigurationInput) (*s3.GetBucketAccelerateConfigurationOutput, error)
+	GetBucketAccelerateConfigurationRequestFunc       func(param0 *s3.GetBucketAccelerateConfigurationInput) (*request.Request, *s3.GetBucketAccelerateConfigurationOutput)
+	GetBucketAccelerateConfigurationWithContextFunc   func(param0 aws.Context, param1 *s3.GetBucketAccelerateConfigurationInput, param2 ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error)
+	GetBucketAclFunc                                  func(param0 *s3.GetBucketAclInput) (*s3.GetBucketAclOutput, error)
+	GetBucketAclRequestFunc                           func(param0 *s3.GetBucketAclInput) (*request.Request, *s3.GetBucketAclOutput)
+	GetBucketAclWithContextFunc                       func(param0 aws.Context, param1 *s3.GetBucketAclInput, param2 ...request.Option) (*s3.GetBucketAclOutput, error)
+	GetBucketAnalyticsConfigurationFunc               func(param0 *s3.GetBucketAnalyticsConfigurationInput) (*s3.GetBucketAnalyticsConfigurationOutput, error)
+	GetBucketAnalyticsConfigurationRequestFunc        func(param0 *s3.GetBucketAnalyticsConfigurationInput) (*request.Request, *s3.GetBucketAnalyticsConfigurationOutput)
+	GetBucketAnalyticsConfigurationWithContextFunc    func(param0 aws.Context, param1 *s3.GetBucketAnalyticsConfigurationInput, param2 ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error)
+	GetBucketCorsFunc                                 func(param0 *s3.GetBucketCorsInput) (*s3.GetBucketCorsOutput, error)
+	GetBucketCorsRequestFunc                          func(param0 *s3.GetBucketCorsInput) (*request.Request, *s3.GetBucketCorsOutput)
+	GetBucketCorsWithContextFunc                      func(param0 aws.Context, param1 *s3.GetBucketCorsInput, param2 ...request.Option) (*s3.GetBucketCorsOutput, error)
+	GetBucketInventoryConfigurationFunc               func(param0 *s3.GetBucketInventoryConfigurationInput) (*s3.GetBucketInventoryConfigurationOutput, error)
+	GetBucketInventoryConfigurationRequestFunc        func(param0 *s3.GetBucketInventoryConfigurationInput) (*request.Request, *s3.GetBucketInventoryConfigurationOutput)
+	GetBucketInventoryConfigurationWithContextFunc    func(param0 aws.Context, param1 *s3.GetBucketInventoryConfigurationInput, param2 ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error)
+	GetBucketLifecycleFunc                            func(param0 *s3.GetBucketLifecycleInput) (*s3.GetBucketLifecycleOutput, error)
+	GetBucketLifecycleConfigurationFunc               func(param0 *s3.GetBucketLifecycleConfigurationInput) (*s3.GetBucketLifecycleConfigurationOutput, error)
+	GetBucketLifecycleConfigurationRequestFunc        func(param0 *s3.GetBucketLifecycleConfigurationInput) (*request.Request, *s3.GetBucketLifecycleConfigurationOutput)
+	GetBucketLifecycleConfigurationWithContextFunc    func(param0 aws.Context, param1 *s3.GetBucketLifecycleConfigurationInput, param2 ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error)
+	GetBucketLifecycleRequestFunc                     func(param0 *s3.GetBucketLifecycleInput) (*request.Request, *s3.GetBucketLifecycleOutput)
+	GetBucketLifecycleWithContextFunc                 func(param0 aws.Context, param1 *s3.GetBucketLifecycleInput, param2 ...request.Option) (*s3.GetBucketLifecycleOutput, error)
+	GetBucketLocationFunc                             func(param0 *s3.GetBucketLocationInput) (*s3.GetBucketLocationOutput, error)
+	GetBucketLocationRequestFunc                      func(param0 *s3.GetBucketLocationInput) (*request.Request, *s3.GetBucketLocationOutput)
+	GetBucketLocationWithContextFunc                  func(param0 aws.Context, param1 *s3.GetBucketLocationInput, param2 ...request.Option) (*s3.GetBucketLocationOutput, error)
+	GetBucketLoggingFunc                              func(param0 *s3.GetBucketLoggingInput) (*s3.GetBucketLoggingOutput, error)
+	GetBucketLoggingRequestFunc                       func(param0 *s3.GetBucketLoggingInput) (*request.Request, *s3.GetBucketLoggingOutput)
+	GetBucketLoggingWithContextFunc                   func(param0 aws.Context, param1 *s3.GetBucketLoggingInput, param2 ...request.Option) (*s3.GetBucketLoggingOutput, error)
+	GetBucketMetricsConfigurationFunc                 func(param0 *s3.GetBucketMetricsConfigurationInput) (*s3.GetBucketMetricsConfigurationOutput, error)
+	GetBucketMetricsConfigurationRequestFunc          func(param0 *s3.GetBucketMetricsConfigurationInput) (*request.Request, *s3.GetBucketMetricsConfigurationOutput)
+	GetBucketMetricsConfigurationWithContextFunc      func(param0 aws.Context, param1 *s3.GetBucketMetricsConfigurationInput, param2 ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error)
+	GetBucketNotificationFunc                         func(param0 *s3.GetBucketNotificationConfigurationRequest) (*s3.NotificationConfigurationDeprecated, error)
+	GetBucketNotificationConfigurationFunc            func(param0 *s3.GetBucketNotificationConfigurationRequest) (*s3.NotificationConfiguration, error)
+	GetBucketNotificationConfigurationRequestFunc     func(param0 *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfiguration)
+	GetBucketNotificationConfigurationWithContextFunc func(param0 aws.Context, param1 *s3.GetBucketNotificationConfigurationRequest, param2 ...request.Option) (*s3.NotificationConfiguration, error)
+	GetBucketNotificationRequestFunc                  func(param0 *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfigurationDeprecated)
+	GetBucketNotificationWithContextFunc              func(param0 aws.Context, param1 *s3.GetBucketNotificationConfigurationRequest, param2 ...request.Option) (*s3.NotificationConfigurationDeprecated, error)
+	GetBucketPolicyFunc                               func(param0 *s3.GetBucketPolicyInput) (*s3.GetBucketPolicyOutput, error)
+	GetBucketPolicyRequestFunc                        func(param0 *s3.GetBucketPolicyInput) (*request.Request, *s3.GetBucketPolicyOutput)
+	GetBucketPolicyWithContextFunc                    func(param0 aws.Context, param1 *s3.GetBucketPolicyInput, param2 ...request.Option) (*s3.GetBucketPolicyOutput, error)
+	GetBucketReplicationFunc                          func(param0 *s3.GetBucketReplicationInput) (*s3.GetBucketReplicationOutput, error)
+	GetBucketReplicationRequestFunc                   func(param0 *s3.GetBucketReplicationInput) (*request.Request, *s3.GetBucketReplicationOutput)
+	GetBucketReplicationWithContextFunc               func(param0 aws.Context, param1 *s3.GetBucketReplicationInput, param2 ...request.Option) (*s3.GetBucketReplicationOutput, error)
+	GetBucketRequestPaymentFunc                       func(param0 *s3.GetBucketRequestPaymentInput) (*s3.GetBucketRequestPaymentOutput, error)
+	GetBucketRequestPaymentRequestFunc                func(param0 *s3.GetBucketRequestPaymentInput) (*request.Request, *s3.GetBucketRequestPaymentOutput)
+	GetBucketRequestPaymentWithContextFunc            func(param0 aws.Context, param1 *s3.GetBucketRequestPaymentInput, param2 ...request.Option) (*s3.GetBucketRequestPaymentOutput, error)
+	GetBucketTaggingFunc                              func(param0 *s3.GetBucketTaggingInput) (*s3.GetBucketTaggingOutput, error)
+	GetBucketTaggingRequestFunc                       func(param0 *s3.GetBucketTaggingInput) (*request.Request, *s3.GetBucketTaggingOutput)
+	GetBucketTaggingWithContextFunc                   func(param0 aws.Context, param1 *s3.GetBucketTaggingInput, param2 ...request.Option) (*s3.GetBucketTaggingOutput, error)
+	GetBucketVersioningFunc                           func(param0 *s3.GetBucketVersioningInput) (*s3.GetBucketVersioningOutput, error)
+	GetBucketVersioningRequestFunc                    func(param0 *s3.GetBucketVersioningInput) (*request.Request, *s3.GetBucketVersioningOutput)
+	GetBucketVersioningWithContextFunc                func(param0 aws.Context, param1 *s3.GetBucketVersioningInput, param2 ...request.Option) (*s3.GetBucketVersioningOutput, error)
+	GetBucketWebsiteFunc                              func(param0 *s3.GetBucketWebsiteInput) (*s3.GetBucketWebsiteOutput, error)
+	GetBucketWebsiteRequestFunc                       func(param0 *s3.GetBucketWebsiteInput) (*request.Request, *s3.GetBucketWebsiteOutput)
+	GetBucketWebsiteWithContextFunc                   func(param0 aws.Context, param1 *s3.GetBucketWebsiteInput, param2 ...request.Option) (*s3.GetBucketWebsiteOutput, error)
+	GetObjectFunc                                     func(param0 *s3.GetObjectInput) (*s3.GetObjectOutput, error)
+	GetObjectAclFunc                                  func(param0 *s3.GetObjectAclInput) (*s3.GetObjectAclOutput, error)
+	GetObjectAclRequestFunc                           func(param0 *s3.GetObjectAclInput) (*request.Request, *s3.GetObjectAclOutput)
+	GetObjectAclWithContextFunc                       func(param0 aws.Context, param1 *s3.GetObjectAclInput, param2 ...request.Option) (*s3.GetObjectAclOutput, error)
+	GetObjectRequestFunc                              func(param0 *s3.GetObjectInput) (*request.Request, *s3.GetObjectOutput)
+	GetObjectTaggingFunc                              func(param0 *s3.GetObjectTaggingInput) (*s3.GetObjectTaggingOutput, error)
+	GetObjectTaggingRequestFunc                       func(param0 *s3.GetObjectTaggingInput) (*request.Request, *s3.GetObjectTaggingOutput)
+	GetObjectTaggingWithContextFunc                   func(param0 aws.Context, param1 *s3.GetObjectTaggingInput, param2 ...request.Option) (*s3.GetObjectTaggingOutput, error)
+	GetObjectTorrentFunc                              func(param0 *s3.GetObjectTorrentInput) (*s3.GetObjectTorrentOutput, error)
+	GetObjectTorrentRequestFunc                       func(param0 *s3.GetObjectTorrentInput) (*request.Request, *s3.GetObjectTorrentOutput)
+	GetObjectTorrentWithContextFunc                   func(param0 aws.Context, param1 *s3.GetObjectTorrentInput, param2 ...request.Option) (*s3.GetObjectTorrentOutput, error)
+	GetObjectWithContextFunc                          func(param0 aws.Context, param1 *s3.GetObjectInput, param2 ...request.Option) (*s3.GetObjectOutput, error)
+	HeadBucketFunc                                    func(param0 *s3.HeadBucketInput) (*s3.HeadBucketOutput, error)
+	HeadBucketRequestFunc                             func(param0 *s3.HeadBucketInput) (*request.Request, *s3.HeadBucketOutput)
+	HeadBucketWithContextFunc                         func(param0 aws.Context, param1 *s3.HeadBucketInput, param2 ...request.Option) (*s3.HeadBucketOutput, error)
+	HeadObjectFunc                                    func(param0 *s3.HeadObjectInput) (*s3.HeadObjectOutput, error)
+	HeadObjectRequestFunc                             func(param0 *s3.HeadObjectInput) (*request.Request, *s3.HeadObjectOutput)
+	HeadObjectWithContextFunc                         func(param0 aws.Context, param1 *s3.HeadObjectInput, param2 ...request.Option) (*s3.HeadObjectOutput, error)
+	ListBucketAnalyticsConfigurationsFunc             func(param0 *s3.ListBucketAnalyticsConfigurationsInput) (*s3.ListBucketAnalyticsConfigurationsOutput, error)
+	ListBucketAnalyticsConfigurationsRequestFunc      func(param0 *s3.ListBucketAnalyticsConfigurationsInput) (*request.Request, *s3.ListBucketAnalyticsConfigurationsOutput)
+	ListBucketAnalyticsConfigurationsWithContextFunc  func(param0 aws.Context, param1 *s3.ListBucketAnalyticsConfigurationsInput, param2 ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error)
+	ListBucketInventoryConfigurationsFunc             func(param0 *s3.ListBucketInventoryConfigurationsInput) (*s3.ListBucketInventoryConfigurationsOutput, error)
+	ListBucketInventoryConfigurationsRequestFunc      func(param0 *s3.ListBucketInventoryConfigurationsInput) (*request.Request, *s3.ListBucketInventoryConfigurationsOutput)
+	ListBucketInventoryConfigurationsWithContextFunc  func(param0 aws.Context, param1 *s3.ListBucketInventoryConfigurationsInput, param2 ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error)
+	ListBucketMetricsConfigurationsFunc               func(param0 *s3.ListBucketMetricsConfigurationsInput) (*s3.ListBucketMetricsConfigurationsOutput, error)
+	ListBucketMetricsConfigurationsRequestFunc        func(param0 *s3.ListBucketMetricsConfigurationsInput) (*request.Request, *s3.ListBucketMetricsConfigurationsOutput)
+	ListBucketMetricsConfigurationsWithContextFunc    func(param0 aws.Context, param1 *s3.ListBucketMetricsConfigurationsInput, param2 ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error)
+	ListBucketsFunc                                   func(param0 *s3.ListBucketsInput) (*s3.ListBucketsOutput, error)
+	ListBucketsRequestFunc                            func(param0 *s3.ListBucketsInput) (*request.Request, *s3.ListBucketsOutput)
+	ListBucketsWithContextFunc                        func(param0 aws.Context, param1 *s3.ListBucketsInput, param2 ...request.Option) (*s3.ListBucketsOutput, error)
+	ListMultipartUploadsFunc                          func(param0 *s3.ListMultipartUploadsInput) (*s3.ListMultipartUploadsOutput, error)
+	ListMultipartUploadsRequestFunc                   func(param0 *s3.ListMultipartUploadsInput) (*request.Request, *s3.ListMultipartUploadsOutput)
+	ListMultipartUploadsWithContextFunc               func(param0 aws.Context, param1 *s3.ListMultipartUploadsInput, param2 ...request.Option) (*s3.ListMultipartUploadsOutput, error)
+	ListObjectVersionsFunc                            func(param0 *s3.ListObjectVersionsInput) (*s3.ListObjectVersionsOutput, error)
+	ListObjectVersionsRequestFunc                     func(param0 *s3.ListObjectVersionsInput) (*request.Request, *s3.ListObjectVersionsOutput)
+	ListObjectVersionsWithContextFunc                 func(param0 aws.Context, param1 *s3.ListObjectVersionsInput, param2 ...request.Option) (*s3.ListObjectVersionsOutput, error)
+	ListObjectsFunc                                   func(param0 *s3.ListObjectsInput) (*s3.ListObjectsOutput, error)
+	ListObjectsRequestFunc                            func(param0 *s3.ListObjectsInput) (*request.Request, *s3.ListObjectsOutput)
+	ListObjectsV2Func                                 func(param0 *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error)
+	ListObjectsV2RequestFunc                          func(param0 *s3.ListObjectsV2Input) (*request.Request, *s3.ListObjectsV2Output)
+	ListObjectsV2WithContextFunc                      func(param0 aws.Context, param1 *s3.ListObjectsV2Input, param2 ...request.Option) (*s3.ListObjectsV2Output, error)
+	ListObjectsWithContextFunc                        func(param0 aws.Context, param1 *s3.ListObjectsInput, param2 ...request.Option) (*s3.ListObjectsOutput, error)
+	ListPartsFunc                                     func(param0 *s3.ListPartsInput) (*s3.ListPartsOutput, error)
+	ListPartsRequestFunc                              func(param0 *s3.ListPartsInput) (*request.Request, *s3.ListPartsOutput)
+	ListPartsWithContextFunc                          func(param0 aws.Context, param1 *s3.ListPartsInput, param2 ...request.Option) (*s3.ListPartsOutput, error)
+	PutBucketAccelerateConfigurationFunc              func(param0 *s3.PutBucketAccelerateConfigurationInput) (*s3.PutBucketAccelerateConfigurationOutput, error)
+	PutBucketAccelerateConfigurationRequestFunc       func(param0 *s3.PutBucketAccelerateConfigurationInput) (*request.Request, *s3.PutBucketAccelerateConfigurationOutput)
+	PutBucketAccelerateConfigurationWithContextFunc   func(param0 aws.Context, param1 *s3.PutBucketAccelerateConfigurationInput, param2 ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error)
+	PutBucketAclFunc                                  func(param0 *s3.PutBucketAclInput) (*s3.PutBucketAclOutput, error)
+	PutBucketAclRequestFunc                           func(param0 *s3.PutBucketAclInput) (*request.Request, *s3.PutBucketAclOutput)
+	PutBucketAclWithContextFunc                       func(param0 aws.Context, param1 *s3.PutBucketAclInput, param2 ...request.Option) (*s3.PutBucketAclOutput, error)
+	PutBucketAnalyticsConfigurationFunc               func(param0 *s3.PutBucketAnalyticsConfigurationInput) (*s3.PutBucketAnalyticsConfigurationOutput, error)
+	PutBucketAnalyticsConfigurationRequestFunc        func(param0 *s3.PutBucketAnalyticsConfigurationInput) (*request.Request, *s3.PutBucketAnalyticsConfigurationOutput)
+	PutBucketAnalyticsConfigurationWithContextFunc    func(param0 aws.Context, param1 *s3.PutBucketAnalyticsConfigurationInput, param2 ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error)
+	PutBucketCorsFunc                                 func(param0 *s3.PutBucketCorsInput) (*s3.PutBucketCorsOutput, error)
+	PutBucketCorsRequestFunc                          func(param0 *s3.PutBucketCorsInput) (*request.Request, *s3.PutBucketCorsOutput)
+	PutBucketCorsWithContextFunc                      func(param0 aws.Context, param1 *s3.PutBucketCorsInput, param2 ...request.Option) (*s3.PutBucketCorsOutput, error)
+	PutBucketInventoryConfigurationFunc               func(param0 *s3.PutBucketInventoryConfigurationInput) (*s3.PutBucketInventoryConfigurationOutput, error)
+	PutBucketInventoryConfigurationRequestFunc        func(param0 *s3.PutBucketInventoryConfigurationInput) (*request.Request, *s3.PutBucketInventoryConfigurationOutput)
+	PutBucketInventoryConfigurationWithContextFunc    func(param0 aws.Context, param1 *s3.PutBucketInventoryConfigurationInput, param2 ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error)
+	PutBucketLifecycleFunc                            func(param0 *s3.PutBucketLifecycleInput) (*s3.PutBucketLifecycleOutput, error)
+	PutBucketLifecycleConfigurationFunc               func(param0 *s3.PutBucketLifecycleConfigurationInput) (*s3.PutBucketLifecycleConfigurationOutput, error)
+	PutBucketLifecycleConfigurationRequestFunc        func(param0 *s3.PutBucketLifecycleConfigurationInput) (*request.Request, *s3.PutBucketLifecycleConfigurationOutput)
+	PutBucketLifecycleConfigurationWithContextFunc    func(param0 aws.Context, param1 *s3.PutBucketLifecycleConfigurationInput, param2 ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error)
+	PutBucketLifecycleRequestFunc                     func(param0 *s3.PutBucketLifecycleInput) (*request.Request, *s3.PutBucketLifecycleOutput)
+	PutBucketLifecycleWithContextFunc                 func(param0 aws.Context, param1 *s3.PutBucketLifecycleInput, param2 ...request.Option) (*s3.PutBucketLifecycleOutput, error)
+	PutBucketLoggingFunc                              func(param0 *s3.PutBucketLoggingInput) (*s3.PutBucketLoggingOutput, error)
+	PutBucketLoggingRequestFunc                       func(param0 *s3.PutBucketLoggingInput) (*request.Request, *s3.PutBucketLoggingOutput)
+	PutBucketLoggingWithContextFunc                   func(param0 aws.Context, param1 *s3.PutBucketLoggingInput, param2 ...request.Option) (*s3.PutBucketLoggingOutput, error)
+	PutBucketMetricsConfigurationFunc                 func(param0 *s3.PutBucketMetricsConfigurationInput) (*s3.PutBucketMetricsConfigurationOutput, error)
+	PutBucketMetricsConfigurationRequestFunc          func(param0 *s3.PutBucketMetricsConfigurationInput) (*request.Request, *s3.PutBucketMetricsConfigurationOutput)
+	PutBucketMetricsConfigurationWithContextFunc      func(param0 aws.Context, param1 *s3.PutBucketMetricsConfigurationInput, param2 ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error)
+	PutBucketNotificationFunc                         func(param0 *s3.PutBucketNotificationInput) (*s3.PutBucketNotificationOutput, error)
+	PutBucketNotificationConfigurationFunc            func(param0 *s3.PutBucketNotificationConfigurationInput) (*s3.PutBucketNotificationConfigurationOutput, error)
+	PutBucketNotificationConfigurationRequestFunc     func(param0 *s3.PutBucketNotificationConfigurationInput) (*request.Request, *s3.PutBucketNotificationConfigurationOutput)
+	PutBucketNotificationConfigurationWithContextFunc func(param0 aws.Context, param1 *s3.PutBucketNotificationConfigurationInput, param2 ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error)
+	PutBucketNotificationRequestFunc                  func(param0 *s3.PutBucketNotificationInput) (*request.Request, *s3.PutBucketNotificationOutput)
+	PutBucketNotificationWithContextFunc              func(param0 aws.Context, param1 *s3.PutBucketNotificationInput, param2 ...request.Option) (*s3.PutBucketNotificationOutput, error)
+	PutBucketPolicyFunc                               func(param0 *s3.PutBucketPolicyInput) (*s3.PutBucketPolicyOutput, error)
+	PutBucketPolicyRequestFunc                        func(param0 *s3.PutBucketPolicyInput) (*request.Request, *s3.PutBucketPolicyOutput)
+	PutBucketPolicyWithContextFunc                    func(param0 aws.Context, param1 *s3.PutBucketPolicyInput, param2 ...request.Option) (*s3.PutBucketPolicyOutput, error)
+	PutBucketReplicationFunc                          func(param0 *s3.PutBucketReplicationInput) (*s3.PutBucketReplicationOutput, error)
+	PutBucketReplicationRequestFunc                   func(param0 *s3.PutBucketReplicationInput) (*request.Request, *s3.PutBucketReplicationOutput)
+	PutBucketReplicationWithContextFunc               func(param0 aws.Context, param1 *s3.PutBucketReplicationInput, param2 ...request.Option) (*s3.PutBucketReplicationOutput, error)
+	PutBucketRequestPaymentFunc                       func(param0 *s3.PutBucketRequestPaymentInput) (*s3.PutBucketRequestPaymentOutput, error)
+	PutBucketRequestPaymentRequestFunc                func(param0 *s3.PutBucketRequestPaymentInput) (*request.Request, *s3.PutBucketRequestPaymentOutput)
+	PutBucketRequestPaymentWithContextFunc            func(param0 aws.Context, param1 *s3.PutBucketRequestPaymentInput, param2 ...request.Option) (*s3.PutBucketRequestPaymentOutput, error)
+	PutBucketTaggingFunc                              func(param0 *s3.PutBucketTaggingInput) (*s3.PutBucketTaggingOutput, error)
+	PutBucketTaggingRequestFunc                       func(param0 *s3.PutBucketTaggingInput) (*request.Request, *s3.PutBucketTaggingOutput)
+	PutBucketTaggingWithContextFunc                   func(param0 aws.Context, param1 *s3.PutBucketTaggingInput, param2 ...request.Option) (*s3.PutBucketTaggingOutput, error)
+	PutBucketVersioningFunc                           func(param0 *s3.PutBucketVersioningInput) (*s3.PutBucketVersioningOutput, error)
+	PutBucketVersioningRequestFunc                    func(param0 *s3.PutBucketVersioningInput) (*request.Request, *s3.PutBucketVersioningOutput)
+	PutBucketVersioningWithContextFunc                func(param0 aws.Context, param1 *s3.PutBucketVersioningInput, param2 ...request.Option) (*s3.PutBucketVersioningOutput, error)
+	PutBucketWebsiteFunc                              func(param0 *s3.PutBucketWebsiteInput) (*s3.PutBucketWebsiteOutput, error)
+	PutBucketWebsiteRequestFunc                       func(param0 *s3.PutBucketWebsiteInput) (*request.Request, *s3.PutBucketWebsiteOutput)
+	PutBucketWebsiteWithContextFunc                   func(param0 aws.Context, param1 *s3.PutBucketWebsiteInput, param2 ...request.Option) (*s3.PutBucketWebsiteOutput, error)
+	PutObjectFunc                                     func(param0 *s3.PutObjectInput) (*s3.PutObjectOutput, error)
+	PutObjectAclFunc                                  func(param0 *s3.PutObjectAclInput) (*s3.PutObjectAclOutput, error)
+	PutObjectAclRequestFunc                           func(param0 *s3.PutObjectAclInput) (*request.Request, *s3.PutObjectAclOutput)
+	PutObjectAclWithContextFunc                       func(param0 aws.Context, param1 *s3.PutObjectAclInput, param2 ...request.Option) (*s3.PutObjectAclOutput, error)
+	PutObjectRequestFunc                              func(param0 *s3.PutObjectInput) (*request.Request, *s3.PutObjectOutput)
+	PutObjectTaggingFunc                              func(param0 *s3.PutObjectTaggingInput) (*s3.PutObjectTaggingOutput, error)
+	PutObjectTaggingRequestFunc                       func(param0 *s3.PutObjectTaggingInput) (*request.Request, *s3.PutObjectTaggingOutput)
+	PutObjectTaggingWithContextFunc                   func(param0 aws.Context, param1 *s3.PutObjectTaggingInput, param2 ...request.Option) (*s3.PutObjectTaggingOutput, error)
+	PutObjectWithContextFunc                          func(param0 aws.Context, param1 *s3.PutObjectInput, param2 ...request.Option) (*s3.PutObjectOutput, error)
+	RestoreObjectFunc                                 func(param0 *s3.RestoreObjectInput) (*s3.RestoreObjectOutput, error)
+	RestoreObjectRequestFunc                          func(param0 *s3.RestoreObjectInput) (*request.Request, *s3.RestoreObjectOutput)
+	RestoreObjectWithContextFunc                      func(param0 aws.Context, param1 *s3.RestoreObjectInput, param2 ...request.Option) (*s3.RestoreObjectOutput, error)
+	UploadPartFunc                                    func(param0 *s3.UploadPartInput) (*s3.UploadPartOutput, error)
+	UploadPartCopyFunc                                func(param0 *s3.UploadPartCopyInput) (*s3.UploadPartCopyOutput, error)
+	UploadPartCopyRequestFunc                         func(param0 *s3.UploadPartCopyInput) (*request.Request, *s3.UploadPartCopyOutput)
+	UploadPartCopyWithContextFunc                     func(param0 aws.Context, param1 *s3.UploadPartCopyInput, param2 ...request.Option) (*s3.UploadPartCopyOutput, error)
+	UploadPartRequestFunc                             func(param0 *s3.UploadPartInput) (*request.Request, *s3.UploadPartOutput)
+	UploadPartWithContextFunc                         func(param0 aws.Context, param1 *s3.UploadPartInput, param2 ...request.Option) (*s3.UploadPartOutput, error)
+	WaitUntilBucketExistsFunc                         func(param0 *s3.HeadBucketInput) error
+	WaitUntilBucketExistsWithContextFunc              func(param0 aws.Context, param1 *s3.HeadBucketInput, param2 ...request.WaiterOption) error
+	WaitUntilBucketNotExistsFunc                      func(param0 *s3.HeadBucketInput) error
+	WaitUntilBucketNotExistsWithContextFunc           func(param0 aws.Context, param1 *s3.HeadBucketInput, param2 ...request.WaiterOption) error
+	WaitUntilObjectExistsFunc                         func(param0 *s3.HeadObjectInput) error
+	WaitUntilObjectExistsWithContextFunc              func(param0 aws.Context, param1 *s3.HeadObjectInput, param2 ...request.WaiterOption) error
+	WaitUntilObjectNotExistsFunc                      func(param0 *s3.HeadObjectInput) error
+	WaitUntilObjectNotExistsWithContextFunc           func(param0 aws.Context, param1 *s3.HeadObjectInput, param2 ...request.WaiterOption) error
+}
+
+func (m *s3Mock) AbortMultipartUpload(param0 *s3.AbortMultipartUploadInput) (*s3.AbortMultipartUploadOutput, error) {
+	m.addCall("AbortMultipartUpload")
+	m.verifyInput("AbortMultipartUpload", param0)
+	return m.AbortMultipartUploadFunc(param0)
+}
+
+func (m *s3Mock) AbortMultipartUploadRequest(param0 *s3.AbortMultipartUploadInput) (*request.Request, *s3.AbortMultipartUploadOutput) {
+	m.addCall("AbortMultipartUploadRequest")
+	m.verifyInput("AbortMultipartUploadRequest", param0)
+	return m.AbortMultipartUploadRequestFunc(param0)
+}
+
+func (m *s3Mock) AbortMultipartUploadWithContext(param0 aws.Context, param1 *s3.AbortMultipartUploadInput, param2 ...request.Option) (*s3.AbortMultipartUploadOutput, error) {
+	m.addCall("AbortMultipartUploadWithContext")
+	m.verifyInput("AbortMultipartUploadWithContext", param0)
+	return m.AbortMultipartUploadWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) CompleteMultipartUpload(param0 *s3.CompleteMultipartUploadInput) (*s3.CompleteMultipartUploadOutput, error) {
+	m.addCall("CompleteMultipartUpload")
+	m.verifyInput("CompleteMultipartUpload", param0)
+	return m.CompleteMultipartUploadFunc(param0)
+}
+
+func (m *s3Mock) CompleteMultipartUploadRequest(param0 *s3.CompleteMultipartUploadInput) (*request.Request, *s3.CompleteMultipartUploadOutput) {
+	m.addCall("CompleteMultipartUploadRequest")
+	m.verifyInput("CompleteMultipartUploadRequest", param0)
+	return m.CompleteMultipartUploadRequestFunc(param0)
+}
+
+func (m *s3Mock) CompleteMultipartUploadWithContext(param0 aws.Context, param1 *s3.CompleteMultipartUploadInput, param2 ...request.Option) (*s3.CompleteMultipartUploadOutput, error) {
+	m.addCall("CompleteMultipartUploadWithContext")
+	m.verifyInput("CompleteMultipartUploadWithContext", param0)
+	return m.CompleteMultipartUploadWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) CopyObject(param0 *s3.CopyObjectInput) (*s3.CopyObjectOutput, error) {
+	m.addCall("CopyObject")
+	m.verifyInput("CopyObject", param0)
+	return m.CopyObjectFunc(param0)
+}
+
+func (m *s3Mock) CopyObjectRequest(param0 *s3.CopyObjectInput) (*request.Request, *s3.CopyObjectOutput) {
+	m.addCall("CopyObjectRequest")
+	m.verifyInput("CopyObjectRequest", param0)
+	return m.CopyObjectRequestFunc(param0)
+}
+
+func (m *s3Mock) CopyObjectWithContext(param0 aws.Context, param1 *s3.CopyObjectInput, param2 ...request.Option) (*s3.CopyObjectOutput, error) {
+	m.addCall("CopyObjectWithContext")
+	m.verifyInput("CopyObjectWithContext", param0)
+	return m.CopyObjectWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) CreateBucket(param0 *s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
+	m.addCall("CreateBucket")
+	m.verifyInput("CreateBucket", param0)
+	return m.CreateBucketFunc(param0)
+}
+
+func (m *s3Mock) CreateBucketRequest(param0 *s3.CreateBucketInput) (*request.Request, *s3.CreateBucketOutput) {
+	m.addCall("CreateBucketRequest")
+	m.verifyInput("CreateBucketRequest", param0)
+	return m.CreateBucketRequestFunc(param0)
+}
+
+func (m *s3Mock) CreateBucketWithContext(param0 aws.Context, param1 *s3.CreateBucketInput, param2 ...request.Option) (*s3.CreateBucketOutput, error) {
+	m.addCall("CreateBucketWithContext")
+	m.verifyInput("CreateBucketWithContext", param0)
+	return m.CreateBucketWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) CreateMultipartUpload(param0 *s3.CreateMultipartUploadInput) (*s3.CreateMultipartUploadOutput, error) {
+	m.addCall("CreateMultipartUpload")
+	m.verifyInput("CreateMultipartUpload", param0)
+	return m.CreateMultipartUploadFunc(param0)
+}
+
+func (m *s3Mock) CreateMultipartUploadRequest(param0 *s3.CreateMultipartUploadInput) (*request.Request, *s3.CreateMultipartUploadOutput) {
+	m.addCall("CreateMultipartUploadRequest")
+	m.verifyInput("CreateMultipartUploadRequest", param0)
+	return m.CreateMultipartUploadRequestFunc(param0)
+}
+
+func (m *s3Mock) CreateMultipartUploadWithContext(param0 aws.Context, param1 *s3.CreateMultipartUploadInput, param2 ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
+	m.addCall("CreateMultipartUploadWithContext")
+	m.verifyInput("CreateMultipartUploadWithContext", param0)
+	return m.CreateMultipartUploadWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucket(param0 *s3.DeleteBucketInput) (*s3.DeleteBucketOutput, error) {
+	m.addCall("DeleteBucket")
+	m.verifyInput("DeleteBucket", param0)
+	return m.DeleteBucketFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketAnalyticsConfiguration(param0 *s3.DeleteBucketAnalyticsConfigurationInput) (*s3.DeleteBucketAnalyticsConfigurationOutput, error) {
+	m.addCall("DeleteBucketAnalyticsConfiguration")
+	m.verifyInput("DeleteBucketAnalyticsConfiguration", param0)
+	return m.DeleteBucketAnalyticsConfigurationFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketAnalyticsConfigurationRequest(param0 *s3.DeleteBucketAnalyticsConfigurationInput) (*request.Request, *s3.DeleteBucketAnalyticsConfigurationOutput) {
+	m.addCall("DeleteBucketAnalyticsConfigurationRequest")
+	m.verifyInput("DeleteBucketAnalyticsConfigurationRequest", param0)
+	return m.DeleteBucketAnalyticsConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketAnalyticsConfigurationWithContext(param0 aws.Context, param1 *s3.DeleteBucketAnalyticsConfigurationInput, param2 ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error) {
+	m.addCall("DeleteBucketAnalyticsConfigurationWithContext")
+	m.verifyInput("DeleteBucketAnalyticsConfigurationWithContext", param0)
+	return m.DeleteBucketAnalyticsConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketCors(param0 *s3.DeleteBucketCorsInput) (*s3.DeleteBucketCorsOutput, error) {
+	m.addCall("DeleteBucketCors")
+	m.verifyInput("DeleteBucketCors", param0)
+	return m.DeleteBucketCorsFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketCorsRequest(param0 *s3.DeleteBucketCorsInput) (*request.Request, *s3.DeleteBucketCorsOutput) {
+	m.addCall("DeleteBucketCorsRequest")
+	m.verifyInput("DeleteBucketCorsRequest", param0)
+	return m.DeleteBucketCorsRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketCorsWithContext(param0 aws.Context, param1 *s3.DeleteBucketCorsInput, param2 ...request.Option) (*s3.DeleteBucketCorsOutput, error) {
+	m.addCall("DeleteBucketCorsWithContext")
+	m.verifyInput("DeleteBucketCorsWithContext", param0)
+	return m.DeleteBucketCorsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketInventoryConfiguration(param0 *s3.DeleteBucketInventoryConfigurationInput) (*s3.DeleteBucketInventoryConfigurationOutput, error) {
+	m.addCall("DeleteBucketInventoryConfiguration")
+	m.verifyInput("DeleteBucketInventoryConfiguration", param0)
+	return m.DeleteBucketInventoryConfigurationFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketInventoryConfigurationRequest(param0 *s3.DeleteBucketInventoryConfigurationInput) (*request.Request, *s3.DeleteBucketInventoryConfigurationOutput) {
+	m.addCall("DeleteBucketInventoryConfigurationRequest")
+	m.verifyInput("DeleteBucketInventoryConfigurationRequest", param0)
+	return m.DeleteBucketInventoryConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketInventoryConfigurationWithContext(param0 aws.Context, param1 *s3.DeleteBucketInventoryConfigurationInput, param2 ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error) {
+	m.addCall("DeleteBucketInventoryConfigurationWithContext")
+	m.verifyInput("DeleteBucketInventoryConfigurationWithContext", param0)
+	return m.DeleteBucketInventoryConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketLifecycle(param0 *s3.DeleteBucketLifecycleInput) (*s3.DeleteBucketLifecycleOutput, error) {
+	m.addCall("DeleteBucketLifecycle")
+	m.verifyInput("DeleteBucketLifecycle", param0)
+	return m.DeleteBucketLifecycleFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketLifecycleRequest(param0 *s3.DeleteBucketLifecycleInput) (*request.Request, *s3.DeleteBucketLifecycleOutput) {
+	m.addCall("DeleteBucketLifecycleRequest")
+	m.verifyInput("DeleteBucketLifecycleRequest", param0)
+	return m.DeleteBucketLifecycleRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketLifecycleWithContext(param0 aws.Context, param1 *s3.DeleteBucketLifecycleInput, param2 ...request.Option) (*s3.DeleteBucketLifecycleOutput, error) {
+	m.addCall("DeleteBucketLifecycleWithContext")
+	m.verifyInput("DeleteBucketLifecycleWithContext", param0)
+	return m.DeleteBucketLifecycleWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketMetricsConfiguration(param0 *s3.DeleteBucketMetricsConfigurationInput) (*s3.DeleteBucketMetricsConfigurationOutput, error) {
+	m.addCall("DeleteBucketMetricsConfiguration")
+	m.verifyInput("DeleteBucketMetricsConfiguration", param0)
+	return m.DeleteBucketMetricsConfigurationFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketMetricsConfigurationRequest(param0 *s3.DeleteBucketMetricsConfigurationInput) (*request.Request, *s3.DeleteBucketMetricsConfigurationOutput) {
+	m.addCall("DeleteBucketMetricsConfigurationRequest")
+	m.verifyInput("DeleteBucketMetricsConfigurationRequest", param0)
+	return m.DeleteBucketMetricsConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketMetricsConfigurationWithContext(param0 aws.Context, param1 *s3.DeleteBucketMetricsConfigurationInput, param2 ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error) {
+	m.addCall("DeleteBucketMetricsConfigurationWithContext")
+	m.verifyInput("DeleteBucketMetricsConfigurationWithContext", param0)
+	return m.DeleteBucketMetricsConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketPolicy(param0 *s3.DeleteBucketPolicyInput) (*s3.DeleteBucketPolicyOutput, error) {
+	m.addCall("DeleteBucketPolicy")
+	m.verifyInput("DeleteBucketPolicy", param0)
+	return m.DeleteBucketPolicyFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketPolicyRequest(param0 *s3.DeleteBucketPolicyInput) (*request.Request, *s3.DeleteBucketPolicyOutput) {
+	m.addCall("DeleteBucketPolicyRequest")
+	m.verifyInput("DeleteBucketPolicyRequest", param0)
+	return m.DeleteBucketPolicyRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketPolicyWithContext(param0 aws.Context, param1 *s3.DeleteBucketPolicyInput, param2 ...request.Option) (*s3.DeleteBucketPolicyOutput, error) {
+	m.addCall("DeleteBucketPolicyWithContext")
+	m.verifyInput("DeleteBucketPolicyWithContext", param0)
+	return m.DeleteBucketPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketReplication(param0 *s3.DeleteBucketReplicationInput) (*s3.DeleteBucketReplicationOutput, error) {
+	m.addCall("DeleteBucketReplication")
+	m.verifyInput("DeleteBucketReplication", param0)
+	return m.DeleteBucketReplicationFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketReplicationRequest(param0 *s3.DeleteBucketReplicationInput) (*request.Request, *s3.DeleteBucketReplicationOutput) {
+	m.addCall("DeleteBucketReplicationRequest")
+	m.verifyInput("DeleteBucketReplicationRequest", param0)
+	return m.DeleteBucketReplicationRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketReplicationWithContext(param0 aws.Context, param1 *s3.DeleteBucketReplicationInput, param2 ...request.Option) (*s3.DeleteBucketReplicationOutput, error) {
+	m.addCall("DeleteBucketReplicationWithContext")
+	m.verifyInput("DeleteBucketReplicationWithContext", param0)
+	return m.DeleteBucketReplicationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketRequest(param0 *s3.DeleteBucketInput) (*request.Request, *s3.DeleteBucketOutput) {
+	m.addCall("DeleteBucketRequest")
+	m.verifyInput("DeleteBucketRequest", param0)
+	return m.DeleteBucketRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketTagging(param0 *s3.DeleteBucketTaggingInput) (*s3.DeleteBucketTaggingOutput, error) {
+	m.addCall("DeleteBucketTagging")
+	m.verifyInput("DeleteBucketTagging", param0)
+	return m.DeleteBucketTaggingFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketTaggingRequest(param0 *s3.DeleteBucketTaggingInput) (*request.Request, *s3.DeleteBucketTaggingOutput) {
+	m.addCall("DeleteBucketTaggingRequest")
+	m.verifyInput("DeleteBucketTaggingRequest", param0)
+	return m.DeleteBucketTaggingRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketTaggingWithContext(param0 aws.Context, param1 *s3.DeleteBucketTaggingInput, param2 ...request.Option) (*s3.DeleteBucketTaggingOutput, error) {
+	m.addCall("DeleteBucketTaggingWithContext")
+	m.verifyInput("DeleteBucketTaggingWithContext", param0)
+	return m.DeleteBucketTaggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketWebsite(param0 *s3.DeleteBucketWebsiteInput) (*s3.DeleteBucketWebsiteOutput, error) {
+	m.addCall("DeleteBucketWebsite")
+	m.verifyInput("DeleteBucketWebsite", param0)
+	return m.DeleteBucketWebsiteFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketWebsiteRequest(param0 *s3.DeleteBucketWebsiteInput) (*request.Request, *s3.DeleteBucketWebsiteOutput) {
+	m.addCall("DeleteBucketWebsiteRequest")
+	m.verifyInput("DeleteBucketWebsiteRequest", param0)
+	return m.DeleteBucketWebsiteRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteBucketWebsiteWithContext(param0 aws.Context, param1 *s3.DeleteBucketWebsiteInput, param2 ...request.Option) (*s3.DeleteBucketWebsiteOutput, error) {
+	m.addCall("DeleteBucketWebsiteWithContext")
+	m.verifyInput("DeleteBucketWebsiteWithContext", param0)
+	return m.DeleteBucketWebsiteWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteBucketWithContext(param0 aws.Context, param1 *s3.DeleteBucketInput, param2 ...request.Option) (*s3.DeleteBucketOutput, error) {
+	m.addCall("DeleteBucketWithContext")
+	m.verifyInput("DeleteBucketWithContext", param0)
+	return m.DeleteBucketWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteObject(param0 *s3.DeleteObjectInput) (*s3.DeleteObjectOutput, error) {
+	m.addCall("DeleteObject")
+	m.verifyInput("DeleteObject", param0)
+	return m.DeleteObjectFunc(param0)
+}
+
+func (m *s3Mock) DeleteObjectRequest(param0 *s3.DeleteObjectInput) (*request.Request, *s3.DeleteObjectOutput) {
+	m.addCall("DeleteObjectRequest")
+	m.verifyInput("DeleteObjectRequest", param0)
+	return m.DeleteObjectRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteObjectTagging(param0 *s3.DeleteObjectTaggingInput) (*s3.DeleteObjectTaggingOutput, error) {
+	m.addCall("DeleteObjectTagging")
+	m.verifyInput("DeleteObjectTagging", param0)
+	return m.DeleteObjectTaggingFunc(param0)
+}
+
+func (m *s3Mock) DeleteObjectTaggingRequest(param0 *s3.DeleteObjectTaggingInput) (*request.Request, *s3.DeleteObjectTaggingOutput) {
+	m.addCall("DeleteObjectTaggingRequest")
+	m.verifyInput("DeleteObjectTaggingRequest", param0)
+	return m.DeleteObjectTaggingRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteObjectTaggingWithContext(param0 aws.Context, param1 *s3.DeleteObjectTaggingInput, param2 ...request.Option) (*s3.DeleteObjectTaggingOutput, error) {
+	m.addCall("DeleteObjectTaggingWithContext")
+	m.verifyInput("DeleteObjectTaggingWithContext", param0)
+	return m.DeleteObjectTaggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteObjectWithContext(param0 aws.Context, param1 *s3.DeleteObjectInput, param2 ...request.Option) (*s3.DeleteObjectOutput, error) {
+	m.addCall("DeleteObjectWithContext")
+	m.verifyInput("DeleteObjectWithContext", param0)
+	return m.DeleteObjectWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) DeleteObjects(param0 *s3.DeleteObjectsInput) (*s3.DeleteObjectsOutput, error) {
+	m.addCall("DeleteObjects")
+	m.verifyInput("DeleteObjects", param0)
+	return m.DeleteObjectsFunc(param0)
+}
+
+func (m *s3Mock) DeleteObjectsRequest(param0 *s3.DeleteObjectsInput) (*request.Request, *s3.DeleteObjectsOutput) {
+	m.addCall("DeleteObjectsRequest")
+	m.verifyInput("DeleteObjectsRequest", param0)
+	return m.DeleteObjectsRequestFunc(param0)
+}
+
+func (m *s3Mock) DeleteObjectsWithContext(param0 aws.Context, param1 *s3.DeleteObjectsInput, param2 ...request.Option) (*s3.DeleteObjectsOutput, error) {
+	m.addCall("DeleteObjectsWithContext")
+	m.verifyInput("DeleteObjectsWithContext", param0)
+	return m.DeleteObjectsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketAccelerateConfiguration(param0 *s3.GetBucketAccelerateConfigurationInput) (*s3.GetBucketAccelerateConfigurationOutput, error) {
+	m.addCall("GetBucketAccelerateConfiguration")
+	m.verifyInput("GetBucketAccelerateConfiguration", param0)
+	return m.GetBucketAccelerateConfigurationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketAccelerateConfigurationRequest(param0 *s3.GetBucketAccelerateConfigurationInput) (*request.Request, *s3.GetBucketAccelerateConfigurationOutput) {
+	m.addCall("GetBucketAccelerateConfigurationRequest")
+	m.verifyInput("GetBucketAccelerateConfigurationRequest", param0)
+	return m.GetBucketAccelerateConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketAccelerateConfigurationWithContext(param0 aws.Context, param1 *s3.GetBucketAccelerateConfigurationInput, param2 ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error) {
+	m.addCall("GetBucketAccelerateConfigurationWithContext")
+	m.verifyInput("GetBucketAccelerateConfigurationWithContext", param0)
+	return m.GetBucketAccelerateConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketAcl(param0 *s3.GetBucketAclInput) (*s3.GetBucketAclOutput, error) {
+	m.addCall("GetBucketAcl")
+	m.verifyInput("GetBucketAcl", param0)
+	return m.GetBucketAclFunc(param0)
+}
+
+func (m *s3Mock) GetBucketAclRequest(param0 *s3.GetBucketAclInput) (*request.Request, *s3.GetBucketAclOutput) {
+	m.addCall("GetBucketAclRequest")
+	m.verifyInput("GetBucketAclRequest", param0)
+	return m.GetBucketAclRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketAclWithContext(param0 aws.Context, param1 *s3.GetBucketAclInput, param2 ...request.Option) (*s3.GetBucketAclOutput, error) {
+	m.addCall("GetBucketAclWithContext")
+	m.verifyInput("GetBucketAclWithContext", param0)
+	return m.GetBucketAclWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketAnalyticsConfiguration(param0 *s3.GetBucketAnalyticsConfigurationInput) (*s3.GetBucketAnalyticsConfigurationOutput, error) {
+	m.addCall("GetBucketAnalyticsConfiguration")
+	m.verifyInput("GetBucketAnalyticsConfiguration", param0)
+	return m.GetBucketAnalyticsConfigurationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketAnalyticsConfigurationRequest(param0 *s3.GetBucketAnalyticsConfigurationInput) (*request.Request, *s3.GetBucketAnalyticsConfigurationOutput) {
+	m.addCall("GetBucketAnalyticsConfigurationRequest")
+	m.verifyInput("GetBucketAnalyticsConfigurationRequest", param0)
+	return m.GetBucketAnalyticsConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketAnalyticsConfigurationWithContext(param0 aws.Context, param1 *s3.GetBucketAnalyticsConfigurationInput, param2 ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error) {
+	m.addCall("GetBucketAnalyticsConfigurationWithContext")
+	m.verifyInput("GetBucketAnalyticsConfigurationWithContext", param0)
+	return m.GetBucketAnalyticsConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketCors(param0 *s3.GetBucketCorsInput) (*s3.GetBucketCorsOutput, error) {
+	m.addCall("GetBucketCors")
+	m.verifyInput("GetBucketCors", param0)
+	return m.GetBucketCorsFunc(param0)
+}
+
+func (m *s3Mock) GetBucketCorsRequest(param0 *s3.GetBucketCorsInput) (*request.Request, *s3.GetBucketCorsOutput) {
+	m.addCall("GetBucketCorsRequest")
+	m.verifyInput("GetBucketCorsRequest", param0)
+	return m.GetBucketCorsRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketCorsWithContext(param0 aws.Context, param1 *s3.GetBucketCorsInput, param2 ...request.Option) (*s3.GetBucketCorsOutput, error) {
+	m.addCall("GetBucketCorsWithContext")
+	m.verifyInput("GetBucketCorsWithContext", param0)
+	return m.GetBucketCorsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketInventoryConfiguration(param0 *s3.GetBucketInventoryConfigurationInput) (*s3.GetBucketInventoryConfigurationOutput, error) {
+	m.addCall("GetBucketInventoryConfiguration")
+	m.verifyInput("GetBucketInventoryConfiguration", param0)
+	return m.GetBucketInventoryConfigurationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketInventoryConfigurationRequest(param0 *s3.GetBucketInventoryConfigurationInput) (*request.Request, *s3.GetBucketInventoryConfigurationOutput) {
+	m.addCall("GetBucketInventoryConfigurationRequest")
+	m.verifyInput("GetBucketInventoryConfigurationRequest", param0)
+	return m.GetBucketInventoryConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketInventoryConfigurationWithContext(param0 aws.Context, param1 *s3.GetBucketInventoryConfigurationInput, param2 ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error) {
+	m.addCall("GetBucketInventoryConfigurationWithContext")
+	m.verifyInput("GetBucketInventoryConfigurationWithContext", param0)
+	return m.GetBucketInventoryConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketLifecycle(param0 *s3.GetBucketLifecycleInput) (*s3.GetBucketLifecycleOutput, error) {
+	m.addCall("GetBucketLifecycle")
+	m.verifyInput("GetBucketLifecycle", param0)
+	return m.GetBucketLifecycleFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLifecycleConfiguration(param0 *s3.GetBucketLifecycleConfigurationInput) (*s3.GetBucketLifecycleConfigurationOutput, error) {
+	m.addCall("GetBucketLifecycleConfiguration")
+	m.verifyInput("GetBucketLifecycleConfiguration", param0)
+	return m.GetBucketLifecycleConfigurationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLifecycleConfigurationRequest(param0 *s3.GetBucketLifecycleConfigurationInput) (*request.Request, *s3.GetBucketLifecycleConfigurationOutput) {
+	m.addCall("GetBucketLifecycleConfigurationRequest")
+	m.verifyInput("GetBucketLifecycleConfigurationRequest", param0)
+	return m.GetBucketLifecycleConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLifecycleConfigurationWithContext(param0 aws.Context, param1 *s3.GetBucketLifecycleConfigurationInput, param2 ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error) {
+	m.addCall("GetBucketLifecycleConfigurationWithContext")
+	m.verifyInput("GetBucketLifecycleConfigurationWithContext", param0)
+	return m.GetBucketLifecycleConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketLifecycleRequest(param0 *s3.GetBucketLifecycleInput) (*request.Request, *s3.GetBucketLifecycleOutput) {
+	m.addCall("GetBucketLifecycleRequest")
+	m.verifyInput("GetBucketLifecycleRequest", param0)
+	return m.GetBucketLifecycleRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLifecycleWithContext(param0 aws.Context, param1 *s3.GetBucketLifecycleInput, param2 ...request.Option) (*s3.GetBucketLifecycleOutput, error) {
+	m.addCall("GetBucketLifecycleWithContext")
+	m.verifyInput("GetBucketLifecycleWithContext", param0)
+	return m.GetBucketLifecycleWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketLocation(param0 *s3.GetBucketLocationInput) (*s3.GetBucketLocationOutput, error) {
+	m.addCall("GetBucketLocation")
+	m.verifyInput("GetBucketLocation", param0)
+	return m.GetBucketLocationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLocationRequest(param0 *s3.GetBucketLocationInput) (*request.Request, *s3.GetBucketLocationOutput) {
+	m.addCall("GetBucketLocationRequest")
+	m.verifyInput("GetBucketLocationRequest", param0)
+	return m.GetBucketLocationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLocationWithContext(param0 aws.Context, param1 *s3.GetBucketLocationInput, param2 ...request.Option) (*s3.GetBucketLocationOutput, error) {
+	m.addCall("GetBucketLocationWithContext")
+	m.verifyInput("GetBucketLocationWithContext", param0)
+	return m.GetBucketLocationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketLogging(param0 *s3.GetBucketLoggingInput) (*s3.GetBucketLoggingOutput, error) {
+	m.addCall("GetBucketLogging")
+	m.verifyInput("GetBucketLogging", param0)
+	return m.GetBucketLoggingFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLoggingRequest(param0 *s3.GetBucketLoggingInput) (*request.Request, *s3.GetBucketLoggingOutput) {
+	m.addCall("GetBucketLoggingRequest")
+	m.verifyInput("GetBucketLoggingRequest", param0)
+	return m.GetBucketLoggingRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketLoggingWithContext(param0 aws.Context, param1 *s3.GetBucketLoggingInput, param2 ...request.Option) (*s3.GetBucketLoggingOutput, error) {
+	m.addCall("GetBucketLoggingWithContext")
+	m.verifyInput("GetBucketLoggingWithContext", param0)
+	return m.GetBucketLoggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketMetricsConfiguration(param0 *s3.GetBucketMetricsConfigurationInput) (*s3.GetBucketMetricsConfigurationOutput, error) {
+	m.addCall("GetBucketMetricsConfiguration")
+	m.verifyInput("GetBucketMetricsConfiguration", param0)
+	return m.GetBucketMetricsConfigurationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketMetricsConfigurationRequest(param0 *s3.GetBucketMetricsConfigurationInput) (*request.Request, *s3.GetBucketMetricsConfigurationOutput) {
+	m.addCall("GetBucketMetricsConfigurationRequest")
+	m.verifyInput("GetBucketMetricsConfigurationRequest", param0)
+	return m.GetBucketMetricsConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketMetricsConfigurationWithContext(param0 aws.Context, param1 *s3.GetBucketMetricsConfigurationInput, param2 ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error) {
+	m.addCall("GetBucketMetricsConfigurationWithContext")
+	m.verifyInput("GetBucketMetricsConfigurationWithContext", param0)
+	return m.GetBucketMetricsConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketNotification(param0 *s3.GetBucketNotificationConfigurationRequest) (*s3.NotificationConfigurationDeprecated, error) {
+	m.addCall("GetBucketNotification")
+	m.verifyInput("GetBucketNotification", param0)
+	return m.GetBucketNotificationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketNotificationConfiguration(param0 *s3.GetBucketNotificationConfigurationRequest) (*s3.NotificationConfiguration, error) {
+	m.addCall("GetBucketNotificationConfiguration")
+	m.verifyInput("GetBucketNotificationConfiguration", param0)
+	return m.GetBucketNotificationConfigurationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketNotificationConfigurationRequest(param0 *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfiguration) {
+	m.addCall("GetBucketNotificationConfigurationRequest")
+	m.verifyInput("GetBucketNotificationConfigurationRequest", param0)
+	return m.GetBucketNotificationConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketNotificationConfigurationWithContext(param0 aws.Context, param1 *s3.GetBucketNotificationConfigurationRequest, param2 ...request.Option) (*s3.NotificationConfiguration, error) {
+	m.addCall("GetBucketNotificationConfigurationWithContext")
+	m.verifyInput("GetBucketNotificationConfigurationWithContext", param0)
+	return m.GetBucketNotificationConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketNotificationRequest(param0 *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfigurationDeprecated) {
+	m.addCall("GetBucketNotificationRequest")
+	m.verifyInput("GetBucketNotificationRequest", param0)
+	return m.GetBucketNotificationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketNotificationWithContext(param0 aws.Context, param1 *s3.GetBucketNotificationConfigurationRequest, param2 ...request.Option) (*s3.NotificationConfigurationDeprecated, error) {
+	m.addCall("GetBucketNotificationWithContext")
+	m.verifyInput("GetBucketNotificationWithContext", param0)
+	return m.GetBucketNotificationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketPolicy(param0 *s3.GetBucketPolicyInput) (*s3.GetBucketPolicyOutput, error) {
+	m.addCall("GetBucketPolicy")
+	m.verifyInput("GetBucketPolicy", param0)
+	return m.GetBucketPolicyFunc(param0)
+}
+
+func (m *s3Mock) GetBucketPolicyRequest(param0 *s3.GetBucketPolicyInput) (*request.Request, *s3.GetBucketPolicyOutput) {
+	m.addCall("GetBucketPolicyRequest")
+	m.verifyInput("GetBucketPolicyRequest", param0)
+	return m.GetBucketPolicyRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketPolicyWithContext(param0 aws.Context, param1 *s3.GetBucketPolicyInput, param2 ...request.Option) (*s3.GetBucketPolicyOutput, error) {
+	m.addCall("GetBucketPolicyWithContext")
+	m.verifyInput("GetBucketPolicyWithContext", param0)
+	return m.GetBucketPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketReplication(param0 *s3.GetBucketReplicationInput) (*s3.GetBucketReplicationOutput, error) {
+	m.addCall("GetBucketReplication")
+	m.verifyInput("GetBucketReplication", param0)
+	return m.GetBucketReplicationFunc(param0)
+}
+
+func (m *s3Mock) GetBucketReplicationRequest(param0 *s3.GetBucketReplicationInput) (*request.Request, *s3.GetBucketReplicationOutput) {
+	m.addCall("GetBucketReplicationRequest")
+	m.verifyInput("GetBucketReplicationRequest", param0)
+	return m.GetBucketReplicationRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketReplicationWithContext(param0 aws.Context, param1 *s3.GetBucketReplicationInput, param2 ...request.Option) (*s3.GetBucketReplicationOutput, error) {
+	m.addCall("GetBucketReplicationWithContext")
+	m.verifyInput("GetBucketReplicationWithContext", param0)
+	return m.GetBucketReplicationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketRequestPayment(param0 *s3.GetBucketRequestPaymentInput) (*s3.GetBucketRequestPaymentOutput, error) {
+	m.addCall("GetBucketRequestPayment")
+	m.verifyInput("GetBucketRequestPayment", param0)
+	return m.GetBucketRequestPaymentFunc(param0)
+}
+
+func (m *s3Mock) GetBucketRequestPaymentRequest(param0 *s3.GetBucketRequestPaymentInput) (*request.Request, *s3.GetBucketRequestPaymentOutput) {
+	m.addCall("GetBucketRequestPaymentRequest")
+	m.verifyInput("GetBucketRequestPaymentRequest", param0)
+	return m.GetBucketRequestPaymentRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketRequestPaymentWithContext(param0 aws.Context, param1 *s3.GetBucketRequestPaymentInput, param2 ...request.Option) (*s3.GetBucketRequestPaymentOutput, error) {
+	m.addCall("GetBucketRequestPaymentWithContext")
+	m.verifyInput("GetBucketRequestPaymentWithContext", param0)
+	return m.GetBucketRequestPaymentWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketTagging(param0 *s3.GetBucketTaggingInput) (*s3.GetBucketTaggingOutput, error) {
+	m.addCall("GetBucketTagging")
+	m.verifyInput("GetBucketTagging", param0)
+	return m.GetBucketTaggingFunc(param0)
+}
+
+func (m *s3Mock) GetBucketTaggingRequest(param0 *s3.GetBucketTaggingInput) (*request.Request, *s3.GetBucketTaggingOutput) {
+	m.addCall("GetBucketTaggingRequest")
+	m.verifyInput("GetBucketTaggingRequest", param0)
+	return m.GetBucketTaggingRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketTaggingWithContext(param0 aws.Context, param1 *s3.GetBucketTaggingInput, param2 ...request.Option) (*s3.GetBucketTaggingOutput, error) {
+	m.addCall("GetBucketTaggingWithContext")
+	m.verifyInput("GetBucketTaggingWithContext", param0)
+	return m.GetBucketTaggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketVersioning(param0 *s3.GetBucketVersioningInput) (*s3.GetBucketVersioningOutput, error) {
+	m.addCall("GetBucketVersioning")
+	m.verifyInput("GetBucketVersioning", param0)
+	return m.GetBucketVersioningFunc(param0)
+}
+
+func (m *s3Mock) GetBucketVersioningRequest(param0 *s3.GetBucketVersioningInput) (*request.Request, *s3.GetBucketVersioningOutput) {
+	m.addCall("GetBucketVersioningRequest")
+	m.verifyInput("GetBucketVersioningRequest", param0)
+	return m.GetBucketVersioningRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketVersioningWithContext(param0 aws.Context, param1 *s3.GetBucketVersioningInput, param2 ...request.Option) (*s3.GetBucketVersioningOutput, error) {
+	m.addCall("GetBucketVersioningWithContext")
+	m.verifyInput("GetBucketVersioningWithContext", param0)
+	return m.GetBucketVersioningWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetBucketWebsite(param0 *s3.GetBucketWebsiteInput) (*s3.GetBucketWebsiteOutput, error) {
+	m.addCall("GetBucketWebsite")
+	m.verifyInput("GetBucketWebsite", param0)
+	return m.GetBucketWebsiteFunc(param0)
+}
+
+func (m *s3Mock) GetBucketWebsiteRequest(param0 *s3.GetBucketWebsiteInput) (*request.Request, *s3.GetBucketWebsiteOutput) {
+	m.addCall("GetBucketWebsiteRequest")
+	m.verifyInput("GetBucketWebsiteRequest", param0)
+	return m.GetBucketWebsiteRequestFunc(param0)
+}
+
+func (m *s3Mock) GetBucketWebsiteWithContext(param0 aws.Context, param1 *s3.GetBucketWebsiteInput, param2 ...request.Option) (*s3.GetBucketWebsiteOutput, error) {
+	m.addCall("GetBucketWebsiteWithContext")
+	m.verifyInput("GetBucketWebsiteWithContext", param0)
+	return m.GetBucketWebsiteWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetObject(param0 *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+	m.addCall("GetObject")
+	m.verifyInput("GetObject", param0)
+	return m.GetObjectFunc(param0)
+}
+
+func (m *s3Mock) GetObjectAcl(param0 *s3.GetObjectAclInput) (*s3.GetObjectAclOutput, error) {
+	m.addCall("GetObjectAcl")
+	m.verifyInput("GetObjectAcl", param0)
+	return m.GetObjectAclFunc(param0)
+}
+
+func (m *s3Mock) GetObjectAclRequest(param0 *s3.GetObjectAclInput) (*request.Request, *s3.GetObjectAclOutput) {
+	m.addCall("GetObjectAclRequest")
+	m.verifyInput("GetObjectAclRequest", param0)
+	return m.GetObjectAclRequestFunc(param0)
+}
+
+func (m *s3Mock) GetObjectAclWithContext(param0 aws.Context, param1 *s3.GetObjectAclInput, param2 ...request.Option) (*s3.GetObjectAclOutput, error) {
+	m.addCall("GetObjectAclWithContext")
+	m.verifyInput("GetObjectAclWithContext", param0)
+	return m.GetObjectAclWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetObjectRequest(param0 *s3.GetObjectInput) (*request.Request, *s3.GetObjectOutput) {
+	m.addCall("GetObjectRequest")
+	m.verifyInput("GetObjectRequest", param0)
+	return m.GetObjectRequestFunc(param0)
+}
+
+func (m *s3Mock) GetObjectTagging(param0 *s3.GetObjectTaggingInput) (*s3.GetObjectTaggingOutput, error) {
+	m.addCall("GetObjectTagging")
+	m.verifyInput("GetObjectTagging", param0)
+	return m.GetObjectTaggingFunc(param0)
+}
+
+func (m *s3Mock) GetObjectTaggingRequest(param0 *s3.GetObjectTaggingInput) (*request.Request, *s3.GetObjectTaggingOutput) {
+	m.addCall("GetObjectTaggingRequest")
+	m.verifyInput("GetObjectTaggingRequest", param0)
+	return m.GetObjectTaggingRequestFunc(param0)
+}
+
+func (m *s3Mock) GetObjectTaggingWithContext(param0 aws.Context, param1 *s3.GetObjectTaggingInput, param2 ...request.Option) (*s3.GetObjectTaggingOutput, error) {
+	m.addCall("GetObjectTaggingWithContext")
+	m.verifyInput("GetObjectTaggingWithContext", param0)
+	return m.GetObjectTaggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetObjectTorrent(param0 *s3.GetObjectTorrentInput) (*s3.GetObjectTorrentOutput, error) {
+	m.addCall("GetObjectTorrent")
+	m.verifyInput("GetObjectTorrent", param0)
+	return m.GetObjectTorrentFunc(param0)
+}
+
+func (m *s3Mock) GetObjectTorrentRequest(param0 *s3.GetObjectTorrentInput) (*request.Request, *s3.GetObjectTorrentOutput) {
+	m.addCall("GetObjectTorrentRequest")
+	m.verifyInput("GetObjectTorrentRequest", param0)
+	return m.GetObjectTorrentRequestFunc(param0)
+}
+
+func (m *s3Mock) GetObjectTorrentWithContext(param0 aws.Context, param1 *s3.GetObjectTorrentInput, param2 ...request.Option) (*s3.GetObjectTorrentOutput, error) {
+	m.addCall("GetObjectTorrentWithContext")
+	m.verifyInput("GetObjectTorrentWithContext", param0)
+	return m.GetObjectTorrentWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) GetObjectWithContext(param0 aws.Context, param1 *s3.GetObjectInput, param2 ...request.Option) (*s3.GetObjectOutput, error) {
+	m.addCall("GetObjectWithContext")
+	m.verifyInput("GetObjectWithContext", param0)
+	return m.GetObjectWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) HeadBucket(param0 *s3.HeadBucketInput) (*s3.HeadBucketOutput, error) {
+	m.addCall("HeadBucket")
+	m.verifyInput("HeadBucket", param0)
+	return m.HeadBucketFunc(param0)
+}
+
+func (m *s3Mock) HeadBucketRequest(param0 *s3.HeadBucketInput) (*request.Request, *s3.HeadBucketOutput) {
+	m.addCall("HeadBucketRequest")
+	m.verifyInput("HeadBucketRequest", param0)
+	return m.HeadBucketRequestFunc(param0)
+}
+
+func (m *s3Mock) HeadBucketWithContext(param0 aws.Context, param1 *s3.HeadBucketInput, param2 ...request.Option) (*s3.HeadBucketOutput, error) {
+	m.addCall("HeadBucketWithContext")
+	m.verifyInput("HeadBucketWithContext", param0)
+	return m.HeadBucketWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) HeadObject(param0 *s3.HeadObjectInput) (*s3.HeadObjectOutput, error) {
+	m.addCall("HeadObject")
+	m.verifyInput("HeadObject", param0)
+	return m.HeadObjectFunc(param0)
+}
+
+func (m *s3Mock) HeadObjectRequest(param0 *s3.HeadObjectInput) (*request.Request, *s3.HeadObjectOutput) {
+	m.addCall("HeadObjectRequest")
+	m.verifyInput("HeadObjectRequest", param0)
+	return m.HeadObjectRequestFunc(param0)
+}
+
+func (m *s3Mock) HeadObjectWithContext(param0 aws.Context, param1 *s3.HeadObjectInput, param2 ...request.Option) (*s3.HeadObjectOutput, error) {
+	m.addCall("HeadObjectWithContext")
+	m.verifyInput("HeadObjectWithContext", param0)
+	return m.HeadObjectWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListBucketAnalyticsConfigurations(param0 *s3.ListBucketAnalyticsConfigurationsInput) (*s3.ListBucketAnalyticsConfigurationsOutput, error) {
+	m.addCall("ListBucketAnalyticsConfigurations")
+	m.verifyInput("ListBucketAnalyticsConfigurations", param0)
+	return m.ListBucketAnalyticsConfigurationsFunc(param0)
+}
+
+func (m *s3Mock) ListBucketAnalyticsConfigurationsRequest(param0 *s3.ListBucketAnalyticsConfigurationsInput) (*request.Request, *s3.ListBucketAnalyticsConfigurationsOutput) {
+	m.addCall("ListBucketAnalyticsConfigurationsRequest")
+	m.verifyInput("ListBucketAnalyticsConfigurationsRequest", param0)
+	return m.ListBucketAnalyticsConfigurationsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListBucketAnalyticsConfigurationsWithContext(param0 aws.Context, param1 *s3.ListBucketAnalyticsConfigurationsInput, param2 ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error) {
+	m.addCall("ListBucketAnalyticsConfigurationsWithContext")
+	m.verifyInput("ListBucketAnalyticsConfigurationsWithContext", param0)
+	return m.ListBucketAnalyticsConfigurationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListBucketInventoryConfigurations(param0 *s3.ListBucketInventoryConfigurationsInput) (*s3.ListBucketInventoryConfigurationsOutput, error) {
+	m.addCall("ListBucketInventoryConfigurations")
+	m.verifyInput("ListBucketInventoryConfigurations", param0)
+	return m.ListBucketInventoryConfigurationsFunc(param0)
+}
+
+func (m *s3Mock) ListBucketInventoryConfigurationsRequest(param0 *s3.ListBucketInventoryConfigurationsInput) (*request.Request, *s3.ListBucketInventoryConfigurationsOutput) {
+	m.addCall("ListBucketInventoryConfigurationsRequest")
+	m.verifyInput("ListBucketInventoryConfigurationsRequest", param0)
+	return m.ListBucketInventoryConfigurationsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListBucketInventoryConfigurationsWithContext(param0 aws.Context, param1 *s3.ListBucketInventoryConfigurationsInput, param2 ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error) {
+	m.addCall("ListBucketInventoryConfigurationsWithContext")
+	m.verifyInput("ListBucketInventoryConfigurationsWithContext", param0)
+	return m.ListBucketInventoryConfigurationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListBucketMetricsConfigurations(param0 *s3.ListBucketMetricsConfigurationsInput) (*s3.ListBucketMetricsConfigurationsOutput, error) {
+	m.addCall("ListBucketMetricsConfigurations")
+	m.verifyInput("ListBucketMetricsConfigurations", param0)
+	return m.ListBucketMetricsConfigurationsFunc(param0)
+}
+
+func (m *s3Mock) ListBucketMetricsConfigurationsRequest(param0 *s3.ListBucketMetricsConfigurationsInput) (*request.Request, *s3.ListBucketMetricsConfigurationsOutput) {
+	m.addCall("ListBucketMetricsConfigurationsRequest")
+	m.verifyInput("ListBucketMetricsConfigurationsRequest", param0)
+	return m.ListBucketMetricsConfigurationsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListBucketMetricsConfigurationsWithContext(param0 aws.Context, param1 *s3.ListBucketMetricsConfigurationsInput, param2 ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error) {
+	m.addCall("ListBucketMetricsConfigurationsWithContext")
+	m.verifyInput("ListBucketMetricsConfigurationsWithContext", param0)
+	return m.ListBucketMetricsConfigurationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListBuckets(param0 *s3.ListBucketsInput) (*s3.ListBucketsOutput, error) {
+	m.addCall("ListBuckets")
+	m.verifyInput("ListBuckets", param0)
+	return m.ListBucketsFunc(param0)
+}
+
+func (m *s3Mock) ListBucketsRequest(param0 *s3.ListBucketsInput) (*request.Request, *s3.ListBucketsOutput) {
+	m.addCall("ListBucketsRequest")
+	m.verifyInput("ListBucketsRequest", param0)
+	return m.ListBucketsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListBucketsWithContext(param0 aws.Context, param1 *s3.ListBucketsInput, param2 ...request.Option) (*s3.ListBucketsOutput, error) {
+	m.addCall("ListBucketsWithContext")
+	m.verifyInput("ListBucketsWithContext", param0)
+	return m.ListBucketsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListMultipartUploads(param0 *s3.ListMultipartUploadsInput) (*s3.ListMultipartUploadsOutput, error) {
+	m.addCall("ListMultipartUploads")
+	m.verifyInput("ListMultipartUploads", param0)
+	return m.ListMultipartUploadsFunc(param0)
+}
+
+func (m *s3Mock) ListMultipartUploadsRequest(param0 *s3.ListMultipartUploadsInput) (*request.Request, *s3.ListMultipartUploadsOutput) {
+	m.addCall("ListMultipartUploadsRequest")
+	m.verifyInput("ListMultipartUploadsRequest", param0)
+	return m.ListMultipartUploadsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListMultipartUploadsWithContext(param0 aws.Context, param1 *s3.ListMultipartUploadsInput, param2 ...request.Option) (*s3.ListMultipartUploadsOutput, error) {
+	m.addCall("ListMultipartUploadsWithContext")
+	m.verifyInput("ListMultipartUploadsWithContext", param0)
+	return m.ListMultipartUploadsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListObjectVersions(param0 *s3.ListObjectVersionsInput) (*s3.ListObjectVersionsOutput, error) {
+	m.addCall("ListObjectVersions")
+	m.verifyInput("ListObjectVersions", param0)
+	return m.ListObjectVersionsFunc(param0)
+}
+
+func (m *s3Mock) ListObjectVersionsRequest(param0 *s3.ListObjectVersionsInput) (*request.Request, *s3.ListObjectVersionsOutput) {
+	m.addCall("ListObjectVersionsRequest")
+	m.verifyInput("ListObjectVersionsRequest", param0)
+	return m.ListObjectVersionsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListObjectVersionsWithContext(param0 aws.Context, param1 *s3.ListObjectVersionsInput, param2 ...request.Option) (*s3.ListObjectVersionsOutput, error) {
+	m.addCall("ListObjectVersionsWithContext")
+	m.verifyInput("ListObjectVersionsWithContext", param0)
+	return m.ListObjectVersionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListObjects(param0 *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
+	m.addCall("ListObjects")
+	m.verifyInput("ListObjects", param0)
+	return m.ListObjectsFunc(param0)
+}
+
+func (m *s3Mock) ListObjectsRequest(param0 *s3.ListObjectsInput) (*request.Request, *s3.ListObjectsOutput) {
+	m.addCall("ListObjectsRequest")
+	m.verifyInput("ListObjectsRequest", param0)
+	return m.ListObjectsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListObjectsV2(param0 *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error) {
+	m.addCall("ListObjectsV2")
+	m.verifyInput("ListObjectsV2", param0)
+	return m.ListObjectsV2Func(param0)
+}
+
+func (m *s3Mock) ListObjectsV2Request(param0 *s3.ListObjectsV2Input) (*request.Request, *s3.ListObjectsV2Output) {
+	m.addCall("ListObjectsV2Request")
+	m.verifyInput("ListObjectsV2Request", param0)
+	return m.ListObjectsV2RequestFunc(param0)
+}
+
+func (m *s3Mock) ListObjectsV2WithContext(param0 aws.Context, param1 *s3.ListObjectsV2Input, param2 ...request.Option) (*s3.ListObjectsV2Output, error) {
+	m.addCall("ListObjectsV2WithContext")
+	m.verifyInput("ListObjectsV2WithContext", param0)
+	return m.ListObjectsV2WithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListObjectsWithContext(param0 aws.Context, param1 *s3.ListObjectsInput, param2 ...request.Option) (*s3.ListObjectsOutput, error) {
+	m.addCall("ListObjectsWithContext")
+	m.verifyInput("ListObjectsWithContext", param0)
+	return m.ListObjectsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) ListParts(param0 *s3.ListPartsInput) (*s3.ListPartsOutput, error) {
+	m.addCall("ListParts")
+	m.verifyInput("ListParts", param0)
+	return m.ListPartsFunc(param0)
+}
+
+func (m *s3Mock) ListPartsRequest(param0 *s3.ListPartsInput) (*request.Request, *s3.ListPartsOutput) {
+	m.addCall("ListPartsRequest")
+	m.verifyInput("ListPartsRequest", param0)
+	return m.ListPartsRequestFunc(param0)
+}
+
+func (m *s3Mock) ListPartsWithContext(param0 aws.Context, param1 *s3.ListPartsInput, param2 ...request.Option) (*s3.ListPartsOutput, error) {
+	m.addCall("ListPartsWithContext")
+	m.verifyInput("ListPartsWithContext", param0)
+	return m.ListPartsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketAccelerateConfiguration(param0 *s3.PutBucketAccelerateConfigurationInput) (*s3.PutBucketAccelerateConfigurationOutput, error) {
+	m.addCall("PutBucketAccelerateConfiguration")
+	m.verifyInput("PutBucketAccelerateConfiguration", param0)
+	return m.PutBucketAccelerateConfigurationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketAccelerateConfigurationRequest(param0 *s3.PutBucketAccelerateConfigurationInput) (*request.Request, *s3.PutBucketAccelerateConfigurationOutput) {
+	m.addCall("PutBucketAccelerateConfigurationRequest")
+	m.verifyInput("PutBucketAccelerateConfigurationRequest", param0)
+	return m.PutBucketAccelerateConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketAccelerateConfigurationWithContext(param0 aws.Context, param1 *s3.PutBucketAccelerateConfigurationInput, param2 ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error) {
+	m.addCall("PutBucketAccelerateConfigurationWithContext")
+	m.verifyInput("PutBucketAccelerateConfigurationWithContext", param0)
+	return m.PutBucketAccelerateConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketAcl(param0 *s3.PutBucketAclInput) (*s3.PutBucketAclOutput, error) {
+	m.addCall("PutBucketAcl")
+	m.verifyInput("PutBucketAcl", param0)
+	return m.PutBucketAclFunc(param0)
+}
+
+func (m *s3Mock) PutBucketAclRequest(param0 *s3.PutBucketAclInput) (*request.Request, *s3.PutBucketAclOutput) {
+	m.addCall("PutBucketAclRequest")
+	m.verifyInput("PutBucketAclRequest", param0)
+	return m.PutBucketAclRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketAclWithContext(param0 aws.Context, param1 *s3.PutBucketAclInput, param2 ...request.Option) (*s3.PutBucketAclOutput, error) {
+	m.addCall("PutBucketAclWithContext")
+	m.verifyInput("PutBucketAclWithContext", param0)
+	return m.PutBucketAclWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketAnalyticsConfiguration(param0 *s3.PutBucketAnalyticsConfigurationInput) (*s3.PutBucketAnalyticsConfigurationOutput, error) {
+	m.addCall("PutBucketAnalyticsConfiguration")
+	m.verifyInput("PutBucketAnalyticsConfiguration", param0)
+	return m.PutBucketAnalyticsConfigurationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketAnalyticsConfigurationRequest(param0 *s3.PutBucketAnalyticsConfigurationInput) (*request.Request, *s3.PutBucketAnalyticsConfigurationOutput) {
+	m.addCall("PutBucketAnalyticsConfigurationRequest")
+	m.verifyInput("PutBucketAnalyticsConfigurationRequest", param0)
+	return m.PutBucketAnalyticsConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketAnalyticsConfigurationWithContext(param0 aws.Context, param1 *s3.PutBucketAnalyticsConfigurationInput, param2 ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error) {
+	m.addCall("PutBucketAnalyticsConfigurationWithContext")
+	m.verifyInput("PutBucketAnalyticsConfigurationWithContext", param0)
+	return m.PutBucketAnalyticsConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketCors(param0 *s3.PutBucketCorsInput) (*s3.PutBucketCorsOutput, error) {
+	m.addCall("PutBucketCors")
+	m.verifyInput("PutBucketCors", param0)
+	return m.PutBucketCorsFunc(param0)
+}
+
+func (m *s3Mock) PutBucketCorsRequest(param0 *s3.PutBucketCorsInput) (*request.Request, *s3.PutBucketCorsOutput) {
+	m.addCall("PutBucketCorsRequest")
+	m.verifyInput("PutBucketCorsRequest", param0)
+	return m.PutBucketCorsRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketCorsWithContext(param0 aws.Context, param1 *s3.PutBucketCorsInput, param2 ...request.Option) (*s3.PutBucketCorsOutput, error) {
+	m.addCall("PutBucketCorsWithContext")
+	m.verifyInput("PutBucketCorsWithContext", param0)
+	return m.PutBucketCorsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketInventoryConfiguration(param0 *s3.PutBucketInventoryConfigurationInput) (*s3.PutBucketInventoryConfigurationOutput, error) {
+	m.addCall("PutBucketInventoryConfiguration")
+	m.verifyInput("PutBucketInventoryConfiguration", param0)
+	return m.PutBucketInventoryConfigurationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketInventoryConfigurationRequest(param0 *s3.PutBucketInventoryConfigurationInput) (*request.Request, *s3.PutBucketInventoryConfigurationOutput) {
+	m.addCall("PutBucketInventoryConfigurationRequest")
+	m.verifyInput("PutBucketInventoryConfigurationRequest", param0)
+	return m.PutBucketInventoryConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketInventoryConfigurationWithContext(param0 aws.Context, param1 *s3.PutBucketInventoryConfigurationInput, param2 ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error) {
+	m.addCall("PutBucketInventoryConfigurationWithContext")
+	m.verifyInput("PutBucketInventoryConfigurationWithContext", param0)
+	return m.PutBucketInventoryConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketLifecycle(param0 *s3.PutBucketLifecycleInput) (*s3.PutBucketLifecycleOutput, error) {
+	m.addCall("PutBucketLifecycle")
+	m.verifyInput("PutBucketLifecycle", param0)
+	return m.PutBucketLifecycleFunc(param0)
+}
+
+func (m *s3Mock) PutBucketLifecycleConfiguration(param0 *s3.PutBucketLifecycleConfigurationInput) (*s3.PutBucketLifecycleConfigurationOutput, error) {
+	m.addCall("PutBucketLifecycleConfiguration")
+	m.verifyInput("PutBucketLifecycleConfiguration", param0)
+	return m.PutBucketLifecycleConfigurationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketLifecycleConfigurationRequest(param0 *s3.PutBucketLifecycleConfigurationInput) (*request.Request, *s3.PutBucketLifecycleConfigurationOutput) {
+	m.addCall("PutBucketLifecycleConfigurationRequest")
+	m.verifyInput("PutBucketLifecycleConfigurationRequest", param0)
+	return m.PutBucketLifecycleConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketLifecycleConfigurationWithContext(param0 aws.Context, param1 *s3.PutBucketLifecycleConfigurationInput, param2 ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error) {
+	m.addCall("PutBucketLifecycleConfigurationWithContext")
+	m.verifyInput("PutBucketLifecycleConfigurationWithContext", param0)
+	return m.PutBucketLifecycleConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketLifecycleRequest(param0 *s3.PutBucketLifecycleInput) (*request.Request, *s3.PutBucketLifecycleOutput) {
+	m.addCall("PutBucketLifecycleRequest")
+	m.verifyInput("PutBucketLifecycleRequest", param0)
+	return m.PutBucketLifecycleRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketLifecycleWithContext(param0 aws.Context, param1 *s3.PutBucketLifecycleInput, param2 ...request.Option) (*s3.PutBucketLifecycleOutput, error) {
+	m.addCall("PutBucketLifecycleWithContext")
+	m.verifyInput("PutBucketLifecycleWithContext", param0)
+	return m.PutBucketLifecycleWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketLogging(param0 *s3.PutBucketLoggingInput) (*s3.PutBucketLoggingOutput, error) {
+	m.addCall("PutBucketLogging")
+	m.verifyInput("PutBucketLogging", param0)
+	return m.PutBucketLoggingFunc(param0)
+}
+
+func (m *s3Mock) PutBucketLoggingRequest(param0 *s3.PutBucketLoggingInput) (*request.Request, *s3.PutBucketLoggingOutput) {
+	m.addCall("PutBucketLoggingRequest")
+	m.verifyInput("PutBucketLoggingRequest", param0)
+	return m.PutBucketLoggingRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketLoggingWithContext(param0 aws.Context, param1 *s3.PutBucketLoggingInput, param2 ...request.Option) (*s3.PutBucketLoggingOutput, error) {
+	m.addCall("PutBucketLoggingWithContext")
+	m.verifyInput("PutBucketLoggingWithContext", param0)
+	return m.PutBucketLoggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketMetricsConfiguration(param0 *s3.PutBucketMetricsConfigurationInput) (*s3.PutBucketMetricsConfigurationOutput, error) {
+	m.addCall("PutBucketMetricsConfiguration")
+	m.verifyInput("PutBucketMetricsConfiguration", param0)
+	return m.PutBucketMetricsConfigurationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketMetricsConfigurationRequest(param0 *s3.PutBucketMetricsConfigurationInput) (*request.Request, *s3.PutBucketMetricsConfigurationOutput) {
+	m.addCall("PutBucketMetricsConfigurationRequest")
+	m.verifyInput("PutBucketMetricsConfigurationRequest", param0)
+	return m.PutBucketMetricsConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketMetricsConfigurationWithContext(param0 aws.Context, param1 *s3.PutBucketMetricsConfigurationInput, param2 ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error) {
+	m.addCall("PutBucketMetricsConfigurationWithContext")
+	m.verifyInput("PutBucketMetricsConfigurationWithContext", param0)
+	return m.PutBucketMetricsConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketNotification(param0 *s3.PutBucketNotificationInput) (*s3.PutBucketNotificationOutput, error) {
+	m.addCall("PutBucketNotification")
+	m.verifyInput("PutBucketNotification", param0)
+	return m.PutBucketNotificationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketNotificationConfiguration(param0 *s3.PutBucketNotificationConfigurationInput) (*s3.PutBucketNotificationConfigurationOutput, error) {
+	m.addCall("PutBucketNotificationConfiguration")
+	m.verifyInput("PutBucketNotificationConfiguration", param0)
+	return m.PutBucketNotificationConfigurationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketNotificationConfigurationRequest(param0 *s3.PutBucketNotificationConfigurationInput) (*request.Request, *s3.PutBucketNotificationConfigurationOutput) {
+	m.addCall("PutBucketNotificationConfigurationRequest")
+	m.verifyInput("PutBucketNotificationConfigurationRequest", param0)
+	return m.PutBucketNotificationConfigurationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketNotificationConfigurationWithContext(param0 aws.Context, param1 *s3.PutBucketNotificationConfigurationInput, param2 ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error) {
+	m.addCall("PutBucketNotificationConfigurationWithContext")
+	m.verifyInput("PutBucketNotificationConfigurationWithContext", param0)
+	return m.PutBucketNotificationConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketNotificationRequest(param0 *s3.PutBucketNotificationInput) (*request.Request, *s3.PutBucketNotificationOutput) {
+	m.addCall("PutBucketNotificationRequest")
+	m.verifyInput("PutBucketNotificationRequest", param0)
+	return m.PutBucketNotificationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketNotificationWithContext(param0 aws.Context, param1 *s3.PutBucketNotificationInput, param2 ...request.Option) (*s3.PutBucketNotificationOutput, error) {
+	m.addCall("PutBucketNotificationWithContext")
+	m.verifyInput("PutBucketNotificationWithContext", param0)
+	return m.PutBucketNotificationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketPolicy(param0 *s3.PutBucketPolicyInput) (*s3.PutBucketPolicyOutput, error) {
+	m.addCall("PutBucketPolicy")
+	m.verifyInput("PutBucketPolicy", param0)
+	return m.PutBucketPolicyFunc(param0)
+}
+
+func (m *s3Mock) PutBucketPolicyRequest(param0 *s3.PutBucketPolicyInput) (*request.Request, *s3.PutBucketPolicyOutput) {
+	m.addCall("PutBucketPolicyRequest")
+	m.verifyInput("PutBucketPolicyRequest", param0)
+	return m.PutBucketPolicyRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketPolicyWithContext(param0 aws.Context, param1 *s3.PutBucketPolicyInput, param2 ...request.Option) (*s3.PutBucketPolicyOutput, error) {
+	m.addCall("PutBucketPolicyWithContext")
+	m.verifyInput("PutBucketPolicyWithContext", param0)
+	return m.PutBucketPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketReplication(param0 *s3.PutBucketReplicationInput) (*s3.PutBucketReplicationOutput, error) {
+	m.addCall("PutBucketReplication")
+	m.verifyInput("PutBucketReplication", param0)
+	return m.PutBucketReplicationFunc(param0)
+}
+
+func (m *s3Mock) PutBucketReplicationRequest(param0 *s3.PutBucketReplicationInput) (*request.Request, *s3.PutBucketReplicationOutput) {
+	m.addCall("PutBucketReplicationRequest")
+	m.verifyInput("PutBucketReplicationRequest", param0)
+	return m.PutBucketReplicationRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketReplicationWithContext(param0 aws.Context, param1 *s3.PutBucketReplicationInput, param2 ...request.Option) (*s3.PutBucketReplicationOutput, error) {
+	m.addCall("PutBucketReplicationWithContext")
+	m.verifyInput("PutBucketReplicationWithContext", param0)
+	return m.PutBucketReplicationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketRequestPayment(param0 *s3.PutBucketRequestPaymentInput) (*s3.PutBucketRequestPaymentOutput, error) {
+	m.addCall("PutBucketRequestPayment")
+	m.verifyInput("PutBucketRequestPayment", param0)
+	return m.PutBucketRequestPaymentFunc(param0)
+}
+
+func (m *s3Mock) PutBucketRequestPaymentRequest(param0 *s3.PutBucketRequestPaymentInput) (*request.Request, *s3.PutBucketRequestPaymentOutput) {
+	m.addCall("PutBucketRequestPaymentRequest")
+	m.verifyInput("PutBucketRequestPaymentRequest", param0)
+	return m.PutBucketRequestPaymentRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketRequestPaymentWithContext(param0 aws.Context, param1 *s3.PutBucketRequestPaymentInput, param2 ...request.Option) (*s3.PutBucketRequestPaymentOutput, error) {
+	m.addCall("PutBucketRequestPaymentWithContext")
+	m.verifyInput("PutBucketRequestPaymentWithContext", param0)
+	return m.PutBucketRequestPaymentWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketTagging(param0 *s3.PutBucketTaggingInput) (*s3.PutBucketTaggingOutput, error) {
+	m.addCall("PutBucketTagging")
+	m.verifyInput("PutBucketTagging", param0)
+	return m.PutBucketTaggingFunc(param0)
+}
+
+func (m *s3Mock) PutBucketTaggingRequest(param0 *s3.PutBucketTaggingInput) (*request.Request, *s3.PutBucketTaggingOutput) {
+	m.addCall("PutBucketTaggingRequest")
+	m.verifyInput("PutBucketTaggingRequest", param0)
+	return m.PutBucketTaggingRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketTaggingWithContext(param0 aws.Context, param1 *s3.PutBucketTaggingInput, param2 ...request.Option) (*s3.PutBucketTaggingOutput, error) {
+	m.addCall("PutBucketTaggingWithContext")
+	m.verifyInput("PutBucketTaggingWithContext", param0)
+	return m.PutBucketTaggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketVersioning(param0 *s3.PutBucketVersioningInput) (*s3.PutBucketVersioningOutput, error) {
+	m.addCall("PutBucketVersioning")
+	m.verifyInput("PutBucketVersioning", param0)
+	return m.PutBucketVersioningFunc(param0)
+}
+
+func (m *s3Mock) PutBucketVersioningRequest(param0 *s3.PutBucketVersioningInput) (*request.Request, *s3.PutBucketVersioningOutput) {
+	m.addCall("PutBucketVersioningRequest")
+	m.verifyInput("PutBucketVersioningRequest", param0)
+	return m.PutBucketVersioningRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketVersioningWithContext(param0 aws.Context, param1 *s3.PutBucketVersioningInput, param2 ...request.Option) (*s3.PutBucketVersioningOutput, error) {
+	m.addCall("PutBucketVersioningWithContext")
+	m.verifyInput("PutBucketVersioningWithContext", param0)
+	return m.PutBucketVersioningWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutBucketWebsite(param0 *s3.PutBucketWebsiteInput) (*s3.PutBucketWebsiteOutput, error) {
+	m.addCall("PutBucketWebsite")
+	m.verifyInput("PutBucketWebsite", param0)
+	return m.PutBucketWebsiteFunc(param0)
+}
+
+func (m *s3Mock) PutBucketWebsiteRequest(param0 *s3.PutBucketWebsiteInput) (*request.Request, *s3.PutBucketWebsiteOutput) {
+	m.addCall("PutBucketWebsiteRequest")
+	m.verifyInput("PutBucketWebsiteRequest", param0)
+	return m.PutBucketWebsiteRequestFunc(param0)
+}
+
+func (m *s3Mock) PutBucketWebsiteWithContext(param0 aws.Context, param1 *s3.PutBucketWebsiteInput, param2 ...request.Option) (*s3.PutBucketWebsiteOutput, error) {
+	m.addCall("PutBucketWebsiteWithContext")
+	m.verifyInput("PutBucketWebsiteWithContext", param0)
+	return m.PutBucketWebsiteWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutObject(param0 *s3.PutObjectInput) (*s3.PutObjectOutput, error) {
+	m.addCall("PutObject")
+	m.verifyInput("PutObject", param0)
+	return m.PutObjectFunc(param0)
+}
+
+func (m *s3Mock) PutObjectAcl(param0 *s3.PutObjectAclInput) (*s3.PutObjectAclOutput, error) {
+	m.addCall("PutObjectAcl")
+	m.verifyInput("PutObjectAcl", param0)
+	return m.PutObjectAclFunc(param0)
+}
+
+func (m *s3Mock) PutObjectAclRequest(param0 *s3.PutObjectAclInput) (*request.Request, *s3.PutObjectAclOutput) {
+	m.addCall("PutObjectAclRequest")
+	m.verifyInput("PutObjectAclRequest", param0)
+	return m.PutObjectAclRequestFunc(param0)
+}
+
+func (m *s3Mock) PutObjectAclWithContext(param0 aws.Context, param1 *s3.PutObjectAclInput, param2 ...request.Option) (*s3.PutObjectAclOutput, error) {
+	m.addCall("PutObjectAclWithContext")
+	m.verifyInput("PutObjectAclWithContext", param0)
+	return m.PutObjectAclWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutObjectRequest(param0 *s3.PutObjectInput) (*request.Request, *s3.PutObjectOutput) {
+	m.addCall("PutObjectRequest")
+	m.verifyInput("PutObjectRequest", param0)
+	return m.PutObjectRequestFunc(param0)
+}
+
+func (m *s3Mock) PutObjectTagging(param0 *s3.PutObjectTaggingInput) (*s3.PutObjectTaggingOutput, error) {
+	m.addCall("PutObjectTagging")
+	m.verifyInput("PutObjectTagging", param0)
+	return m.PutObjectTaggingFunc(param0)
+}
+
+func (m *s3Mock) PutObjectTaggingRequest(param0 *s3.PutObjectTaggingInput) (*request.Request, *s3.PutObjectTaggingOutput) {
+	m.addCall("PutObjectTaggingRequest")
+	m.verifyInput("PutObjectTaggingRequest", param0)
+	return m.PutObjectTaggingRequestFunc(param0)
+}
+
+func (m *s3Mock) PutObjectTaggingWithContext(param0 aws.Context, param1 *s3.PutObjectTaggingInput, param2 ...request.Option) (*s3.PutObjectTaggingOutput, error) {
+	m.addCall("PutObjectTaggingWithContext")
+	m.verifyInput("PutObjectTaggingWithContext", param0)
+	return m.PutObjectTaggingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) PutObjectWithContext(param0 aws.Context, param1 *s3.PutObjectInput, param2 ...request.Option) (*s3.PutObjectOutput, error) {
+	m.addCall("PutObjectWithContext")
+	m.verifyInput("PutObjectWithContext", param0)
+	return m.PutObjectWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) RestoreObject(param0 *s3.RestoreObjectInput) (*s3.RestoreObjectOutput, error) {
+	m.addCall("RestoreObject")
+	m.verifyInput("RestoreObject", param0)
+	return m.RestoreObjectFunc(param0)
+}
+
+func (m *s3Mock) RestoreObjectRequest(param0 *s3.RestoreObjectInput) (*request.Request, *s3.RestoreObjectOutput) {
+	m.addCall("RestoreObjectRequest")
+	m.verifyInput("RestoreObjectRequest", param0)
+	return m.RestoreObjectRequestFunc(param0)
+}
+
+func (m *s3Mock) RestoreObjectWithContext(param0 aws.Context, param1 *s3.RestoreObjectInput, param2 ...request.Option) (*s3.RestoreObjectOutput, error) {
+	m.addCall("RestoreObjectWithContext")
+	m.verifyInput("RestoreObjectWithContext", param0)
+	return m.RestoreObjectWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) UploadPart(param0 *s3.UploadPartInput) (*s3.UploadPartOutput, error) {
+	m.addCall("UploadPart")
+	m.verifyInput("UploadPart", param0)
+	return m.UploadPartFunc(param0)
+}
+
+func (m *s3Mock) UploadPartCopy(param0 *s3.UploadPartCopyInput) (*s3.UploadPartCopyOutput, error) {
+	m.addCall("UploadPartCopy")
+	m.verifyInput("UploadPartCopy", param0)
+	return m.UploadPartCopyFunc(param0)
+}
+
+func (m *s3Mock) UploadPartCopyRequest(param0 *s3.UploadPartCopyInput) (*request.Request, *s3.UploadPartCopyOutput) {
+	m.addCall("UploadPartCopyRequest")
+	m.verifyInput("UploadPartCopyRequest", param0)
+	return m.UploadPartCopyRequestFunc(param0)
+}
+
+func (m *s3Mock) UploadPartCopyWithContext(param0 aws.Context, param1 *s3.UploadPartCopyInput, param2 ...request.Option) (*s3.UploadPartCopyOutput, error) {
+	m.addCall("UploadPartCopyWithContext")
+	m.verifyInput("UploadPartCopyWithContext", param0)
+	return m.UploadPartCopyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) UploadPartRequest(param0 *s3.UploadPartInput) (*request.Request, *s3.UploadPartOutput) {
+	m.addCall("UploadPartRequest")
+	m.verifyInput("UploadPartRequest", param0)
+	return m.UploadPartRequestFunc(param0)
+}
+
+func (m *s3Mock) UploadPartWithContext(param0 aws.Context, param1 *s3.UploadPartInput, param2 ...request.Option) (*s3.UploadPartOutput, error) {
+	m.addCall("UploadPartWithContext")
+	m.verifyInput("UploadPartWithContext", param0)
+	return m.UploadPartWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) WaitUntilBucketExists(param0 *s3.HeadBucketInput) error {
+	m.addCall("WaitUntilBucketExists")
+	m.verifyInput("WaitUntilBucketExists", param0)
+	return m.WaitUntilBucketExistsFunc(param0)
+}
+
+func (m *s3Mock) WaitUntilBucketExistsWithContext(param0 aws.Context, param1 *s3.HeadBucketInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilBucketExistsWithContext")
+	m.verifyInput("WaitUntilBucketExistsWithContext", param0)
+	return m.WaitUntilBucketExistsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) WaitUntilBucketNotExists(param0 *s3.HeadBucketInput) error {
+	m.addCall("WaitUntilBucketNotExists")
+	m.verifyInput("WaitUntilBucketNotExists", param0)
+	return m.WaitUntilBucketNotExistsFunc(param0)
+}
+
+func (m *s3Mock) WaitUntilBucketNotExistsWithContext(param0 aws.Context, param1 *s3.HeadBucketInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilBucketNotExistsWithContext")
+	m.verifyInput("WaitUntilBucketNotExistsWithContext", param0)
+	return m.WaitUntilBucketNotExistsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) WaitUntilObjectExists(param0 *s3.HeadObjectInput) error {
+	m.addCall("WaitUntilObjectExists")
+	m.verifyInput("WaitUntilObjectExists", param0)
+	return m.WaitUntilObjectExistsFunc(param0)
+}
+
+func (m *s3Mock) WaitUntilObjectExistsWithContext(param0 aws.Context, param1 *s3.HeadObjectInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilObjectExistsWithContext")
+	m.verifyInput("WaitUntilObjectExistsWithContext", param0)
+	return m.WaitUntilObjectExistsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *s3Mock) WaitUntilObjectNotExists(param0 *s3.HeadObjectInput) error {
+	m.addCall("WaitUntilObjectNotExists")
+	m.verifyInput("WaitUntilObjectNotExists", param0)
+	return m.WaitUntilObjectNotExistsFunc(param0)
+}
+
+func (m *s3Mock) WaitUntilObjectNotExistsWithContext(param0 aws.Context, param1 *s3.HeadObjectInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilObjectNotExistsWithContext")
+	m.verifyInput("WaitUntilObjectNotExistsWithContext", param0)
+	return m.WaitUntilObjectNotExistsWithContextFunc(param0, param1, param2...)
 }

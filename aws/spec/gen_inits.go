@@ -57,6 +57,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateAppscalingpolicy(f.Sess, f.Log) }
 	case "createappscalingtarget":
 		return func() interface{} { return NewCreateAppscalingtarget(f.Sess, f.Log) }
+	case "createbucket":
+		return func() interface{} { return NewCreateBucket(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -89,6 +91,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteAppscalingpolicy(f.Sess, f.Log) }
 	case "deleteappscalingtarget":
 		return func() interface{} { return NewDeleteAppscalingtarget(f.Sess, f.Log) }
+	case "deletebucket":
+		return func() interface{} { return NewDeleteBucket(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -127,6 +131,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewStartAlarm(f.Sess, f.Log) }
 	case "stopalarm":
 		return func() interface{} { return NewStopAlarm(f.Sess, f.Log) }
+	case "updatebucket":
+		return func() interface{} { return NewUpdateBucket(f.Sess, f.Log) }
 	case "updatepolicy":
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
 	case "updatesecuritygroup":
@@ -149,6 +155,7 @@ var (
 	_ command = &CreateAlarm{}
 	_ command = &CreateAppscalingpolicy{}
 	_ command = &CreateAppscalingtarget{}
+	_ command = &CreateBucket{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -165,6 +172,7 @@ var (
 	_ command = &DeleteAlarm{}
 	_ command = &DeleteAppscalingpolicy{}
 	_ command = &DeleteAppscalingtarget{}
+	_ command = &DeleteBucket{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
@@ -184,6 +192,7 @@ var (
 	_ command = &DetachSecuritygroup{}
 	_ command = &StartAlarm{}
 	_ command = &StopAlarm{}
+	_ command = &UpdateBucket{}
 	_ command = &UpdatePolicy{}
 	_ command = &UpdateSecuritygroup{}
 	_ command = &UpdateSubnet{}

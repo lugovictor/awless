@@ -34,6 +34,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -868,6 +870,80 @@ func (cmd *CreateAppscalingtarget) ParamsHelp() string {
 }
 
 func (cmd *CreateAppscalingtarget) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateBucket(sess *session.Session, l ...*logger.Logger) *CreateBucket {
+	cmd := new(CreateBucket)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = s3.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateBucket) SetApi(api s3iface.S3API) {
+	cmd.api = api
+}
+
+func (cmd *CreateBucket) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &s3.CreateBucketInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in s3.CreateBucketInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateBucket(input)
+	cmd.logger.ExtraVerbosef("s3.CreateBucket call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateBucket) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateBucket) ParamsHelp() string {
+	return generateParamsHelp("createbucket", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateBucket) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -2221,6 +2297,80 @@ func (cmd *DeleteAppscalingtarget) ParamsHelp() string {
 }
 
 func (cmd *DeleteAppscalingtarget) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteBucket(sess *session.Session, l ...*logger.Logger) *DeleteBucket {
+	cmd := new(DeleteBucket)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = s3.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteBucket) SetApi(api s3iface.S3API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteBucket) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &s3.DeleteBucketInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in s3.DeleteBucketInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteBucket(input)
+	cmd.logger.ExtraVerbosef("s3.DeleteBucket call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteBucket) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteBucket) ParamsHelp() string {
+	return generateParamsHelp("deletebucket", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteBucket) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -3853,6 +4003,74 @@ func (cmd *StopAlarm) ParamsHelp() string {
 }
 
 func (cmd *StopAlarm) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateBucket(sess *session.Session, l ...*logger.Logger) *UpdateBucket {
+	cmd := new(UpdateBucket)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = s3.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateBucket) SetApi(api s3iface.S3API) {
+	cmd.api = api
+}
+
+func (cmd *UpdateBucket) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateBucket) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateBucket) ParamsHelp() string {
+	return generateParamsHelp("updatebucket", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateBucket) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

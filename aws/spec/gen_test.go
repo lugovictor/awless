@@ -31,6 +31,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -117,6 +119,9 @@ var (
 	newUpdatePolicy    = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateZone      = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newDeleteZone      = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newCreateBucket    = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newDeleteBucket    = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newUpdateBucket    = func() *UpdateBucket { return &UpdateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
 )
 
 type mockApplicationautoscaling struct {
@@ -133,6 +138,9 @@ type mockIam struct {
 }
 type mockRoute53 struct {
 	route53iface.Route53API
+}
+type mockS3 struct {
+	s3iface.S3API
 }
 
 func (m *mockApplicationautoscaling) PutScalingPolicy(input *applicationautoscaling.PutScalingPolicyInput) (*applicationautoscaling.PutScalingPolicyOutput, error) {
@@ -511,6 +519,26 @@ func (m *mockRoute53) DeleteHostedZone(input *route53.DeleteHostedZoneInput) (*r
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletezone"]; ok {
 		return outFunc().(*route53.DeleteHostedZoneOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockS3) CreateBucket(input *s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
+	if got, want := input, genTestsExpected["createbucket"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createbucket"]; ok {
+		return outFunc().(*s3.CreateBucketOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockS3) DeleteBucket(input *s3.DeleteBucketInput) (*s3.DeleteBucketOutput, error) {
+	if got, want := input, genTestsExpected["deletebucket"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletebucket"]; ok {
+		return outFunc().(*s3.DeleteBucketOutput), nil
 	}
 	return nil, nil
 }

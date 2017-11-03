@@ -23,6 +23,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/wallix/awless/aws/spec"
 )
 
@@ -100,6 +101,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateAppscalingtarget(nil)
 			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
+			return cmd
+		}
+	case "createbucket":
+		return func() interface{} {
+			cmd := awsspec.NewCreateBucket(nil)
+			cmd.SetApi(f.Mock.(s3iface.S3API))
 			return cmd
 		}
 	case "creategroup":
@@ -196,6 +203,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteAppscalingtarget(nil)
 			cmd.SetApi(f.Mock.(applicationautoscalingiface.ApplicationAutoScalingAPI))
+			return cmd
+		}
+	case "deletebucket":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteBucket(nil)
+			cmd.SetApi(f.Mock.(s3iface.S3API))
 			return cmd
 		}
 	case "deletegroup":
@@ -310,6 +323,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewStopAlarm(nil)
 			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
+			return cmd
+		}
+	case "updatebucket":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateBucket(nil)
+			cmd.SetApi(f.Mock.(s3iface.S3API))
 			return cmd
 		}
 	case "updatepolicy":
