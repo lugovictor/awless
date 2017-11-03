@@ -33,6 +33,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
+	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/aws/aws-sdk-go/service/sns/snsiface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -131,6 +133,8 @@ var (
 	newCreateBucket    = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
 	newDeleteBucket    = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
 	newUpdateBucket    = func() *UpdateBucket { return &UpdateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newCreateTopic     = func() *CreateTopic { return &CreateTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newDeleteTopic     = func() *DeleteTopic { return &DeleteTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
 )
 
 type mockApplicationautoscaling struct {
@@ -150,6 +154,9 @@ type mockRoute53 struct {
 }
 type mockS3 struct {
 	s3iface.S3API
+}
+type mockSns struct {
+	snsiface.SNSAPI
 }
 
 func (m *mockApplicationautoscaling) PutScalingPolicy(input *applicationautoscaling.PutScalingPolicyInput) (*applicationautoscaling.PutScalingPolicyOutput, error) {
@@ -628,6 +635,26 @@ func (m *mockS3) DeleteBucket(input *s3.DeleteBucketInput) (*s3.DeleteBucketOutp
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletebucket"]; ok {
 		return outFunc().(*s3.DeleteBucketOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockSns) CreateTopic(input *sns.CreateTopicInput) (*sns.CreateTopicOutput, error) {
+	if got, want := input, genTestsExpected["createtopic"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createtopic"]; ok {
+		return outFunc().(*sns.CreateTopicOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockSns) DeleteTopic(input *sns.DeleteTopicInput) (*sns.DeleteTopicOutput, error) {
+	if got, want := input, genTestsExpected["deletetopic"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletetopic"]; ok {
+		return outFunc().(*sns.DeleteTopicOutput), nil
 	}
 	return nil, nil
 }

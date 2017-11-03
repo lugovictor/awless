@@ -85,6 +85,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateSubnet(f.Sess, f.Log) }
 	case "createtag":
 		return func() interface{} { return NewCreateTag(f.Sess, f.Log) }
+	case "createtopic":
+		return func() interface{} { return NewCreateTopic(f.Sess, f.Log) }
 	case "createuser":
 		return func() interface{} { return NewCreateUser(f.Sess, f.Log) }
 	case "createvolume":
@@ -123,6 +125,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteSubnet(f.Sess, f.Log) }
 	case "deletetag":
 		return func() interface{} { return NewDeleteTag(f.Sess, f.Log) }
+	case "deletetopic":
+		return func() interface{} { return NewDeleteTopic(f.Sess, f.Log) }
 	case "deleteuser":
 		return func() interface{} { return NewDeleteUser(f.Sess, f.Log) }
 	case "deletevolume":
@@ -187,6 +191,7 @@ var (
 	_ command = &CreateSecuritygroup{}
 	_ command = &CreateSubnet{}
 	_ command = &CreateTag{}
+	_ command = &CreateTopic{}
 	_ command = &CreateUser{}
 	_ command = &CreateVolume{}
 	_ command = &CreateVpc{}
@@ -206,6 +211,7 @@ var (
 	_ command = &DeleteSecuritygroup{}
 	_ command = &DeleteSubnet{}
 	_ command = &DeleteTag{}
+	_ command = &DeleteTopic{}
 	_ command = &DeleteUser{}
 	_ command = &DeleteVolume{}
 	_ command = &DeleteVpc{}

@@ -24,6 +24,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
+	"github.com/aws/aws-sdk-go/service/sns/snsiface"
 	"github.com/wallix/awless/aws/spec"
 )
 
@@ -187,6 +188,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createtopic":
+		return func() interface{} {
+			cmd := awsspec.NewCreateTopic(nil)
+			cmd.SetApi(f.Mock.(snsiface.SNSAPI))
+			return cmd
+		}
 	case "createuser":
 		return func() interface{} {
 			cmd := awsspec.NewCreateUser(nil)
@@ -299,6 +306,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteTag(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletetopic":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteTopic(nil)
+			cmd.SetApi(f.Mock.(snsiface.SNSAPI))
 			return cmd
 		}
 	case "deleteuser":

@@ -32,6 +32,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
+	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/aws/aws-sdk-go/service/sns/snsiface"
 )
 
 type applicationautoscalingMock struct {
@@ -11360,4 +11362,639 @@ func (m *s3Mock) WaitUntilObjectNotExistsWithContext(param0 aws.Context, param1 
 	m.addCall("WaitUntilObjectNotExistsWithContext")
 	m.verifyInput("WaitUntilObjectNotExistsWithContext", param0)
 	return m.WaitUntilObjectNotExistsWithContextFunc(param0, param1, param2...)
+}
+
+type snsMock struct {
+	basicMock
+	snsiface.SNSAPI
+	AddPermissionFunc                                 func(param0 *sns.AddPermissionInput) (*sns.AddPermissionOutput, error)
+	AddPermissionRequestFunc                          func(param0 *sns.AddPermissionInput) (*request.Request, *sns.AddPermissionOutput)
+	AddPermissionWithContextFunc                      func(param0 aws.Context, param1 *sns.AddPermissionInput, param2 ...request.Option) (*sns.AddPermissionOutput, error)
+	CheckIfPhoneNumberIsOptedOutFunc                  func(param0 *sns.CheckIfPhoneNumberIsOptedOutInput) (*sns.CheckIfPhoneNumberIsOptedOutOutput, error)
+	CheckIfPhoneNumberIsOptedOutRequestFunc           func(param0 *sns.CheckIfPhoneNumberIsOptedOutInput) (*request.Request, *sns.CheckIfPhoneNumberIsOptedOutOutput)
+	CheckIfPhoneNumberIsOptedOutWithContextFunc       func(param0 aws.Context, param1 *sns.CheckIfPhoneNumberIsOptedOutInput, param2 ...request.Option) (*sns.CheckIfPhoneNumberIsOptedOutOutput, error)
+	ConfirmSubscriptionFunc                           func(param0 *sns.ConfirmSubscriptionInput) (*sns.ConfirmSubscriptionOutput, error)
+	ConfirmSubscriptionRequestFunc                    func(param0 *sns.ConfirmSubscriptionInput) (*request.Request, *sns.ConfirmSubscriptionOutput)
+	ConfirmSubscriptionWithContextFunc                func(param0 aws.Context, param1 *sns.ConfirmSubscriptionInput, param2 ...request.Option) (*sns.ConfirmSubscriptionOutput, error)
+	CreatePlatformApplicationFunc                     func(param0 *sns.CreatePlatformApplicationInput) (*sns.CreatePlatformApplicationOutput, error)
+	CreatePlatformApplicationRequestFunc              func(param0 *sns.CreatePlatformApplicationInput) (*request.Request, *sns.CreatePlatformApplicationOutput)
+	CreatePlatformApplicationWithContextFunc          func(param0 aws.Context, param1 *sns.CreatePlatformApplicationInput, param2 ...request.Option) (*sns.CreatePlatformApplicationOutput, error)
+	CreatePlatformEndpointFunc                        func(param0 *sns.CreatePlatformEndpointInput) (*sns.CreatePlatformEndpointOutput, error)
+	CreatePlatformEndpointRequestFunc                 func(param0 *sns.CreatePlatformEndpointInput) (*request.Request, *sns.CreatePlatformEndpointOutput)
+	CreatePlatformEndpointWithContextFunc             func(param0 aws.Context, param1 *sns.CreatePlatformEndpointInput, param2 ...request.Option) (*sns.CreatePlatformEndpointOutput, error)
+	CreateTopicFunc                                   func(param0 *sns.CreateTopicInput) (*sns.CreateTopicOutput, error)
+	CreateTopicRequestFunc                            func(param0 *sns.CreateTopicInput) (*request.Request, *sns.CreateTopicOutput)
+	CreateTopicWithContextFunc                        func(param0 aws.Context, param1 *sns.CreateTopicInput, param2 ...request.Option) (*sns.CreateTopicOutput, error)
+	DeleteEndpointFunc                                func(param0 *sns.DeleteEndpointInput) (*sns.DeleteEndpointOutput, error)
+	DeleteEndpointRequestFunc                         func(param0 *sns.DeleteEndpointInput) (*request.Request, *sns.DeleteEndpointOutput)
+	DeleteEndpointWithContextFunc                     func(param0 aws.Context, param1 *sns.DeleteEndpointInput, param2 ...request.Option) (*sns.DeleteEndpointOutput, error)
+	DeletePlatformApplicationFunc                     func(param0 *sns.DeletePlatformApplicationInput) (*sns.DeletePlatformApplicationOutput, error)
+	DeletePlatformApplicationRequestFunc              func(param0 *sns.DeletePlatformApplicationInput) (*request.Request, *sns.DeletePlatformApplicationOutput)
+	DeletePlatformApplicationWithContextFunc          func(param0 aws.Context, param1 *sns.DeletePlatformApplicationInput, param2 ...request.Option) (*sns.DeletePlatformApplicationOutput, error)
+	DeleteTopicFunc                                   func(param0 *sns.DeleteTopicInput) (*sns.DeleteTopicOutput, error)
+	DeleteTopicRequestFunc                            func(param0 *sns.DeleteTopicInput) (*request.Request, *sns.DeleteTopicOutput)
+	DeleteTopicWithContextFunc                        func(param0 aws.Context, param1 *sns.DeleteTopicInput, param2 ...request.Option) (*sns.DeleteTopicOutput, error)
+	GetEndpointAttributesFunc                         func(param0 *sns.GetEndpointAttributesInput) (*sns.GetEndpointAttributesOutput, error)
+	GetEndpointAttributesRequestFunc                  func(param0 *sns.GetEndpointAttributesInput) (*request.Request, *sns.GetEndpointAttributesOutput)
+	GetEndpointAttributesWithContextFunc              func(param0 aws.Context, param1 *sns.GetEndpointAttributesInput, param2 ...request.Option) (*sns.GetEndpointAttributesOutput, error)
+	GetPlatformApplicationAttributesFunc              func(param0 *sns.GetPlatformApplicationAttributesInput) (*sns.GetPlatformApplicationAttributesOutput, error)
+	GetPlatformApplicationAttributesRequestFunc       func(param0 *sns.GetPlatformApplicationAttributesInput) (*request.Request, *sns.GetPlatformApplicationAttributesOutput)
+	GetPlatformApplicationAttributesWithContextFunc   func(param0 aws.Context, param1 *sns.GetPlatformApplicationAttributesInput, param2 ...request.Option) (*sns.GetPlatformApplicationAttributesOutput, error)
+	GetSMSAttributesFunc                              func(param0 *sns.GetSMSAttributesInput) (*sns.GetSMSAttributesOutput, error)
+	GetSMSAttributesRequestFunc                       func(param0 *sns.GetSMSAttributesInput) (*request.Request, *sns.GetSMSAttributesOutput)
+	GetSMSAttributesWithContextFunc                   func(param0 aws.Context, param1 *sns.GetSMSAttributesInput, param2 ...request.Option) (*sns.GetSMSAttributesOutput, error)
+	GetSubscriptionAttributesFunc                     func(param0 *sns.GetSubscriptionAttributesInput) (*sns.GetSubscriptionAttributesOutput, error)
+	GetSubscriptionAttributesRequestFunc              func(param0 *sns.GetSubscriptionAttributesInput) (*request.Request, *sns.GetSubscriptionAttributesOutput)
+	GetSubscriptionAttributesWithContextFunc          func(param0 aws.Context, param1 *sns.GetSubscriptionAttributesInput, param2 ...request.Option) (*sns.GetSubscriptionAttributesOutput, error)
+	GetTopicAttributesFunc                            func(param0 *sns.GetTopicAttributesInput) (*sns.GetTopicAttributesOutput, error)
+	GetTopicAttributesRequestFunc                     func(param0 *sns.GetTopicAttributesInput) (*request.Request, *sns.GetTopicAttributesOutput)
+	GetTopicAttributesWithContextFunc                 func(param0 aws.Context, param1 *sns.GetTopicAttributesInput, param2 ...request.Option) (*sns.GetTopicAttributesOutput, error)
+	ListEndpointsByPlatformApplicationFunc            func(param0 *sns.ListEndpointsByPlatformApplicationInput) (*sns.ListEndpointsByPlatformApplicationOutput, error)
+	ListEndpointsByPlatformApplicationRequestFunc     func(param0 *sns.ListEndpointsByPlatformApplicationInput) (*request.Request, *sns.ListEndpointsByPlatformApplicationOutput)
+	ListEndpointsByPlatformApplicationWithContextFunc func(param0 aws.Context, param1 *sns.ListEndpointsByPlatformApplicationInput, param2 ...request.Option) (*sns.ListEndpointsByPlatformApplicationOutput, error)
+	ListPhoneNumbersOptedOutFunc                      func(param0 *sns.ListPhoneNumbersOptedOutInput) (*sns.ListPhoneNumbersOptedOutOutput, error)
+	ListPhoneNumbersOptedOutRequestFunc               func(param0 *sns.ListPhoneNumbersOptedOutInput) (*request.Request, *sns.ListPhoneNumbersOptedOutOutput)
+	ListPhoneNumbersOptedOutWithContextFunc           func(param0 aws.Context, param1 *sns.ListPhoneNumbersOptedOutInput, param2 ...request.Option) (*sns.ListPhoneNumbersOptedOutOutput, error)
+	ListPlatformApplicationsFunc                      func(param0 *sns.ListPlatformApplicationsInput) (*sns.ListPlatformApplicationsOutput, error)
+	ListPlatformApplicationsRequestFunc               func(param0 *sns.ListPlatformApplicationsInput) (*request.Request, *sns.ListPlatformApplicationsOutput)
+	ListPlatformApplicationsWithContextFunc           func(param0 aws.Context, param1 *sns.ListPlatformApplicationsInput, param2 ...request.Option) (*sns.ListPlatformApplicationsOutput, error)
+	ListSubscriptionsFunc                             func(param0 *sns.ListSubscriptionsInput) (*sns.ListSubscriptionsOutput, error)
+	ListSubscriptionsByTopicFunc                      func(param0 *sns.ListSubscriptionsByTopicInput) (*sns.ListSubscriptionsByTopicOutput, error)
+	ListSubscriptionsByTopicRequestFunc               func(param0 *sns.ListSubscriptionsByTopicInput) (*request.Request, *sns.ListSubscriptionsByTopicOutput)
+	ListSubscriptionsByTopicWithContextFunc           func(param0 aws.Context, param1 *sns.ListSubscriptionsByTopicInput, param2 ...request.Option) (*sns.ListSubscriptionsByTopicOutput, error)
+	ListSubscriptionsRequestFunc                      func(param0 *sns.ListSubscriptionsInput) (*request.Request, *sns.ListSubscriptionsOutput)
+	ListSubscriptionsWithContextFunc                  func(param0 aws.Context, param1 *sns.ListSubscriptionsInput, param2 ...request.Option) (*sns.ListSubscriptionsOutput, error)
+	ListTopicsFunc                                    func(param0 *sns.ListTopicsInput) (*sns.ListTopicsOutput, error)
+	ListTopicsRequestFunc                             func(param0 *sns.ListTopicsInput) (*request.Request, *sns.ListTopicsOutput)
+	ListTopicsWithContextFunc                         func(param0 aws.Context, param1 *sns.ListTopicsInput, param2 ...request.Option) (*sns.ListTopicsOutput, error)
+	OptInPhoneNumberFunc                              func(param0 *sns.OptInPhoneNumberInput) (*sns.OptInPhoneNumberOutput, error)
+	OptInPhoneNumberRequestFunc                       func(param0 *sns.OptInPhoneNumberInput) (*request.Request, *sns.OptInPhoneNumberOutput)
+	OptInPhoneNumberWithContextFunc                   func(param0 aws.Context, param1 *sns.OptInPhoneNumberInput, param2 ...request.Option) (*sns.OptInPhoneNumberOutput, error)
+	PublishFunc                                       func(param0 *sns.PublishInput) (*sns.PublishOutput, error)
+	PublishRequestFunc                                func(param0 *sns.PublishInput) (*request.Request, *sns.PublishOutput)
+	PublishWithContextFunc                            func(param0 aws.Context, param1 *sns.PublishInput, param2 ...request.Option) (*sns.PublishOutput, error)
+	RemovePermissionFunc                              func(param0 *sns.RemovePermissionInput) (*sns.RemovePermissionOutput, error)
+	RemovePermissionRequestFunc                       func(param0 *sns.RemovePermissionInput) (*request.Request, *sns.RemovePermissionOutput)
+	RemovePermissionWithContextFunc                   func(param0 aws.Context, param1 *sns.RemovePermissionInput, param2 ...request.Option) (*sns.RemovePermissionOutput, error)
+	SetEndpointAttributesFunc                         func(param0 *sns.SetEndpointAttributesInput) (*sns.SetEndpointAttributesOutput, error)
+	SetEndpointAttributesRequestFunc                  func(param0 *sns.SetEndpointAttributesInput) (*request.Request, *sns.SetEndpointAttributesOutput)
+	SetEndpointAttributesWithContextFunc              func(param0 aws.Context, param1 *sns.SetEndpointAttributesInput, param2 ...request.Option) (*sns.SetEndpointAttributesOutput, error)
+	SetPlatformApplicationAttributesFunc              func(param0 *sns.SetPlatformApplicationAttributesInput) (*sns.SetPlatformApplicationAttributesOutput, error)
+	SetPlatformApplicationAttributesRequestFunc       func(param0 *sns.SetPlatformApplicationAttributesInput) (*request.Request, *sns.SetPlatformApplicationAttributesOutput)
+	SetPlatformApplicationAttributesWithContextFunc   func(param0 aws.Context, param1 *sns.SetPlatformApplicationAttributesInput, param2 ...request.Option) (*sns.SetPlatformApplicationAttributesOutput, error)
+	SetSMSAttributesFunc                              func(param0 *sns.SetSMSAttributesInput) (*sns.SetSMSAttributesOutput, error)
+	SetSMSAttributesRequestFunc                       func(param0 *sns.SetSMSAttributesInput) (*request.Request, *sns.SetSMSAttributesOutput)
+	SetSMSAttributesWithContextFunc                   func(param0 aws.Context, param1 *sns.SetSMSAttributesInput, param2 ...request.Option) (*sns.SetSMSAttributesOutput, error)
+	SetSubscriptionAttributesFunc                     func(param0 *sns.SetSubscriptionAttributesInput) (*sns.SetSubscriptionAttributesOutput, error)
+	SetSubscriptionAttributesRequestFunc              func(param0 *sns.SetSubscriptionAttributesInput) (*request.Request, *sns.SetSubscriptionAttributesOutput)
+	SetSubscriptionAttributesWithContextFunc          func(param0 aws.Context, param1 *sns.SetSubscriptionAttributesInput, param2 ...request.Option) (*sns.SetSubscriptionAttributesOutput, error)
+	SetTopicAttributesFunc                            func(param0 *sns.SetTopicAttributesInput) (*sns.SetTopicAttributesOutput, error)
+	SetTopicAttributesRequestFunc                     func(param0 *sns.SetTopicAttributesInput) (*request.Request, *sns.SetTopicAttributesOutput)
+	SetTopicAttributesWithContextFunc                 func(param0 aws.Context, param1 *sns.SetTopicAttributesInput, param2 ...request.Option) (*sns.SetTopicAttributesOutput, error)
+	SubscribeFunc                                     func(param0 *sns.SubscribeInput) (*sns.SubscribeOutput, error)
+	SubscribeRequestFunc                              func(param0 *sns.SubscribeInput) (*request.Request, *sns.SubscribeOutput)
+	SubscribeWithContextFunc                          func(param0 aws.Context, param1 *sns.SubscribeInput, param2 ...request.Option) (*sns.SubscribeOutput, error)
+	UnsubscribeFunc                                   func(param0 *sns.UnsubscribeInput) (*sns.UnsubscribeOutput, error)
+	UnsubscribeRequestFunc                            func(param0 *sns.UnsubscribeInput) (*request.Request, *sns.UnsubscribeOutput)
+	UnsubscribeWithContextFunc                        func(param0 aws.Context, param1 *sns.UnsubscribeInput, param2 ...request.Option) (*sns.UnsubscribeOutput, error)
+}
+
+func (m *snsMock) AddPermission(param0 *sns.AddPermissionInput) (*sns.AddPermissionOutput, error) {
+	m.addCall("AddPermission")
+	m.verifyInput("AddPermission", param0)
+	return m.AddPermissionFunc(param0)
+}
+
+func (m *snsMock) AddPermissionRequest(param0 *sns.AddPermissionInput) (*request.Request, *sns.AddPermissionOutput) {
+	m.addCall("AddPermissionRequest")
+	m.verifyInput("AddPermissionRequest", param0)
+	return m.AddPermissionRequestFunc(param0)
+}
+
+func (m *snsMock) AddPermissionWithContext(param0 aws.Context, param1 *sns.AddPermissionInput, param2 ...request.Option) (*sns.AddPermissionOutput, error) {
+	m.addCall("AddPermissionWithContext")
+	m.verifyInput("AddPermissionWithContext", param0)
+	return m.AddPermissionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) CheckIfPhoneNumberIsOptedOut(param0 *sns.CheckIfPhoneNumberIsOptedOutInput) (*sns.CheckIfPhoneNumberIsOptedOutOutput, error) {
+	m.addCall("CheckIfPhoneNumberIsOptedOut")
+	m.verifyInput("CheckIfPhoneNumberIsOptedOut", param0)
+	return m.CheckIfPhoneNumberIsOptedOutFunc(param0)
+}
+
+func (m *snsMock) CheckIfPhoneNumberIsOptedOutRequest(param0 *sns.CheckIfPhoneNumberIsOptedOutInput) (*request.Request, *sns.CheckIfPhoneNumberIsOptedOutOutput) {
+	m.addCall("CheckIfPhoneNumberIsOptedOutRequest")
+	m.verifyInput("CheckIfPhoneNumberIsOptedOutRequest", param0)
+	return m.CheckIfPhoneNumberIsOptedOutRequestFunc(param0)
+}
+
+func (m *snsMock) CheckIfPhoneNumberIsOptedOutWithContext(param0 aws.Context, param1 *sns.CheckIfPhoneNumberIsOptedOutInput, param2 ...request.Option) (*sns.CheckIfPhoneNumberIsOptedOutOutput, error) {
+	m.addCall("CheckIfPhoneNumberIsOptedOutWithContext")
+	m.verifyInput("CheckIfPhoneNumberIsOptedOutWithContext", param0)
+	return m.CheckIfPhoneNumberIsOptedOutWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) ConfirmSubscription(param0 *sns.ConfirmSubscriptionInput) (*sns.ConfirmSubscriptionOutput, error) {
+	m.addCall("ConfirmSubscription")
+	m.verifyInput("ConfirmSubscription", param0)
+	return m.ConfirmSubscriptionFunc(param0)
+}
+
+func (m *snsMock) ConfirmSubscriptionRequest(param0 *sns.ConfirmSubscriptionInput) (*request.Request, *sns.ConfirmSubscriptionOutput) {
+	m.addCall("ConfirmSubscriptionRequest")
+	m.verifyInput("ConfirmSubscriptionRequest", param0)
+	return m.ConfirmSubscriptionRequestFunc(param0)
+}
+
+func (m *snsMock) ConfirmSubscriptionWithContext(param0 aws.Context, param1 *sns.ConfirmSubscriptionInput, param2 ...request.Option) (*sns.ConfirmSubscriptionOutput, error) {
+	m.addCall("ConfirmSubscriptionWithContext")
+	m.verifyInput("ConfirmSubscriptionWithContext", param0)
+	return m.ConfirmSubscriptionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) CreatePlatformApplication(param0 *sns.CreatePlatformApplicationInput) (*sns.CreatePlatformApplicationOutput, error) {
+	m.addCall("CreatePlatformApplication")
+	m.verifyInput("CreatePlatformApplication", param0)
+	return m.CreatePlatformApplicationFunc(param0)
+}
+
+func (m *snsMock) CreatePlatformApplicationRequest(param0 *sns.CreatePlatformApplicationInput) (*request.Request, *sns.CreatePlatformApplicationOutput) {
+	m.addCall("CreatePlatformApplicationRequest")
+	m.verifyInput("CreatePlatformApplicationRequest", param0)
+	return m.CreatePlatformApplicationRequestFunc(param0)
+}
+
+func (m *snsMock) CreatePlatformApplicationWithContext(param0 aws.Context, param1 *sns.CreatePlatformApplicationInput, param2 ...request.Option) (*sns.CreatePlatformApplicationOutput, error) {
+	m.addCall("CreatePlatformApplicationWithContext")
+	m.verifyInput("CreatePlatformApplicationWithContext", param0)
+	return m.CreatePlatformApplicationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) CreatePlatformEndpoint(param0 *sns.CreatePlatformEndpointInput) (*sns.CreatePlatformEndpointOutput, error) {
+	m.addCall("CreatePlatformEndpoint")
+	m.verifyInput("CreatePlatformEndpoint", param0)
+	return m.CreatePlatformEndpointFunc(param0)
+}
+
+func (m *snsMock) CreatePlatformEndpointRequest(param0 *sns.CreatePlatformEndpointInput) (*request.Request, *sns.CreatePlatformEndpointOutput) {
+	m.addCall("CreatePlatformEndpointRequest")
+	m.verifyInput("CreatePlatformEndpointRequest", param0)
+	return m.CreatePlatformEndpointRequestFunc(param0)
+}
+
+func (m *snsMock) CreatePlatformEndpointWithContext(param0 aws.Context, param1 *sns.CreatePlatformEndpointInput, param2 ...request.Option) (*sns.CreatePlatformEndpointOutput, error) {
+	m.addCall("CreatePlatformEndpointWithContext")
+	m.verifyInput("CreatePlatformEndpointWithContext", param0)
+	return m.CreatePlatformEndpointWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) CreateTopic(param0 *sns.CreateTopicInput) (*sns.CreateTopicOutput, error) {
+	m.addCall("CreateTopic")
+	m.verifyInput("CreateTopic", param0)
+	return m.CreateTopicFunc(param0)
+}
+
+func (m *snsMock) CreateTopicRequest(param0 *sns.CreateTopicInput) (*request.Request, *sns.CreateTopicOutput) {
+	m.addCall("CreateTopicRequest")
+	m.verifyInput("CreateTopicRequest", param0)
+	return m.CreateTopicRequestFunc(param0)
+}
+
+func (m *snsMock) CreateTopicWithContext(param0 aws.Context, param1 *sns.CreateTopicInput, param2 ...request.Option) (*sns.CreateTopicOutput, error) {
+	m.addCall("CreateTopicWithContext")
+	m.verifyInput("CreateTopicWithContext", param0)
+	return m.CreateTopicWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) DeleteEndpoint(param0 *sns.DeleteEndpointInput) (*sns.DeleteEndpointOutput, error) {
+	m.addCall("DeleteEndpoint")
+	m.verifyInput("DeleteEndpoint", param0)
+	return m.DeleteEndpointFunc(param0)
+}
+
+func (m *snsMock) DeleteEndpointRequest(param0 *sns.DeleteEndpointInput) (*request.Request, *sns.DeleteEndpointOutput) {
+	m.addCall("DeleteEndpointRequest")
+	m.verifyInput("DeleteEndpointRequest", param0)
+	return m.DeleteEndpointRequestFunc(param0)
+}
+
+func (m *snsMock) DeleteEndpointWithContext(param0 aws.Context, param1 *sns.DeleteEndpointInput, param2 ...request.Option) (*sns.DeleteEndpointOutput, error) {
+	m.addCall("DeleteEndpointWithContext")
+	m.verifyInput("DeleteEndpointWithContext", param0)
+	return m.DeleteEndpointWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) DeletePlatformApplication(param0 *sns.DeletePlatformApplicationInput) (*sns.DeletePlatformApplicationOutput, error) {
+	m.addCall("DeletePlatformApplication")
+	m.verifyInput("DeletePlatformApplication", param0)
+	return m.DeletePlatformApplicationFunc(param0)
+}
+
+func (m *snsMock) DeletePlatformApplicationRequest(param0 *sns.DeletePlatformApplicationInput) (*request.Request, *sns.DeletePlatformApplicationOutput) {
+	m.addCall("DeletePlatformApplicationRequest")
+	m.verifyInput("DeletePlatformApplicationRequest", param0)
+	return m.DeletePlatformApplicationRequestFunc(param0)
+}
+
+func (m *snsMock) DeletePlatformApplicationWithContext(param0 aws.Context, param1 *sns.DeletePlatformApplicationInput, param2 ...request.Option) (*sns.DeletePlatformApplicationOutput, error) {
+	m.addCall("DeletePlatformApplicationWithContext")
+	m.verifyInput("DeletePlatformApplicationWithContext", param0)
+	return m.DeletePlatformApplicationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) DeleteTopic(param0 *sns.DeleteTopicInput) (*sns.DeleteTopicOutput, error) {
+	m.addCall("DeleteTopic")
+	m.verifyInput("DeleteTopic", param0)
+	return m.DeleteTopicFunc(param0)
+}
+
+func (m *snsMock) DeleteTopicRequest(param0 *sns.DeleteTopicInput) (*request.Request, *sns.DeleteTopicOutput) {
+	m.addCall("DeleteTopicRequest")
+	m.verifyInput("DeleteTopicRequest", param0)
+	return m.DeleteTopicRequestFunc(param0)
+}
+
+func (m *snsMock) DeleteTopicWithContext(param0 aws.Context, param1 *sns.DeleteTopicInput, param2 ...request.Option) (*sns.DeleteTopicOutput, error) {
+	m.addCall("DeleteTopicWithContext")
+	m.verifyInput("DeleteTopicWithContext", param0)
+	return m.DeleteTopicWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) GetEndpointAttributes(param0 *sns.GetEndpointAttributesInput) (*sns.GetEndpointAttributesOutput, error) {
+	m.addCall("GetEndpointAttributes")
+	m.verifyInput("GetEndpointAttributes", param0)
+	return m.GetEndpointAttributesFunc(param0)
+}
+
+func (m *snsMock) GetEndpointAttributesRequest(param0 *sns.GetEndpointAttributesInput) (*request.Request, *sns.GetEndpointAttributesOutput) {
+	m.addCall("GetEndpointAttributesRequest")
+	m.verifyInput("GetEndpointAttributesRequest", param0)
+	return m.GetEndpointAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) GetEndpointAttributesWithContext(param0 aws.Context, param1 *sns.GetEndpointAttributesInput, param2 ...request.Option) (*sns.GetEndpointAttributesOutput, error) {
+	m.addCall("GetEndpointAttributesWithContext")
+	m.verifyInput("GetEndpointAttributesWithContext", param0)
+	return m.GetEndpointAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) GetPlatformApplicationAttributes(param0 *sns.GetPlatformApplicationAttributesInput) (*sns.GetPlatformApplicationAttributesOutput, error) {
+	m.addCall("GetPlatformApplicationAttributes")
+	m.verifyInput("GetPlatformApplicationAttributes", param0)
+	return m.GetPlatformApplicationAttributesFunc(param0)
+}
+
+func (m *snsMock) GetPlatformApplicationAttributesRequest(param0 *sns.GetPlatformApplicationAttributesInput) (*request.Request, *sns.GetPlatformApplicationAttributesOutput) {
+	m.addCall("GetPlatformApplicationAttributesRequest")
+	m.verifyInput("GetPlatformApplicationAttributesRequest", param0)
+	return m.GetPlatformApplicationAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) GetPlatformApplicationAttributesWithContext(param0 aws.Context, param1 *sns.GetPlatformApplicationAttributesInput, param2 ...request.Option) (*sns.GetPlatformApplicationAttributesOutput, error) {
+	m.addCall("GetPlatformApplicationAttributesWithContext")
+	m.verifyInput("GetPlatformApplicationAttributesWithContext", param0)
+	return m.GetPlatformApplicationAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) GetSMSAttributes(param0 *sns.GetSMSAttributesInput) (*sns.GetSMSAttributesOutput, error) {
+	m.addCall("GetSMSAttributes")
+	m.verifyInput("GetSMSAttributes", param0)
+	return m.GetSMSAttributesFunc(param0)
+}
+
+func (m *snsMock) GetSMSAttributesRequest(param0 *sns.GetSMSAttributesInput) (*request.Request, *sns.GetSMSAttributesOutput) {
+	m.addCall("GetSMSAttributesRequest")
+	m.verifyInput("GetSMSAttributesRequest", param0)
+	return m.GetSMSAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) GetSMSAttributesWithContext(param0 aws.Context, param1 *sns.GetSMSAttributesInput, param2 ...request.Option) (*sns.GetSMSAttributesOutput, error) {
+	m.addCall("GetSMSAttributesWithContext")
+	m.verifyInput("GetSMSAttributesWithContext", param0)
+	return m.GetSMSAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) GetSubscriptionAttributes(param0 *sns.GetSubscriptionAttributesInput) (*sns.GetSubscriptionAttributesOutput, error) {
+	m.addCall("GetSubscriptionAttributes")
+	m.verifyInput("GetSubscriptionAttributes", param0)
+	return m.GetSubscriptionAttributesFunc(param0)
+}
+
+func (m *snsMock) GetSubscriptionAttributesRequest(param0 *sns.GetSubscriptionAttributesInput) (*request.Request, *sns.GetSubscriptionAttributesOutput) {
+	m.addCall("GetSubscriptionAttributesRequest")
+	m.verifyInput("GetSubscriptionAttributesRequest", param0)
+	return m.GetSubscriptionAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) GetSubscriptionAttributesWithContext(param0 aws.Context, param1 *sns.GetSubscriptionAttributesInput, param2 ...request.Option) (*sns.GetSubscriptionAttributesOutput, error) {
+	m.addCall("GetSubscriptionAttributesWithContext")
+	m.verifyInput("GetSubscriptionAttributesWithContext", param0)
+	return m.GetSubscriptionAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) GetTopicAttributes(param0 *sns.GetTopicAttributesInput) (*sns.GetTopicAttributesOutput, error) {
+	m.addCall("GetTopicAttributes")
+	m.verifyInput("GetTopicAttributes", param0)
+	return m.GetTopicAttributesFunc(param0)
+}
+
+func (m *snsMock) GetTopicAttributesRequest(param0 *sns.GetTopicAttributesInput) (*request.Request, *sns.GetTopicAttributesOutput) {
+	m.addCall("GetTopicAttributesRequest")
+	m.verifyInput("GetTopicAttributesRequest", param0)
+	return m.GetTopicAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) GetTopicAttributesWithContext(param0 aws.Context, param1 *sns.GetTopicAttributesInput, param2 ...request.Option) (*sns.GetTopicAttributesOutput, error) {
+	m.addCall("GetTopicAttributesWithContext")
+	m.verifyInput("GetTopicAttributesWithContext", param0)
+	return m.GetTopicAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) ListEndpointsByPlatformApplication(param0 *sns.ListEndpointsByPlatformApplicationInput) (*sns.ListEndpointsByPlatformApplicationOutput, error) {
+	m.addCall("ListEndpointsByPlatformApplication")
+	m.verifyInput("ListEndpointsByPlatformApplication", param0)
+	return m.ListEndpointsByPlatformApplicationFunc(param0)
+}
+
+func (m *snsMock) ListEndpointsByPlatformApplicationRequest(param0 *sns.ListEndpointsByPlatformApplicationInput) (*request.Request, *sns.ListEndpointsByPlatformApplicationOutput) {
+	m.addCall("ListEndpointsByPlatformApplicationRequest")
+	m.verifyInput("ListEndpointsByPlatformApplicationRequest", param0)
+	return m.ListEndpointsByPlatformApplicationRequestFunc(param0)
+}
+
+func (m *snsMock) ListEndpointsByPlatformApplicationWithContext(param0 aws.Context, param1 *sns.ListEndpointsByPlatformApplicationInput, param2 ...request.Option) (*sns.ListEndpointsByPlatformApplicationOutput, error) {
+	m.addCall("ListEndpointsByPlatformApplicationWithContext")
+	m.verifyInput("ListEndpointsByPlatformApplicationWithContext", param0)
+	return m.ListEndpointsByPlatformApplicationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) ListPhoneNumbersOptedOut(param0 *sns.ListPhoneNumbersOptedOutInput) (*sns.ListPhoneNumbersOptedOutOutput, error) {
+	m.addCall("ListPhoneNumbersOptedOut")
+	m.verifyInput("ListPhoneNumbersOptedOut", param0)
+	return m.ListPhoneNumbersOptedOutFunc(param0)
+}
+
+func (m *snsMock) ListPhoneNumbersOptedOutRequest(param0 *sns.ListPhoneNumbersOptedOutInput) (*request.Request, *sns.ListPhoneNumbersOptedOutOutput) {
+	m.addCall("ListPhoneNumbersOptedOutRequest")
+	m.verifyInput("ListPhoneNumbersOptedOutRequest", param0)
+	return m.ListPhoneNumbersOptedOutRequestFunc(param0)
+}
+
+func (m *snsMock) ListPhoneNumbersOptedOutWithContext(param0 aws.Context, param1 *sns.ListPhoneNumbersOptedOutInput, param2 ...request.Option) (*sns.ListPhoneNumbersOptedOutOutput, error) {
+	m.addCall("ListPhoneNumbersOptedOutWithContext")
+	m.verifyInput("ListPhoneNumbersOptedOutWithContext", param0)
+	return m.ListPhoneNumbersOptedOutWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) ListPlatformApplications(param0 *sns.ListPlatformApplicationsInput) (*sns.ListPlatformApplicationsOutput, error) {
+	m.addCall("ListPlatformApplications")
+	m.verifyInput("ListPlatformApplications", param0)
+	return m.ListPlatformApplicationsFunc(param0)
+}
+
+func (m *snsMock) ListPlatformApplicationsRequest(param0 *sns.ListPlatformApplicationsInput) (*request.Request, *sns.ListPlatformApplicationsOutput) {
+	m.addCall("ListPlatformApplicationsRequest")
+	m.verifyInput("ListPlatformApplicationsRequest", param0)
+	return m.ListPlatformApplicationsRequestFunc(param0)
+}
+
+func (m *snsMock) ListPlatformApplicationsWithContext(param0 aws.Context, param1 *sns.ListPlatformApplicationsInput, param2 ...request.Option) (*sns.ListPlatformApplicationsOutput, error) {
+	m.addCall("ListPlatformApplicationsWithContext")
+	m.verifyInput("ListPlatformApplicationsWithContext", param0)
+	return m.ListPlatformApplicationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) ListSubscriptions(param0 *sns.ListSubscriptionsInput) (*sns.ListSubscriptionsOutput, error) {
+	m.addCall("ListSubscriptions")
+	m.verifyInput("ListSubscriptions", param0)
+	return m.ListSubscriptionsFunc(param0)
+}
+
+func (m *snsMock) ListSubscriptionsByTopic(param0 *sns.ListSubscriptionsByTopicInput) (*sns.ListSubscriptionsByTopicOutput, error) {
+	m.addCall("ListSubscriptionsByTopic")
+	m.verifyInput("ListSubscriptionsByTopic", param0)
+	return m.ListSubscriptionsByTopicFunc(param0)
+}
+
+func (m *snsMock) ListSubscriptionsByTopicRequest(param0 *sns.ListSubscriptionsByTopicInput) (*request.Request, *sns.ListSubscriptionsByTopicOutput) {
+	m.addCall("ListSubscriptionsByTopicRequest")
+	m.verifyInput("ListSubscriptionsByTopicRequest", param0)
+	return m.ListSubscriptionsByTopicRequestFunc(param0)
+}
+
+func (m *snsMock) ListSubscriptionsByTopicWithContext(param0 aws.Context, param1 *sns.ListSubscriptionsByTopicInput, param2 ...request.Option) (*sns.ListSubscriptionsByTopicOutput, error) {
+	m.addCall("ListSubscriptionsByTopicWithContext")
+	m.verifyInput("ListSubscriptionsByTopicWithContext", param0)
+	return m.ListSubscriptionsByTopicWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) ListSubscriptionsRequest(param0 *sns.ListSubscriptionsInput) (*request.Request, *sns.ListSubscriptionsOutput) {
+	m.addCall("ListSubscriptionsRequest")
+	m.verifyInput("ListSubscriptionsRequest", param0)
+	return m.ListSubscriptionsRequestFunc(param0)
+}
+
+func (m *snsMock) ListSubscriptionsWithContext(param0 aws.Context, param1 *sns.ListSubscriptionsInput, param2 ...request.Option) (*sns.ListSubscriptionsOutput, error) {
+	m.addCall("ListSubscriptionsWithContext")
+	m.verifyInput("ListSubscriptionsWithContext", param0)
+	return m.ListSubscriptionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) ListTopics(param0 *sns.ListTopicsInput) (*sns.ListTopicsOutput, error) {
+	m.addCall("ListTopics")
+	m.verifyInput("ListTopics", param0)
+	return m.ListTopicsFunc(param0)
+}
+
+func (m *snsMock) ListTopicsRequest(param0 *sns.ListTopicsInput) (*request.Request, *sns.ListTopicsOutput) {
+	m.addCall("ListTopicsRequest")
+	m.verifyInput("ListTopicsRequest", param0)
+	return m.ListTopicsRequestFunc(param0)
+}
+
+func (m *snsMock) ListTopicsWithContext(param0 aws.Context, param1 *sns.ListTopicsInput, param2 ...request.Option) (*sns.ListTopicsOutput, error) {
+	m.addCall("ListTopicsWithContext")
+	m.verifyInput("ListTopicsWithContext", param0)
+	return m.ListTopicsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) OptInPhoneNumber(param0 *sns.OptInPhoneNumberInput) (*sns.OptInPhoneNumberOutput, error) {
+	m.addCall("OptInPhoneNumber")
+	m.verifyInput("OptInPhoneNumber", param0)
+	return m.OptInPhoneNumberFunc(param0)
+}
+
+func (m *snsMock) OptInPhoneNumberRequest(param0 *sns.OptInPhoneNumberInput) (*request.Request, *sns.OptInPhoneNumberOutput) {
+	m.addCall("OptInPhoneNumberRequest")
+	m.verifyInput("OptInPhoneNumberRequest", param0)
+	return m.OptInPhoneNumberRequestFunc(param0)
+}
+
+func (m *snsMock) OptInPhoneNumberWithContext(param0 aws.Context, param1 *sns.OptInPhoneNumberInput, param2 ...request.Option) (*sns.OptInPhoneNumberOutput, error) {
+	m.addCall("OptInPhoneNumberWithContext")
+	m.verifyInput("OptInPhoneNumberWithContext", param0)
+	return m.OptInPhoneNumberWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) Publish(param0 *sns.PublishInput) (*sns.PublishOutput, error) {
+	m.addCall("Publish")
+	m.verifyInput("Publish", param0)
+	return m.PublishFunc(param0)
+}
+
+func (m *snsMock) PublishRequest(param0 *sns.PublishInput) (*request.Request, *sns.PublishOutput) {
+	m.addCall("PublishRequest")
+	m.verifyInput("PublishRequest", param0)
+	return m.PublishRequestFunc(param0)
+}
+
+func (m *snsMock) PublishWithContext(param0 aws.Context, param1 *sns.PublishInput, param2 ...request.Option) (*sns.PublishOutput, error) {
+	m.addCall("PublishWithContext")
+	m.verifyInput("PublishWithContext", param0)
+	return m.PublishWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) RemovePermission(param0 *sns.RemovePermissionInput) (*sns.RemovePermissionOutput, error) {
+	m.addCall("RemovePermission")
+	m.verifyInput("RemovePermission", param0)
+	return m.RemovePermissionFunc(param0)
+}
+
+func (m *snsMock) RemovePermissionRequest(param0 *sns.RemovePermissionInput) (*request.Request, *sns.RemovePermissionOutput) {
+	m.addCall("RemovePermissionRequest")
+	m.verifyInput("RemovePermissionRequest", param0)
+	return m.RemovePermissionRequestFunc(param0)
+}
+
+func (m *snsMock) RemovePermissionWithContext(param0 aws.Context, param1 *sns.RemovePermissionInput, param2 ...request.Option) (*sns.RemovePermissionOutput, error) {
+	m.addCall("RemovePermissionWithContext")
+	m.verifyInput("RemovePermissionWithContext", param0)
+	return m.RemovePermissionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) SetEndpointAttributes(param0 *sns.SetEndpointAttributesInput) (*sns.SetEndpointAttributesOutput, error) {
+	m.addCall("SetEndpointAttributes")
+	m.verifyInput("SetEndpointAttributes", param0)
+	return m.SetEndpointAttributesFunc(param0)
+}
+
+func (m *snsMock) SetEndpointAttributesRequest(param0 *sns.SetEndpointAttributesInput) (*request.Request, *sns.SetEndpointAttributesOutput) {
+	m.addCall("SetEndpointAttributesRequest")
+	m.verifyInput("SetEndpointAttributesRequest", param0)
+	return m.SetEndpointAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) SetEndpointAttributesWithContext(param0 aws.Context, param1 *sns.SetEndpointAttributesInput, param2 ...request.Option) (*sns.SetEndpointAttributesOutput, error) {
+	m.addCall("SetEndpointAttributesWithContext")
+	m.verifyInput("SetEndpointAttributesWithContext", param0)
+	return m.SetEndpointAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) SetPlatformApplicationAttributes(param0 *sns.SetPlatformApplicationAttributesInput) (*sns.SetPlatformApplicationAttributesOutput, error) {
+	m.addCall("SetPlatformApplicationAttributes")
+	m.verifyInput("SetPlatformApplicationAttributes", param0)
+	return m.SetPlatformApplicationAttributesFunc(param0)
+}
+
+func (m *snsMock) SetPlatformApplicationAttributesRequest(param0 *sns.SetPlatformApplicationAttributesInput) (*request.Request, *sns.SetPlatformApplicationAttributesOutput) {
+	m.addCall("SetPlatformApplicationAttributesRequest")
+	m.verifyInput("SetPlatformApplicationAttributesRequest", param0)
+	return m.SetPlatformApplicationAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) SetPlatformApplicationAttributesWithContext(param0 aws.Context, param1 *sns.SetPlatformApplicationAttributesInput, param2 ...request.Option) (*sns.SetPlatformApplicationAttributesOutput, error) {
+	m.addCall("SetPlatformApplicationAttributesWithContext")
+	m.verifyInput("SetPlatformApplicationAttributesWithContext", param0)
+	return m.SetPlatformApplicationAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) SetSMSAttributes(param0 *sns.SetSMSAttributesInput) (*sns.SetSMSAttributesOutput, error) {
+	m.addCall("SetSMSAttributes")
+	m.verifyInput("SetSMSAttributes", param0)
+	return m.SetSMSAttributesFunc(param0)
+}
+
+func (m *snsMock) SetSMSAttributesRequest(param0 *sns.SetSMSAttributesInput) (*request.Request, *sns.SetSMSAttributesOutput) {
+	m.addCall("SetSMSAttributesRequest")
+	m.verifyInput("SetSMSAttributesRequest", param0)
+	return m.SetSMSAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) SetSMSAttributesWithContext(param0 aws.Context, param1 *sns.SetSMSAttributesInput, param2 ...request.Option) (*sns.SetSMSAttributesOutput, error) {
+	m.addCall("SetSMSAttributesWithContext")
+	m.verifyInput("SetSMSAttributesWithContext", param0)
+	return m.SetSMSAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) SetSubscriptionAttributes(param0 *sns.SetSubscriptionAttributesInput) (*sns.SetSubscriptionAttributesOutput, error) {
+	m.addCall("SetSubscriptionAttributes")
+	m.verifyInput("SetSubscriptionAttributes", param0)
+	return m.SetSubscriptionAttributesFunc(param0)
+}
+
+func (m *snsMock) SetSubscriptionAttributesRequest(param0 *sns.SetSubscriptionAttributesInput) (*request.Request, *sns.SetSubscriptionAttributesOutput) {
+	m.addCall("SetSubscriptionAttributesRequest")
+	m.verifyInput("SetSubscriptionAttributesRequest", param0)
+	return m.SetSubscriptionAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) SetSubscriptionAttributesWithContext(param0 aws.Context, param1 *sns.SetSubscriptionAttributesInput, param2 ...request.Option) (*sns.SetSubscriptionAttributesOutput, error) {
+	m.addCall("SetSubscriptionAttributesWithContext")
+	m.verifyInput("SetSubscriptionAttributesWithContext", param0)
+	return m.SetSubscriptionAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) SetTopicAttributes(param0 *sns.SetTopicAttributesInput) (*sns.SetTopicAttributesOutput, error) {
+	m.addCall("SetTopicAttributes")
+	m.verifyInput("SetTopicAttributes", param0)
+	return m.SetTopicAttributesFunc(param0)
+}
+
+func (m *snsMock) SetTopicAttributesRequest(param0 *sns.SetTopicAttributesInput) (*request.Request, *sns.SetTopicAttributesOutput) {
+	m.addCall("SetTopicAttributesRequest")
+	m.verifyInput("SetTopicAttributesRequest", param0)
+	return m.SetTopicAttributesRequestFunc(param0)
+}
+
+func (m *snsMock) SetTopicAttributesWithContext(param0 aws.Context, param1 *sns.SetTopicAttributesInput, param2 ...request.Option) (*sns.SetTopicAttributesOutput, error) {
+	m.addCall("SetTopicAttributesWithContext")
+	m.verifyInput("SetTopicAttributesWithContext", param0)
+	return m.SetTopicAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) Subscribe(param0 *sns.SubscribeInput) (*sns.SubscribeOutput, error) {
+	m.addCall("Subscribe")
+	m.verifyInput("Subscribe", param0)
+	return m.SubscribeFunc(param0)
+}
+
+func (m *snsMock) SubscribeRequest(param0 *sns.SubscribeInput) (*request.Request, *sns.SubscribeOutput) {
+	m.addCall("SubscribeRequest")
+	m.verifyInput("SubscribeRequest", param0)
+	return m.SubscribeRequestFunc(param0)
+}
+
+func (m *snsMock) SubscribeWithContext(param0 aws.Context, param1 *sns.SubscribeInput, param2 ...request.Option) (*sns.SubscribeOutput, error) {
+	m.addCall("SubscribeWithContext")
+	m.verifyInput("SubscribeWithContext", param0)
+	return m.SubscribeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *snsMock) Unsubscribe(param0 *sns.UnsubscribeInput) (*sns.UnsubscribeOutput, error) {
+	m.addCall("Unsubscribe")
+	m.verifyInput("Unsubscribe", param0)
+	return m.UnsubscribeFunc(param0)
+}
+
+func (m *snsMock) UnsubscribeRequest(param0 *sns.UnsubscribeInput) (*request.Request, *sns.UnsubscribeOutput) {
+	m.addCall("UnsubscribeRequest")
+	m.verifyInput("UnsubscribeRequest", param0)
+	return m.UnsubscribeRequestFunc(param0)
+}
+
+func (m *snsMock) UnsubscribeWithContext(param0 aws.Context, param1 *sns.UnsubscribeInput, param2 ...request.Option) (*sns.UnsubscribeOutput, error) {
+	m.addCall("UnsubscribeWithContext")
+	m.verifyInput("UnsubscribeWithContext", param0)
+	return m.UnsubscribeWithContextFunc(param0, param1, param2...)
 }
