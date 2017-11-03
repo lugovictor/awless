@@ -30,6 +30,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/route53"
+	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -1702,6 +1704,80 @@ func (cmd *CreateVpc) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateZone(sess *session.Session, l ...*logger.Logger) *CreateZone {
+	cmd := new(CreateZone)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = route53.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateZone) SetApi(api route53iface.Route53API) {
+	cmd.api = api
+}
+
+func (cmd *CreateZone) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &route53.CreateHostedZoneInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in route53.CreateHostedZoneInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateHostedZone(input)
+	cmd.logger.ExtraVerbosef("route53.CreateHostedZone call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateZone) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateZone) ParamsHelp() string {
+	return generateParamsHelp("createzone", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateZone) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteAccesskey(sess *session.Session, l ...*logger.Logger) *DeleteAccesskey {
 	cmd := new(DeleteAccesskey)
 	if len(l) > 0 {
@@ -2855,6 +2931,80 @@ func (cmd *DeleteVpc) ParamsHelp() string {
 }
 
 func (cmd *DeleteVpc) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteZone(sess *session.Session, l ...*logger.Logger) *DeleteZone {
+	cmd := new(DeleteZone)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = route53.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteZone) SetApi(api route53iface.Route53API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteZone) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &route53.DeleteHostedZoneInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in route53.DeleteHostedZoneInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteHostedZone(input)
+	cmd.logger.ExtraVerbosef("route53.DeleteHostedZone call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteZone) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteZone) ParamsHelp() string {
+	return generateParamsHelp("deletezone", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteZone) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

@@ -21,6 +21,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/wallix/awless/aws/spec"
 )
 
@@ -154,6 +155,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createzone":
+		return func() interface{} {
+			cmd := awsspec.NewCreateZone(nil)
+			cmd.SetApi(f.Mock.(route53iface.Route53API))
+			return cmd
+		}
 	case "deleteaccesskey":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteAccesskey(nil)
@@ -230,6 +237,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteVpc(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletezone":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteZone(nil)
+			cmd.SetApi(f.Mock.(route53iface.Route53API))
 			return cmd
 		}
 	case "detachalarm":

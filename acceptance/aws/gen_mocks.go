@@ -26,6 +26,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/route53"
+	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 )
 
 type cloudwatchMock struct {
@@ -8455,4 +8457,1136 @@ func (m *iamMock) WaitUntilUserExistsWithContext(param0 aws.Context, param1 *iam
 	m.addCall("WaitUntilUserExistsWithContext")
 	m.verifyInput("WaitUntilUserExistsWithContext", param0)
 	return m.WaitUntilUserExistsWithContextFunc(param0, param1, param2...)
+}
+
+type route53Mock struct {
+	basicMock
+	route53iface.Route53API
+	AssociateVPCWithHostedZoneFunc                        func(param0 *route53.AssociateVPCWithHostedZoneInput) (*route53.AssociateVPCWithHostedZoneOutput, error)
+	AssociateVPCWithHostedZoneRequestFunc                 func(param0 *route53.AssociateVPCWithHostedZoneInput) (*request.Request, *route53.AssociateVPCWithHostedZoneOutput)
+	AssociateVPCWithHostedZoneWithContextFunc             func(param0 aws.Context, param1 *route53.AssociateVPCWithHostedZoneInput, param2 ...request.Option) (*route53.AssociateVPCWithHostedZoneOutput, error)
+	ChangeResourceRecordSetsFunc                          func(param0 *route53.ChangeResourceRecordSetsInput) (*route53.ChangeResourceRecordSetsOutput, error)
+	ChangeResourceRecordSetsRequestFunc                   func(param0 *route53.ChangeResourceRecordSetsInput) (*request.Request, *route53.ChangeResourceRecordSetsOutput)
+	ChangeResourceRecordSetsWithContextFunc               func(param0 aws.Context, param1 *route53.ChangeResourceRecordSetsInput, param2 ...request.Option) (*route53.ChangeResourceRecordSetsOutput, error)
+	ChangeTagsForResourceFunc                             func(param0 *route53.ChangeTagsForResourceInput) (*route53.ChangeTagsForResourceOutput, error)
+	ChangeTagsForResourceRequestFunc                      func(param0 *route53.ChangeTagsForResourceInput) (*request.Request, *route53.ChangeTagsForResourceOutput)
+	ChangeTagsForResourceWithContextFunc                  func(param0 aws.Context, param1 *route53.ChangeTagsForResourceInput, param2 ...request.Option) (*route53.ChangeTagsForResourceOutput, error)
+	CreateHealthCheckFunc                                 func(param0 *route53.CreateHealthCheckInput) (*route53.CreateHealthCheckOutput, error)
+	CreateHealthCheckRequestFunc                          func(param0 *route53.CreateHealthCheckInput) (*request.Request, *route53.CreateHealthCheckOutput)
+	CreateHealthCheckWithContextFunc                      func(param0 aws.Context, param1 *route53.CreateHealthCheckInput, param2 ...request.Option) (*route53.CreateHealthCheckOutput, error)
+	CreateHostedZoneFunc                                  func(param0 *route53.CreateHostedZoneInput) (*route53.CreateHostedZoneOutput, error)
+	CreateHostedZoneRequestFunc                           func(param0 *route53.CreateHostedZoneInput) (*request.Request, *route53.CreateHostedZoneOutput)
+	CreateHostedZoneWithContextFunc                       func(param0 aws.Context, param1 *route53.CreateHostedZoneInput, param2 ...request.Option) (*route53.CreateHostedZoneOutput, error)
+	CreateQueryLoggingConfigFunc                          func(param0 *route53.CreateQueryLoggingConfigInput) (*route53.CreateQueryLoggingConfigOutput, error)
+	CreateQueryLoggingConfigRequestFunc                   func(param0 *route53.CreateQueryLoggingConfigInput) (*request.Request, *route53.CreateQueryLoggingConfigOutput)
+	CreateQueryLoggingConfigWithContextFunc               func(param0 aws.Context, param1 *route53.CreateQueryLoggingConfigInput, param2 ...request.Option) (*route53.CreateQueryLoggingConfigOutput, error)
+	CreateReusableDelegationSetFunc                       func(param0 *route53.CreateReusableDelegationSetInput) (*route53.CreateReusableDelegationSetOutput, error)
+	CreateReusableDelegationSetRequestFunc                func(param0 *route53.CreateReusableDelegationSetInput) (*request.Request, *route53.CreateReusableDelegationSetOutput)
+	CreateReusableDelegationSetWithContextFunc            func(param0 aws.Context, param1 *route53.CreateReusableDelegationSetInput, param2 ...request.Option) (*route53.CreateReusableDelegationSetOutput, error)
+	CreateTrafficPolicyFunc                               func(param0 *route53.CreateTrafficPolicyInput) (*route53.CreateTrafficPolicyOutput, error)
+	CreateTrafficPolicyInstanceFunc                       func(param0 *route53.CreateTrafficPolicyInstanceInput) (*route53.CreateTrafficPolicyInstanceOutput, error)
+	CreateTrafficPolicyInstanceRequestFunc                func(param0 *route53.CreateTrafficPolicyInstanceInput) (*request.Request, *route53.CreateTrafficPolicyInstanceOutput)
+	CreateTrafficPolicyInstanceWithContextFunc            func(param0 aws.Context, param1 *route53.CreateTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.CreateTrafficPolicyInstanceOutput, error)
+	CreateTrafficPolicyRequestFunc                        func(param0 *route53.CreateTrafficPolicyInput) (*request.Request, *route53.CreateTrafficPolicyOutput)
+	CreateTrafficPolicyVersionFunc                        func(param0 *route53.CreateTrafficPolicyVersionInput) (*route53.CreateTrafficPolicyVersionOutput, error)
+	CreateTrafficPolicyVersionRequestFunc                 func(param0 *route53.CreateTrafficPolicyVersionInput) (*request.Request, *route53.CreateTrafficPolicyVersionOutput)
+	CreateTrafficPolicyVersionWithContextFunc             func(param0 aws.Context, param1 *route53.CreateTrafficPolicyVersionInput, param2 ...request.Option) (*route53.CreateTrafficPolicyVersionOutput, error)
+	CreateTrafficPolicyWithContextFunc                    func(param0 aws.Context, param1 *route53.CreateTrafficPolicyInput, param2 ...request.Option) (*route53.CreateTrafficPolicyOutput, error)
+	CreateVPCAssociationAuthorizationFunc                 func(param0 *route53.CreateVPCAssociationAuthorizationInput) (*route53.CreateVPCAssociationAuthorizationOutput, error)
+	CreateVPCAssociationAuthorizationRequestFunc          func(param0 *route53.CreateVPCAssociationAuthorizationInput) (*request.Request, *route53.CreateVPCAssociationAuthorizationOutput)
+	CreateVPCAssociationAuthorizationWithContextFunc      func(param0 aws.Context, param1 *route53.CreateVPCAssociationAuthorizationInput, param2 ...request.Option) (*route53.CreateVPCAssociationAuthorizationOutput, error)
+	DeleteHealthCheckFunc                                 func(param0 *route53.DeleteHealthCheckInput) (*route53.DeleteHealthCheckOutput, error)
+	DeleteHealthCheckRequestFunc                          func(param0 *route53.DeleteHealthCheckInput) (*request.Request, *route53.DeleteHealthCheckOutput)
+	DeleteHealthCheckWithContextFunc                      func(param0 aws.Context, param1 *route53.DeleteHealthCheckInput, param2 ...request.Option) (*route53.DeleteHealthCheckOutput, error)
+	DeleteHostedZoneFunc                                  func(param0 *route53.DeleteHostedZoneInput) (*route53.DeleteHostedZoneOutput, error)
+	DeleteHostedZoneRequestFunc                           func(param0 *route53.DeleteHostedZoneInput) (*request.Request, *route53.DeleteHostedZoneOutput)
+	DeleteHostedZoneWithContextFunc                       func(param0 aws.Context, param1 *route53.DeleteHostedZoneInput, param2 ...request.Option) (*route53.DeleteHostedZoneOutput, error)
+	DeleteQueryLoggingConfigFunc                          func(param0 *route53.DeleteQueryLoggingConfigInput) (*route53.DeleteQueryLoggingConfigOutput, error)
+	DeleteQueryLoggingConfigRequestFunc                   func(param0 *route53.DeleteQueryLoggingConfigInput) (*request.Request, *route53.DeleteQueryLoggingConfigOutput)
+	DeleteQueryLoggingConfigWithContextFunc               func(param0 aws.Context, param1 *route53.DeleteQueryLoggingConfigInput, param2 ...request.Option) (*route53.DeleteQueryLoggingConfigOutput, error)
+	DeleteReusableDelegationSetFunc                       func(param0 *route53.DeleteReusableDelegationSetInput) (*route53.DeleteReusableDelegationSetOutput, error)
+	DeleteReusableDelegationSetRequestFunc                func(param0 *route53.DeleteReusableDelegationSetInput) (*request.Request, *route53.DeleteReusableDelegationSetOutput)
+	DeleteReusableDelegationSetWithContextFunc            func(param0 aws.Context, param1 *route53.DeleteReusableDelegationSetInput, param2 ...request.Option) (*route53.DeleteReusableDelegationSetOutput, error)
+	DeleteTrafficPolicyFunc                               func(param0 *route53.DeleteTrafficPolicyInput) (*route53.DeleteTrafficPolicyOutput, error)
+	DeleteTrafficPolicyInstanceFunc                       func(param0 *route53.DeleteTrafficPolicyInstanceInput) (*route53.DeleteTrafficPolicyInstanceOutput, error)
+	DeleteTrafficPolicyInstanceRequestFunc                func(param0 *route53.DeleteTrafficPolicyInstanceInput) (*request.Request, *route53.DeleteTrafficPolicyInstanceOutput)
+	DeleteTrafficPolicyInstanceWithContextFunc            func(param0 aws.Context, param1 *route53.DeleteTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.DeleteTrafficPolicyInstanceOutput, error)
+	DeleteTrafficPolicyRequestFunc                        func(param0 *route53.DeleteTrafficPolicyInput) (*request.Request, *route53.DeleteTrafficPolicyOutput)
+	DeleteTrafficPolicyWithContextFunc                    func(param0 aws.Context, param1 *route53.DeleteTrafficPolicyInput, param2 ...request.Option) (*route53.DeleteTrafficPolicyOutput, error)
+	DeleteVPCAssociationAuthorizationFunc                 func(param0 *route53.DeleteVPCAssociationAuthorizationInput) (*route53.DeleteVPCAssociationAuthorizationOutput, error)
+	DeleteVPCAssociationAuthorizationRequestFunc          func(param0 *route53.DeleteVPCAssociationAuthorizationInput) (*request.Request, *route53.DeleteVPCAssociationAuthorizationOutput)
+	DeleteVPCAssociationAuthorizationWithContextFunc      func(param0 aws.Context, param1 *route53.DeleteVPCAssociationAuthorizationInput, param2 ...request.Option) (*route53.DeleteVPCAssociationAuthorizationOutput, error)
+	DisassociateVPCFromHostedZoneFunc                     func(param0 *route53.DisassociateVPCFromHostedZoneInput) (*route53.DisassociateVPCFromHostedZoneOutput, error)
+	DisassociateVPCFromHostedZoneRequestFunc              func(param0 *route53.DisassociateVPCFromHostedZoneInput) (*request.Request, *route53.DisassociateVPCFromHostedZoneOutput)
+	DisassociateVPCFromHostedZoneWithContextFunc          func(param0 aws.Context, param1 *route53.DisassociateVPCFromHostedZoneInput, param2 ...request.Option) (*route53.DisassociateVPCFromHostedZoneOutput, error)
+	GetChangeFunc                                         func(param0 *route53.GetChangeInput) (*route53.GetChangeOutput, error)
+	GetChangeRequestFunc                                  func(param0 *route53.GetChangeInput) (*request.Request, *route53.GetChangeOutput)
+	GetChangeWithContextFunc                              func(param0 aws.Context, param1 *route53.GetChangeInput, param2 ...request.Option) (*route53.GetChangeOutput, error)
+	GetCheckerIpRangesFunc                                func(param0 *route53.GetCheckerIpRangesInput) (*route53.GetCheckerIpRangesOutput, error)
+	GetCheckerIpRangesRequestFunc                         func(param0 *route53.GetCheckerIpRangesInput) (*request.Request, *route53.GetCheckerIpRangesOutput)
+	GetCheckerIpRangesWithContextFunc                     func(param0 aws.Context, param1 *route53.GetCheckerIpRangesInput, param2 ...request.Option) (*route53.GetCheckerIpRangesOutput, error)
+	GetGeoLocationFunc                                    func(param0 *route53.GetGeoLocationInput) (*route53.GetGeoLocationOutput, error)
+	GetGeoLocationRequestFunc                             func(param0 *route53.GetGeoLocationInput) (*request.Request, *route53.GetGeoLocationOutput)
+	GetGeoLocationWithContextFunc                         func(param0 aws.Context, param1 *route53.GetGeoLocationInput, param2 ...request.Option) (*route53.GetGeoLocationOutput, error)
+	GetHealthCheckFunc                                    func(param0 *route53.GetHealthCheckInput) (*route53.GetHealthCheckOutput, error)
+	GetHealthCheckCountFunc                               func(param0 *route53.GetHealthCheckCountInput) (*route53.GetHealthCheckCountOutput, error)
+	GetHealthCheckCountRequestFunc                        func(param0 *route53.GetHealthCheckCountInput) (*request.Request, *route53.GetHealthCheckCountOutput)
+	GetHealthCheckCountWithContextFunc                    func(param0 aws.Context, param1 *route53.GetHealthCheckCountInput, param2 ...request.Option) (*route53.GetHealthCheckCountOutput, error)
+	GetHealthCheckLastFailureReasonFunc                   func(param0 *route53.GetHealthCheckLastFailureReasonInput) (*route53.GetHealthCheckLastFailureReasonOutput, error)
+	GetHealthCheckLastFailureReasonRequestFunc            func(param0 *route53.GetHealthCheckLastFailureReasonInput) (*request.Request, *route53.GetHealthCheckLastFailureReasonOutput)
+	GetHealthCheckLastFailureReasonWithContextFunc        func(param0 aws.Context, param1 *route53.GetHealthCheckLastFailureReasonInput, param2 ...request.Option) (*route53.GetHealthCheckLastFailureReasonOutput, error)
+	GetHealthCheckRequestFunc                             func(param0 *route53.GetHealthCheckInput) (*request.Request, *route53.GetHealthCheckOutput)
+	GetHealthCheckStatusFunc                              func(param0 *route53.GetHealthCheckStatusInput) (*route53.GetHealthCheckStatusOutput, error)
+	GetHealthCheckStatusRequestFunc                       func(param0 *route53.GetHealthCheckStatusInput) (*request.Request, *route53.GetHealthCheckStatusOutput)
+	GetHealthCheckStatusWithContextFunc                   func(param0 aws.Context, param1 *route53.GetHealthCheckStatusInput, param2 ...request.Option) (*route53.GetHealthCheckStatusOutput, error)
+	GetHealthCheckWithContextFunc                         func(param0 aws.Context, param1 *route53.GetHealthCheckInput, param2 ...request.Option) (*route53.GetHealthCheckOutput, error)
+	GetHostedZoneFunc                                     func(param0 *route53.GetHostedZoneInput) (*route53.GetHostedZoneOutput, error)
+	GetHostedZoneCountFunc                                func(param0 *route53.GetHostedZoneCountInput) (*route53.GetHostedZoneCountOutput, error)
+	GetHostedZoneCountRequestFunc                         func(param0 *route53.GetHostedZoneCountInput) (*request.Request, *route53.GetHostedZoneCountOutput)
+	GetHostedZoneCountWithContextFunc                     func(param0 aws.Context, param1 *route53.GetHostedZoneCountInput, param2 ...request.Option) (*route53.GetHostedZoneCountOutput, error)
+	GetHostedZoneRequestFunc                              func(param0 *route53.GetHostedZoneInput) (*request.Request, *route53.GetHostedZoneOutput)
+	GetHostedZoneWithContextFunc                          func(param0 aws.Context, param1 *route53.GetHostedZoneInput, param2 ...request.Option) (*route53.GetHostedZoneOutput, error)
+	GetQueryLoggingConfigFunc                             func(param0 *route53.GetQueryLoggingConfigInput) (*route53.GetQueryLoggingConfigOutput, error)
+	GetQueryLoggingConfigRequestFunc                      func(param0 *route53.GetQueryLoggingConfigInput) (*request.Request, *route53.GetQueryLoggingConfigOutput)
+	GetQueryLoggingConfigWithContextFunc                  func(param0 aws.Context, param1 *route53.GetQueryLoggingConfigInput, param2 ...request.Option) (*route53.GetQueryLoggingConfigOutput, error)
+	GetReusableDelegationSetFunc                          func(param0 *route53.GetReusableDelegationSetInput) (*route53.GetReusableDelegationSetOutput, error)
+	GetReusableDelegationSetRequestFunc                   func(param0 *route53.GetReusableDelegationSetInput) (*request.Request, *route53.GetReusableDelegationSetOutput)
+	GetReusableDelegationSetWithContextFunc               func(param0 aws.Context, param1 *route53.GetReusableDelegationSetInput, param2 ...request.Option) (*route53.GetReusableDelegationSetOutput, error)
+	GetTrafficPolicyFunc                                  func(param0 *route53.GetTrafficPolicyInput) (*route53.GetTrafficPolicyOutput, error)
+	GetTrafficPolicyInstanceFunc                          func(param0 *route53.GetTrafficPolicyInstanceInput) (*route53.GetTrafficPolicyInstanceOutput, error)
+	GetTrafficPolicyInstanceCountFunc                     func(param0 *route53.GetTrafficPolicyInstanceCountInput) (*route53.GetTrafficPolicyInstanceCountOutput, error)
+	GetTrafficPolicyInstanceCountRequestFunc              func(param0 *route53.GetTrafficPolicyInstanceCountInput) (*request.Request, *route53.GetTrafficPolicyInstanceCountOutput)
+	GetTrafficPolicyInstanceCountWithContextFunc          func(param0 aws.Context, param1 *route53.GetTrafficPolicyInstanceCountInput, param2 ...request.Option) (*route53.GetTrafficPolicyInstanceCountOutput, error)
+	GetTrafficPolicyInstanceRequestFunc                   func(param0 *route53.GetTrafficPolicyInstanceInput) (*request.Request, *route53.GetTrafficPolicyInstanceOutput)
+	GetTrafficPolicyInstanceWithContextFunc               func(param0 aws.Context, param1 *route53.GetTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.GetTrafficPolicyInstanceOutput, error)
+	GetTrafficPolicyRequestFunc                           func(param0 *route53.GetTrafficPolicyInput) (*request.Request, *route53.GetTrafficPolicyOutput)
+	GetTrafficPolicyWithContextFunc                       func(param0 aws.Context, param1 *route53.GetTrafficPolicyInput, param2 ...request.Option) (*route53.GetTrafficPolicyOutput, error)
+	ListGeoLocationsFunc                                  func(param0 *route53.ListGeoLocationsInput) (*route53.ListGeoLocationsOutput, error)
+	ListGeoLocationsRequestFunc                           func(param0 *route53.ListGeoLocationsInput) (*request.Request, *route53.ListGeoLocationsOutput)
+	ListGeoLocationsWithContextFunc                       func(param0 aws.Context, param1 *route53.ListGeoLocationsInput, param2 ...request.Option) (*route53.ListGeoLocationsOutput, error)
+	ListHealthChecksFunc                                  func(param0 *route53.ListHealthChecksInput) (*route53.ListHealthChecksOutput, error)
+	ListHealthChecksRequestFunc                           func(param0 *route53.ListHealthChecksInput) (*request.Request, *route53.ListHealthChecksOutput)
+	ListHealthChecksWithContextFunc                       func(param0 aws.Context, param1 *route53.ListHealthChecksInput, param2 ...request.Option) (*route53.ListHealthChecksOutput, error)
+	ListHostedZonesFunc                                   func(param0 *route53.ListHostedZonesInput) (*route53.ListHostedZonesOutput, error)
+	ListHostedZonesByNameFunc                             func(param0 *route53.ListHostedZonesByNameInput) (*route53.ListHostedZonesByNameOutput, error)
+	ListHostedZonesByNameRequestFunc                      func(param0 *route53.ListHostedZonesByNameInput) (*request.Request, *route53.ListHostedZonesByNameOutput)
+	ListHostedZonesByNameWithContextFunc                  func(param0 aws.Context, param1 *route53.ListHostedZonesByNameInput, param2 ...request.Option) (*route53.ListHostedZonesByNameOutput, error)
+	ListHostedZonesRequestFunc                            func(param0 *route53.ListHostedZonesInput) (*request.Request, *route53.ListHostedZonesOutput)
+	ListHostedZonesWithContextFunc                        func(param0 aws.Context, param1 *route53.ListHostedZonesInput, param2 ...request.Option) (*route53.ListHostedZonesOutput, error)
+	ListQueryLoggingConfigsFunc                           func(param0 *route53.ListQueryLoggingConfigsInput) (*route53.ListQueryLoggingConfigsOutput, error)
+	ListQueryLoggingConfigsRequestFunc                    func(param0 *route53.ListQueryLoggingConfigsInput) (*request.Request, *route53.ListQueryLoggingConfigsOutput)
+	ListQueryLoggingConfigsWithContextFunc                func(param0 aws.Context, param1 *route53.ListQueryLoggingConfigsInput, param2 ...request.Option) (*route53.ListQueryLoggingConfigsOutput, error)
+	ListResourceRecordSetsFunc                            func(param0 *route53.ListResourceRecordSetsInput) (*route53.ListResourceRecordSetsOutput, error)
+	ListResourceRecordSetsRequestFunc                     func(param0 *route53.ListResourceRecordSetsInput) (*request.Request, *route53.ListResourceRecordSetsOutput)
+	ListResourceRecordSetsWithContextFunc                 func(param0 aws.Context, param1 *route53.ListResourceRecordSetsInput, param2 ...request.Option) (*route53.ListResourceRecordSetsOutput, error)
+	ListReusableDelegationSetsFunc                        func(param0 *route53.ListReusableDelegationSetsInput) (*route53.ListReusableDelegationSetsOutput, error)
+	ListReusableDelegationSetsRequestFunc                 func(param0 *route53.ListReusableDelegationSetsInput) (*request.Request, *route53.ListReusableDelegationSetsOutput)
+	ListReusableDelegationSetsWithContextFunc             func(param0 aws.Context, param1 *route53.ListReusableDelegationSetsInput, param2 ...request.Option) (*route53.ListReusableDelegationSetsOutput, error)
+	ListTagsForResourceFunc                               func(param0 *route53.ListTagsForResourceInput) (*route53.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequestFunc                        func(param0 *route53.ListTagsForResourceInput) (*request.Request, *route53.ListTagsForResourceOutput)
+	ListTagsForResourceWithContextFunc                    func(param0 aws.Context, param1 *route53.ListTagsForResourceInput, param2 ...request.Option) (*route53.ListTagsForResourceOutput, error)
+	ListTagsForResourcesFunc                              func(param0 *route53.ListTagsForResourcesInput) (*route53.ListTagsForResourcesOutput, error)
+	ListTagsForResourcesRequestFunc                       func(param0 *route53.ListTagsForResourcesInput) (*request.Request, *route53.ListTagsForResourcesOutput)
+	ListTagsForResourcesWithContextFunc                   func(param0 aws.Context, param1 *route53.ListTagsForResourcesInput, param2 ...request.Option) (*route53.ListTagsForResourcesOutput, error)
+	ListTrafficPoliciesFunc                               func(param0 *route53.ListTrafficPoliciesInput) (*route53.ListTrafficPoliciesOutput, error)
+	ListTrafficPoliciesRequestFunc                        func(param0 *route53.ListTrafficPoliciesInput) (*request.Request, *route53.ListTrafficPoliciesOutput)
+	ListTrafficPoliciesWithContextFunc                    func(param0 aws.Context, param1 *route53.ListTrafficPoliciesInput, param2 ...request.Option) (*route53.ListTrafficPoliciesOutput, error)
+	ListTrafficPolicyInstancesFunc                        func(param0 *route53.ListTrafficPolicyInstancesInput) (*route53.ListTrafficPolicyInstancesOutput, error)
+	ListTrafficPolicyInstancesByHostedZoneFunc            func(param0 *route53.ListTrafficPolicyInstancesByHostedZoneInput) (*route53.ListTrafficPolicyInstancesByHostedZoneOutput, error)
+	ListTrafficPolicyInstancesByHostedZoneRequestFunc     func(param0 *route53.ListTrafficPolicyInstancesByHostedZoneInput) (*request.Request, *route53.ListTrafficPolicyInstancesByHostedZoneOutput)
+	ListTrafficPolicyInstancesByHostedZoneWithContextFunc func(param0 aws.Context, param1 *route53.ListTrafficPolicyInstancesByHostedZoneInput, param2 ...request.Option) (*route53.ListTrafficPolicyInstancesByHostedZoneOutput, error)
+	ListTrafficPolicyInstancesByPolicyFunc                func(param0 *route53.ListTrafficPolicyInstancesByPolicyInput) (*route53.ListTrafficPolicyInstancesByPolicyOutput, error)
+	ListTrafficPolicyInstancesByPolicyRequestFunc         func(param0 *route53.ListTrafficPolicyInstancesByPolicyInput) (*request.Request, *route53.ListTrafficPolicyInstancesByPolicyOutput)
+	ListTrafficPolicyInstancesByPolicyWithContextFunc     func(param0 aws.Context, param1 *route53.ListTrafficPolicyInstancesByPolicyInput, param2 ...request.Option) (*route53.ListTrafficPolicyInstancesByPolicyOutput, error)
+	ListTrafficPolicyInstancesRequestFunc                 func(param0 *route53.ListTrafficPolicyInstancesInput) (*request.Request, *route53.ListTrafficPolicyInstancesOutput)
+	ListTrafficPolicyInstancesWithContextFunc             func(param0 aws.Context, param1 *route53.ListTrafficPolicyInstancesInput, param2 ...request.Option) (*route53.ListTrafficPolicyInstancesOutput, error)
+	ListTrafficPolicyVersionsFunc                         func(param0 *route53.ListTrafficPolicyVersionsInput) (*route53.ListTrafficPolicyVersionsOutput, error)
+	ListTrafficPolicyVersionsRequestFunc                  func(param0 *route53.ListTrafficPolicyVersionsInput) (*request.Request, *route53.ListTrafficPolicyVersionsOutput)
+	ListTrafficPolicyVersionsWithContextFunc              func(param0 aws.Context, param1 *route53.ListTrafficPolicyVersionsInput, param2 ...request.Option) (*route53.ListTrafficPolicyVersionsOutput, error)
+	ListVPCAssociationAuthorizationsFunc                  func(param0 *route53.ListVPCAssociationAuthorizationsInput) (*route53.ListVPCAssociationAuthorizationsOutput, error)
+	ListVPCAssociationAuthorizationsRequestFunc           func(param0 *route53.ListVPCAssociationAuthorizationsInput) (*request.Request, *route53.ListVPCAssociationAuthorizationsOutput)
+	ListVPCAssociationAuthorizationsWithContextFunc       func(param0 aws.Context, param1 *route53.ListVPCAssociationAuthorizationsInput, param2 ...request.Option) (*route53.ListVPCAssociationAuthorizationsOutput, error)
+	TestDNSAnswerFunc                                     func(param0 *route53.TestDNSAnswerInput) (*route53.TestDNSAnswerOutput, error)
+	TestDNSAnswerRequestFunc                              func(param0 *route53.TestDNSAnswerInput) (*request.Request, *route53.TestDNSAnswerOutput)
+	TestDNSAnswerWithContextFunc                          func(param0 aws.Context, param1 *route53.TestDNSAnswerInput, param2 ...request.Option) (*route53.TestDNSAnswerOutput, error)
+	UpdateHealthCheckFunc                                 func(param0 *route53.UpdateHealthCheckInput) (*route53.UpdateHealthCheckOutput, error)
+	UpdateHealthCheckRequestFunc                          func(param0 *route53.UpdateHealthCheckInput) (*request.Request, *route53.UpdateHealthCheckOutput)
+	UpdateHealthCheckWithContextFunc                      func(param0 aws.Context, param1 *route53.UpdateHealthCheckInput, param2 ...request.Option) (*route53.UpdateHealthCheckOutput, error)
+	UpdateHostedZoneCommentFunc                           func(param0 *route53.UpdateHostedZoneCommentInput) (*route53.UpdateHostedZoneCommentOutput, error)
+	UpdateHostedZoneCommentRequestFunc                    func(param0 *route53.UpdateHostedZoneCommentInput) (*request.Request, *route53.UpdateHostedZoneCommentOutput)
+	UpdateHostedZoneCommentWithContextFunc                func(param0 aws.Context, param1 *route53.UpdateHostedZoneCommentInput, param2 ...request.Option) (*route53.UpdateHostedZoneCommentOutput, error)
+	UpdateTrafficPolicyCommentFunc                        func(param0 *route53.UpdateTrafficPolicyCommentInput) (*route53.UpdateTrafficPolicyCommentOutput, error)
+	UpdateTrafficPolicyCommentRequestFunc                 func(param0 *route53.UpdateTrafficPolicyCommentInput) (*request.Request, *route53.UpdateTrafficPolicyCommentOutput)
+	UpdateTrafficPolicyCommentWithContextFunc             func(param0 aws.Context, param1 *route53.UpdateTrafficPolicyCommentInput, param2 ...request.Option) (*route53.UpdateTrafficPolicyCommentOutput, error)
+	UpdateTrafficPolicyInstanceFunc                       func(param0 *route53.UpdateTrafficPolicyInstanceInput) (*route53.UpdateTrafficPolicyInstanceOutput, error)
+	UpdateTrafficPolicyInstanceRequestFunc                func(param0 *route53.UpdateTrafficPolicyInstanceInput) (*request.Request, *route53.UpdateTrafficPolicyInstanceOutput)
+	UpdateTrafficPolicyInstanceWithContextFunc            func(param0 aws.Context, param1 *route53.UpdateTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.UpdateTrafficPolicyInstanceOutput, error)
+	WaitUntilResourceRecordSetsChangedFunc                func(param0 *route53.GetChangeInput) error
+	WaitUntilResourceRecordSetsChangedWithContextFunc     func(param0 aws.Context, param1 *route53.GetChangeInput, param2 ...request.WaiterOption) error
+}
+
+func (m *route53Mock) AssociateVPCWithHostedZone(param0 *route53.AssociateVPCWithHostedZoneInput) (*route53.AssociateVPCWithHostedZoneOutput, error) {
+	m.addCall("AssociateVPCWithHostedZone")
+	m.verifyInput("AssociateVPCWithHostedZone", param0)
+	return m.AssociateVPCWithHostedZoneFunc(param0)
+}
+
+func (m *route53Mock) AssociateVPCWithHostedZoneRequest(param0 *route53.AssociateVPCWithHostedZoneInput) (*request.Request, *route53.AssociateVPCWithHostedZoneOutput) {
+	m.addCall("AssociateVPCWithHostedZoneRequest")
+	m.verifyInput("AssociateVPCWithHostedZoneRequest", param0)
+	return m.AssociateVPCWithHostedZoneRequestFunc(param0)
+}
+
+func (m *route53Mock) AssociateVPCWithHostedZoneWithContext(param0 aws.Context, param1 *route53.AssociateVPCWithHostedZoneInput, param2 ...request.Option) (*route53.AssociateVPCWithHostedZoneOutput, error) {
+	m.addCall("AssociateVPCWithHostedZoneWithContext")
+	m.verifyInput("AssociateVPCWithHostedZoneWithContext", param0)
+	return m.AssociateVPCWithHostedZoneWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ChangeResourceRecordSets(param0 *route53.ChangeResourceRecordSetsInput) (*route53.ChangeResourceRecordSetsOutput, error) {
+	m.addCall("ChangeResourceRecordSets")
+	m.verifyInput("ChangeResourceRecordSets", param0)
+	return m.ChangeResourceRecordSetsFunc(param0)
+}
+
+func (m *route53Mock) ChangeResourceRecordSetsRequest(param0 *route53.ChangeResourceRecordSetsInput) (*request.Request, *route53.ChangeResourceRecordSetsOutput) {
+	m.addCall("ChangeResourceRecordSetsRequest")
+	m.verifyInput("ChangeResourceRecordSetsRequest", param0)
+	return m.ChangeResourceRecordSetsRequestFunc(param0)
+}
+
+func (m *route53Mock) ChangeResourceRecordSetsWithContext(param0 aws.Context, param1 *route53.ChangeResourceRecordSetsInput, param2 ...request.Option) (*route53.ChangeResourceRecordSetsOutput, error) {
+	m.addCall("ChangeResourceRecordSetsWithContext")
+	m.verifyInput("ChangeResourceRecordSetsWithContext", param0)
+	return m.ChangeResourceRecordSetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ChangeTagsForResource(param0 *route53.ChangeTagsForResourceInput) (*route53.ChangeTagsForResourceOutput, error) {
+	m.addCall("ChangeTagsForResource")
+	m.verifyInput("ChangeTagsForResource", param0)
+	return m.ChangeTagsForResourceFunc(param0)
+}
+
+func (m *route53Mock) ChangeTagsForResourceRequest(param0 *route53.ChangeTagsForResourceInput) (*request.Request, *route53.ChangeTagsForResourceOutput) {
+	m.addCall("ChangeTagsForResourceRequest")
+	m.verifyInput("ChangeTagsForResourceRequest", param0)
+	return m.ChangeTagsForResourceRequestFunc(param0)
+}
+
+func (m *route53Mock) ChangeTagsForResourceWithContext(param0 aws.Context, param1 *route53.ChangeTagsForResourceInput, param2 ...request.Option) (*route53.ChangeTagsForResourceOutput, error) {
+	m.addCall("ChangeTagsForResourceWithContext")
+	m.verifyInput("ChangeTagsForResourceWithContext", param0)
+	return m.ChangeTagsForResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateHealthCheck(param0 *route53.CreateHealthCheckInput) (*route53.CreateHealthCheckOutput, error) {
+	m.addCall("CreateHealthCheck")
+	m.verifyInput("CreateHealthCheck", param0)
+	return m.CreateHealthCheckFunc(param0)
+}
+
+func (m *route53Mock) CreateHealthCheckRequest(param0 *route53.CreateHealthCheckInput) (*request.Request, *route53.CreateHealthCheckOutput) {
+	m.addCall("CreateHealthCheckRequest")
+	m.verifyInput("CreateHealthCheckRequest", param0)
+	return m.CreateHealthCheckRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateHealthCheckWithContext(param0 aws.Context, param1 *route53.CreateHealthCheckInput, param2 ...request.Option) (*route53.CreateHealthCheckOutput, error) {
+	m.addCall("CreateHealthCheckWithContext")
+	m.verifyInput("CreateHealthCheckWithContext", param0)
+	return m.CreateHealthCheckWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateHostedZone(param0 *route53.CreateHostedZoneInput) (*route53.CreateHostedZoneOutput, error) {
+	m.addCall("CreateHostedZone")
+	m.verifyInput("CreateHostedZone", param0)
+	return m.CreateHostedZoneFunc(param0)
+}
+
+func (m *route53Mock) CreateHostedZoneRequest(param0 *route53.CreateHostedZoneInput) (*request.Request, *route53.CreateHostedZoneOutput) {
+	m.addCall("CreateHostedZoneRequest")
+	m.verifyInput("CreateHostedZoneRequest", param0)
+	return m.CreateHostedZoneRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateHostedZoneWithContext(param0 aws.Context, param1 *route53.CreateHostedZoneInput, param2 ...request.Option) (*route53.CreateHostedZoneOutput, error) {
+	m.addCall("CreateHostedZoneWithContext")
+	m.verifyInput("CreateHostedZoneWithContext", param0)
+	return m.CreateHostedZoneWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateQueryLoggingConfig(param0 *route53.CreateQueryLoggingConfigInput) (*route53.CreateQueryLoggingConfigOutput, error) {
+	m.addCall("CreateQueryLoggingConfig")
+	m.verifyInput("CreateQueryLoggingConfig", param0)
+	return m.CreateQueryLoggingConfigFunc(param0)
+}
+
+func (m *route53Mock) CreateQueryLoggingConfigRequest(param0 *route53.CreateQueryLoggingConfigInput) (*request.Request, *route53.CreateQueryLoggingConfigOutput) {
+	m.addCall("CreateQueryLoggingConfigRequest")
+	m.verifyInput("CreateQueryLoggingConfigRequest", param0)
+	return m.CreateQueryLoggingConfigRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateQueryLoggingConfigWithContext(param0 aws.Context, param1 *route53.CreateQueryLoggingConfigInput, param2 ...request.Option) (*route53.CreateQueryLoggingConfigOutput, error) {
+	m.addCall("CreateQueryLoggingConfigWithContext")
+	m.verifyInput("CreateQueryLoggingConfigWithContext", param0)
+	return m.CreateQueryLoggingConfigWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateReusableDelegationSet(param0 *route53.CreateReusableDelegationSetInput) (*route53.CreateReusableDelegationSetOutput, error) {
+	m.addCall("CreateReusableDelegationSet")
+	m.verifyInput("CreateReusableDelegationSet", param0)
+	return m.CreateReusableDelegationSetFunc(param0)
+}
+
+func (m *route53Mock) CreateReusableDelegationSetRequest(param0 *route53.CreateReusableDelegationSetInput) (*request.Request, *route53.CreateReusableDelegationSetOutput) {
+	m.addCall("CreateReusableDelegationSetRequest")
+	m.verifyInput("CreateReusableDelegationSetRequest", param0)
+	return m.CreateReusableDelegationSetRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateReusableDelegationSetWithContext(param0 aws.Context, param1 *route53.CreateReusableDelegationSetInput, param2 ...request.Option) (*route53.CreateReusableDelegationSetOutput, error) {
+	m.addCall("CreateReusableDelegationSetWithContext")
+	m.verifyInput("CreateReusableDelegationSetWithContext", param0)
+	return m.CreateReusableDelegationSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateTrafficPolicy(param0 *route53.CreateTrafficPolicyInput) (*route53.CreateTrafficPolicyOutput, error) {
+	m.addCall("CreateTrafficPolicy")
+	m.verifyInput("CreateTrafficPolicy", param0)
+	return m.CreateTrafficPolicyFunc(param0)
+}
+
+func (m *route53Mock) CreateTrafficPolicyInstance(param0 *route53.CreateTrafficPolicyInstanceInput) (*route53.CreateTrafficPolicyInstanceOutput, error) {
+	m.addCall("CreateTrafficPolicyInstance")
+	m.verifyInput("CreateTrafficPolicyInstance", param0)
+	return m.CreateTrafficPolicyInstanceFunc(param0)
+}
+
+func (m *route53Mock) CreateTrafficPolicyInstanceRequest(param0 *route53.CreateTrafficPolicyInstanceInput) (*request.Request, *route53.CreateTrafficPolicyInstanceOutput) {
+	m.addCall("CreateTrafficPolicyInstanceRequest")
+	m.verifyInput("CreateTrafficPolicyInstanceRequest", param0)
+	return m.CreateTrafficPolicyInstanceRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateTrafficPolicyInstanceWithContext(param0 aws.Context, param1 *route53.CreateTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.CreateTrafficPolicyInstanceOutput, error) {
+	m.addCall("CreateTrafficPolicyInstanceWithContext")
+	m.verifyInput("CreateTrafficPolicyInstanceWithContext", param0)
+	return m.CreateTrafficPolicyInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateTrafficPolicyRequest(param0 *route53.CreateTrafficPolicyInput) (*request.Request, *route53.CreateTrafficPolicyOutput) {
+	m.addCall("CreateTrafficPolicyRequest")
+	m.verifyInput("CreateTrafficPolicyRequest", param0)
+	return m.CreateTrafficPolicyRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateTrafficPolicyVersion(param0 *route53.CreateTrafficPolicyVersionInput) (*route53.CreateTrafficPolicyVersionOutput, error) {
+	m.addCall("CreateTrafficPolicyVersion")
+	m.verifyInput("CreateTrafficPolicyVersion", param0)
+	return m.CreateTrafficPolicyVersionFunc(param0)
+}
+
+func (m *route53Mock) CreateTrafficPolicyVersionRequest(param0 *route53.CreateTrafficPolicyVersionInput) (*request.Request, *route53.CreateTrafficPolicyVersionOutput) {
+	m.addCall("CreateTrafficPolicyVersionRequest")
+	m.verifyInput("CreateTrafficPolicyVersionRequest", param0)
+	return m.CreateTrafficPolicyVersionRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateTrafficPolicyVersionWithContext(param0 aws.Context, param1 *route53.CreateTrafficPolicyVersionInput, param2 ...request.Option) (*route53.CreateTrafficPolicyVersionOutput, error) {
+	m.addCall("CreateTrafficPolicyVersionWithContext")
+	m.verifyInput("CreateTrafficPolicyVersionWithContext", param0)
+	return m.CreateTrafficPolicyVersionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateTrafficPolicyWithContext(param0 aws.Context, param1 *route53.CreateTrafficPolicyInput, param2 ...request.Option) (*route53.CreateTrafficPolicyOutput, error) {
+	m.addCall("CreateTrafficPolicyWithContext")
+	m.verifyInput("CreateTrafficPolicyWithContext", param0)
+	return m.CreateTrafficPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) CreateVPCAssociationAuthorization(param0 *route53.CreateVPCAssociationAuthorizationInput) (*route53.CreateVPCAssociationAuthorizationOutput, error) {
+	m.addCall("CreateVPCAssociationAuthorization")
+	m.verifyInput("CreateVPCAssociationAuthorization", param0)
+	return m.CreateVPCAssociationAuthorizationFunc(param0)
+}
+
+func (m *route53Mock) CreateVPCAssociationAuthorizationRequest(param0 *route53.CreateVPCAssociationAuthorizationInput) (*request.Request, *route53.CreateVPCAssociationAuthorizationOutput) {
+	m.addCall("CreateVPCAssociationAuthorizationRequest")
+	m.verifyInput("CreateVPCAssociationAuthorizationRequest", param0)
+	return m.CreateVPCAssociationAuthorizationRequestFunc(param0)
+}
+
+func (m *route53Mock) CreateVPCAssociationAuthorizationWithContext(param0 aws.Context, param1 *route53.CreateVPCAssociationAuthorizationInput, param2 ...request.Option) (*route53.CreateVPCAssociationAuthorizationOutput, error) {
+	m.addCall("CreateVPCAssociationAuthorizationWithContext")
+	m.verifyInput("CreateVPCAssociationAuthorizationWithContext", param0)
+	return m.CreateVPCAssociationAuthorizationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DeleteHealthCheck(param0 *route53.DeleteHealthCheckInput) (*route53.DeleteHealthCheckOutput, error) {
+	m.addCall("DeleteHealthCheck")
+	m.verifyInput("DeleteHealthCheck", param0)
+	return m.DeleteHealthCheckFunc(param0)
+}
+
+func (m *route53Mock) DeleteHealthCheckRequest(param0 *route53.DeleteHealthCheckInput) (*request.Request, *route53.DeleteHealthCheckOutput) {
+	m.addCall("DeleteHealthCheckRequest")
+	m.verifyInput("DeleteHealthCheckRequest", param0)
+	return m.DeleteHealthCheckRequestFunc(param0)
+}
+
+func (m *route53Mock) DeleteHealthCheckWithContext(param0 aws.Context, param1 *route53.DeleteHealthCheckInput, param2 ...request.Option) (*route53.DeleteHealthCheckOutput, error) {
+	m.addCall("DeleteHealthCheckWithContext")
+	m.verifyInput("DeleteHealthCheckWithContext", param0)
+	return m.DeleteHealthCheckWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DeleteHostedZone(param0 *route53.DeleteHostedZoneInput) (*route53.DeleteHostedZoneOutput, error) {
+	m.addCall("DeleteHostedZone")
+	m.verifyInput("DeleteHostedZone", param0)
+	return m.DeleteHostedZoneFunc(param0)
+}
+
+func (m *route53Mock) DeleteHostedZoneRequest(param0 *route53.DeleteHostedZoneInput) (*request.Request, *route53.DeleteHostedZoneOutput) {
+	m.addCall("DeleteHostedZoneRequest")
+	m.verifyInput("DeleteHostedZoneRequest", param0)
+	return m.DeleteHostedZoneRequestFunc(param0)
+}
+
+func (m *route53Mock) DeleteHostedZoneWithContext(param0 aws.Context, param1 *route53.DeleteHostedZoneInput, param2 ...request.Option) (*route53.DeleteHostedZoneOutput, error) {
+	m.addCall("DeleteHostedZoneWithContext")
+	m.verifyInput("DeleteHostedZoneWithContext", param0)
+	return m.DeleteHostedZoneWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DeleteQueryLoggingConfig(param0 *route53.DeleteQueryLoggingConfigInput) (*route53.DeleteQueryLoggingConfigOutput, error) {
+	m.addCall("DeleteQueryLoggingConfig")
+	m.verifyInput("DeleteQueryLoggingConfig", param0)
+	return m.DeleteQueryLoggingConfigFunc(param0)
+}
+
+func (m *route53Mock) DeleteQueryLoggingConfigRequest(param0 *route53.DeleteQueryLoggingConfigInput) (*request.Request, *route53.DeleteQueryLoggingConfigOutput) {
+	m.addCall("DeleteQueryLoggingConfigRequest")
+	m.verifyInput("DeleteQueryLoggingConfigRequest", param0)
+	return m.DeleteQueryLoggingConfigRequestFunc(param0)
+}
+
+func (m *route53Mock) DeleteQueryLoggingConfigWithContext(param0 aws.Context, param1 *route53.DeleteQueryLoggingConfigInput, param2 ...request.Option) (*route53.DeleteQueryLoggingConfigOutput, error) {
+	m.addCall("DeleteQueryLoggingConfigWithContext")
+	m.verifyInput("DeleteQueryLoggingConfigWithContext", param0)
+	return m.DeleteQueryLoggingConfigWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DeleteReusableDelegationSet(param0 *route53.DeleteReusableDelegationSetInput) (*route53.DeleteReusableDelegationSetOutput, error) {
+	m.addCall("DeleteReusableDelegationSet")
+	m.verifyInput("DeleteReusableDelegationSet", param0)
+	return m.DeleteReusableDelegationSetFunc(param0)
+}
+
+func (m *route53Mock) DeleteReusableDelegationSetRequest(param0 *route53.DeleteReusableDelegationSetInput) (*request.Request, *route53.DeleteReusableDelegationSetOutput) {
+	m.addCall("DeleteReusableDelegationSetRequest")
+	m.verifyInput("DeleteReusableDelegationSetRequest", param0)
+	return m.DeleteReusableDelegationSetRequestFunc(param0)
+}
+
+func (m *route53Mock) DeleteReusableDelegationSetWithContext(param0 aws.Context, param1 *route53.DeleteReusableDelegationSetInput, param2 ...request.Option) (*route53.DeleteReusableDelegationSetOutput, error) {
+	m.addCall("DeleteReusableDelegationSetWithContext")
+	m.verifyInput("DeleteReusableDelegationSetWithContext", param0)
+	return m.DeleteReusableDelegationSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DeleteTrafficPolicy(param0 *route53.DeleteTrafficPolicyInput) (*route53.DeleteTrafficPolicyOutput, error) {
+	m.addCall("DeleteTrafficPolicy")
+	m.verifyInput("DeleteTrafficPolicy", param0)
+	return m.DeleteTrafficPolicyFunc(param0)
+}
+
+func (m *route53Mock) DeleteTrafficPolicyInstance(param0 *route53.DeleteTrafficPolicyInstanceInput) (*route53.DeleteTrafficPolicyInstanceOutput, error) {
+	m.addCall("DeleteTrafficPolicyInstance")
+	m.verifyInput("DeleteTrafficPolicyInstance", param0)
+	return m.DeleteTrafficPolicyInstanceFunc(param0)
+}
+
+func (m *route53Mock) DeleteTrafficPolicyInstanceRequest(param0 *route53.DeleteTrafficPolicyInstanceInput) (*request.Request, *route53.DeleteTrafficPolicyInstanceOutput) {
+	m.addCall("DeleteTrafficPolicyInstanceRequest")
+	m.verifyInput("DeleteTrafficPolicyInstanceRequest", param0)
+	return m.DeleteTrafficPolicyInstanceRequestFunc(param0)
+}
+
+func (m *route53Mock) DeleteTrafficPolicyInstanceWithContext(param0 aws.Context, param1 *route53.DeleteTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.DeleteTrafficPolicyInstanceOutput, error) {
+	m.addCall("DeleteTrafficPolicyInstanceWithContext")
+	m.verifyInput("DeleteTrafficPolicyInstanceWithContext", param0)
+	return m.DeleteTrafficPolicyInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DeleteTrafficPolicyRequest(param0 *route53.DeleteTrafficPolicyInput) (*request.Request, *route53.DeleteTrafficPolicyOutput) {
+	m.addCall("DeleteTrafficPolicyRequest")
+	m.verifyInput("DeleteTrafficPolicyRequest", param0)
+	return m.DeleteTrafficPolicyRequestFunc(param0)
+}
+
+func (m *route53Mock) DeleteTrafficPolicyWithContext(param0 aws.Context, param1 *route53.DeleteTrafficPolicyInput, param2 ...request.Option) (*route53.DeleteTrafficPolicyOutput, error) {
+	m.addCall("DeleteTrafficPolicyWithContext")
+	m.verifyInput("DeleteTrafficPolicyWithContext", param0)
+	return m.DeleteTrafficPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DeleteVPCAssociationAuthorization(param0 *route53.DeleteVPCAssociationAuthorizationInput) (*route53.DeleteVPCAssociationAuthorizationOutput, error) {
+	m.addCall("DeleteVPCAssociationAuthorization")
+	m.verifyInput("DeleteVPCAssociationAuthorization", param0)
+	return m.DeleteVPCAssociationAuthorizationFunc(param0)
+}
+
+func (m *route53Mock) DeleteVPCAssociationAuthorizationRequest(param0 *route53.DeleteVPCAssociationAuthorizationInput) (*request.Request, *route53.DeleteVPCAssociationAuthorizationOutput) {
+	m.addCall("DeleteVPCAssociationAuthorizationRequest")
+	m.verifyInput("DeleteVPCAssociationAuthorizationRequest", param0)
+	return m.DeleteVPCAssociationAuthorizationRequestFunc(param0)
+}
+
+func (m *route53Mock) DeleteVPCAssociationAuthorizationWithContext(param0 aws.Context, param1 *route53.DeleteVPCAssociationAuthorizationInput, param2 ...request.Option) (*route53.DeleteVPCAssociationAuthorizationOutput, error) {
+	m.addCall("DeleteVPCAssociationAuthorizationWithContext")
+	m.verifyInput("DeleteVPCAssociationAuthorizationWithContext", param0)
+	return m.DeleteVPCAssociationAuthorizationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) DisassociateVPCFromHostedZone(param0 *route53.DisassociateVPCFromHostedZoneInput) (*route53.DisassociateVPCFromHostedZoneOutput, error) {
+	m.addCall("DisassociateVPCFromHostedZone")
+	m.verifyInput("DisassociateVPCFromHostedZone", param0)
+	return m.DisassociateVPCFromHostedZoneFunc(param0)
+}
+
+func (m *route53Mock) DisassociateVPCFromHostedZoneRequest(param0 *route53.DisassociateVPCFromHostedZoneInput) (*request.Request, *route53.DisassociateVPCFromHostedZoneOutput) {
+	m.addCall("DisassociateVPCFromHostedZoneRequest")
+	m.verifyInput("DisassociateVPCFromHostedZoneRequest", param0)
+	return m.DisassociateVPCFromHostedZoneRequestFunc(param0)
+}
+
+func (m *route53Mock) DisassociateVPCFromHostedZoneWithContext(param0 aws.Context, param1 *route53.DisassociateVPCFromHostedZoneInput, param2 ...request.Option) (*route53.DisassociateVPCFromHostedZoneOutput, error) {
+	m.addCall("DisassociateVPCFromHostedZoneWithContext")
+	m.verifyInput("DisassociateVPCFromHostedZoneWithContext", param0)
+	return m.DisassociateVPCFromHostedZoneWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetChange(param0 *route53.GetChangeInput) (*route53.GetChangeOutput, error) {
+	m.addCall("GetChange")
+	m.verifyInput("GetChange", param0)
+	return m.GetChangeFunc(param0)
+}
+
+func (m *route53Mock) GetChangeRequest(param0 *route53.GetChangeInput) (*request.Request, *route53.GetChangeOutput) {
+	m.addCall("GetChangeRequest")
+	m.verifyInput("GetChangeRequest", param0)
+	return m.GetChangeRequestFunc(param0)
+}
+
+func (m *route53Mock) GetChangeWithContext(param0 aws.Context, param1 *route53.GetChangeInput, param2 ...request.Option) (*route53.GetChangeOutput, error) {
+	m.addCall("GetChangeWithContext")
+	m.verifyInput("GetChangeWithContext", param0)
+	return m.GetChangeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetCheckerIpRanges(param0 *route53.GetCheckerIpRangesInput) (*route53.GetCheckerIpRangesOutput, error) {
+	m.addCall("GetCheckerIpRanges")
+	m.verifyInput("GetCheckerIpRanges", param0)
+	return m.GetCheckerIpRangesFunc(param0)
+}
+
+func (m *route53Mock) GetCheckerIpRangesRequest(param0 *route53.GetCheckerIpRangesInput) (*request.Request, *route53.GetCheckerIpRangesOutput) {
+	m.addCall("GetCheckerIpRangesRequest")
+	m.verifyInput("GetCheckerIpRangesRequest", param0)
+	return m.GetCheckerIpRangesRequestFunc(param0)
+}
+
+func (m *route53Mock) GetCheckerIpRangesWithContext(param0 aws.Context, param1 *route53.GetCheckerIpRangesInput, param2 ...request.Option) (*route53.GetCheckerIpRangesOutput, error) {
+	m.addCall("GetCheckerIpRangesWithContext")
+	m.verifyInput("GetCheckerIpRangesWithContext", param0)
+	return m.GetCheckerIpRangesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetGeoLocation(param0 *route53.GetGeoLocationInput) (*route53.GetGeoLocationOutput, error) {
+	m.addCall("GetGeoLocation")
+	m.verifyInput("GetGeoLocation", param0)
+	return m.GetGeoLocationFunc(param0)
+}
+
+func (m *route53Mock) GetGeoLocationRequest(param0 *route53.GetGeoLocationInput) (*request.Request, *route53.GetGeoLocationOutput) {
+	m.addCall("GetGeoLocationRequest")
+	m.verifyInput("GetGeoLocationRequest", param0)
+	return m.GetGeoLocationRequestFunc(param0)
+}
+
+func (m *route53Mock) GetGeoLocationWithContext(param0 aws.Context, param1 *route53.GetGeoLocationInput, param2 ...request.Option) (*route53.GetGeoLocationOutput, error) {
+	m.addCall("GetGeoLocationWithContext")
+	m.verifyInput("GetGeoLocationWithContext", param0)
+	return m.GetGeoLocationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetHealthCheck(param0 *route53.GetHealthCheckInput) (*route53.GetHealthCheckOutput, error) {
+	m.addCall("GetHealthCheck")
+	m.verifyInput("GetHealthCheck", param0)
+	return m.GetHealthCheckFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckCount(param0 *route53.GetHealthCheckCountInput) (*route53.GetHealthCheckCountOutput, error) {
+	m.addCall("GetHealthCheckCount")
+	m.verifyInput("GetHealthCheckCount", param0)
+	return m.GetHealthCheckCountFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckCountRequest(param0 *route53.GetHealthCheckCountInput) (*request.Request, *route53.GetHealthCheckCountOutput) {
+	m.addCall("GetHealthCheckCountRequest")
+	m.verifyInput("GetHealthCheckCountRequest", param0)
+	return m.GetHealthCheckCountRequestFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckCountWithContext(param0 aws.Context, param1 *route53.GetHealthCheckCountInput, param2 ...request.Option) (*route53.GetHealthCheckCountOutput, error) {
+	m.addCall("GetHealthCheckCountWithContext")
+	m.verifyInput("GetHealthCheckCountWithContext", param0)
+	return m.GetHealthCheckCountWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetHealthCheckLastFailureReason(param0 *route53.GetHealthCheckLastFailureReasonInput) (*route53.GetHealthCheckLastFailureReasonOutput, error) {
+	m.addCall("GetHealthCheckLastFailureReason")
+	m.verifyInput("GetHealthCheckLastFailureReason", param0)
+	return m.GetHealthCheckLastFailureReasonFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckLastFailureReasonRequest(param0 *route53.GetHealthCheckLastFailureReasonInput) (*request.Request, *route53.GetHealthCheckLastFailureReasonOutput) {
+	m.addCall("GetHealthCheckLastFailureReasonRequest")
+	m.verifyInput("GetHealthCheckLastFailureReasonRequest", param0)
+	return m.GetHealthCheckLastFailureReasonRequestFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckLastFailureReasonWithContext(param0 aws.Context, param1 *route53.GetHealthCheckLastFailureReasonInput, param2 ...request.Option) (*route53.GetHealthCheckLastFailureReasonOutput, error) {
+	m.addCall("GetHealthCheckLastFailureReasonWithContext")
+	m.verifyInput("GetHealthCheckLastFailureReasonWithContext", param0)
+	return m.GetHealthCheckLastFailureReasonWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetHealthCheckRequest(param0 *route53.GetHealthCheckInput) (*request.Request, *route53.GetHealthCheckOutput) {
+	m.addCall("GetHealthCheckRequest")
+	m.verifyInput("GetHealthCheckRequest", param0)
+	return m.GetHealthCheckRequestFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckStatus(param0 *route53.GetHealthCheckStatusInput) (*route53.GetHealthCheckStatusOutput, error) {
+	m.addCall("GetHealthCheckStatus")
+	m.verifyInput("GetHealthCheckStatus", param0)
+	return m.GetHealthCheckStatusFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckStatusRequest(param0 *route53.GetHealthCheckStatusInput) (*request.Request, *route53.GetHealthCheckStatusOutput) {
+	m.addCall("GetHealthCheckStatusRequest")
+	m.verifyInput("GetHealthCheckStatusRequest", param0)
+	return m.GetHealthCheckStatusRequestFunc(param0)
+}
+
+func (m *route53Mock) GetHealthCheckStatusWithContext(param0 aws.Context, param1 *route53.GetHealthCheckStatusInput, param2 ...request.Option) (*route53.GetHealthCheckStatusOutput, error) {
+	m.addCall("GetHealthCheckStatusWithContext")
+	m.verifyInput("GetHealthCheckStatusWithContext", param0)
+	return m.GetHealthCheckStatusWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetHealthCheckWithContext(param0 aws.Context, param1 *route53.GetHealthCheckInput, param2 ...request.Option) (*route53.GetHealthCheckOutput, error) {
+	m.addCall("GetHealthCheckWithContext")
+	m.verifyInput("GetHealthCheckWithContext", param0)
+	return m.GetHealthCheckWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetHostedZone(param0 *route53.GetHostedZoneInput) (*route53.GetHostedZoneOutput, error) {
+	m.addCall("GetHostedZone")
+	m.verifyInput("GetHostedZone", param0)
+	return m.GetHostedZoneFunc(param0)
+}
+
+func (m *route53Mock) GetHostedZoneCount(param0 *route53.GetHostedZoneCountInput) (*route53.GetHostedZoneCountOutput, error) {
+	m.addCall("GetHostedZoneCount")
+	m.verifyInput("GetHostedZoneCount", param0)
+	return m.GetHostedZoneCountFunc(param0)
+}
+
+func (m *route53Mock) GetHostedZoneCountRequest(param0 *route53.GetHostedZoneCountInput) (*request.Request, *route53.GetHostedZoneCountOutput) {
+	m.addCall("GetHostedZoneCountRequest")
+	m.verifyInput("GetHostedZoneCountRequest", param0)
+	return m.GetHostedZoneCountRequestFunc(param0)
+}
+
+func (m *route53Mock) GetHostedZoneCountWithContext(param0 aws.Context, param1 *route53.GetHostedZoneCountInput, param2 ...request.Option) (*route53.GetHostedZoneCountOutput, error) {
+	m.addCall("GetHostedZoneCountWithContext")
+	m.verifyInput("GetHostedZoneCountWithContext", param0)
+	return m.GetHostedZoneCountWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetHostedZoneRequest(param0 *route53.GetHostedZoneInput) (*request.Request, *route53.GetHostedZoneOutput) {
+	m.addCall("GetHostedZoneRequest")
+	m.verifyInput("GetHostedZoneRequest", param0)
+	return m.GetHostedZoneRequestFunc(param0)
+}
+
+func (m *route53Mock) GetHostedZoneWithContext(param0 aws.Context, param1 *route53.GetHostedZoneInput, param2 ...request.Option) (*route53.GetHostedZoneOutput, error) {
+	m.addCall("GetHostedZoneWithContext")
+	m.verifyInput("GetHostedZoneWithContext", param0)
+	return m.GetHostedZoneWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetQueryLoggingConfig(param0 *route53.GetQueryLoggingConfigInput) (*route53.GetQueryLoggingConfigOutput, error) {
+	m.addCall("GetQueryLoggingConfig")
+	m.verifyInput("GetQueryLoggingConfig", param0)
+	return m.GetQueryLoggingConfigFunc(param0)
+}
+
+func (m *route53Mock) GetQueryLoggingConfigRequest(param0 *route53.GetQueryLoggingConfigInput) (*request.Request, *route53.GetQueryLoggingConfigOutput) {
+	m.addCall("GetQueryLoggingConfigRequest")
+	m.verifyInput("GetQueryLoggingConfigRequest", param0)
+	return m.GetQueryLoggingConfigRequestFunc(param0)
+}
+
+func (m *route53Mock) GetQueryLoggingConfigWithContext(param0 aws.Context, param1 *route53.GetQueryLoggingConfigInput, param2 ...request.Option) (*route53.GetQueryLoggingConfigOutput, error) {
+	m.addCall("GetQueryLoggingConfigWithContext")
+	m.verifyInput("GetQueryLoggingConfigWithContext", param0)
+	return m.GetQueryLoggingConfigWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetReusableDelegationSet(param0 *route53.GetReusableDelegationSetInput) (*route53.GetReusableDelegationSetOutput, error) {
+	m.addCall("GetReusableDelegationSet")
+	m.verifyInput("GetReusableDelegationSet", param0)
+	return m.GetReusableDelegationSetFunc(param0)
+}
+
+func (m *route53Mock) GetReusableDelegationSetRequest(param0 *route53.GetReusableDelegationSetInput) (*request.Request, *route53.GetReusableDelegationSetOutput) {
+	m.addCall("GetReusableDelegationSetRequest")
+	m.verifyInput("GetReusableDelegationSetRequest", param0)
+	return m.GetReusableDelegationSetRequestFunc(param0)
+}
+
+func (m *route53Mock) GetReusableDelegationSetWithContext(param0 aws.Context, param1 *route53.GetReusableDelegationSetInput, param2 ...request.Option) (*route53.GetReusableDelegationSetOutput, error) {
+	m.addCall("GetReusableDelegationSetWithContext")
+	m.verifyInput("GetReusableDelegationSetWithContext", param0)
+	return m.GetReusableDelegationSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetTrafficPolicy(param0 *route53.GetTrafficPolicyInput) (*route53.GetTrafficPolicyOutput, error) {
+	m.addCall("GetTrafficPolicy")
+	m.verifyInput("GetTrafficPolicy", param0)
+	return m.GetTrafficPolicyFunc(param0)
+}
+
+func (m *route53Mock) GetTrafficPolicyInstance(param0 *route53.GetTrafficPolicyInstanceInput) (*route53.GetTrafficPolicyInstanceOutput, error) {
+	m.addCall("GetTrafficPolicyInstance")
+	m.verifyInput("GetTrafficPolicyInstance", param0)
+	return m.GetTrafficPolicyInstanceFunc(param0)
+}
+
+func (m *route53Mock) GetTrafficPolicyInstanceCount(param0 *route53.GetTrafficPolicyInstanceCountInput) (*route53.GetTrafficPolicyInstanceCountOutput, error) {
+	m.addCall("GetTrafficPolicyInstanceCount")
+	m.verifyInput("GetTrafficPolicyInstanceCount", param0)
+	return m.GetTrafficPolicyInstanceCountFunc(param0)
+}
+
+func (m *route53Mock) GetTrafficPolicyInstanceCountRequest(param0 *route53.GetTrafficPolicyInstanceCountInput) (*request.Request, *route53.GetTrafficPolicyInstanceCountOutput) {
+	m.addCall("GetTrafficPolicyInstanceCountRequest")
+	m.verifyInput("GetTrafficPolicyInstanceCountRequest", param0)
+	return m.GetTrafficPolicyInstanceCountRequestFunc(param0)
+}
+
+func (m *route53Mock) GetTrafficPolicyInstanceCountWithContext(param0 aws.Context, param1 *route53.GetTrafficPolicyInstanceCountInput, param2 ...request.Option) (*route53.GetTrafficPolicyInstanceCountOutput, error) {
+	m.addCall("GetTrafficPolicyInstanceCountWithContext")
+	m.verifyInput("GetTrafficPolicyInstanceCountWithContext", param0)
+	return m.GetTrafficPolicyInstanceCountWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetTrafficPolicyInstanceRequest(param0 *route53.GetTrafficPolicyInstanceInput) (*request.Request, *route53.GetTrafficPolicyInstanceOutput) {
+	m.addCall("GetTrafficPolicyInstanceRequest")
+	m.verifyInput("GetTrafficPolicyInstanceRequest", param0)
+	return m.GetTrafficPolicyInstanceRequestFunc(param0)
+}
+
+func (m *route53Mock) GetTrafficPolicyInstanceWithContext(param0 aws.Context, param1 *route53.GetTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.GetTrafficPolicyInstanceOutput, error) {
+	m.addCall("GetTrafficPolicyInstanceWithContext")
+	m.verifyInput("GetTrafficPolicyInstanceWithContext", param0)
+	return m.GetTrafficPolicyInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) GetTrafficPolicyRequest(param0 *route53.GetTrafficPolicyInput) (*request.Request, *route53.GetTrafficPolicyOutput) {
+	m.addCall("GetTrafficPolicyRequest")
+	m.verifyInput("GetTrafficPolicyRequest", param0)
+	return m.GetTrafficPolicyRequestFunc(param0)
+}
+
+func (m *route53Mock) GetTrafficPolicyWithContext(param0 aws.Context, param1 *route53.GetTrafficPolicyInput, param2 ...request.Option) (*route53.GetTrafficPolicyOutput, error) {
+	m.addCall("GetTrafficPolicyWithContext")
+	m.verifyInput("GetTrafficPolicyWithContext", param0)
+	return m.GetTrafficPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListGeoLocations(param0 *route53.ListGeoLocationsInput) (*route53.ListGeoLocationsOutput, error) {
+	m.addCall("ListGeoLocations")
+	m.verifyInput("ListGeoLocations", param0)
+	return m.ListGeoLocationsFunc(param0)
+}
+
+func (m *route53Mock) ListGeoLocationsRequest(param0 *route53.ListGeoLocationsInput) (*request.Request, *route53.ListGeoLocationsOutput) {
+	m.addCall("ListGeoLocationsRequest")
+	m.verifyInput("ListGeoLocationsRequest", param0)
+	return m.ListGeoLocationsRequestFunc(param0)
+}
+
+func (m *route53Mock) ListGeoLocationsWithContext(param0 aws.Context, param1 *route53.ListGeoLocationsInput, param2 ...request.Option) (*route53.ListGeoLocationsOutput, error) {
+	m.addCall("ListGeoLocationsWithContext")
+	m.verifyInput("ListGeoLocationsWithContext", param0)
+	return m.ListGeoLocationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListHealthChecks(param0 *route53.ListHealthChecksInput) (*route53.ListHealthChecksOutput, error) {
+	m.addCall("ListHealthChecks")
+	m.verifyInput("ListHealthChecks", param0)
+	return m.ListHealthChecksFunc(param0)
+}
+
+func (m *route53Mock) ListHealthChecksRequest(param0 *route53.ListHealthChecksInput) (*request.Request, *route53.ListHealthChecksOutput) {
+	m.addCall("ListHealthChecksRequest")
+	m.verifyInput("ListHealthChecksRequest", param0)
+	return m.ListHealthChecksRequestFunc(param0)
+}
+
+func (m *route53Mock) ListHealthChecksWithContext(param0 aws.Context, param1 *route53.ListHealthChecksInput, param2 ...request.Option) (*route53.ListHealthChecksOutput, error) {
+	m.addCall("ListHealthChecksWithContext")
+	m.verifyInput("ListHealthChecksWithContext", param0)
+	return m.ListHealthChecksWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListHostedZones(param0 *route53.ListHostedZonesInput) (*route53.ListHostedZonesOutput, error) {
+	m.addCall("ListHostedZones")
+	m.verifyInput("ListHostedZones", param0)
+	return m.ListHostedZonesFunc(param0)
+}
+
+func (m *route53Mock) ListHostedZonesByName(param0 *route53.ListHostedZonesByNameInput) (*route53.ListHostedZonesByNameOutput, error) {
+	m.addCall("ListHostedZonesByName")
+	m.verifyInput("ListHostedZonesByName", param0)
+	return m.ListHostedZonesByNameFunc(param0)
+}
+
+func (m *route53Mock) ListHostedZonesByNameRequest(param0 *route53.ListHostedZonesByNameInput) (*request.Request, *route53.ListHostedZonesByNameOutput) {
+	m.addCall("ListHostedZonesByNameRequest")
+	m.verifyInput("ListHostedZonesByNameRequest", param0)
+	return m.ListHostedZonesByNameRequestFunc(param0)
+}
+
+func (m *route53Mock) ListHostedZonesByNameWithContext(param0 aws.Context, param1 *route53.ListHostedZonesByNameInput, param2 ...request.Option) (*route53.ListHostedZonesByNameOutput, error) {
+	m.addCall("ListHostedZonesByNameWithContext")
+	m.verifyInput("ListHostedZonesByNameWithContext", param0)
+	return m.ListHostedZonesByNameWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListHostedZonesRequest(param0 *route53.ListHostedZonesInput) (*request.Request, *route53.ListHostedZonesOutput) {
+	m.addCall("ListHostedZonesRequest")
+	m.verifyInput("ListHostedZonesRequest", param0)
+	return m.ListHostedZonesRequestFunc(param0)
+}
+
+func (m *route53Mock) ListHostedZonesWithContext(param0 aws.Context, param1 *route53.ListHostedZonesInput, param2 ...request.Option) (*route53.ListHostedZonesOutput, error) {
+	m.addCall("ListHostedZonesWithContext")
+	m.verifyInput("ListHostedZonesWithContext", param0)
+	return m.ListHostedZonesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListQueryLoggingConfigs(param0 *route53.ListQueryLoggingConfigsInput) (*route53.ListQueryLoggingConfigsOutput, error) {
+	m.addCall("ListQueryLoggingConfigs")
+	m.verifyInput("ListQueryLoggingConfigs", param0)
+	return m.ListQueryLoggingConfigsFunc(param0)
+}
+
+func (m *route53Mock) ListQueryLoggingConfigsRequest(param0 *route53.ListQueryLoggingConfigsInput) (*request.Request, *route53.ListQueryLoggingConfigsOutput) {
+	m.addCall("ListQueryLoggingConfigsRequest")
+	m.verifyInput("ListQueryLoggingConfigsRequest", param0)
+	return m.ListQueryLoggingConfigsRequestFunc(param0)
+}
+
+func (m *route53Mock) ListQueryLoggingConfigsWithContext(param0 aws.Context, param1 *route53.ListQueryLoggingConfigsInput, param2 ...request.Option) (*route53.ListQueryLoggingConfigsOutput, error) {
+	m.addCall("ListQueryLoggingConfigsWithContext")
+	m.verifyInput("ListQueryLoggingConfigsWithContext", param0)
+	return m.ListQueryLoggingConfigsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListResourceRecordSets(param0 *route53.ListResourceRecordSetsInput) (*route53.ListResourceRecordSetsOutput, error) {
+	m.addCall("ListResourceRecordSets")
+	m.verifyInput("ListResourceRecordSets", param0)
+	return m.ListResourceRecordSetsFunc(param0)
+}
+
+func (m *route53Mock) ListResourceRecordSetsRequest(param0 *route53.ListResourceRecordSetsInput) (*request.Request, *route53.ListResourceRecordSetsOutput) {
+	m.addCall("ListResourceRecordSetsRequest")
+	m.verifyInput("ListResourceRecordSetsRequest", param0)
+	return m.ListResourceRecordSetsRequestFunc(param0)
+}
+
+func (m *route53Mock) ListResourceRecordSetsWithContext(param0 aws.Context, param1 *route53.ListResourceRecordSetsInput, param2 ...request.Option) (*route53.ListResourceRecordSetsOutput, error) {
+	m.addCall("ListResourceRecordSetsWithContext")
+	m.verifyInput("ListResourceRecordSetsWithContext", param0)
+	return m.ListResourceRecordSetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListReusableDelegationSets(param0 *route53.ListReusableDelegationSetsInput) (*route53.ListReusableDelegationSetsOutput, error) {
+	m.addCall("ListReusableDelegationSets")
+	m.verifyInput("ListReusableDelegationSets", param0)
+	return m.ListReusableDelegationSetsFunc(param0)
+}
+
+func (m *route53Mock) ListReusableDelegationSetsRequest(param0 *route53.ListReusableDelegationSetsInput) (*request.Request, *route53.ListReusableDelegationSetsOutput) {
+	m.addCall("ListReusableDelegationSetsRequest")
+	m.verifyInput("ListReusableDelegationSetsRequest", param0)
+	return m.ListReusableDelegationSetsRequestFunc(param0)
+}
+
+func (m *route53Mock) ListReusableDelegationSetsWithContext(param0 aws.Context, param1 *route53.ListReusableDelegationSetsInput, param2 ...request.Option) (*route53.ListReusableDelegationSetsOutput, error) {
+	m.addCall("ListReusableDelegationSetsWithContext")
+	m.verifyInput("ListReusableDelegationSetsWithContext", param0)
+	return m.ListReusableDelegationSetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListTagsForResource(param0 *route53.ListTagsForResourceInput) (*route53.ListTagsForResourceOutput, error) {
+	m.addCall("ListTagsForResource")
+	m.verifyInput("ListTagsForResource", param0)
+	return m.ListTagsForResourceFunc(param0)
+}
+
+func (m *route53Mock) ListTagsForResourceRequest(param0 *route53.ListTagsForResourceInput) (*request.Request, *route53.ListTagsForResourceOutput) {
+	m.addCall("ListTagsForResourceRequest")
+	m.verifyInput("ListTagsForResourceRequest", param0)
+	return m.ListTagsForResourceRequestFunc(param0)
+}
+
+func (m *route53Mock) ListTagsForResourceWithContext(param0 aws.Context, param1 *route53.ListTagsForResourceInput, param2 ...request.Option) (*route53.ListTagsForResourceOutput, error) {
+	m.addCall("ListTagsForResourceWithContext")
+	m.verifyInput("ListTagsForResourceWithContext", param0)
+	return m.ListTagsForResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListTagsForResources(param0 *route53.ListTagsForResourcesInput) (*route53.ListTagsForResourcesOutput, error) {
+	m.addCall("ListTagsForResources")
+	m.verifyInput("ListTagsForResources", param0)
+	return m.ListTagsForResourcesFunc(param0)
+}
+
+func (m *route53Mock) ListTagsForResourcesRequest(param0 *route53.ListTagsForResourcesInput) (*request.Request, *route53.ListTagsForResourcesOutput) {
+	m.addCall("ListTagsForResourcesRequest")
+	m.verifyInput("ListTagsForResourcesRequest", param0)
+	return m.ListTagsForResourcesRequestFunc(param0)
+}
+
+func (m *route53Mock) ListTagsForResourcesWithContext(param0 aws.Context, param1 *route53.ListTagsForResourcesInput, param2 ...request.Option) (*route53.ListTagsForResourcesOutput, error) {
+	m.addCall("ListTagsForResourcesWithContext")
+	m.verifyInput("ListTagsForResourcesWithContext", param0)
+	return m.ListTagsForResourcesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListTrafficPolicies(param0 *route53.ListTrafficPoliciesInput) (*route53.ListTrafficPoliciesOutput, error) {
+	m.addCall("ListTrafficPolicies")
+	m.verifyInput("ListTrafficPolicies", param0)
+	return m.ListTrafficPoliciesFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPoliciesRequest(param0 *route53.ListTrafficPoliciesInput) (*request.Request, *route53.ListTrafficPoliciesOutput) {
+	m.addCall("ListTrafficPoliciesRequest")
+	m.verifyInput("ListTrafficPoliciesRequest", param0)
+	return m.ListTrafficPoliciesRequestFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPoliciesWithContext(param0 aws.Context, param1 *route53.ListTrafficPoliciesInput, param2 ...request.Option) (*route53.ListTrafficPoliciesOutput, error) {
+	m.addCall("ListTrafficPoliciesWithContext")
+	m.verifyInput("ListTrafficPoliciesWithContext", param0)
+	return m.ListTrafficPoliciesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstances(param0 *route53.ListTrafficPolicyInstancesInput) (*route53.ListTrafficPolicyInstancesOutput, error) {
+	m.addCall("ListTrafficPolicyInstances")
+	m.verifyInput("ListTrafficPolicyInstances", param0)
+	return m.ListTrafficPolicyInstancesFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesByHostedZone(param0 *route53.ListTrafficPolicyInstancesByHostedZoneInput) (*route53.ListTrafficPolicyInstancesByHostedZoneOutput, error) {
+	m.addCall("ListTrafficPolicyInstancesByHostedZone")
+	m.verifyInput("ListTrafficPolicyInstancesByHostedZone", param0)
+	return m.ListTrafficPolicyInstancesByHostedZoneFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesByHostedZoneRequest(param0 *route53.ListTrafficPolicyInstancesByHostedZoneInput) (*request.Request, *route53.ListTrafficPolicyInstancesByHostedZoneOutput) {
+	m.addCall("ListTrafficPolicyInstancesByHostedZoneRequest")
+	m.verifyInput("ListTrafficPolicyInstancesByHostedZoneRequest", param0)
+	return m.ListTrafficPolicyInstancesByHostedZoneRequestFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesByHostedZoneWithContext(param0 aws.Context, param1 *route53.ListTrafficPolicyInstancesByHostedZoneInput, param2 ...request.Option) (*route53.ListTrafficPolicyInstancesByHostedZoneOutput, error) {
+	m.addCall("ListTrafficPolicyInstancesByHostedZoneWithContext")
+	m.verifyInput("ListTrafficPolicyInstancesByHostedZoneWithContext", param0)
+	return m.ListTrafficPolicyInstancesByHostedZoneWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesByPolicy(param0 *route53.ListTrafficPolicyInstancesByPolicyInput) (*route53.ListTrafficPolicyInstancesByPolicyOutput, error) {
+	m.addCall("ListTrafficPolicyInstancesByPolicy")
+	m.verifyInput("ListTrafficPolicyInstancesByPolicy", param0)
+	return m.ListTrafficPolicyInstancesByPolicyFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesByPolicyRequest(param0 *route53.ListTrafficPolicyInstancesByPolicyInput) (*request.Request, *route53.ListTrafficPolicyInstancesByPolicyOutput) {
+	m.addCall("ListTrafficPolicyInstancesByPolicyRequest")
+	m.verifyInput("ListTrafficPolicyInstancesByPolicyRequest", param0)
+	return m.ListTrafficPolicyInstancesByPolicyRequestFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesByPolicyWithContext(param0 aws.Context, param1 *route53.ListTrafficPolicyInstancesByPolicyInput, param2 ...request.Option) (*route53.ListTrafficPolicyInstancesByPolicyOutput, error) {
+	m.addCall("ListTrafficPolicyInstancesByPolicyWithContext")
+	m.verifyInput("ListTrafficPolicyInstancesByPolicyWithContext", param0)
+	return m.ListTrafficPolicyInstancesByPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesRequest(param0 *route53.ListTrafficPolicyInstancesInput) (*request.Request, *route53.ListTrafficPolicyInstancesOutput) {
+	m.addCall("ListTrafficPolicyInstancesRequest")
+	m.verifyInput("ListTrafficPolicyInstancesRequest", param0)
+	return m.ListTrafficPolicyInstancesRequestFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyInstancesWithContext(param0 aws.Context, param1 *route53.ListTrafficPolicyInstancesInput, param2 ...request.Option) (*route53.ListTrafficPolicyInstancesOutput, error) {
+	m.addCall("ListTrafficPolicyInstancesWithContext")
+	m.verifyInput("ListTrafficPolicyInstancesWithContext", param0)
+	return m.ListTrafficPolicyInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListTrafficPolicyVersions(param0 *route53.ListTrafficPolicyVersionsInput) (*route53.ListTrafficPolicyVersionsOutput, error) {
+	m.addCall("ListTrafficPolicyVersions")
+	m.verifyInput("ListTrafficPolicyVersions", param0)
+	return m.ListTrafficPolicyVersionsFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyVersionsRequest(param0 *route53.ListTrafficPolicyVersionsInput) (*request.Request, *route53.ListTrafficPolicyVersionsOutput) {
+	m.addCall("ListTrafficPolicyVersionsRequest")
+	m.verifyInput("ListTrafficPolicyVersionsRequest", param0)
+	return m.ListTrafficPolicyVersionsRequestFunc(param0)
+}
+
+func (m *route53Mock) ListTrafficPolicyVersionsWithContext(param0 aws.Context, param1 *route53.ListTrafficPolicyVersionsInput, param2 ...request.Option) (*route53.ListTrafficPolicyVersionsOutput, error) {
+	m.addCall("ListTrafficPolicyVersionsWithContext")
+	m.verifyInput("ListTrafficPolicyVersionsWithContext", param0)
+	return m.ListTrafficPolicyVersionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) ListVPCAssociationAuthorizations(param0 *route53.ListVPCAssociationAuthorizationsInput) (*route53.ListVPCAssociationAuthorizationsOutput, error) {
+	m.addCall("ListVPCAssociationAuthorizations")
+	m.verifyInput("ListVPCAssociationAuthorizations", param0)
+	return m.ListVPCAssociationAuthorizationsFunc(param0)
+}
+
+func (m *route53Mock) ListVPCAssociationAuthorizationsRequest(param0 *route53.ListVPCAssociationAuthorizationsInput) (*request.Request, *route53.ListVPCAssociationAuthorizationsOutput) {
+	m.addCall("ListVPCAssociationAuthorizationsRequest")
+	m.verifyInput("ListVPCAssociationAuthorizationsRequest", param0)
+	return m.ListVPCAssociationAuthorizationsRequestFunc(param0)
+}
+
+func (m *route53Mock) ListVPCAssociationAuthorizationsWithContext(param0 aws.Context, param1 *route53.ListVPCAssociationAuthorizationsInput, param2 ...request.Option) (*route53.ListVPCAssociationAuthorizationsOutput, error) {
+	m.addCall("ListVPCAssociationAuthorizationsWithContext")
+	m.verifyInput("ListVPCAssociationAuthorizationsWithContext", param0)
+	return m.ListVPCAssociationAuthorizationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) TestDNSAnswer(param0 *route53.TestDNSAnswerInput) (*route53.TestDNSAnswerOutput, error) {
+	m.addCall("TestDNSAnswer")
+	m.verifyInput("TestDNSAnswer", param0)
+	return m.TestDNSAnswerFunc(param0)
+}
+
+func (m *route53Mock) TestDNSAnswerRequest(param0 *route53.TestDNSAnswerInput) (*request.Request, *route53.TestDNSAnswerOutput) {
+	m.addCall("TestDNSAnswerRequest")
+	m.verifyInput("TestDNSAnswerRequest", param0)
+	return m.TestDNSAnswerRequestFunc(param0)
+}
+
+func (m *route53Mock) TestDNSAnswerWithContext(param0 aws.Context, param1 *route53.TestDNSAnswerInput, param2 ...request.Option) (*route53.TestDNSAnswerOutput, error) {
+	m.addCall("TestDNSAnswerWithContext")
+	m.verifyInput("TestDNSAnswerWithContext", param0)
+	return m.TestDNSAnswerWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) UpdateHealthCheck(param0 *route53.UpdateHealthCheckInput) (*route53.UpdateHealthCheckOutput, error) {
+	m.addCall("UpdateHealthCheck")
+	m.verifyInput("UpdateHealthCheck", param0)
+	return m.UpdateHealthCheckFunc(param0)
+}
+
+func (m *route53Mock) UpdateHealthCheckRequest(param0 *route53.UpdateHealthCheckInput) (*request.Request, *route53.UpdateHealthCheckOutput) {
+	m.addCall("UpdateHealthCheckRequest")
+	m.verifyInput("UpdateHealthCheckRequest", param0)
+	return m.UpdateHealthCheckRequestFunc(param0)
+}
+
+func (m *route53Mock) UpdateHealthCheckWithContext(param0 aws.Context, param1 *route53.UpdateHealthCheckInput, param2 ...request.Option) (*route53.UpdateHealthCheckOutput, error) {
+	m.addCall("UpdateHealthCheckWithContext")
+	m.verifyInput("UpdateHealthCheckWithContext", param0)
+	return m.UpdateHealthCheckWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) UpdateHostedZoneComment(param0 *route53.UpdateHostedZoneCommentInput) (*route53.UpdateHostedZoneCommentOutput, error) {
+	m.addCall("UpdateHostedZoneComment")
+	m.verifyInput("UpdateHostedZoneComment", param0)
+	return m.UpdateHostedZoneCommentFunc(param0)
+}
+
+func (m *route53Mock) UpdateHostedZoneCommentRequest(param0 *route53.UpdateHostedZoneCommentInput) (*request.Request, *route53.UpdateHostedZoneCommentOutput) {
+	m.addCall("UpdateHostedZoneCommentRequest")
+	m.verifyInput("UpdateHostedZoneCommentRequest", param0)
+	return m.UpdateHostedZoneCommentRequestFunc(param0)
+}
+
+func (m *route53Mock) UpdateHostedZoneCommentWithContext(param0 aws.Context, param1 *route53.UpdateHostedZoneCommentInput, param2 ...request.Option) (*route53.UpdateHostedZoneCommentOutput, error) {
+	m.addCall("UpdateHostedZoneCommentWithContext")
+	m.verifyInput("UpdateHostedZoneCommentWithContext", param0)
+	return m.UpdateHostedZoneCommentWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) UpdateTrafficPolicyComment(param0 *route53.UpdateTrafficPolicyCommentInput) (*route53.UpdateTrafficPolicyCommentOutput, error) {
+	m.addCall("UpdateTrafficPolicyComment")
+	m.verifyInput("UpdateTrafficPolicyComment", param0)
+	return m.UpdateTrafficPolicyCommentFunc(param0)
+}
+
+func (m *route53Mock) UpdateTrafficPolicyCommentRequest(param0 *route53.UpdateTrafficPolicyCommentInput) (*request.Request, *route53.UpdateTrafficPolicyCommentOutput) {
+	m.addCall("UpdateTrafficPolicyCommentRequest")
+	m.verifyInput("UpdateTrafficPolicyCommentRequest", param0)
+	return m.UpdateTrafficPolicyCommentRequestFunc(param0)
+}
+
+func (m *route53Mock) UpdateTrafficPolicyCommentWithContext(param0 aws.Context, param1 *route53.UpdateTrafficPolicyCommentInput, param2 ...request.Option) (*route53.UpdateTrafficPolicyCommentOutput, error) {
+	m.addCall("UpdateTrafficPolicyCommentWithContext")
+	m.verifyInput("UpdateTrafficPolicyCommentWithContext", param0)
+	return m.UpdateTrafficPolicyCommentWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) UpdateTrafficPolicyInstance(param0 *route53.UpdateTrafficPolicyInstanceInput) (*route53.UpdateTrafficPolicyInstanceOutput, error) {
+	m.addCall("UpdateTrafficPolicyInstance")
+	m.verifyInput("UpdateTrafficPolicyInstance", param0)
+	return m.UpdateTrafficPolicyInstanceFunc(param0)
+}
+
+func (m *route53Mock) UpdateTrafficPolicyInstanceRequest(param0 *route53.UpdateTrafficPolicyInstanceInput) (*request.Request, *route53.UpdateTrafficPolicyInstanceOutput) {
+	m.addCall("UpdateTrafficPolicyInstanceRequest")
+	m.verifyInput("UpdateTrafficPolicyInstanceRequest", param0)
+	return m.UpdateTrafficPolicyInstanceRequestFunc(param0)
+}
+
+func (m *route53Mock) UpdateTrafficPolicyInstanceWithContext(param0 aws.Context, param1 *route53.UpdateTrafficPolicyInstanceInput, param2 ...request.Option) (*route53.UpdateTrafficPolicyInstanceOutput, error) {
+	m.addCall("UpdateTrafficPolicyInstanceWithContext")
+	m.verifyInput("UpdateTrafficPolicyInstanceWithContext", param0)
+	return m.UpdateTrafficPolicyInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *route53Mock) WaitUntilResourceRecordSetsChanged(param0 *route53.GetChangeInput) error {
+	m.addCall("WaitUntilResourceRecordSetsChanged")
+	m.verifyInput("WaitUntilResourceRecordSetsChanged", param0)
+	return m.WaitUntilResourceRecordSetsChangedFunc(param0)
+}
+
+func (m *route53Mock) WaitUntilResourceRecordSetsChangedWithContext(param0 aws.Context, param1 *route53.GetChangeInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilResourceRecordSetsChangedWithContext")
+	m.verifyInput("WaitUntilResourceRecordSetsChangedWithContext", param0)
+	return m.WaitUntilResourceRecordSetsChangedWithContextFunc(param0, param1, param2...)
 }

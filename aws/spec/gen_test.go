@@ -27,6 +27,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/route53"
+	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -99,6 +101,8 @@ var (
 	newDeletePolicy    = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachPolicy    = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdatePolicy    = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateZone      = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newDeleteZone      = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 )
 
 type mockCloudwatch struct {
@@ -109,6 +113,9 @@ type mockEc2 struct {
 }
 type mockIam struct {
 	iamiface.IAMAPI
+}
+type mockRoute53 struct {
+	route53iface.Route53API
 }
 
 func (m *mockCloudwatch) PutMetricAlarm(input *cloudwatch.PutMetricAlarmInput) (*cloudwatch.PutMetricAlarmOutput, error) {
@@ -427,6 +434,26 @@ func (m *mockIam) CreatePolicyVersion(input *iam.CreatePolicyVersionInput) (*iam
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["updatepolicy"]; ok {
 		return outFunc().(*iam.CreatePolicyVersionOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockRoute53) CreateHostedZone(input *route53.CreateHostedZoneInput) (*route53.CreateHostedZoneOutput, error) {
+	if got, want := input, genTestsExpected["createzone"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createzone"]; ok {
+		return outFunc().(*route53.CreateHostedZoneOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockRoute53) DeleteHostedZone(input *route53.DeleteHostedZoneInput) (*route53.DeleteHostedZoneOutput, error) {
+	if got, want := input, genTestsExpected["deletezone"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletezone"]; ok {
+		return outFunc().(*route53.DeleteHostedZoneOutput), nil
 	}
 	return nil, nil
 }

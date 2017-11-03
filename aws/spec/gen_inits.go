@@ -75,6 +75,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateTag(f.Sess, f.Log) }
 	case "createvpc":
 		return func() interface{} { return NewCreateVpc(f.Sess, f.Log) }
+	case "createzone":
+		return func() interface{} { return NewCreateZone(f.Sess, f.Log) }
 	case "deleteaccesskey":
 		return func() interface{} { return NewDeleteAccesskey(f.Sess, f.Log) }
 	case "deletealarm":
@@ -101,6 +103,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteTag(f.Sess, f.Log) }
 	case "deletevpc":
 		return func() interface{} { return NewDeleteVpc(f.Sess, f.Log) }
+	case "deletezone":
+		return func() interface{} { return NewDeleteZone(f.Sess, f.Log) }
 	case "detachalarm":
 		return func() interface{} { return NewDetachAlarm(f.Sess, f.Log) }
 	case "detachinternetgateway":
@@ -146,6 +150,7 @@ var (
 	_ command = &CreateSubnet{}
 	_ command = &CreateTag{}
 	_ command = &CreateVpc{}
+	_ command = &CreateZone{}
 	_ command = &DeleteAccesskey{}
 	_ command = &DeleteAlarm{}
 	_ command = &DeleteGroup{}
@@ -159,6 +164,7 @@ var (
 	_ command = &DeleteSubnet{}
 	_ command = &DeleteTag{}
 	_ command = &DeleteVpc{}
+	_ command = &DeleteZone{}
 	_ command = &DetachAlarm{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachPolicy{}
