@@ -114,13 +114,17 @@ var (
 	}
 	newUpdateSubnet    = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newAttachPolicy    = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newAttachUser      = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateAccesskey = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateGroup     = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreatePolicy    = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateUser      = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteAccesskey = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteGroup     = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeletePolicy    = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteUser      = func() *DeleteUser { return &DeleteUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachPolicy    = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachUser      = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdatePolicy    = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateZone      = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newDeleteZone      = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
@@ -478,6 +482,16 @@ func (m *mockEc2) ModifySubnetAttribute(input *ec2.ModifySubnetAttributeInput) (
 	return nil, nil
 }
 
+func (m *mockIam) AddUserToGroup(input *iam.AddUserToGroupInput) (*iam.AddUserToGroupOutput, error) {
+	if got, want := input, genTestsExpected["attachuser"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["attachuser"]; ok {
+		return outFunc().(*iam.AddUserToGroupOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) CreateAccessKey(input *iam.CreateAccessKeyInput) (*iam.CreateAccessKeyOutput, error) {
 	if got, want := input, genTestsExpected["createaccesskey"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -508,6 +522,16 @@ func (m *mockIam) CreatePolicy(input *iam.CreatePolicyInput) (*iam.CreatePolicyO
 	return nil, nil
 }
 
+func (m *mockIam) CreateUser(input *iam.CreateUserInput) (*iam.CreateUserOutput, error) {
+	if got, want := input, genTestsExpected["createuser"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createuser"]; ok {
+		return outFunc().(*iam.CreateUserOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) DeleteAccessKey(input *iam.DeleteAccessKeyInput) (*iam.DeleteAccessKeyOutput, error) {
 	if got, want := input, genTestsExpected["deleteaccesskey"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -534,6 +558,26 @@ func (m *mockIam) DeletePolicy(input *iam.DeletePolicyInput) (*iam.DeletePolicyO
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletepolicy"]; ok {
 		return outFunc().(*iam.DeletePolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) DeleteUser(input *iam.DeleteUserInput) (*iam.DeleteUserOutput, error) {
+	if got, want := input, genTestsExpected["deleteuser"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteuser"]; ok {
+		return outFunc().(*iam.DeleteUserOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) RemoveUserFromGroup(input *iam.RemoveUserFromGroupInput) (*iam.RemoveUserFromGroupOutput, error) {
+	if got, want := input, genTestsExpected["detachuser"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["detachuser"]; ok {
+		return outFunc().(*iam.RemoveUserFromGroupOutput), nil
 	}
 	return nil, nil
 }

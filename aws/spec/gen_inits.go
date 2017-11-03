@@ -45,6 +45,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachRoutetable(f.Sess, f.Log) }
 	case "attachsecuritygroup":
 		return func() interface{} { return NewAttachSecuritygroup(f.Sess, f.Log) }
+	case "attachuser":
+		return func() interface{} { return NewAttachUser(f.Sess, f.Log) }
 	case "attachvolume":
 		return func() interface{} { return NewAttachVolume(f.Sess, f.Log) }
 	case "checkinstance":
@@ -83,6 +85,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateSubnet(f.Sess, f.Log) }
 	case "createtag":
 		return func() interface{} { return NewCreateTag(f.Sess, f.Log) }
+	case "createuser":
+		return func() interface{} { return NewCreateUser(f.Sess, f.Log) }
 	case "createvolume":
 		return func() interface{} { return NewCreateVolume(f.Sess, f.Log) }
 	case "createvpc":
@@ -119,6 +123,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteSubnet(f.Sess, f.Log) }
 	case "deletetag":
 		return func() interface{} { return NewDeleteTag(f.Sess, f.Log) }
+	case "deleteuser":
+		return func() interface{} { return NewDeleteUser(f.Sess, f.Log) }
 	case "deletevolume":
 		return func() interface{} { return NewDeleteVolume(f.Sess, f.Log) }
 	case "deletevpc":
@@ -135,6 +141,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachRoutetable(f.Sess, f.Log) }
 	case "detachsecuritygroup":
 		return func() interface{} { return NewDetachSecuritygroup(f.Sess, f.Log) }
+	case "detachuser":
+		return func() interface{} { return NewDetachUser(f.Sess, f.Log) }
 	case "detachvolume":
 		return func() interface{} { return NewDetachVolume(f.Sess, f.Log) }
 	case "startalarm":
@@ -159,6 +167,7 @@ var (
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
 	_ command = &AttachSecuritygroup{}
+	_ command = &AttachUser{}
 	_ command = &AttachVolume{}
 	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
@@ -178,6 +187,7 @@ var (
 	_ command = &CreateSecuritygroup{}
 	_ command = &CreateSubnet{}
 	_ command = &CreateTag{}
+	_ command = &CreateUser{}
 	_ command = &CreateVolume{}
 	_ command = &CreateVpc{}
 	_ command = &CreateZone{}
@@ -196,6 +206,7 @@ var (
 	_ command = &DeleteSecuritygroup{}
 	_ command = &DeleteSubnet{}
 	_ command = &DeleteTag{}
+	_ command = &DeleteUser{}
 	_ command = &DeleteVolume{}
 	_ command = &DeleteVpc{}
 	_ command = &DeleteZone{}
@@ -204,6 +215,7 @@ var (
 	_ command = &DetachPolicy{}
 	_ command = &DetachRoutetable{}
 	_ command = &DetachSecuritygroup{}
+	_ command = &DetachUser{}
 	_ command = &DetachVolume{}
 	_ command = &StartAlarm{}
 	_ command = &StopAlarm{}
