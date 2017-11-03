@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/aws/aws-sdk-go/service/acm"
+	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -46,6 +48,9 @@ var (
 	genTestsCleanupFunc       = make(map[string]func())
 	genTestsOutputExtractFunc = make(map[string]func() interface{})
 
+	newCheckCertificate       = func() *CheckCertificate { return &CheckCertificate{api: &mockAcm{}, logger: logger.DiscardLogger} }
+	newCreateCertificate      = func() *CreateCertificate { return &CreateCertificate{api: &mockAcm{}, logger: logger.DiscardLogger} }
+	newDeleteCertificate      = func() *DeleteCertificate { return &DeleteCertificate{api: &mockAcm{}, logger: logger.DiscardLogger} }
 	newCreateAppscalingpolicy = func() *CreateAppscalingpolicy {
 		return &CreateAppscalingpolicy{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
 	}
@@ -137,6 +142,9 @@ var (
 	newDeleteTopic     = func() *DeleteTopic { return &DeleteTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
 )
 
+type mockAcm struct {
+	acmiface.ACMAPI
+}
 type mockApplicationautoscaling struct {
 	applicationautoscalingiface.ApplicationAutoScalingAPI
 }
@@ -157,6 +165,16 @@ type mockS3 struct {
 }
 type mockSns struct {
 	snsiface.SNSAPI
+}
+
+func (m *mockAcm) DeleteCertificate(input *acm.DeleteCertificateInput) (*acm.DeleteCertificateOutput, error) {
+	if got, want := input, genTestsExpected["deletecertificate"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletecertificate"]; ok {
+		return outFunc().(*acm.DeleteCertificateOutput), nil
+	}
+	return nil, nil
 }
 
 func (m *mockApplicationautoscaling) PutScalingPolicy(input *applicationautoscaling.PutScalingPolicyInput) (*applicationautoscaling.PutScalingPolicyOutput, error) {

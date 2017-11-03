@@ -20,6 +20,8 @@ package awsat
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/service/acm"
+	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -35,6 +37,221 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/aws/aws-sdk-go/service/sns/snsiface"
 )
+
+type acmMock struct {
+	basicMock
+	acmiface.ACMAPI
+	AddTagsToCertificateFunc                 func(param0 *acm.AddTagsToCertificateInput) (*acm.AddTagsToCertificateOutput, error)
+	AddTagsToCertificateRequestFunc          func(param0 *acm.AddTagsToCertificateInput) (*request.Request, *acm.AddTagsToCertificateOutput)
+	AddTagsToCertificateWithContextFunc      func(param0 aws.Context, param1 *acm.AddTagsToCertificateInput, param2 ...request.Option) (*acm.AddTagsToCertificateOutput, error)
+	DeleteCertificateFunc                    func(param0 *acm.DeleteCertificateInput) (*acm.DeleteCertificateOutput, error)
+	DeleteCertificateRequestFunc             func(param0 *acm.DeleteCertificateInput) (*request.Request, *acm.DeleteCertificateOutput)
+	DeleteCertificateWithContextFunc         func(param0 aws.Context, param1 *acm.DeleteCertificateInput, param2 ...request.Option) (*acm.DeleteCertificateOutput, error)
+	DescribeCertificateFunc                  func(param0 *acm.DescribeCertificateInput) (*acm.DescribeCertificateOutput, error)
+	DescribeCertificateRequestFunc           func(param0 *acm.DescribeCertificateInput) (*request.Request, *acm.DescribeCertificateOutput)
+	DescribeCertificateWithContextFunc       func(param0 aws.Context, param1 *acm.DescribeCertificateInput, param2 ...request.Option) (*acm.DescribeCertificateOutput, error)
+	GetCertificateFunc                       func(param0 *acm.GetCertificateInput) (*acm.GetCertificateOutput, error)
+	GetCertificateRequestFunc                func(param0 *acm.GetCertificateInput) (*request.Request, *acm.GetCertificateOutput)
+	GetCertificateWithContextFunc            func(param0 aws.Context, param1 *acm.GetCertificateInput, param2 ...request.Option) (*acm.GetCertificateOutput, error)
+	ImportCertificateFunc                    func(param0 *acm.ImportCertificateInput) (*acm.ImportCertificateOutput, error)
+	ImportCertificateRequestFunc             func(param0 *acm.ImportCertificateInput) (*request.Request, *acm.ImportCertificateOutput)
+	ImportCertificateWithContextFunc         func(param0 aws.Context, param1 *acm.ImportCertificateInput, param2 ...request.Option) (*acm.ImportCertificateOutput, error)
+	ListCertificatesFunc                     func(param0 *acm.ListCertificatesInput) (*acm.ListCertificatesOutput, error)
+	ListCertificatesRequestFunc              func(param0 *acm.ListCertificatesInput) (*request.Request, *acm.ListCertificatesOutput)
+	ListCertificatesWithContextFunc          func(param0 aws.Context, param1 *acm.ListCertificatesInput, param2 ...request.Option) (*acm.ListCertificatesOutput, error)
+	ListTagsForCertificateFunc               func(param0 *acm.ListTagsForCertificateInput) (*acm.ListTagsForCertificateOutput, error)
+	ListTagsForCertificateRequestFunc        func(param0 *acm.ListTagsForCertificateInput) (*request.Request, *acm.ListTagsForCertificateOutput)
+	ListTagsForCertificateWithContextFunc    func(param0 aws.Context, param1 *acm.ListTagsForCertificateInput, param2 ...request.Option) (*acm.ListTagsForCertificateOutput, error)
+	RemoveTagsFromCertificateFunc            func(param0 *acm.RemoveTagsFromCertificateInput) (*acm.RemoveTagsFromCertificateOutput, error)
+	RemoveTagsFromCertificateRequestFunc     func(param0 *acm.RemoveTagsFromCertificateInput) (*request.Request, *acm.RemoveTagsFromCertificateOutput)
+	RemoveTagsFromCertificateWithContextFunc func(param0 aws.Context, param1 *acm.RemoveTagsFromCertificateInput, param2 ...request.Option) (*acm.RemoveTagsFromCertificateOutput, error)
+	RequestCertificateFunc                   func(param0 *acm.RequestCertificateInput) (*acm.RequestCertificateOutput, error)
+	RequestCertificateRequestFunc            func(param0 *acm.RequestCertificateInput) (*request.Request, *acm.RequestCertificateOutput)
+	RequestCertificateWithContextFunc        func(param0 aws.Context, param1 *acm.RequestCertificateInput, param2 ...request.Option) (*acm.RequestCertificateOutput, error)
+	ResendValidationEmailFunc                func(param0 *acm.ResendValidationEmailInput) (*acm.ResendValidationEmailOutput, error)
+	ResendValidationEmailRequestFunc         func(param0 *acm.ResendValidationEmailInput) (*request.Request, *acm.ResendValidationEmailOutput)
+	ResendValidationEmailWithContextFunc     func(param0 aws.Context, param1 *acm.ResendValidationEmailInput, param2 ...request.Option) (*acm.ResendValidationEmailOutput, error)
+}
+
+func (m *acmMock) AddTagsToCertificate(param0 *acm.AddTagsToCertificateInput) (*acm.AddTagsToCertificateOutput, error) {
+	m.addCall("AddTagsToCertificate")
+	m.verifyInput("AddTagsToCertificate", param0)
+	return m.AddTagsToCertificateFunc(param0)
+}
+
+func (m *acmMock) AddTagsToCertificateRequest(param0 *acm.AddTagsToCertificateInput) (*request.Request, *acm.AddTagsToCertificateOutput) {
+	m.addCall("AddTagsToCertificateRequest")
+	m.verifyInput("AddTagsToCertificateRequest", param0)
+	return m.AddTagsToCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) AddTagsToCertificateWithContext(param0 aws.Context, param1 *acm.AddTagsToCertificateInput, param2 ...request.Option) (*acm.AddTagsToCertificateOutput, error) {
+	m.addCall("AddTagsToCertificateWithContext")
+	m.verifyInput("AddTagsToCertificateWithContext", param0)
+	return m.AddTagsToCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) DeleteCertificate(param0 *acm.DeleteCertificateInput) (*acm.DeleteCertificateOutput, error) {
+	m.addCall("DeleteCertificate")
+	m.verifyInput("DeleteCertificate", param0)
+	return m.DeleteCertificateFunc(param0)
+}
+
+func (m *acmMock) DeleteCertificateRequest(param0 *acm.DeleteCertificateInput) (*request.Request, *acm.DeleteCertificateOutput) {
+	m.addCall("DeleteCertificateRequest")
+	m.verifyInput("DeleteCertificateRequest", param0)
+	return m.DeleteCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) DeleteCertificateWithContext(param0 aws.Context, param1 *acm.DeleteCertificateInput, param2 ...request.Option) (*acm.DeleteCertificateOutput, error) {
+	m.addCall("DeleteCertificateWithContext")
+	m.verifyInput("DeleteCertificateWithContext", param0)
+	return m.DeleteCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) DescribeCertificate(param0 *acm.DescribeCertificateInput) (*acm.DescribeCertificateOutput, error) {
+	m.addCall("DescribeCertificate")
+	m.verifyInput("DescribeCertificate", param0)
+	return m.DescribeCertificateFunc(param0)
+}
+
+func (m *acmMock) DescribeCertificateRequest(param0 *acm.DescribeCertificateInput) (*request.Request, *acm.DescribeCertificateOutput) {
+	m.addCall("DescribeCertificateRequest")
+	m.verifyInput("DescribeCertificateRequest", param0)
+	return m.DescribeCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) DescribeCertificateWithContext(param0 aws.Context, param1 *acm.DescribeCertificateInput, param2 ...request.Option) (*acm.DescribeCertificateOutput, error) {
+	m.addCall("DescribeCertificateWithContext")
+	m.verifyInput("DescribeCertificateWithContext", param0)
+	return m.DescribeCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) GetCertificate(param0 *acm.GetCertificateInput) (*acm.GetCertificateOutput, error) {
+	m.addCall("GetCertificate")
+	m.verifyInput("GetCertificate", param0)
+	return m.GetCertificateFunc(param0)
+}
+
+func (m *acmMock) GetCertificateRequest(param0 *acm.GetCertificateInput) (*request.Request, *acm.GetCertificateOutput) {
+	m.addCall("GetCertificateRequest")
+	m.verifyInput("GetCertificateRequest", param0)
+	return m.GetCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) GetCertificateWithContext(param0 aws.Context, param1 *acm.GetCertificateInput, param2 ...request.Option) (*acm.GetCertificateOutput, error) {
+	m.addCall("GetCertificateWithContext")
+	m.verifyInput("GetCertificateWithContext", param0)
+	return m.GetCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) ImportCertificate(param0 *acm.ImportCertificateInput) (*acm.ImportCertificateOutput, error) {
+	m.addCall("ImportCertificate")
+	m.verifyInput("ImportCertificate", param0)
+	return m.ImportCertificateFunc(param0)
+}
+
+func (m *acmMock) ImportCertificateRequest(param0 *acm.ImportCertificateInput) (*request.Request, *acm.ImportCertificateOutput) {
+	m.addCall("ImportCertificateRequest")
+	m.verifyInput("ImportCertificateRequest", param0)
+	return m.ImportCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) ImportCertificateWithContext(param0 aws.Context, param1 *acm.ImportCertificateInput, param2 ...request.Option) (*acm.ImportCertificateOutput, error) {
+	m.addCall("ImportCertificateWithContext")
+	m.verifyInput("ImportCertificateWithContext", param0)
+	return m.ImportCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) ListCertificates(param0 *acm.ListCertificatesInput) (*acm.ListCertificatesOutput, error) {
+	m.addCall("ListCertificates")
+	m.verifyInput("ListCertificates", param0)
+	return m.ListCertificatesFunc(param0)
+}
+
+func (m *acmMock) ListCertificatesRequest(param0 *acm.ListCertificatesInput) (*request.Request, *acm.ListCertificatesOutput) {
+	m.addCall("ListCertificatesRequest")
+	m.verifyInput("ListCertificatesRequest", param0)
+	return m.ListCertificatesRequestFunc(param0)
+}
+
+func (m *acmMock) ListCertificatesWithContext(param0 aws.Context, param1 *acm.ListCertificatesInput, param2 ...request.Option) (*acm.ListCertificatesOutput, error) {
+	m.addCall("ListCertificatesWithContext")
+	m.verifyInput("ListCertificatesWithContext", param0)
+	return m.ListCertificatesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) ListTagsForCertificate(param0 *acm.ListTagsForCertificateInput) (*acm.ListTagsForCertificateOutput, error) {
+	m.addCall("ListTagsForCertificate")
+	m.verifyInput("ListTagsForCertificate", param0)
+	return m.ListTagsForCertificateFunc(param0)
+}
+
+func (m *acmMock) ListTagsForCertificateRequest(param0 *acm.ListTagsForCertificateInput) (*request.Request, *acm.ListTagsForCertificateOutput) {
+	m.addCall("ListTagsForCertificateRequest")
+	m.verifyInput("ListTagsForCertificateRequest", param0)
+	return m.ListTagsForCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) ListTagsForCertificateWithContext(param0 aws.Context, param1 *acm.ListTagsForCertificateInput, param2 ...request.Option) (*acm.ListTagsForCertificateOutput, error) {
+	m.addCall("ListTagsForCertificateWithContext")
+	m.verifyInput("ListTagsForCertificateWithContext", param0)
+	return m.ListTagsForCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) RemoveTagsFromCertificate(param0 *acm.RemoveTagsFromCertificateInput) (*acm.RemoveTagsFromCertificateOutput, error) {
+	m.addCall("RemoveTagsFromCertificate")
+	m.verifyInput("RemoveTagsFromCertificate", param0)
+	return m.RemoveTagsFromCertificateFunc(param0)
+}
+
+func (m *acmMock) RemoveTagsFromCertificateRequest(param0 *acm.RemoveTagsFromCertificateInput) (*request.Request, *acm.RemoveTagsFromCertificateOutput) {
+	m.addCall("RemoveTagsFromCertificateRequest")
+	m.verifyInput("RemoveTagsFromCertificateRequest", param0)
+	return m.RemoveTagsFromCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) RemoveTagsFromCertificateWithContext(param0 aws.Context, param1 *acm.RemoveTagsFromCertificateInput, param2 ...request.Option) (*acm.RemoveTagsFromCertificateOutput, error) {
+	m.addCall("RemoveTagsFromCertificateWithContext")
+	m.verifyInput("RemoveTagsFromCertificateWithContext", param0)
+	return m.RemoveTagsFromCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) RequestCertificate(param0 *acm.RequestCertificateInput) (*acm.RequestCertificateOutput, error) {
+	m.addCall("RequestCertificate")
+	m.verifyInput("RequestCertificate", param0)
+	return m.RequestCertificateFunc(param0)
+}
+
+func (m *acmMock) RequestCertificateRequest(param0 *acm.RequestCertificateInput) (*request.Request, *acm.RequestCertificateOutput) {
+	m.addCall("RequestCertificateRequest")
+	m.verifyInput("RequestCertificateRequest", param0)
+	return m.RequestCertificateRequestFunc(param0)
+}
+
+func (m *acmMock) RequestCertificateWithContext(param0 aws.Context, param1 *acm.RequestCertificateInput, param2 ...request.Option) (*acm.RequestCertificateOutput, error) {
+	m.addCall("RequestCertificateWithContext")
+	m.verifyInput("RequestCertificateWithContext", param0)
+	return m.RequestCertificateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *acmMock) ResendValidationEmail(param0 *acm.ResendValidationEmailInput) (*acm.ResendValidationEmailOutput, error) {
+	m.addCall("ResendValidationEmail")
+	m.verifyInput("ResendValidationEmail", param0)
+	return m.ResendValidationEmailFunc(param0)
+}
+
+func (m *acmMock) ResendValidationEmailRequest(param0 *acm.ResendValidationEmailInput) (*request.Request, *acm.ResendValidationEmailOutput) {
+	m.addCall("ResendValidationEmailRequest")
+	m.verifyInput("ResendValidationEmailRequest", param0)
+	return m.ResendValidationEmailRequestFunc(param0)
+}
+
+func (m *acmMock) ResendValidationEmailWithContext(param0 aws.Context, param1 *acm.ResendValidationEmailInput, param2 ...request.Option) (*acm.ResendValidationEmailOutput, error) {
+	m.addCall("ResendValidationEmailWithContext")
+	m.verifyInput("ResendValidationEmailWithContext", param0)
+	return m.ResendValidationEmailWithContextFunc(param0, param1, param2...)
+}
 
 type applicationautoscalingMock struct {
 	basicMock

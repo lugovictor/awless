@@ -18,6 +18,7 @@ limitations under the License.
 package awsat
 
 import (
+	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
@@ -80,6 +81,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "checkcertificate":
+		return func() interface{} {
+			cmd := awsspec.NewCheckCertificate(nil)
+			cmd.SetApi(f.Mock.(acmiface.ACMAPI))
+			return cmd
+		}
 	case "checkinstance":
 		return func() interface{} {
 			cmd := awsspec.NewCheckInstance(nil)
@@ -126,6 +133,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateBucket(nil)
 			cmd.SetApi(f.Mock.(s3iface.S3API))
+			return cmd
+		}
+	case "createcertificate":
+		return func() interface{} {
+			cmd := awsspec.NewCreateCertificate(nil)
+			cmd.SetApi(f.Mock.(acmiface.ACMAPI))
 			return cmd
 		}
 	case "creategroup":
@@ -246,6 +259,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteBucket(nil)
 			cmd.SetApi(f.Mock.(s3iface.S3API))
+			return cmd
+		}
+	case "deletecertificate":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteCertificate(nil)
+			cmd.SetApi(f.Mock.(acmiface.ACMAPI))
 			return cmd
 		}
 	case "deletegroup":

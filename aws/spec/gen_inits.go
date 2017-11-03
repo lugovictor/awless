@@ -49,6 +49,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachUser(f.Sess, f.Log) }
 	case "attachvolume":
 		return func() interface{} { return NewAttachVolume(f.Sess, f.Log) }
+	case "checkcertificate":
+		return func() interface{} { return NewCheckCertificate(f.Sess, f.Log) }
 	case "checkinstance":
 		return func() interface{} { return NewCheckInstance(f.Sess, f.Log) }
 	case "checksecuritygroup":
@@ -65,6 +67,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateAppscalingtarget(f.Sess, f.Log) }
 	case "createbucket":
 		return func() interface{} { return NewCreateBucket(f.Sess, f.Log) }
+	case "createcertificate":
+		return func() interface{} { return NewCreateCertificate(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -105,6 +109,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteAppscalingtarget(f.Sess, f.Log) }
 	case "deletebucket":
 		return func() interface{} { return NewDeleteBucket(f.Sess, f.Log) }
+	case "deletecertificate":
+		return func() interface{} { return NewDeleteCertificate(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -173,6 +179,7 @@ var (
 	_ command = &AttachSecuritygroup{}
 	_ command = &AttachUser{}
 	_ command = &AttachVolume{}
+	_ command = &CheckCertificate{}
 	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CheckVolume{}
@@ -181,6 +188,7 @@ var (
 	_ command = &CreateAppscalingpolicy{}
 	_ command = &CreateAppscalingtarget{}
 	_ command = &CreateBucket{}
+	_ command = &CreateCertificate{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -201,6 +209,7 @@ var (
 	_ command = &DeleteAppscalingpolicy{}
 	_ command = &DeleteAppscalingtarget{}
 	_ command = &DeleteBucket{}
+	_ command = &DeleteCertificate{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}

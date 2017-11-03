@@ -24,6 +24,8 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/acm"
+	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -616,6 +618,74 @@ func (cmd *AttachVolume) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCheckCertificate(sess *session.Session, l ...*logger.Logger) *CheckCertificate {
+	cmd := new(CheckCertificate)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = acm.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckCertificate) SetApi(api acmiface.ACMAPI) {
+	cmd.api = api
+}
+
+func (cmd *CheckCertificate) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckCertificate) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckCertificate) ParamsHelp() string {
+	return generateParamsHelp("checkcertificate", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckCertificate) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCheckInstance(sess *session.Session, l ...*logger.Logger) *CheckInstance {
 	cmd := new(CheckInstance)
 	if len(l) > 0 {
@@ -1187,6 +1257,74 @@ func (cmd *CreateBucket) ParamsHelp() string {
 }
 
 func (cmd *CreateBucket) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateCertificate(sess *session.Session, l ...*logger.Logger) *CreateCertificate {
+	cmd := new(CreateCertificate)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = acm.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateCertificate) SetApi(api acmiface.ACMAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateCertificate) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateCertificate) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateCertificate) ParamsHelp() string {
+	return generateParamsHelp("createcertificate", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateCertificate) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -2861,6 +2999,80 @@ func (cmd *DeleteBucket) ParamsHelp() string {
 }
 
 func (cmd *DeleteBucket) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteCertificate(sess *session.Session, l ...*logger.Logger) *DeleteCertificate {
+	cmd := new(DeleteCertificate)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = acm.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteCertificate) SetApi(api acmiface.ACMAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteCertificate) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &acm.DeleteCertificateInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in acm.DeleteCertificateInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteCertificate(input)
+	cmd.logger.ExtraVerbosef("acm.DeleteCertificate call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteCertificate) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteCertificate) ParamsHelp() string {
+	return generateParamsHelp("deletecertificate", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteCertificate) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
