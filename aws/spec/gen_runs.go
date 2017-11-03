@@ -441,6 +441,105 @@ func (cmd *AttachSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewAttachVolume(sess *session.Session, l ...*logger.Logger) *AttachVolume {
+	cmd := new(AttachVolume)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachVolume) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *AttachVolume) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.AttachVolumeInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.AttachVolumeInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.AttachVolume(input)
+	cmd.logger.ExtraVerbosef("ec2.AttachVolume call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachVolume) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachVolume) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.AttachVolumeInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.AttachVolumeInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.AttachVolume(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.AttachVolume call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: attach volume ok")
+			return fakeDryRunId("volume"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *AttachVolume) ParamsHelp() string {
+	return generateParamsHelp("attachvolume", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachVolume) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCheckInstance(sess *session.Session, l ...*logger.Logger) *CheckInstance {
 	cmd := new(CheckInstance)
 	if len(l) > 0 {
@@ -574,6 +673,74 @@ func (cmd *CheckSecuritygroup) ParamsHelp() string {
 }
 
 func (cmd *CheckSecuritygroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCheckVolume(sess *session.Session, l ...*logger.Logger) *CheckVolume {
+	cmd := new(CheckVolume)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckVolume) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *CheckVolume) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckVolume) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckVolume) ParamsHelp() string {
+	return generateParamsHelp("checkvolume", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckVolume) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -1828,6 +1995,105 @@ func (cmd *CreateTag) ParamsHelp() string {
 }
 
 func (cmd *CreateTag) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateVolume(sess *session.Session, l ...*logger.Logger) *CreateVolume {
+	cmd := new(CreateVolume)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateVolume) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *CreateVolume) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.CreateVolumeInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.CreateVolumeInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateVolume(input)
+	cmd.logger.ExtraVerbosef("ec2.CreateVolume call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateVolume) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateVolume) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateVolumeInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.CreateVolumeInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.CreateVolume(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.CreateVolume call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: create volume ok")
+			return fakeDryRunId("volume"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *CreateVolume) ParamsHelp() string {
+	return generateParamsHelp("createvolume", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateVolume) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -3283,6 +3549,105 @@ func (cmd *DeleteTag) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteVolume(sess *session.Session, l ...*logger.Logger) *DeleteVolume {
+	cmd := new(DeleteVolume)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteVolume) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteVolume) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.DeleteVolumeInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DeleteVolumeInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteVolume(input)
+	cmd.logger.ExtraVerbosef("ec2.DeleteVolume call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteVolume) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteVolume) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteVolumeInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.DeleteVolumeInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.DeleteVolume(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.DeleteVolume call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: delete volume ok")
+			return fakeDryRunId("volume"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DeleteVolume) ParamsHelp() string {
+	return generateParamsHelp("deletevolume", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteVolume) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteVpc(sess *session.Session, l ...*logger.Logger) *DeleteVpc {
 	cmd := new(DeleteVpc)
 	if len(l) > 0 {
@@ -3855,6 +4220,105 @@ func (cmd *DetachSecuritygroup) ParamsHelp() string {
 }
 
 func (cmd *DetachSecuritygroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDetachVolume(sess *session.Session, l ...*logger.Logger) *DetachVolume {
+	cmd := new(DetachVolume)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachVolume) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *DetachVolume) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.DetachVolumeInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DetachVolumeInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DetachVolume(input)
+	cmd.logger.ExtraVerbosef("ec2.DetachVolume call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachVolume) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachVolume) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DetachVolumeInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.DetachVolumeInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.DetachVolume(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.DetachVolume call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: detach volume ok")
+			return fakeDryRunId("volume"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DetachVolume) ParamsHelp() string {
+	return generateParamsHelp("detachvolume", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachVolume) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

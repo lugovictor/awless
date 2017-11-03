@@ -69,8 +69,10 @@ var (
 	newAttachSecuritygroup = func() *AttachSecuritygroup {
 		return &AttachSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newAttachVolume          = func() *AttachVolume { return &AttachVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckInstance         = func() *CheckInstance { return &CheckInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckSecuritygroup    = func() *CheckSecuritygroup { return &CheckSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCheckVolume           = func() *CheckVolume { return &CheckVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInstance        = func() *CreateInstance { return &CreateInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInternetgateway = func() *CreateInternetgateway {
 		return &CreateInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
@@ -83,6 +85,7 @@ var (
 	}
 	newCreateSubnet          = func() *CreateSubnet { return &CreateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateTag             = func() *CreateTag { return &CreateTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateVolume          = func() *CreateVolume { return &CreateVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateVpc             = func() *CreateVpc { return &CreateVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteInstance        = func() *DeleteInstance { return &DeleteInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteInternetgateway = func() *DeleteInternetgateway {
@@ -96,6 +99,7 @@ var (
 	}
 	newDeleteSubnet          = func() *DeleteSubnet { return &DeleteSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteTag             = func() *DeleteTag { return &DeleteTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteVolume          = func() *DeleteVolume { return &DeleteVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVpc             = func() *DeleteVpc { return &DeleteVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDetachInternetgateway = func() *DetachInternetgateway {
 		return &DetachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
@@ -104,6 +108,7 @@ var (
 	newDetachSecuritygroup = func() *DetachSecuritygroup {
 		return &DetachSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newDetachVolume        = func() *DetachVolume { return &DetachVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
 		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -243,6 +248,16 @@ func (m *mockEc2) AssociateRouteTable(input *ec2.AssociateRouteTableInput) (*ec2
 	return nil, nil
 }
 
+func (m *mockEc2) AttachVolume(input *ec2.AttachVolumeInput) (*ec2.VolumeAttachment, error) {
+	if got, want := input, genTestsExpected["attachvolume"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["attachvolume"]; ok {
+		return outFunc().(*ec2.VolumeAttachment), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) RunInstances(input *ec2.RunInstancesInput) (*ec2.Reservation, error) {
 	if got, want := input, genTestsExpected["createinstance"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -309,6 +324,16 @@ func (m *mockEc2) CreateSubnet(input *ec2.CreateSubnetInput) (*ec2.CreateSubnetO
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["createsubnet"]; ok {
 		return outFunc().(*ec2.CreateSubnetOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) CreateVolume(input *ec2.CreateVolumeInput) (*ec2.Volume, error) {
+	if got, want := input, genTestsExpected["createvolume"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createvolume"]; ok {
+		return outFunc().(*ec2.Volume), nil
 	}
 	return nil, nil
 }
@@ -393,6 +418,16 @@ func (m *mockEc2) DeleteSubnet(input *ec2.DeleteSubnetInput) (*ec2.DeleteSubnetO
 	return nil, nil
 }
 
+func (m *mockEc2) DeleteVolume(input *ec2.DeleteVolumeInput) (*ec2.DeleteVolumeOutput, error) {
+	if got, want := input, genTestsExpected["deletevolume"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletevolume"]; ok {
+		return outFunc().(*ec2.DeleteVolumeOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) DeleteVpc(input *ec2.DeleteVpcInput) (*ec2.DeleteVpcOutput, error) {
 	if got, want := input, genTestsExpected["deletevpc"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -419,6 +454,16 @@ func (m *mockEc2) DisassociateRouteTable(input *ec2.DisassociateRouteTableInput)
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["detachroutetable"]; ok {
 		return outFunc().(*ec2.DisassociateRouteTableOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DetachVolume(input *ec2.DetachVolumeInput) (*ec2.VolumeAttachment, error) {
+	if got, want := input, genTestsExpected["detachvolume"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["detachvolume"]; ok {
+		return outFunc().(*ec2.VolumeAttachment), nil
 	}
 	return nil, nil
 }

@@ -92,7 +92,7 @@ func (cmd *UpdateBucket) ManualRun(ctx, params map[string]interface{}) (interfac
 					input.WebsiteConfiguration.RedirectAllRequestsTo.Protocol = aws.String("https")
 				}
 			}
-			
+
 			if cmd.IndexSuffix != nil {
 				input.WebsiteConfiguration.IndexDocument = &s3.IndexDocument{Suffix: cmd.IndexSuffix}
 			} else {

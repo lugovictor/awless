@@ -67,6 +67,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "attachvolume":
+		return func() interface{} {
+			cmd := awsspec.NewAttachVolume(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "checkinstance":
 		return func() interface{} {
 			cmd := awsspec.NewCheckInstance(nil)
@@ -76,6 +82,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "checksecuritygroup":
 		return func() interface{} {
 			cmd := awsspec.NewCheckSecuritygroup(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "checkvolume":
+		return func() interface{} {
+			cmd := awsspec.NewCheckVolume(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
@@ -166,6 +178,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "createtag":
 		return func() interface{} {
 			cmd := awsspec.NewCreateTag(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "createvolume":
+		return func() interface{} {
+			cmd := awsspec.NewCreateVolume(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
@@ -271,6 +289,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "deletevolume":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteVolume(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "deletevpc":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteVpc(nil)
@@ -310,6 +334,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "detachsecuritygroup":
 		return func() interface{} {
 			cmd := awsspec.NewDetachSecuritygroup(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "detachvolume":
+		return func() interface{} {
+			cmd := awsspec.NewDetachVolume(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
