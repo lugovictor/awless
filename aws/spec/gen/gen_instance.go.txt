@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +35,7 @@ type CreateInstance struct {
     Keypair *string `awsName:"KeyName" awsType:"awsstr" templateName:"keypair"`
     Ip *string `awsName:"PrivateIpAddress" awsType:"awsstr" templateName:"ip"`
     Userdata *string `awsName:"UserData" awsType:"awsfiletobase64" templateName:"userdata"`
-    Securitygroup *[]string `awsName:"SecurityGroupIds" awsType:"awsstringslice" templateName:"securitygroup"`
+    Securitygroup []*string `awsName:"SecurityGroupIds" awsType:"awsstringslice" templateName:"securitygroup"`
     Lock *bool `awsName:"DisableApiTermination" awsType:"awsbool" templateName:"lock"`
     Role *string `awsName:"IamInstanceProfile.Name" awsType:"awsstr" templateName:"role"`
 }
@@ -68,7 +67,7 @@ type DeleteInstance struct {
   _              string `action:"delete" entity:"instance" awsAPI:"ec2" awsCall:"TerminateInstances" awsInput:"ec2.TerminateInstancesInput" awsOutput:"ec2.TerminateInstancesOutput" awsDryRun:""`
   logger         *logger.Logger
   api            ec2iface.EC2API
-    Id *[]string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
+    Id []*string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
 }
 
 func (cmd *DeleteInstance) ValidateParams(params []string) ([]string, error) {
@@ -80,7 +79,7 @@ type StartInstance struct {
   _              string `action:"start" entity:"instance" awsAPI:"ec2" awsCall:"StartInstances" awsInput:"ec2.StartInstancesInput" awsOutput:"ec2.StartInstancesOutput" awsDryRun:""`
   logger         *logger.Logger
   api            ec2iface.EC2API
-    Id *[]string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
+    Id []*string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
 }
 
 func (cmd *StartInstance) ValidateParams(params []string) ([]string, error) {
@@ -96,7 +95,7 @@ type StopInstance struct {
   _              string `action:"stop" entity:"instance" awsAPI:"ec2" awsCall:"StopInstances" awsInput:"ec2.StopInstancesInput" awsOutput:"ec2.StopInstancesOutput" awsDryRun:""`
   logger         *logger.Logger
   api            ec2iface.EC2API
-    Id *[]string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
+    Id []*string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
 }
 
 func (cmd *StopInstance) ValidateParams(params []string) ([]string, error) {

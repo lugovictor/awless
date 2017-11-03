@@ -35,6 +35,8 @@ type AWSFactory struct {
 
 func (f *AWSFactory) Build(key string) func() interface{} {
 	switch key {
+	case "attachalarm":
+		return func() interface{} { return NewAttachAlarm(f.Sess, f.Log) }
 	case "attachinternetgateway":
 		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
 	case "attachpolicy":
@@ -49,6 +51,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCheckSecuritygroup(f.Sess, f.Log) }
 	case "createaccesskey":
 		return func() interface{} { return NewCreateAccesskey(f.Sess, f.Log) }
+	case "createalarm":
+		return func() interface{} { return NewCreateAlarm(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -73,6 +77,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateVpc(f.Sess, f.Log) }
 	case "deleteaccesskey":
 		return func() interface{} { return NewDeleteAccesskey(f.Sess, f.Log) }
+	case "deletealarm":
+		return func() interface{} { return NewDeleteAlarm(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -95,6 +101,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteTag(f.Sess, f.Log) }
 	case "deletevpc":
 		return func() interface{} { return NewDeleteVpc(f.Sess, f.Log) }
+	case "detachalarm":
+		return func() interface{} { return NewDetachAlarm(f.Sess, f.Log) }
 	case "detachinternetgateway":
 		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
 	case "detachpolicy":
@@ -103,6 +111,10 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachRoutetable(f.Sess, f.Log) }
 	case "detachsecuritygroup":
 		return func() interface{} { return NewDetachSecuritygroup(f.Sess, f.Log) }
+	case "startalarm":
+		return func() interface{} { return NewStartAlarm(f.Sess, f.Log) }
+	case "stopalarm":
+		return func() interface{} { return NewStopAlarm(f.Sess, f.Log) }
 	case "updatepolicy":
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
 	case "updatesecuritygroup":
@@ -114,6 +126,7 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 }
 
 var (
+	_ command = &AttachAlarm{}
 	_ command = &AttachInternetgateway{}
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
@@ -121,6 +134,7 @@ var (
 	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CreateAccesskey{}
+	_ command = &CreateAlarm{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -133,6 +147,7 @@ var (
 	_ command = &CreateTag{}
 	_ command = &CreateVpc{}
 	_ command = &DeleteAccesskey{}
+	_ command = &DeleteAlarm{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
@@ -144,10 +159,13 @@ var (
 	_ command = &DeleteSubnet{}
 	_ command = &DeleteTag{}
 	_ command = &DeleteVpc{}
+	_ command = &DetachAlarm{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachPolicy{}
 	_ command = &DetachRoutetable{}
 	_ command = &DetachSecuritygroup{}
+	_ command = &StartAlarm{}
+	_ command = &StopAlarm{}
 	_ command = &UpdatePolicy{}
 	_ command = &UpdateSecuritygroup{}
 	_ command = &UpdateSubnet{}

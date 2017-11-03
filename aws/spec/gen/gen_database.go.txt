@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +38,7 @@ type CreateDatabase struct {
     Cluster *string `awsName:"DBClusterIdentifier" awsType:"awsstr" templateName:"cluster"`
     Dbname *string `awsName:"DBName" awsType:"awsstr" templateName:"dbname"`
     Parametergroup *string `awsName:"DBParameterGroupName" awsType:"awsstr" templateName:"parametergroup"`
-    Dbsecuritygroups *[]string `awsName:"DBSecurityGroups" awsType:"awsstringslice" templateName:"dbsecuritygroups"`
+    Dbsecuritygroups []*string `awsName:"DBSecurityGroups" awsType:"awsstringslice" templateName:"dbsecuritygroups"`
     Subnetgroup *string `awsName:"DBSubnetGroupName" awsType:"awsstr" templateName:"subnetgroup"`
     Domain *string `awsName:"Domain" awsType:"awsstr" templateName:"domain"`
     Iamrole *string `awsName:"DomainIAMRoleName" awsType:"awsstr" templateName:"iamrole"`
@@ -55,7 +54,7 @@ type CreateDatabase struct {
     Encrypted *bool `awsName:"StorageEncrypted" awsType:"awsbool" templateName:"encrypted"`
     Storagetype *string `awsName:"StorageType" awsType:"awsstr" templateName:"storagetype"`
     Timezone *string `awsName:"Timezone" awsType:"awsstr" templateName:"timezone"`
-    Vpcsecuritygroups *[]string `awsName:"VpcSecurityGroupIds" awsType:"awsstringslice" templateName:"vpcsecuritygroups"`
+    Vpcsecuritygroups []*string `awsName:"VpcSecurityGroupIds" awsType:"awsstringslice" templateName:"vpcsecuritygroups"`
 }
 
 func (cmd *CreateDatabase) ValidateParams(params []string) ([]string, error) {

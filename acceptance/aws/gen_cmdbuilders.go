@@ -18,6 +18,7 @@ limitations under the License.
 package awsat
 
 import (
+	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/aws/spec"
@@ -33,6 +34,12 @@ func NewAcceptanceFactory(mock interface{}) *AcceptanceFactory {
 
 func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	switch key {
+	case "attachalarm":
+		return func() interface{} {
+			cmd := awsspec.NewAttachAlarm(nil)
+			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
+			return cmd
+		}
 	case "attachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewAttachInternetgateway(nil)
@@ -73,6 +80,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateAccesskey(nil)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "createalarm":
+		return func() interface{} {
+			cmd := awsspec.NewCreateAlarm(nil)
+			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
 			return cmd
 		}
 	case "creategroup":
@@ -147,6 +160,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
+	case "deletealarm":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteAlarm(nil)
+			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
+			return cmd
+		}
 	case "deletegroup":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteGroup(nil)
@@ -213,6 +232,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "detachalarm":
+		return func() interface{} {
+			cmd := awsspec.NewDetachAlarm(nil)
+			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
+			return cmd
+		}
 	case "detachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewDetachInternetgateway(nil)
@@ -235,6 +260,18 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDetachSecuritygroup(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "startalarm":
+		return func() interface{} {
+			cmd := awsspec.NewStartAlarm(nil)
+			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
+			return cmd
+		}
+	case "stopalarm":
+		return func() interface{} {
+			cmd := awsspec.NewStopAlarm(nil)
+			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
 			return cmd
 		}
 	case "updatepolicy":

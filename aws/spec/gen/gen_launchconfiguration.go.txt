@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +32,7 @@ type CreateLaunchconfiguration struct {
     Public *bool `awsName:"AssociatePublicIpAddress" awsType:"awsbool" templateName:"public"`
     Keypair *string `awsName:"KeyName" awsType:"awsstr" templateName:"keypair"`
     Userdata *string `awsName:"UserData" awsType:"awsfiletobase64" templateName:"userdata"`
-    Securitygroups *[]string `awsName:"SecurityGroups" awsType:"awsstringslice" templateName:"securitygroups"`
+    Securitygroups []*string `awsName:"SecurityGroups" awsType:"awsstringslice" templateName:"securitygroups"`
     Role *string `awsName:"IamInstanceProfile" awsType:"awsstr" templateName:"role"`
     Spotprice *string `awsName:"SpotPrice" awsType:"awsstr" templateName:"spotprice"`
 }

@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,13 +30,13 @@ type CreateScalinggroup struct {
     Launchconfiguration *string `awsName:"LaunchConfigurationName" awsType:"awsstr" templateName:"launchconfiguration" required:""`
     MaxSize *int64 `awsName:"MaxSize" awsType:"awsint64" templateName:"max-size" required:""`
     MinSize *int64 `awsName:"MinSize" awsType:"awsint64" templateName:"min-size" required:""`
-    Subnets *[]string `awsName:"VPCZoneIdentifier" awsType:"awscsvstr" templateName:"subnets" required:""`
+    Subnets []*string `awsName:"VPCZoneIdentifier" awsType:"awscsvstr" templateName:"subnets" required:""`
     Cooldown *int64 `awsName:"DefaultCooldown" awsType:"awsint64" templateName:"cooldown"`
     DesiredCapacity *int64 `awsName:"DesiredCapacity" awsType:"awsint64" templateName:"desired-capacity"`
     HealthcheckGracePeriod *int64 `awsName:"HealthCheckGracePeriod" awsType:"awsint64" templateName:"healthcheck-grace-period"`
     HealthcheckType *string `awsName:"HealthCheckType" awsType:"awsstr" templateName:"healthcheck-type"`
     NewInstancesProtected *bool `awsName:"NewInstancesProtectedFromScaleIn" awsType:"awsbool" templateName:"new-instances-protected"`
-    Targetgroups *[]string `awsName:"TargetGroupARNs" awsType:"awsstringslice" templateName:"targetgroups"`
+    Targetgroups []*string `awsName:"TargetGroupARNs" awsType:"awsstringslice" templateName:"targetgroups"`
 }
 
 func (cmd *CreateScalinggroup) ValidateParams(params []string) ([]string, error) {
@@ -62,7 +61,7 @@ type UpdateScalinggroup struct {
     MaxSize *int64 `awsName:"MaxSize" awsType:"awsint64" templateName:"max-size"`
     MinSize *int64 `awsName:"MinSize" awsType:"awsint64" templateName:"min-size"`
     NewInstancesProtected *bool `awsName:"NewInstancesProtectedFromScaleIn" awsType:"awsbool" templateName:"new-instances-protected"`
-    Subnets *[]string `awsName:"VPCZoneIdentifier" awsType:"awscsvstr" templateName:"subnets"`
+    Subnets []*string `awsName:"VPCZoneIdentifier" awsType:"awscsvstr" templateName:"subnets"`
 }
 
 func (cmd *UpdateScalinggroup) ValidateParams(params []string) ([]string, error) {

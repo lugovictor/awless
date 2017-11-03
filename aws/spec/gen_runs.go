@@ -24,12 +24,82 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/wallix/awless/logger"
 )
+
+func NewAttachAlarm(sess *session.Session, l ...*logger.Logger) *AttachAlarm {
+	cmd := new(AttachAlarm)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudwatch.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachAlarm) SetApi(api cloudwatchiface.CloudWatchAPI) {
+	cmd.api = api
+}
+
+func (cmd *AttachAlarm) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachAlarm) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachAlarm) ParamsHelp() string {
+	return generateParamsHelp("attachalarm", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachAlarm) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
 
 func NewAttachInternetgateway(sess *session.Session, l ...*logger.Logger) *AttachInternetgateway {
 	cmd := new(AttachInternetgateway)
@@ -572,6 +642,80 @@ func (cmd *CreateAccesskey) ParamsHelp() string {
 }
 
 func (cmd *CreateAccesskey) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateAlarm(sess *session.Session, l ...*logger.Logger) *CreateAlarm {
+	cmd := new(CreateAlarm)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudwatch.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateAlarm) SetApi(api cloudwatchiface.CloudWatchAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateAlarm) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &cloudwatch.PutMetricAlarmInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in cloudwatch.PutMetricAlarmInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.PutMetricAlarm(input)
+	cmd.logger.ExtraVerbosef("cloudwatch.PutMetricAlarm call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateAlarm) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateAlarm) ParamsHelp() string {
+	return generateParamsHelp("createalarm", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateAlarm) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -1632,6 +1776,80 @@ func (cmd *DeleteAccesskey) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteAlarm(sess *session.Session, l ...*logger.Logger) *DeleteAlarm {
+	cmd := new(DeleteAlarm)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudwatch.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteAlarm) SetApi(api cloudwatchiface.CloudWatchAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteAlarm) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &cloudwatch.DeleteAlarmsInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in cloudwatch.DeleteAlarmsInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteAlarms(input)
+	cmd.logger.ExtraVerbosef("cloudwatch.DeleteAlarms call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteAlarm) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteAlarm) ParamsHelp() string {
+	return generateParamsHelp("deletealarm", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteAlarm) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteGroup(sess *session.Session, l ...*logger.Logger) *DeleteGroup {
 	cmd := new(DeleteGroup)
 	if len(l) > 0 {
@@ -2640,6 +2858,74 @@ func (cmd *DeleteVpc) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDetachAlarm(sess *session.Session, l ...*logger.Logger) *DetachAlarm {
+	cmd := new(DetachAlarm)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudwatch.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachAlarm) SetApi(api cloudwatchiface.CloudWatchAPI) {
+	cmd.api = api
+}
+
+func (cmd *DetachAlarm) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachAlarm) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachAlarm) ParamsHelp() string {
+	return generateParamsHelp("detachalarm", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachAlarm) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDetachInternetgateway(sess *session.Session, l ...*logger.Logger) *DetachInternetgateway {
 	cmd := new(DetachInternetgateway)
 	if len(l) > 0 {
@@ -2971,6 +3257,154 @@ func (cmd *DetachSecuritygroup) ParamsHelp() string {
 }
 
 func (cmd *DetachSecuritygroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewStartAlarm(sess *session.Session, l ...*logger.Logger) *StartAlarm {
+	cmd := new(StartAlarm)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudwatch.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *StartAlarm) SetApi(api cloudwatchiface.CloudWatchAPI) {
+	cmd.api = api
+}
+
+func (cmd *StartAlarm) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &cloudwatch.EnableAlarmActionsInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in cloudwatch.EnableAlarmActionsInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.EnableAlarmActions(input)
+	cmd.logger.ExtraVerbosef("cloudwatch.EnableAlarmActions call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *StartAlarm) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *StartAlarm) ParamsHelp() string {
+	return generateParamsHelp("startalarm", structListParamsKeys(cmd))
+}
+
+func (cmd *StartAlarm) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewStopAlarm(sess *session.Session, l ...*logger.Logger) *StopAlarm {
+	cmd := new(StopAlarm)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudwatch.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *StopAlarm) SetApi(api cloudwatchiface.CloudWatchAPI) {
+	cmd.api = api
+}
+
+func (cmd *StopAlarm) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &cloudwatch.DisableAlarmActionsInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in cloudwatch.DisableAlarmActionsInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DisableAlarmActions(input)
+	cmd.logger.ExtraVerbosef("cloudwatch.DisableAlarmActions call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *StopAlarm) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *StopAlarm) ParamsHelp() string {
+	return generateParamsHelp("stopalarm", structListParamsKeys(cmd))
+}
+
+func (cmd *StopAlarm) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

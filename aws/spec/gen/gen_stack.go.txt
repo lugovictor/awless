@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,12 +28,12 @@ type CreateStack struct {
   api            cloudformationiface.CloudFormationAPI
     Name *string `awsName:"StackName" awsType:"awsstr" templateName:"name" required:""`
     TemplateFile *string `awsName:"TemplateBody" awsType:"awsfiletostring" templateName:"template-file" required:""`
-    Capabilities *[]string `awsName:"Capabilities" awsType:"awsstringslice" templateName:"capabilities"`
+    Capabilities []*string `awsName:"Capabilities" awsType:"awsstringslice" templateName:"capabilities"`
     DisableRollback *bool `awsName:"DisableRollback" awsType:"awsbool" templateName:"disable-rollback"`
-    Notifications *[]string `awsName:"NotificationARNs" awsType:"awsstringslice" templateName:"notifications"`
+    Notifications []*string `awsName:"NotificationARNs" awsType:"awsstringslice" templateName:"notifications"`
     OnFailure *string `awsName:"OnFailure" awsType:"awsstr" templateName:"on-failure"`
     Parameters *struct{} `awsName:"Parameters" awsType:"awsparameterslice" templateName:"parameters"`
-    ResourceTypes *[]string `awsName:"ResourceTypes" awsType:"awsstringslice" templateName:"resource-types"`
+    ResourceTypes []*string `awsName:"ResourceTypes" awsType:"awsstringslice" templateName:"resource-types"`
     Role *string `awsName:"RoleARN" awsType:"awsstr" templateName:"role"`
     PolicyFile *string `awsName:"StackPolicyBody" awsType:"awsfiletostring" templateName:"policy-file"`
     Timeout *int64 `awsName:"TimeoutInMinutes" awsType:"awsint64" templateName:"timeout"`
@@ -54,10 +53,10 @@ type UpdateStack struct {
   logger         *logger.Logger
   api            cloudformationiface.CloudFormationAPI
     Name *string `awsName:"StackName" awsType:"awsstr" templateName:"name" required:""`
-    Capabilities *[]string `awsName:"Capabilities" awsType:"awsstringslice" templateName:"capabilities"`
-    Notifications *[]string `awsName:"NotificationARNs" awsType:"awsstringslice" templateName:"notifications"`
+    Capabilities []*string `awsName:"Capabilities" awsType:"awsstringslice" templateName:"capabilities"`
+    Notifications []*string `awsName:"NotificationARNs" awsType:"awsstringslice" templateName:"notifications"`
     Parameters *struct{} `awsName:"Parameters" awsType:"awsparameterslice" templateName:"parameters"`
-    ResourceTypes *[]string `awsName:"ResourceTypes" awsType:"awsstringslice" templateName:"resource-types"`
+    ResourceTypes []*string `awsName:"ResourceTypes" awsType:"awsstringslice" templateName:"resource-types"`
     Role *string `awsName:"RoleARN" awsType:"awsstr" templateName:"role"`
     PolicyFile *string `awsName:"StackPolicyBody" awsType:"awsfiletostring" templateName:"policy-file"`
     PolicyUpdateFile *string `awsName:"StackPolicyDuringUpdateBody" awsType:"awsfiletostring" templateName:"policy-update-file"`
@@ -79,7 +78,7 @@ type DeleteStack struct {
   logger         *logger.Logger
   api            cloudformationiface.CloudFormationAPI
     Name *string `awsName:"StackName" awsType:"awsstr" templateName:"name" required:""`
-    RetainResources *[]string `awsName:"RetainResources" awsType:"awsstringslice" templateName:"retain-resources"`
+    RetainResources []*string `awsName:"RetainResources" awsType:"awsstringslice" templateName:"retain-resources"`
 }
 
 func (cmd *DeleteStack) ValidateParams(params []string) ([]string, error) {

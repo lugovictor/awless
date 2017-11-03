@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +28,7 @@ type CreateDbsubnetgroup struct {
   api            rdsiface.RDSAPI
     Description *string `awsName:"DBSubnetGroupDescription" awsType:"awsstr" templateName:"description" required:""`
     Name *string `awsName:"DBSubnetGroupName" awsType:"awsstr" templateName:"name" required:""`
-    Subnets *[]string `awsName:"SubnetIds" awsType:"awsstringslice" templateName:"subnets" required:""`
+    Subnets []*string `awsName:"SubnetIds" awsType:"awsstringslice" templateName:"subnets" required:""`
 }
 
 func (cmd *CreateDbsubnetgroup) ValidateParams(params []string) ([]string, error) {

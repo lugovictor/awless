@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +27,11 @@ type CreateLoadbalancer struct {
   logger         *logger.Logger
   api            elbv2iface.ELBV2API
     Name *string `awsName:"Name" awsType:"awsstr" templateName:"name" required:""`
-    Subnets *[]string `awsName:"Subnets" awsType:"awsstringslice" templateName:"subnets" required:""`
+    Subnets []*string `awsName:"Subnets" awsType:"awsstringslice" templateName:"subnets" required:""`
     SubnetMappings *struct{} `awsName:"SubnetMappings" awsType:"awssubnetmappings" templateName:"subnet-mappings"`
     Iptype *string `awsName:"IpAddressType" awsType:"awsstr" templateName:"iptype"`
     Scheme *string `awsName:"Scheme" awsType:"awsstr" templateName:"scheme"`
-    Securitygroups *[]string `awsName:"SecurityGroups" awsType:"awsstringslice" templateName:"securitygroups"`
+    Securitygroups []*string `awsName:"SecurityGroups" awsType:"awsstringslice" templateName:"securitygroups"`
     Type *string `awsName:"Type" awsType:"awsstr" templateName:"type"`
 }
 

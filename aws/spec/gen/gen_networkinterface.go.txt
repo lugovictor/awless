@@ -1,4 +1,3 @@
-// +build ignore
 /* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +28,7 @@ type CreateNetworkinterface struct {
   api            ec2iface.EC2API
     Subnet *string `awsName:"SubnetId" awsType:"awsstr" templateName:"subnet" required:""`
     Description *string `awsName:"Description" awsType:"awsstr" templateName:"description"`
-    Securitygroups *[]string `awsName:"Groups" awsType:"awsstringslice" templateName:"securitygroups"`
+    Securitygroups []*string `awsName:"Groups" awsType:"awsstringslice" templateName:"securitygroups"`
     Privateip *string `awsName:"PrivateIpAddress" awsType:"awsstr" templateName:"privateip"`
 }
 

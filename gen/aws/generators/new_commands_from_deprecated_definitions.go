@@ -128,9 +128,9 @@ func AwsTypeToGoType(awstype string) (string, error) {
 	case "awsfiletobase64":
 		return "*string", nil
 	case "awsfiletobyteslice":
-		return "*[]byte", nil
+		return "[]byte", nil
 	case "awsstringslice", "awscsvstr":
-		return "*[]string", nil
+		return "[]*string", nil
 	case "awsint64", "awsslicestructint64":
 		return "*int64", nil
 	case "awsfloat":
@@ -148,8 +148,7 @@ func GenerateResultExtraction(cmd aws.NewCommand) string {
 	return out
 }
 
-const generatedNewCommands = `// +build ignore
-/* Copyright 2017 WALLIX
+const generatedNewCommands = `/* Copyright 2017 WALLIX
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

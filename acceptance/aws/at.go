@@ -103,6 +103,10 @@ func Int64(v int64) *int64 {
 	return &v
 }
 
+func Float64(v float64) *float64 {
+	return &v
+}
+
 func Int64AsIntValue(v *int64) int {
 	if v != nil {
 		return int(*v)

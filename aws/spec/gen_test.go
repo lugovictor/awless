@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
@@ -36,6 +38,12 @@ var (
 	genTestsCleanupFunc       = make(map[string]func())
 	genTestsOutputExtractFunc = make(map[string]func() interface{})
 
+	newAttachAlarm           = func() *AttachAlarm { return &AttachAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
+	newCreateAlarm           = func() *CreateAlarm { return &CreateAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
+	newDeleteAlarm           = func() *DeleteAlarm { return &DeleteAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
+	newDetachAlarm           = func() *DetachAlarm { return &DetachAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
+	newStartAlarm            = func() *StartAlarm { return &StartAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
+	newStopAlarm             = func() *StopAlarm { return &StopAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newAttachInternetgateway = func() *AttachInternetgateway {
 		return &AttachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -93,11 +101,54 @@ var (
 	newUpdatePolicy    = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 )
 
+type mockCloudwatch struct {
+	cloudwatchiface.CloudWatchAPI
+}
 type mockEc2 struct {
 	ec2iface.EC2API
 }
 type mockIam struct {
 	iamiface.IAMAPI
+}
+
+func (m *mockCloudwatch) PutMetricAlarm(input *cloudwatch.PutMetricAlarmInput) (*cloudwatch.PutMetricAlarmOutput, error) {
+	if got, want := input, genTestsExpected["createalarm"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createalarm"]; ok {
+		return outFunc().(*cloudwatch.PutMetricAlarmOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockCloudwatch) DeleteAlarms(input *cloudwatch.DeleteAlarmsInput) (*cloudwatch.DeleteAlarmsOutput, error) {
+	if got, want := input, genTestsExpected["deletealarm"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletealarm"]; ok {
+		return outFunc().(*cloudwatch.DeleteAlarmsOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockCloudwatch) EnableAlarmActions(input *cloudwatch.EnableAlarmActionsInput) (*cloudwatch.EnableAlarmActionsOutput, error) {
+	if got, want := input, genTestsExpected["startalarm"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["startalarm"]; ok {
+		return outFunc().(*cloudwatch.EnableAlarmActionsOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockCloudwatch) DisableAlarmActions(input *cloudwatch.DisableAlarmActionsInput) (*cloudwatch.DisableAlarmActionsOutput, error) {
+	if got, want := input, genTestsExpected["stopalarm"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["stopalarm"]; ok {
+		return outFunc().(*cloudwatch.DisableAlarmActionsOutput), nil
+	}
+	return nil, nil
 }
 
 func (m *mockEc2) AttachInternetGateway(input *ec2.AttachInternetGatewayInput) (*ec2.AttachInternetGatewayOutput, error) {

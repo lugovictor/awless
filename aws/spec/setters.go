@@ -129,16 +129,20 @@ func setFieldWithType(v, i interface{}, fieldPath string, destType string, inter
 	case awscsvstr:
 		v = strings.Join(castStringSlice(v), ",")
 	case awsdimensionslice:
-		sl := castStringSlice(v)
-		var dimensions []*cloudwatch.Dimension
-		for _, s := range sl {
-			splits := strings.SplitN(s, ":", 2)
-			if len(splits) != 2 {
-				return fmt.Errorf("invalid dimension '%s', expected 'key:value'", s)
+		if dimensions, isDim := v.([]*cloudwatch.Dimension); isDim {
+			v = dimensions
+		} else {
+			dimensions = []*cloudwatch.Dimension{}
+			sl := castStringSlice(v)
+			for _, s := range sl {
+				splits := strings.SplitN(s, ":", 2)
+				if len(splits) != 2 {
+					return fmt.Errorf("invalid dimension '%s', expected 'key:value'", s)
+				}
+				dimensions = append(dimensions, &cloudwatch.Dimension{Name: aws.String(splits[0]), Value: aws.String(splits[1])})
+				v = dimensions
 			}
-			dimensions = append(dimensions, &cloudwatch.Dimension{Name: aws.String(splits[0]), Value: aws.String(splits[1])})
 		}
-		v = dimensions
 	case awsecskeyvalue:
 		sl := castStringSlice(v)
 		var keyvalues []*ecs.KeyValuePair
@@ -367,6 +371,8 @@ func castFloat(v interface{}) (float64, error) {
 		return float64(vv), nil
 	case float64:
 		return vv, nil
+	case *float64:
+		return aws.Float64Value(vv), nil
 	case int:
 		return float64(vv), nil
 	case int64:
@@ -540,8 +546,10 @@ func structSetter(s interface{}, params map[string]interface{}) error {
 					fieldType = awsint64
 				case reflect.Bool:
 					fieldType = awsbool
+				case reflect.Float64:
+					fieldType = awsfloat
 				default:
-					return fmt.Errorf("unknown type in pointer %s", field.Type.String())
+					return fmt.Errorf("unknown type %s for parameter %s in struct setter", tplName, field.Type.String())
 				}
 			} else if kind == reflect.Slice && field.Type.Elem().Kind() == reflect.Ptr {
 				switch field.Type.Elem().Elem().Kind() {
@@ -549,8 +557,15 @@ func structSetter(s interface{}, params map[string]interface{}) error {
 					fieldType = awsstringslice
 				case reflect.Int64:
 					fieldType = awsint64slice
+				case reflect.Struct:
+					switch field.Type.Elem().Elem() {
+					case reflect.TypeOf(cloudwatch.Dimension{}):
+						fieldType = awsdimensionslice
+					default:
+						return fmt.Errorf("unknown struct type in slice %s for parameter %s", field.Type.String(), tplName)
+					}
 				default:
-					return fmt.Errorf("unknown type in slice %s", field.Type.String())
+					return fmt.Errorf("unknown type in slice %s for parameter %s", field.Type.String(), tplName)
 				}
 			}
 			if err := setFieldWithType(v, s, field.Name, fieldType); err != nil {

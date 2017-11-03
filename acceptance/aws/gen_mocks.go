@@ -20,11 +20,347 @@ package awsat
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 )
+
+type cloudwatchMock struct {
+	basicMock
+	cloudwatchiface.CloudWatchAPI
+	DeleteAlarmsFunc                       func(param0 *cloudwatch.DeleteAlarmsInput) (*cloudwatch.DeleteAlarmsOutput, error)
+	DeleteAlarmsRequestFunc                func(param0 *cloudwatch.DeleteAlarmsInput) (*request.Request, *cloudwatch.DeleteAlarmsOutput)
+	DeleteAlarmsWithContextFunc            func(param0 aws.Context, param1 *cloudwatch.DeleteAlarmsInput, param2 ...request.Option) (*cloudwatch.DeleteAlarmsOutput, error)
+	DeleteDashboardsFunc                   func(param0 *cloudwatch.DeleteDashboardsInput) (*cloudwatch.DeleteDashboardsOutput, error)
+	DeleteDashboardsRequestFunc            func(param0 *cloudwatch.DeleteDashboardsInput) (*request.Request, *cloudwatch.DeleteDashboardsOutput)
+	DeleteDashboardsWithContextFunc        func(param0 aws.Context, param1 *cloudwatch.DeleteDashboardsInput, param2 ...request.Option) (*cloudwatch.DeleteDashboardsOutput, error)
+	DescribeAlarmHistoryFunc               func(param0 *cloudwatch.DescribeAlarmHistoryInput) (*cloudwatch.DescribeAlarmHistoryOutput, error)
+	DescribeAlarmHistoryRequestFunc        func(param0 *cloudwatch.DescribeAlarmHistoryInput) (*request.Request, *cloudwatch.DescribeAlarmHistoryOutput)
+	DescribeAlarmHistoryWithContextFunc    func(param0 aws.Context, param1 *cloudwatch.DescribeAlarmHistoryInput, param2 ...request.Option) (*cloudwatch.DescribeAlarmHistoryOutput, error)
+	DescribeAlarmsFunc                     func(param0 *cloudwatch.DescribeAlarmsInput) (*cloudwatch.DescribeAlarmsOutput, error)
+	DescribeAlarmsForMetricFunc            func(param0 *cloudwatch.DescribeAlarmsForMetricInput) (*cloudwatch.DescribeAlarmsForMetricOutput, error)
+	DescribeAlarmsForMetricRequestFunc     func(param0 *cloudwatch.DescribeAlarmsForMetricInput) (*request.Request, *cloudwatch.DescribeAlarmsForMetricOutput)
+	DescribeAlarmsForMetricWithContextFunc func(param0 aws.Context, param1 *cloudwatch.DescribeAlarmsForMetricInput, param2 ...request.Option) (*cloudwatch.DescribeAlarmsForMetricOutput, error)
+	DescribeAlarmsRequestFunc              func(param0 *cloudwatch.DescribeAlarmsInput) (*request.Request, *cloudwatch.DescribeAlarmsOutput)
+	DescribeAlarmsWithContextFunc          func(param0 aws.Context, param1 *cloudwatch.DescribeAlarmsInput, param2 ...request.Option) (*cloudwatch.DescribeAlarmsOutput, error)
+	DisableAlarmActionsFunc                func(param0 *cloudwatch.DisableAlarmActionsInput) (*cloudwatch.DisableAlarmActionsOutput, error)
+	DisableAlarmActionsRequestFunc         func(param0 *cloudwatch.DisableAlarmActionsInput) (*request.Request, *cloudwatch.DisableAlarmActionsOutput)
+	DisableAlarmActionsWithContextFunc     func(param0 aws.Context, param1 *cloudwatch.DisableAlarmActionsInput, param2 ...request.Option) (*cloudwatch.DisableAlarmActionsOutput, error)
+	EnableAlarmActionsFunc                 func(param0 *cloudwatch.EnableAlarmActionsInput) (*cloudwatch.EnableAlarmActionsOutput, error)
+	EnableAlarmActionsRequestFunc          func(param0 *cloudwatch.EnableAlarmActionsInput) (*request.Request, *cloudwatch.EnableAlarmActionsOutput)
+	EnableAlarmActionsWithContextFunc      func(param0 aws.Context, param1 *cloudwatch.EnableAlarmActionsInput, param2 ...request.Option) (*cloudwatch.EnableAlarmActionsOutput, error)
+	GetDashboardFunc                       func(param0 *cloudwatch.GetDashboardInput) (*cloudwatch.GetDashboardOutput, error)
+	GetDashboardRequestFunc                func(param0 *cloudwatch.GetDashboardInput) (*request.Request, *cloudwatch.GetDashboardOutput)
+	GetDashboardWithContextFunc            func(param0 aws.Context, param1 *cloudwatch.GetDashboardInput, param2 ...request.Option) (*cloudwatch.GetDashboardOutput, error)
+	GetMetricStatisticsFunc                func(param0 *cloudwatch.GetMetricStatisticsInput) (*cloudwatch.GetMetricStatisticsOutput, error)
+	GetMetricStatisticsRequestFunc         func(param0 *cloudwatch.GetMetricStatisticsInput) (*request.Request, *cloudwatch.GetMetricStatisticsOutput)
+	GetMetricStatisticsWithContextFunc     func(param0 aws.Context, param1 *cloudwatch.GetMetricStatisticsInput, param2 ...request.Option) (*cloudwatch.GetMetricStatisticsOutput, error)
+	ListDashboardsFunc                     func(param0 *cloudwatch.ListDashboardsInput) (*cloudwatch.ListDashboardsOutput, error)
+	ListDashboardsRequestFunc              func(param0 *cloudwatch.ListDashboardsInput) (*request.Request, *cloudwatch.ListDashboardsOutput)
+	ListDashboardsWithContextFunc          func(param0 aws.Context, param1 *cloudwatch.ListDashboardsInput, param2 ...request.Option) (*cloudwatch.ListDashboardsOutput, error)
+	ListMetricsFunc                        func(param0 *cloudwatch.ListMetricsInput) (*cloudwatch.ListMetricsOutput, error)
+	ListMetricsRequestFunc                 func(param0 *cloudwatch.ListMetricsInput) (*request.Request, *cloudwatch.ListMetricsOutput)
+	ListMetricsWithContextFunc             func(param0 aws.Context, param1 *cloudwatch.ListMetricsInput, param2 ...request.Option) (*cloudwatch.ListMetricsOutput, error)
+	PutDashboardFunc                       func(param0 *cloudwatch.PutDashboardInput) (*cloudwatch.PutDashboardOutput, error)
+	PutDashboardRequestFunc                func(param0 *cloudwatch.PutDashboardInput) (*request.Request, *cloudwatch.PutDashboardOutput)
+	PutDashboardWithContextFunc            func(param0 aws.Context, param1 *cloudwatch.PutDashboardInput, param2 ...request.Option) (*cloudwatch.PutDashboardOutput, error)
+	PutMetricAlarmFunc                     func(param0 *cloudwatch.PutMetricAlarmInput) (*cloudwatch.PutMetricAlarmOutput, error)
+	PutMetricAlarmRequestFunc              func(param0 *cloudwatch.PutMetricAlarmInput) (*request.Request, *cloudwatch.PutMetricAlarmOutput)
+	PutMetricAlarmWithContextFunc          func(param0 aws.Context, param1 *cloudwatch.PutMetricAlarmInput, param2 ...request.Option) (*cloudwatch.PutMetricAlarmOutput, error)
+	PutMetricDataFunc                      func(param0 *cloudwatch.PutMetricDataInput) (*cloudwatch.PutMetricDataOutput, error)
+	PutMetricDataRequestFunc               func(param0 *cloudwatch.PutMetricDataInput) (*request.Request, *cloudwatch.PutMetricDataOutput)
+	PutMetricDataWithContextFunc           func(param0 aws.Context, param1 *cloudwatch.PutMetricDataInput, param2 ...request.Option) (*cloudwatch.PutMetricDataOutput, error)
+	SetAlarmStateFunc                      func(param0 *cloudwatch.SetAlarmStateInput) (*cloudwatch.SetAlarmStateOutput, error)
+	SetAlarmStateRequestFunc               func(param0 *cloudwatch.SetAlarmStateInput) (*request.Request, *cloudwatch.SetAlarmStateOutput)
+	SetAlarmStateWithContextFunc           func(param0 aws.Context, param1 *cloudwatch.SetAlarmStateInput, param2 ...request.Option) (*cloudwatch.SetAlarmStateOutput, error)
+	WaitUntilAlarmExistsFunc               func(param0 *cloudwatch.DescribeAlarmsInput) error
+	WaitUntilAlarmExistsWithContextFunc    func(param0 aws.Context, param1 *cloudwatch.DescribeAlarmsInput, param2 ...request.WaiterOption) error
+}
+
+func (m *cloudwatchMock) DeleteAlarms(param0 *cloudwatch.DeleteAlarmsInput) (*cloudwatch.DeleteAlarmsOutput, error) {
+	m.addCall("DeleteAlarms")
+	m.verifyInput("DeleteAlarms", param0)
+	return m.DeleteAlarmsFunc(param0)
+}
+
+func (m *cloudwatchMock) DeleteAlarmsRequest(param0 *cloudwatch.DeleteAlarmsInput) (*request.Request, *cloudwatch.DeleteAlarmsOutput) {
+	m.addCall("DeleteAlarmsRequest")
+	m.verifyInput("DeleteAlarmsRequest", param0)
+	return m.DeleteAlarmsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) DeleteAlarmsWithContext(param0 aws.Context, param1 *cloudwatch.DeleteAlarmsInput, param2 ...request.Option) (*cloudwatch.DeleteAlarmsOutput, error) {
+	m.addCall("DeleteAlarmsWithContext")
+	m.verifyInput("DeleteAlarmsWithContext", param0)
+	return m.DeleteAlarmsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) DeleteDashboards(param0 *cloudwatch.DeleteDashboardsInput) (*cloudwatch.DeleteDashboardsOutput, error) {
+	m.addCall("DeleteDashboards")
+	m.verifyInput("DeleteDashboards", param0)
+	return m.DeleteDashboardsFunc(param0)
+}
+
+func (m *cloudwatchMock) DeleteDashboardsRequest(param0 *cloudwatch.DeleteDashboardsInput) (*request.Request, *cloudwatch.DeleteDashboardsOutput) {
+	m.addCall("DeleteDashboardsRequest")
+	m.verifyInput("DeleteDashboardsRequest", param0)
+	return m.DeleteDashboardsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) DeleteDashboardsWithContext(param0 aws.Context, param1 *cloudwatch.DeleteDashboardsInput, param2 ...request.Option) (*cloudwatch.DeleteDashboardsOutput, error) {
+	m.addCall("DeleteDashboardsWithContext")
+	m.verifyInput("DeleteDashboardsWithContext", param0)
+	return m.DeleteDashboardsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) DescribeAlarmHistory(param0 *cloudwatch.DescribeAlarmHistoryInput) (*cloudwatch.DescribeAlarmHistoryOutput, error) {
+	m.addCall("DescribeAlarmHistory")
+	m.verifyInput("DescribeAlarmHistory", param0)
+	return m.DescribeAlarmHistoryFunc(param0)
+}
+
+func (m *cloudwatchMock) DescribeAlarmHistoryRequest(param0 *cloudwatch.DescribeAlarmHistoryInput) (*request.Request, *cloudwatch.DescribeAlarmHistoryOutput) {
+	m.addCall("DescribeAlarmHistoryRequest")
+	m.verifyInput("DescribeAlarmHistoryRequest", param0)
+	return m.DescribeAlarmHistoryRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) DescribeAlarmHistoryWithContext(param0 aws.Context, param1 *cloudwatch.DescribeAlarmHistoryInput, param2 ...request.Option) (*cloudwatch.DescribeAlarmHistoryOutput, error) {
+	m.addCall("DescribeAlarmHistoryWithContext")
+	m.verifyInput("DescribeAlarmHistoryWithContext", param0)
+	return m.DescribeAlarmHistoryWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) DescribeAlarms(param0 *cloudwatch.DescribeAlarmsInput) (*cloudwatch.DescribeAlarmsOutput, error) {
+	m.addCall("DescribeAlarms")
+	m.verifyInput("DescribeAlarms", param0)
+	return m.DescribeAlarmsFunc(param0)
+}
+
+func (m *cloudwatchMock) DescribeAlarmsForMetric(param0 *cloudwatch.DescribeAlarmsForMetricInput) (*cloudwatch.DescribeAlarmsForMetricOutput, error) {
+	m.addCall("DescribeAlarmsForMetric")
+	m.verifyInput("DescribeAlarmsForMetric", param0)
+	return m.DescribeAlarmsForMetricFunc(param0)
+}
+
+func (m *cloudwatchMock) DescribeAlarmsForMetricRequest(param0 *cloudwatch.DescribeAlarmsForMetricInput) (*request.Request, *cloudwatch.DescribeAlarmsForMetricOutput) {
+	m.addCall("DescribeAlarmsForMetricRequest")
+	m.verifyInput("DescribeAlarmsForMetricRequest", param0)
+	return m.DescribeAlarmsForMetricRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) DescribeAlarmsForMetricWithContext(param0 aws.Context, param1 *cloudwatch.DescribeAlarmsForMetricInput, param2 ...request.Option) (*cloudwatch.DescribeAlarmsForMetricOutput, error) {
+	m.addCall("DescribeAlarmsForMetricWithContext")
+	m.verifyInput("DescribeAlarmsForMetricWithContext", param0)
+	return m.DescribeAlarmsForMetricWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) DescribeAlarmsRequest(param0 *cloudwatch.DescribeAlarmsInput) (*request.Request, *cloudwatch.DescribeAlarmsOutput) {
+	m.addCall("DescribeAlarmsRequest")
+	m.verifyInput("DescribeAlarmsRequest", param0)
+	return m.DescribeAlarmsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) DescribeAlarmsWithContext(param0 aws.Context, param1 *cloudwatch.DescribeAlarmsInput, param2 ...request.Option) (*cloudwatch.DescribeAlarmsOutput, error) {
+	m.addCall("DescribeAlarmsWithContext")
+	m.verifyInput("DescribeAlarmsWithContext", param0)
+	return m.DescribeAlarmsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) DisableAlarmActions(param0 *cloudwatch.DisableAlarmActionsInput) (*cloudwatch.DisableAlarmActionsOutput, error) {
+	m.addCall("DisableAlarmActions")
+	m.verifyInput("DisableAlarmActions", param0)
+	return m.DisableAlarmActionsFunc(param0)
+}
+
+func (m *cloudwatchMock) DisableAlarmActionsRequest(param0 *cloudwatch.DisableAlarmActionsInput) (*request.Request, *cloudwatch.DisableAlarmActionsOutput) {
+	m.addCall("DisableAlarmActionsRequest")
+	m.verifyInput("DisableAlarmActionsRequest", param0)
+	return m.DisableAlarmActionsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) DisableAlarmActionsWithContext(param0 aws.Context, param1 *cloudwatch.DisableAlarmActionsInput, param2 ...request.Option) (*cloudwatch.DisableAlarmActionsOutput, error) {
+	m.addCall("DisableAlarmActionsWithContext")
+	m.verifyInput("DisableAlarmActionsWithContext", param0)
+	return m.DisableAlarmActionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) EnableAlarmActions(param0 *cloudwatch.EnableAlarmActionsInput) (*cloudwatch.EnableAlarmActionsOutput, error) {
+	m.addCall("EnableAlarmActions")
+	m.verifyInput("EnableAlarmActions", param0)
+	return m.EnableAlarmActionsFunc(param0)
+}
+
+func (m *cloudwatchMock) EnableAlarmActionsRequest(param0 *cloudwatch.EnableAlarmActionsInput) (*request.Request, *cloudwatch.EnableAlarmActionsOutput) {
+	m.addCall("EnableAlarmActionsRequest")
+	m.verifyInput("EnableAlarmActionsRequest", param0)
+	return m.EnableAlarmActionsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) EnableAlarmActionsWithContext(param0 aws.Context, param1 *cloudwatch.EnableAlarmActionsInput, param2 ...request.Option) (*cloudwatch.EnableAlarmActionsOutput, error) {
+	m.addCall("EnableAlarmActionsWithContext")
+	m.verifyInput("EnableAlarmActionsWithContext", param0)
+	return m.EnableAlarmActionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) GetDashboard(param0 *cloudwatch.GetDashboardInput) (*cloudwatch.GetDashboardOutput, error) {
+	m.addCall("GetDashboard")
+	m.verifyInput("GetDashboard", param0)
+	return m.GetDashboardFunc(param0)
+}
+
+func (m *cloudwatchMock) GetDashboardRequest(param0 *cloudwatch.GetDashboardInput) (*request.Request, *cloudwatch.GetDashboardOutput) {
+	m.addCall("GetDashboardRequest")
+	m.verifyInput("GetDashboardRequest", param0)
+	return m.GetDashboardRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) GetDashboardWithContext(param0 aws.Context, param1 *cloudwatch.GetDashboardInput, param2 ...request.Option) (*cloudwatch.GetDashboardOutput, error) {
+	m.addCall("GetDashboardWithContext")
+	m.verifyInput("GetDashboardWithContext", param0)
+	return m.GetDashboardWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) GetMetricStatistics(param0 *cloudwatch.GetMetricStatisticsInput) (*cloudwatch.GetMetricStatisticsOutput, error) {
+	m.addCall("GetMetricStatistics")
+	m.verifyInput("GetMetricStatistics", param0)
+	return m.GetMetricStatisticsFunc(param0)
+}
+
+func (m *cloudwatchMock) GetMetricStatisticsRequest(param0 *cloudwatch.GetMetricStatisticsInput) (*request.Request, *cloudwatch.GetMetricStatisticsOutput) {
+	m.addCall("GetMetricStatisticsRequest")
+	m.verifyInput("GetMetricStatisticsRequest", param0)
+	return m.GetMetricStatisticsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) GetMetricStatisticsWithContext(param0 aws.Context, param1 *cloudwatch.GetMetricStatisticsInput, param2 ...request.Option) (*cloudwatch.GetMetricStatisticsOutput, error) {
+	m.addCall("GetMetricStatisticsWithContext")
+	m.verifyInput("GetMetricStatisticsWithContext", param0)
+	return m.GetMetricStatisticsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) ListDashboards(param0 *cloudwatch.ListDashboardsInput) (*cloudwatch.ListDashboardsOutput, error) {
+	m.addCall("ListDashboards")
+	m.verifyInput("ListDashboards", param0)
+	return m.ListDashboardsFunc(param0)
+}
+
+func (m *cloudwatchMock) ListDashboardsRequest(param0 *cloudwatch.ListDashboardsInput) (*request.Request, *cloudwatch.ListDashboardsOutput) {
+	m.addCall("ListDashboardsRequest")
+	m.verifyInput("ListDashboardsRequest", param0)
+	return m.ListDashboardsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) ListDashboardsWithContext(param0 aws.Context, param1 *cloudwatch.ListDashboardsInput, param2 ...request.Option) (*cloudwatch.ListDashboardsOutput, error) {
+	m.addCall("ListDashboardsWithContext")
+	m.verifyInput("ListDashboardsWithContext", param0)
+	return m.ListDashboardsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) ListMetrics(param0 *cloudwatch.ListMetricsInput) (*cloudwatch.ListMetricsOutput, error) {
+	m.addCall("ListMetrics")
+	m.verifyInput("ListMetrics", param0)
+	return m.ListMetricsFunc(param0)
+}
+
+func (m *cloudwatchMock) ListMetricsRequest(param0 *cloudwatch.ListMetricsInput) (*request.Request, *cloudwatch.ListMetricsOutput) {
+	m.addCall("ListMetricsRequest")
+	m.verifyInput("ListMetricsRequest", param0)
+	return m.ListMetricsRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) ListMetricsWithContext(param0 aws.Context, param1 *cloudwatch.ListMetricsInput, param2 ...request.Option) (*cloudwatch.ListMetricsOutput, error) {
+	m.addCall("ListMetricsWithContext")
+	m.verifyInput("ListMetricsWithContext", param0)
+	return m.ListMetricsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) PutDashboard(param0 *cloudwatch.PutDashboardInput) (*cloudwatch.PutDashboardOutput, error) {
+	m.addCall("PutDashboard")
+	m.verifyInput("PutDashboard", param0)
+	return m.PutDashboardFunc(param0)
+}
+
+func (m *cloudwatchMock) PutDashboardRequest(param0 *cloudwatch.PutDashboardInput) (*request.Request, *cloudwatch.PutDashboardOutput) {
+	m.addCall("PutDashboardRequest")
+	m.verifyInput("PutDashboardRequest", param0)
+	return m.PutDashboardRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) PutDashboardWithContext(param0 aws.Context, param1 *cloudwatch.PutDashboardInput, param2 ...request.Option) (*cloudwatch.PutDashboardOutput, error) {
+	m.addCall("PutDashboardWithContext")
+	m.verifyInput("PutDashboardWithContext", param0)
+	return m.PutDashboardWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) PutMetricAlarm(param0 *cloudwatch.PutMetricAlarmInput) (*cloudwatch.PutMetricAlarmOutput, error) {
+	m.addCall("PutMetricAlarm")
+	m.verifyInput("PutMetricAlarm", param0)
+	return m.PutMetricAlarmFunc(param0)
+}
+
+func (m *cloudwatchMock) PutMetricAlarmRequest(param0 *cloudwatch.PutMetricAlarmInput) (*request.Request, *cloudwatch.PutMetricAlarmOutput) {
+	m.addCall("PutMetricAlarmRequest")
+	m.verifyInput("PutMetricAlarmRequest", param0)
+	return m.PutMetricAlarmRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) PutMetricAlarmWithContext(param0 aws.Context, param1 *cloudwatch.PutMetricAlarmInput, param2 ...request.Option) (*cloudwatch.PutMetricAlarmOutput, error) {
+	m.addCall("PutMetricAlarmWithContext")
+	m.verifyInput("PutMetricAlarmWithContext", param0)
+	return m.PutMetricAlarmWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) PutMetricData(param0 *cloudwatch.PutMetricDataInput) (*cloudwatch.PutMetricDataOutput, error) {
+	m.addCall("PutMetricData")
+	m.verifyInput("PutMetricData", param0)
+	return m.PutMetricDataFunc(param0)
+}
+
+func (m *cloudwatchMock) PutMetricDataRequest(param0 *cloudwatch.PutMetricDataInput) (*request.Request, *cloudwatch.PutMetricDataOutput) {
+	m.addCall("PutMetricDataRequest")
+	m.verifyInput("PutMetricDataRequest", param0)
+	return m.PutMetricDataRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) PutMetricDataWithContext(param0 aws.Context, param1 *cloudwatch.PutMetricDataInput, param2 ...request.Option) (*cloudwatch.PutMetricDataOutput, error) {
+	m.addCall("PutMetricDataWithContext")
+	m.verifyInput("PutMetricDataWithContext", param0)
+	return m.PutMetricDataWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) SetAlarmState(param0 *cloudwatch.SetAlarmStateInput) (*cloudwatch.SetAlarmStateOutput, error) {
+	m.addCall("SetAlarmState")
+	m.verifyInput("SetAlarmState", param0)
+	return m.SetAlarmStateFunc(param0)
+}
+
+func (m *cloudwatchMock) SetAlarmStateRequest(param0 *cloudwatch.SetAlarmStateInput) (*request.Request, *cloudwatch.SetAlarmStateOutput) {
+	m.addCall("SetAlarmStateRequest")
+	m.verifyInput("SetAlarmStateRequest", param0)
+	return m.SetAlarmStateRequestFunc(param0)
+}
+
+func (m *cloudwatchMock) SetAlarmStateWithContext(param0 aws.Context, param1 *cloudwatch.SetAlarmStateInput, param2 ...request.Option) (*cloudwatch.SetAlarmStateOutput, error) {
+	m.addCall("SetAlarmStateWithContext")
+	m.verifyInput("SetAlarmStateWithContext", param0)
+	return m.SetAlarmStateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudwatchMock) WaitUntilAlarmExists(param0 *cloudwatch.DescribeAlarmsInput) error {
+	m.addCall("WaitUntilAlarmExists")
+	m.verifyInput("WaitUntilAlarmExists", param0)
+	return m.WaitUntilAlarmExistsFunc(param0)
+}
+
+func (m *cloudwatchMock) WaitUntilAlarmExistsWithContext(param0 aws.Context, param1 *cloudwatch.DescribeAlarmsInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilAlarmExistsWithContext")
+	m.verifyInput("WaitUntilAlarmExistsWithContext", param0)
+	return m.WaitUntilAlarmExistsWithContextFunc(param0, param1, param2...)
+}
 
 type ec2Mock struct {
 	basicMock
