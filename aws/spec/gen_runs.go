@@ -1616,6 +1616,80 @@ func (cmd *CreateDatabase) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateDbsubnetgroup(sess *session.Session, l ...*logger.Logger) *CreateDbsubnetgroup {
+	cmd := new(CreateDbsubnetgroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = rds.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateDbsubnetgroup) SetApi(api rdsiface.RDSAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateDbsubnetgroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &rds.CreateDBSubnetGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in rds.CreateDBSubnetGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateDBSubnetGroup(input)
+	cmd.logger.ExtraVerbosef("rds.CreateDBSubnetGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateDbsubnetgroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateDbsubnetgroup) ParamsHelp() string {
+	return generateParamsHelp("createdbsubnetgroup", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateDbsubnetgroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateGroup(sess *session.Session, l ...*logger.Logger) *CreateGroup {
 	cmd := new(CreateGroup)
 	if len(l) > 0 {
@@ -3577,6 +3651,80 @@ func (cmd *DeleteDatabase) ParamsHelp() string {
 }
 
 func (cmd *DeleteDatabase) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteDbsubnetgroup(sess *session.Session, l ...*logger.Logger) *DeleteDbsubnetgroup {
+	cmd := new(DeleteDbsubnetgroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = rds.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteDbsubnetgroup) SetApi(api rdsiface.RDSAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteDbsubnetgroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &rds.DeleteDBSubnetGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in rds.DeleteDBSubnetGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteDBSubnetGroup(input)
+	cmd.logger.ExtraVerbosef("rds.DeleteDBSubnetGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteDbsubnetgroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteDbsubnetgroup) ParamsHelp() string {
+	return generateParamsHelp("deletedbsubnetgroup", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteDbsubnetgroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

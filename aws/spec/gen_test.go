@@ -144,29 +144,35 @@ var (
 	newUpdateContainertask = func() *UpdateContainertask {
 		return &UpdateContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
-	newAttachPolicy    = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newAttachUser      = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreateAccesskey = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreateGroup     = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreatePolicy    = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreateUser      = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeleteAccesskey = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeleteGroup     = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeletePolicy    = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeleteUser      = func() *DeleteUser { return &DeleteUser{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDetachPolicy    = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDetachUser      = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newUpdatePolicy    = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCheckDatabase   = func() *CheckDatabase { return &CheckDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
-	newCreateDatabase  = func() *CreateDatabase { return &CreateDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
-	newDeleteDatabase  = func() *DeleteDatabase { return &DeleteDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
-	newCreateZone      = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
-	newDeleteZone      = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
-	newCreateBucket    = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
-	newDeleteBucket    = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
-	newUpdateBucket    = func() *UpdateBucket { return &UpdateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
-	newCreateTopic     = func() *CreateTopic { return &CreateTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
-	newDeleteTopic     = func() *DeleteTopic { return &DeleteTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newAttachPolicy        = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newAttachUser          = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateAccesskey     = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateGroup         = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreatePolicy        = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateUser          = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteAccesskey     = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteGroup         = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeletePolicy        = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteUser          = func() *DeleteUser { return &DeleteUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachPolicy        = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachUser          = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newUpdatePolicy        = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCheckDatabase       = func() *CheckDatabase { return &CheckDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
+	newCreateDatabase      = func() *CreateDatabase { return &CreateDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
+	newCreateDbsubnetgroup = func() *CreateDbsubnetgroup {
+		return &CreateDbsubnetgroup{api: &mockRds{}, logger: logger.DiscardLogger}
+	}
+	newDeleteDatabase      = func() *DeleteDatabase { return &DeleteDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
+	newDeleteDbsubnetgroup = func() *DeleteDbsubnetgroup {
+		return &DeleteDbsubnetgroup{api: &mockRds{}, logger: logger.DiscardLogger}
+	}
+	newCreateZone   = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newDeleteZone   = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newCreateBucket = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newDeleteBucket = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newUpdateBucket = func() *UpdateBucket { return &UpdateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newCreateTopic  = func() *CreateTopic { return &CreateTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newDeleteTopic  = func() *DeleteTopic { return &DeleteTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
 )
 
 type mockAcm struct {
@@ -690,12 +696,32 @@ func (m *mockRds) CreateDBInstance(input *rds.CreateDBInstanceInput) (*rds.Creat
 	return nil, nil
 }
 
+func (m *mockRds) CreateDBSubnetGroup(input *rds.CreateDBSubnetGroupInput) (*rds.CreateDBSubnetGroupOutput, error) {
+	if got, want := input, genTestsExpected["createdbsubnetgroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createdbsubnetgroup"]; ok {
+		return outFunc().(*rds.CreateDBSubnetGroupOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockRds) DeleteDBInstance(input *rds.DeleteDBInstanceInput) (*rds.DeleteDBInstanceOutput, error) {
 	if got, want := input, genTestsExpected["deletedatabase"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletedatabase"]; ok {
 		return outFunc().(*rds.DeleteDBInstanceOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockRds) DeleteDBSubnetGroup(input *rds.DeleteDBSubnetGroupInput) (*rds.DeleteDBSubnetGroupOutput, error) {
+	if got, want := input, genTestsExpected["deletedbsubnetgroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletedbsubnetgroup"]; ok {
+		return outFunc().(*rds.DeleteDBSubnetGroupOutput), nil
 	}
 	return nil, nil
 }

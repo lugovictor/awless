@@ -167,6 +167,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
 			return cmd
 		}
+	case "createdbsubnetgroup":
+		return func() interface{} {
+			cmd := awsspec.NewCreateDbsubnetgroup(nil)
+			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
+			return cmd
+		}
 	case "creategroup":
 		return func() interface{} {
 			cmd := awsspec.NewCreateGroup(nil)
@@ -308,6 +314,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "deletedatabase":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteDatabase(nil)
+			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
+			return cmd
+		}
+	case "deletedbsubnetgroup":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteDbsubnetgroup(nil)
 			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
 			return cmd
 		}

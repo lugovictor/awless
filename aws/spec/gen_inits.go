@@ -77,6 +77,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateContainercluster(f.Sess, f.Log) }
 	case "createdatabase":
 		return func() interface{} { return NewCreateDatabase(f.Sess, f.Log) }
+	case "createdbsubnetgroup":
+		return func() interface{} { return NewCreateDbsubnetgroup(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -125,6 +127,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteContainertask(f.Sess, f.Log) }
 	case "deletedatabase":
 		return func() interface{} { return NewDeleteDatabase(f.Sess, f.Log) }
+	case "deletedbsubnetgroup":
+		return func() interface{} { return NewDeleteDbsubnetgroup(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -215,6 +219,7 @@ var (
 	_ command = &CreateCertificate{}
 	_ command = &CreateContainercluster{}
 	_ command = &CreateDatabase{}
+	_ command = &CreateDbsubnetgroup{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -239,6 +244,7 @@ var (
 	_ command = &DeleteContainercluster{}
 	_ command = &DeleteContainertask{}
 	_ command = &DeleteDatabase{}
+	_ command = &DeleteDbsubnetgroup{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
