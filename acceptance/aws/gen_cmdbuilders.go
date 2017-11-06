@@ -24,6 +24,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/sns/snsiface"
@@ -94,6 +95,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(acmiface.ACMAPI))
 			return cmd
 		}
+	case "checkdatabase":
+		return func() interface{} {
+			cmd := awsspec.NewCheckDatabase(nil)
+			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
+			return cmd
+		}
 	case "checkinstance":
 		return func() interface{} {
 			cmd := awsspec.NewCheckInstance(nil)
@@ -152,6 +159,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateContainercluster(nil)
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
+	case "createdatabase":
+		return func() interface{} {
+			cmd := awsspec.NewCreateDatabase(nil)
+			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
 			return cmd
 		}
 	case "creategroup":
@@ -290,6 +303,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteContainertask(nil)
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
+	case "deletedatabase":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteDatabase(nil)
+			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
 			return cmd
 		}
 	case "deletegroup":

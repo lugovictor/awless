@@ -32,6 +32,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/rds"
+	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -9546,6 +9548,1908 @@ func (m *iamMock) WaitUntilUserExistsWithContext(param0 aws.Context, param1 *iam
 	m.addCall("WaitUntilUserExistsWithContext")
 	m.verifyInput("WaitUntilUserExistsWithContext", param0)
 	return m.WaitUntilUserExistsWithContextFunc(param0, param1, param2...)
+}
+
+type rdsMock struct {
+	basicMock
+	rdsiface.RDSAPI
+	AddRoleToDBClusterFunc                                func(param0 *rds.AddRoleToDBClusterInput) (*rds.AddRoleToDBClusterOutput, error)
+	AddRoleToDBClusterRequestFunc                         func(param0 *rds.AddRoleToDBClusterInput) (*request.Request, *rds.AddRoleToDBClusterOutput)
+	AddRoleToDBClusterWithContextFunc                     func(param0 aws.Context, param1 *rds.AddRoleToDBClusterInput, param2 ...request.Option) (*rds.AddRoleToDBClusterOutput, error)
+	AddSourceIdentifierToSubscriptionFunc                 func(param0 *rds.AddSourceIdentifierToSubscriptionInput) (*rds.AddSourceIdentifierToSubscriptionOutput, error)
+	AddSourceIdentifierToSubscriptionRequestFunc          func(param0 *rds.AddSourceIdentifierToSubscriptionInput) (*request.Request, *rds.AddSourceIdentifierToSubscriptionOutput)
+	AddSourceIdentifierToSubscriptionWithContextFunc      func(param0 aws.Context, param1 *rds.AddSourceIdentifierToSubscriptionInput, param2 ...request.Option) (*rds.AddSourceIdentifierToSubscriptionOutput, error)
+	AddTagsToResourceFunc                                 func(param0 *rds.AddTagsToResourceInput) (*rds.AddTagsToResourceOutput, error)
+	AddTagsToResourceRequestFunc                          func(param0 *rds.AddTagsToResourceInput) (*request.Request, *rds.AddTagsToResourceOutput)
+	AddTagsToResourceWithContextFunc                      func(param0 aws.Context, param1 *rds.AddTagsToResourceInput, param2 ...request.Option) (*rds.AddTagsToResourceOutput, error)
+	ApplyPendingMaintenanceActionFunc                     func(param0 *rds.ApplyPendingMaintenanceActionInput) (*rds.ApplyPendingMaintenanceActionOutput, error)
+	ApplyPendingMaintenanceActionRequestFunc              func(param0 *rds.ApplyPendingMaintenanceActionInput) (*request.Request, *rds.ApplyPendingMaintenanceActionOutput)
+	ApplyPendingMaintenanceActionWithContextFunc          func(param0 aws.Context, param1 *rds.ApplyPendingMaintenanceActionInput, param2 ...request.Option) (*rds.ApplyPendingMaintenanceActionOutput, error)
+	AuthorizeDBSecurityGroupIngressFunc                   func(param0 *rds.AuthorizeDBSecurityGroupIngressInput) (*rds.AuthorizeDBSecurityGroupIngressOutput, error)
+	AuthorizeDBSecurityGroupIngressRequestFunc            func(param0 *rds.AuthorizeDBSecurityGroupIngressInput) (*request.Request, *rds.AuthorizeDBSecurityGroupIngressOutput)
+	AuthorizeDBSecurityGroupIngressWithContextFunc        func(param0 aws.Context, param1 *rds.AuthorizeDBSecurityGroupIngressInput, param2 ...request.Option) (*rds.AuthorizeDBSecurityGroupIngressOutput, error)
+	CopyDBClusterParameterGroupFunc                       func(param0 *rds.CopyDBClusterParameterGroupInput) (*rds.CopyDBClusterParameterGroupOutput, error)
+	CopyDBClusterParameterGroupRequestFunc                func(param0 *rds.CopyDBClusterParameterGroupInput) (*request.Request, *rds.CopyDBClusterParameterGroupOutput)
+	CopyDBClusterParameterGroupWithContextFunc            func(param0 aws.Context, param1 *rds.CopyDBClusterParameterGroupInput, param2 ...request.Option) (*rds.CopyDBClusterParameterGroupOutput, error)
+	CopyDBClusterSnapshotFunc                             func(param0 *rds.CopyDBClusterSnapshotInput) (*rds.CopyDBClusterSnapshotOutput, error)
+	CopyDBClusterSnapshotRequestFunc                      func(param0 *rds.CopyDBClusterSnapshotInput) (*request.Request, *rds.CopyDBClusterSnapshotOutput)
+	CopyDBClusterSnapshotWithContextFunc                  func(param0 aws.Context, param1 *rds.CopyDBClusterSnapshotInput, param2 ...request.Option) (*rds.CopyDBClusterSnapshotOutput, error)
+	CopyDBParameterGroupFunc                              func(param0 *rds.CopyDBParameterGroupInput) (*rds.CopyDBParameterGroupOutput, error)
+	CopyDBParameterGroupRequestFunc                       func(param0 *rds.CopyDBParameterGroupInput) (*request.Request, *rds.CopyDBParameterGroupOutput)
+	CopyDBParameterGroupWithContextFunc                   func(param0 aws.Context, param1 *rds.CopyDBParameterGroupInput, param2 ...request.Option) (*rds.CopyDBParameterGroupOutput, error)
+	CopyDBSnapshotFunc                                    func(param0 *rds.CopyDBSnapshotInput) (*rds.CopyDBSnapshotOutput, error)
+	CopyDBSnapshotRequestFunc                             func(param0 *rds.CopyDBSnapshotInput) (*request.Request, *rds.CopyDBSnapshotOutput)
+	CopyDBSnapshotWithContextFunc                         func(param0 aws.Context, param1 *rds.CopyDBSnapshotInput, param2 ...request.Option) (*rds.CopyDBSnapshotOutput, error)
+	CopyOptionGroupFunc                                   func(param0 *rds.CopyOptionGroupInput) (*rds.CopyOptionGroupOutput, error)
+	CopyOptionGroupRequestFunc                            func(param0 *rds.CopyOptionGroupInput) (*request.Request, *rds.CopyOptionGroupOutput)
+	CopyOptionGroupWithContextFunc                        func(param0 aws.Context, param1 *rds.CopyOptionGroupInput, param2 ...request.Option) (*rds.CopyOptionGroupOutput, error)
+	CreateDBClusterFunc                                   func(param0 *rds.CreateDBClusterInput) (*rds.CreateDBClusterOutput, error)
+	CreateDBClusterParameterGroupFunc                     func(param0 *rds.CreateDBClusterParameterGroupInput) (*rds.CreateDBClusterParameterGroupOutput, error)
+	CreateDBClusterParameterGroupRequestFunc              func(param0 *rds.CreateDBClusterParameterGroupInput) (*request.Request, *rds.CreateDBClusterParameterGroupOutput)
+	CreateDBClusterParameterGroupWithContextFunc          func(param0 aws.Context, param1 *rds.CreateDBClusterParameterGroupInput, param2 ...request.Option) (*rds.CreateDBClusterParameterGroupOutput, error)
+	CreateDBClusterRequestFunc                            func(param0 *rds.CreateDBClusterInput) (*request.Request, *rds.CreateDBClusterOutput)
+	CreateDBClusterSnapshotFunc                           func(param0 *rds.CreateDBClusterSnapshotInput) (*rds.CreateDBClusterSnapshotOutput, error)
+	CreateDBClusterSnapshotRequestFunc                    func(param0 *rds.CreateDBClusterSnapshotInput) (*request.Request, *rds.CreateDBClusterSnapshotOutput)
+	CreateDBClusterSnapshotWithContextFunc                func(param0 aws.Context, param1 *rds.CreateDBClusterSnapshotInput, param2 ...request.Option) (*rds.CreateDBClusterSnapshotOutput, error)
+	CreateDBClusterWithContextFunc                        func(param0 aws.Context, param1 *rds.CreateDBClusterInput, param2 ...request.Option) (*rds.CreateDBClusterOutput, error)
+	CreateDBInstanceFunc                                  func(param0 *rds.CreateDBInstanceInput) (*rds.CreateDBInstanceOutput, error)
+	CreateDBInstanceReadReplicaFunc                       func(param0 *rds.CreateDBInstanceReadReplicaInput) (*rds.CreateDBInstanceReadReplicaOutput, error)
+	CreateDBInstanceReadReplicaRequestFunc                func(param0 *rds.CreateDBInstanceReadReplicaInput) (*request.Request, *rds.CreateDBInstanceReadReplicaOutput)
+	CreateDBInstanceReadReplicaWithContextFunc            func(param0 aws.Context, param1 *rds.CreateDBInstanceReadReplicaInput, param2 ...request.Option) (*rds.CreateDBInstanceReadReplicaOutput, error)
+	CreateDBInstanceRequestFunc                           func(param0 *rds.CreateDBInstanceInput) (*request.Request, *rds.CreateDBInstanceOutput)
+	CreateDBInstanceWithContextFunc                       func(param0 aws.Context, param1 *rds.CreateDBInstanceInput, param2 ...request.Option) (*rds.CreateDBInstanceOutput, error)
+	CreateDBParameterGroupFunc                            func(param0 *rds.CreateDBParameterGroupInput) (*rds.CreateDBParameterGroupOutput, error)
+	CreateDBParameterGroupRequestFunc                     func(param0 *rds.CreateDBParameterGroupInput) (*request.Request, *rds.CreateDBParameterGroupOutput)
+	CreateDBParameterGroupWithContextFunc                 func(param0 aws.Context, param1 *rds.CreateDBParameterGroupInput, param2 ...request.Option) (*rds.CreateDBParameterGroupOutput, error)
+	CreateDBSecurityGroupFunc                             func(param0 *rds.CreateDBSecurityGroupInput) (*rds.CreateDBSecurityGroupOutput, error)
+	CreateDBSecurityGroupRequestFunc                      func(param0 *rds.CreateDBSecurityGroupInput) (*request.Request, *rds.CreateDBSecurityGroupOutput)
+	CreateDBSecurityGroupWithContextFunc                  func(param0 aws.Context, param1 *rds.CreateDBSecurityGroupInput, param2 ...request.Option) (*rds.CreateDBSecurityGroupOutput, error)
+	CreateDBSnapshotFunc                                  func(param0 *rds.CreateDBSnapshotInput) (*rds.CreateDBSnapshotOutput, error)
+	CreateDBSnapshotRequestFunc                           func(param0 *rds.CreateDBSnapshotInput) (*request.Request, *rds.CreateDBSnapshotOutput)
+	CreateDBSnapshotWithContextFunc                       func(param0 aws.Context, param1 *rds.CreateDBSnapshotInput, param2 ...request.Option) (*rds.CreateDBSnapshotOutput, error)
+	CreateDBSubnetGroupFunc                               func(param0 *rds.CreateDBSubnetGroupInput) (*rds.CreateDBSubnetGroupOutput, error)
+	CreateDBSubnetGroupRequestFunc                        func(param0 *rds.CreateDBSubnetGroupInput) (*request.Request, *rds.CreateDBSubnetGroupOutput)
+	CreateDBSubnetGroupWithContextFunc                    func(param0 aws.Context, param1 *rds.CreateDBSubnetGroupInput, param2 ...request.Option) (*rds.CreateDBSubnetGroupOutput, error)
+	CreateEventSubscriptionFunc                           func(param0 *rds.CreateEventSubscriptionInput) (*rds.CreateEventSubscriptionOutput, error)
+	CreateEventSubscriptionRequestFunc                    func(param0 *rds.CreateEventSubscriptionInput) (*request.Request, *rds.CreateEventSubscriptionOutput)
+	CreateEventSubscriptionWithContextFunc                func(param0 aws.Context, param1 *rds.CreateEventSubscriptionInput, param2 ...request.Option) (*rds.CreateEventSubscriptionOutput, error)
+	CreateOptionGroupFunc                                 func(param0 *rds.CreateOptionGroupInput) (*rds.CreateOptionGroupOutput, error)
+	CreateOptionGroupRequestFunc                          func(param0 *rds.CreateOptionGroupInput) (*request.Request, *rds.CreateOptionGroupOutput)
+	CreateOptionGroupWithContextFunc                      func(param0 aws.Context, param1 *rds.CreateOptionGroupInput, param2 ...request.Option) (*rds.CreateOptionGroupOutput, error)
+	DeleteDBClusterFunc                                   func(param0 *rds.DeleteDBClusterInput) (*rds.DeleteDBClusterOutput, error)
+	DeleteDBClusterParameterGroupFunc                     func(param0 *rds.DeleteDBClusterParameterGroupInput) (*rds.DeleteDBClusterParameterGroupOutput, error)
+	DeleteDBClusterParameterGroupRequestFunc              func(param0 *rds.DeleteDBClusterParameterGroupInput) (*request.Request, *rds.DeleteDBClusterParameterGroupOutput)
+	DeleteDBClusterParameterGroupWithContextFunc          func(param0 aws.Context, param1 *rds.DeleteDBClusterParameterGroupInput, param2 ...request.Option) (*rds.DeleteDBClusterParameterGroupOutput, error)
+	DeleteDBClusterRequestFunc                            func(param0 *rds.DeleteDBClusterInput) (*request.Request, *rds.DeleteDBClusterOutput)
+	DeleteDBClusterSnapshotFunc                           func(param0 *rds.DeleteDBClusterSnapshotInput) (*rds.DeleteDBClusterSnapshotOutput, error)
+	DeleteDBClusterSnapshotRequestFunc                    func(param0 *rds.DeleteDBClusterSnapshotInput) (*request.Request, *rds.DeleteDBClusterSnapshotOutput)
+	DeleteDBClusterSnapshotWithContextFunc                func(param0 aws.Context, param1 *rds.DeleteDBClusterSnapshotInput, param2 ...request.Option) (*rds.DeleteDBClusterSnapshotOutput, error)
+	DeleteDBClusterWithContextFunc                        func(param0 aws.Context, param1 *rds.DeleteDBClusterInput, param2 ...request.Option) (*rds.DeleteDBClusterOutput, error)
+	DeleteDBInstanceFunc                                  func(param0 *rds.DeleteDBInstanceInput) (*rds.DeleteDBInstanceOutput, error)
+	DeleteDBInstanceRequestFunc                           func(param0 *rds.DeleteDBInstanceInput) (*request.Request, *rds.DeleteDBInstanceOutput)
+	DeleteDBInstanceWithContextFunc                       func(param0 aws.Context, param1 *rds.DeleteDBInstanceInput, param2 ...request.Option) (*rds.DeleteDBInstanceOutput, error)
+	DeleteDBParameterGroupFunc                            func(param0 *rds.DeleteDBParameterGroupInput) (*rds.DeleteDBParameterGroupOutput, error)
+	DeleteDBParameterGroupRequestFunc                     func(param0 *rds.DeleteDBParameterGroupInput) (*request.Request, *rds.DeleteDBParameterGroupOutput)
+	DeleteDBParameterGroupWithContextFunc                 func(param0 aws.Context, param1 *rds.DeleteDBParameterGroupInput, param2 ...request.Option) (*rds.DeleteDBParameterGroupOutput, error)
+	DeleteDBSecurityGroupFunc                             func(param0 *rds.DeleteDBSecurityGroupInput) (*rds.DeleteDBSecurityGroupOutput, error)
+	DeleteDBSecurityGroupRequestFunc                      func(param0 *rds.DeleteDBSecurityGroupInput) (*request.Request, *rds.DeleteDBSecurityGroupOutput)
+	DeleteDBSecurityGroupWithContextFunc                  func(param0 aws.Context, param1 *rds.DeleteDBSecurityGroupInput, param2 ...request.Option) (*rds.DeleteDBSecurityGroupOutput, error)
+	DeleteDBSnapshotFunc                                  func(param0 *rds.DeleteDBSnapshotInput) (*rds.DeleteDBSnapshotOutput, error)
+	DeleteDBSnapshotRequestFunc                           func(param0 *rds.DeleteDBSnapshotInput) (*request.Request, *rds.DeleteDBSnapshotOutput)
+	DeleteDBSnapshotWithContextFunc                       func(param0 aws.Context, param1 *rds.DeleteDBSnapshotInput, param2 ...request.Option) (*rds.DeleteDBSnapshotOutput, error)
+	DeleteDBSubnetGroupFunc                               func(param0 *rds.DeleteDBSubnetGroupInput) (*rds.DeleteDBSubnetGroupOutput, error)
+	DeleteDBSubnetGroupRequestFunc                        func(param0 *rds.DeleteDBSubnetGroupInput) (*request.Request, *rds.DeleteDBSubnetGroupOutput)
+	DeleteDBSubnetGroupWithContextFunc                    func(param0 aws.Context, param1 *rds.DeleteDBSubnetGroupInput, param2 ...request.Option) (*rds.DeleteDBSubnetGroupOutput, error)
+	DeleteEventSubscriptionFunc                           func(param0 *rds.DeleteEventSubscriptionInput) (*rds.DeleteEventSubscriptionOutput, error)
+	DeleteEventSubscriptionRequestFunc                    func(param0 *rds.DeleteEventSubscriptionInput) (*request.Request, *rds.DeleteEventSubscriptionOutput)
+	DeleteEventSubscriptionWithContextFunc                func(param0 aws.Context, param1 *rds.DeleteEventSubscriptionInput, param2 ...request.Option) (*rds.DeleteEventSubscriptionOutput, error)
+	DeleteOptionGroupFunc                                 func(param0 *rds.DeleteOptionGroupInput) (*rds.DeleteOptionGroupOutput, error)
+	DeleteOptionGroupRequestFunc                          func(param0 *rds.DeleteOptionGroupInput) (*request.Request, *rds.DeleteOptionGroupOutput)
+	DeleteOptionGroupWithContextFunc                      func(param0 aws.Context, param1 *rds.DeleteOptionGroupInput, param2 ...request.Option) (*rds.DeleteOptionGroupOutput, error)
+	DescribeAccountAttributesFunc                         func(param0 *rds.DescribeAccountAttributesInput) (*rds.DescribeAccountAttributesOutput, error)
+	DescribeAccountAttributesRequestFunc                  func(param0 *rds.DescribeAccountAttributesInput) (*request.Request, *rds.DescribeAccountAttributesOutput)
+	DescribeAccountAttributesWithContextFunc              func(param0 aws.Context, param1 *rds.DescribeAccountAttributesInput, param2 ...request.Option) (*rds.DescribeAccountAttributesOutput, error)
+	DescribeCertificatesFunc                              func(param0 *rds.DescribeCertificatesInput) (*rds.DescribeCertificatesOutput, error)
+	DescribeCertificatesRequestFunc                       func(param0 *rds.DescribeCertificatesInput) (*request.Request, *rds.DescribeCertificatesOutput)
+	DescribeCertificatesWithContextFunc                   func(param0 aws.Context, param1 *rds.DescribeCertificatesInput, param2 ...request.Option) (*rds.DescribeCertificatesOutput, error)
+	DescribeDBClusterParameterGroupsFunc                  func(param0 *rds.DescribeDBClusterParameterGroupsInput) (*rds.DescribeDBClusterParameterGroupsOutput, error)
+	DescribeDBClusterParameterGroupsRequestFunc           func(param0 *rds.DescribeDBClusterParameterGroupsInput) (*request.Request, *rds.DescribeDBClusterParameterGroupsOutput)
+	DescribeDBClusterParameterGroupsWithContextFunc       func(param0 aws.Context, param1 *rds.DescribeDBClusterParameterGroupsInput, param2 ...request.Option) (*rds.DescribeDBClusterParameterGroupsOutput, error)
+	DescribeDBClusterParametersFunc                       func(param0 *rds.DescribeDBClusterParametersInput) (*rds.DescribeDBClusterParametersOutput, error)
+	DescribeDBClusterParametersRequestFunc                func(param0 *rds.DescribeDBClusterParametersInput) (*request.Request, *rds.DescribeDBClusterParametersOutput)
+	DescribeDBClusterParametersWithContextFunc            func(param0 aws.Context, param1 *rds.DescribeDBClusterParametersInput, param2 ...request.Option) (*rds.DescribeDBClusterParametersOutput, error)
+	DescribeDBClusterSnapshotAttributesFunc               func(param0 *rds.DescribeDBClusterSnapshotAttributesInput) (*rds.DescribeDBClusterSnapshotAttributesOutput, error)
+	DescribeDBClusterSnapshotAttributesRequestFunc        func(param0 *rds.DescribeDBClusterSnapshotAttributesInput) (*request.Request, *rds.DescribeDBClusterSnapshotAttributesOutput)
+	DescribeDBClusterSnapshotAttributesWithContextFunc    func(param0 aws.Context, param1 *rds.DescribeDBClusterSnapshotAttributesInput, param2 ...request.Option) (*rds.DescribeDBClusterSnapshotAttributesOutput, error)
+	DescribeDBClusterSnapshotsFunc                        func(param0 *rds.DescribeDBClusterSnapshotsInput) (*rds.DescribeDBClusterSnapshotsOutput, error)
+	DescribeDBClusterSnapshotsRequestFunc                 func(param0 *rds.DescribeDBClusterSnapshotsInput) (*request.Request, *rds.DescribeDBClusterSnapshotsOutput)
+	DescribeDBClusterSnapshotsWithContextFunc             func(param0 aws.Context, param1 *rds.DescribeDBClusterSnapshotsInput, param2 ...request.Option) (*rds.DescribeDBClusterSnapshotsOutput, error)
+	DescribeDBClustersFunc                                func(param0 *rds.DescribeDBClustersInput) (*rds.DescribeDBClustersOutput, error)
+	DescribeDBClustersRequestFunc                         func(param0 *rds.DescribeDBClustersInput) (*request.Request, *rds.DescribeDBClustersOutput)
+	DescribeDBClustersWithContextFunc                     func(param0 aws.Context, param1 *rds.DescribeDBClustersInput, param2 ...request.Option) (*rds.DescribeDBClustersOutput, error)
+	DescribeDBEngineVersionsFunc                          func(param0 *rds.DescribeDBEngineVersionsInput) (*rds.DescribeDBEngineVersionsOutput, error)
+	DescribeDBEngineVersionsRequestFunc                   func(param0 *rds.DescribeDBEngineVersionsInput) (*request.Request, *rds.DescribeDBEngineVersionsOutput)
+	DescribeDBEngineVersionsWithContextFunc               func(param0 aws.Context, param1 *rds.DescribeDBEngineVersionsInput, param2 ...request.Option) (*rds.DescribeDBEngineVersionsOutput, error)
+	DescribeDBInstancesFunc                               func(param0 *rds.DescribeDBInstancesInput) (*rds.DescribeDBInstancesOutput, error)
+	DescribeDBInstancesRequestFunc                        func(param0 *rds.DescribeDBInstancesInput) (*request.Request, *rds.DescribeDBInstancesOutput)
+	DescribeDBInstancesWithContextFunc                    func(param0 aws.Context, param1 *rds.DescribeDBInstancesInput, param2 ...request.Option) (*rds.DescribeDBInstancesOutput, error)
+	DescribeDBLogFilesFunc                                func(param0 *rds.DescribeDBLogFilesInput) (*rds.DescribeDBLogFilesOutput, error)
+	DescribeDBLogFilesRequestFunc                         func(param0 *rds.DescribeDBLogFilesInput) (*request.Request, *rds.DescribeDBLogFilesOutput)
+	DescribeDBLogFilesWithContextFunc                     func(param0 aws.Context, param1 *rds.DescribeDBLogFilesInput, param2 ...request.Option) (*rds.DescribeDBLogFilesOutput, error)
+	DescribeDBParameterGroupsFunc                         func(param0 *rds.DescribeDBParameterGroupsInput) (*rds.DescribeDBParameterGroupsOutput, error)
+	DescribeDBParameterGroupsRequestFunc                  func(param0 *rds.DescribeDBParameterGroupsInput) (*request.Request, *rds.DescribeDBParameterGroupsOutput)
+	DescribeDBParameterGroupsWithContextFunc              func(param0 aws.Context, param1 *rds.DescribeDBParameterGroupsInput, param2 ...request.Option) (*rds.DescribeDBParameterGroupsOutput, error)
+	DescribeDBParametersFunc                              func(param0 *rds.DescribeDBParametersInput) (*rds.DescribeDBParametersOutput, error)
+	DescribeDBParametersRequestFunc                       func(param0 *rds.DescribeDBParametersInput) (*request.Request, *rds.DescribeDBParametersOutput)
+	DescribeDBParametersWithContextFunc                   func(param0 aws.Context, param1 *rds.DescribeDBParametersInput, param2 ...request.Option) (*rds.DescribeDBParametersOutput, error)
+	DescribeDBSecurityGroupsFunc                          func(param0 *rds.DescribeDBSecurityGroupsInput) (*rds.DescribeDBSecurityGroupsOutput, error)
+	DescribeDBSecurityGroupsRequestFunc                   func(param0 *rds.DescribeDBSecurityGroupsInput) (*request.Request, *rds.DescribeDBSecurityGroupsOutput)
+	DescribeDBSecurityGroupsWithContextFunc               func(param0 aws.Context, param1 *rds.DescribeDBSecurityGroupsInput, param2 ...request.Option) (*rds.DescribeDBSecurityGroupsOutput, error)
+	DescribeDBSnapshotAttributesFunc                      func(param0 *rds.DescribeDBSnapshotAttributesInput) (*rds.DescribeDBSnapshotAttributesOutput, error)
+	DescribeDBSnapshotAttributesRequestFunc               func(param0 *rds.DescribeDBSnapshotAttributesInput) (*request.Request, *rds.DescribeDBSnapshotAttributesOutput)
+	DescribeDBSnapshotAttributesWithContextFunc           func(param0 aws.Context, param1 *rds.DescribeDBSnapshotAttributesInput, param2 ...request.Option) (*rds.DescribeDBSnapshotAttributesOutput, error)
+	DescribeDBSnapshotsFunc                               func(param0 *rds.DescribeDBSnapshotsInput) (*rds.DescribeDBSnapshotsOutput, error)
+	DescribeDBSnapshotsRequestFunc                        func(param0 *rds.DescribeDBSnapshotsInput) (*request.Request, *rds.DescribeDBSnapshotsOutput)
+	DescribeDBSnapshotsWithContextFunc                    func(param0 aws.Context, param1 *rds.DescribeDBSnapshotsInput, param2 ...request.Option) (*rds.DescribeDBSnapshotsOutput, error)
+	DescribeDBSubnetGroupsFunc                            func(param0 *rds.DescribeDBSubnetGroupsInput) (*rds.DescribeDBSubnetGroupsOutput, error)
+	DescribeDBSubnetGroupsRequestFunc                     func(param0 *rds.DescribeDBSubnetGroupsInput) (*request.Request, *rds.DescribeDBSubnetGroupsOutput)
+	DescribeDBSubnetGroupsWithContextFunc                 func(param0 aws.Context, param1 *rds.DescribeDBSubnetGroupsInput, param2 ...request.Option) (*rds.DescribeDBSubnetGroupsOutput, error)
+	DescribeEngineDefaultClusterParametersFunc            func(param0 *rds.DescribeEngineDefaultClusterParametersInput) (*rds.DescribeEngineDefaultClusterParametersOutput, error)
+	DescribeEngineDefaultClusterParametersRequestFunc     func(param0 *rds.DescribeEngineDefaultClusterParametersInput) (*request.Request, *rds.DescribeEngineDefaultClusterParametersOutput)
+	DescribeEngineDefaultClusterParametersWithContextFunc func(param0 aws.Context, param1 *rds.DescribeEngineDefaultClusterParametersInput, param2 ...request.Option) (*rds.DescribeEngineDefaultClusterParametersOutput, error)
+	DescribeEngineDefaultParametersFunc                   func(param0 *rds.DescribeEngineDefaultParametersInput) (*rds.DescribeEngineDefaultParametersOutput, error)
+	DescribeEngineDefaultParametersRequestFunc            func(param0 *rds.DescribeEngineDefaultParametersInput) (*request.Request, *rds.DescribeEngineDefaultParametersOutput)
+	DescribeEngineDefaultParametersWithContextFunc        func(param0 aws.Context, param1 *rds.DescribeEngineDefaultParametersInput, param2 ...request.Option) (*rds.DescribeEngineDefaultParametersOutput, error)
+	DescribeEventCategoriesFunc                           func(param0 *rds.DescribeEventCategoriesInput) (*rds.DescribeEventCategoriesOutput, error)
+	DescribeEventCategoriesRequestFunc                    func(param0 *rds.DescribeEventCategoriesInput) (*request.Request, *rds.DescribeEventCategoriesOutput)
+	DescribeEventCategoriesWithContextFunc                func(param0 aws.Context, param1 *rds.DescribeEventCategoriesInput, param2 ...request.Option) (*rds.DescribeEventCategoriesOutput, error)
+	DescribeEventSubscriptionsFunc                        func(param0 *rds.DescribeEventSubscriptionsInput) (*rds.DescribeEventSubscriptionsOutput, error)
+	DescribeEventSubscriptionsRequestFunc                 func(param0 *rds.DescribeEventSubscriptionsInput) (*request.Request, *rds.DescribeEventSubscriptionsOutput)
+	DescribeEventSubscriptionsWithContextFunc             func(param0 aws.Context, param1 *rds.DescribeEventSubscriptionsInput, param2 ...request.Option) (*rds.DescribeEventSubscriptionsOutput, error)
+	DescribeEventsFunc                                    func(param0 *rds.DescribeEventsInput) (*rds.DescribeEventsOutput, error)
+	DescribeEventsRequestFunc                             func(param0 *rds.DescribeEventsInput) (*request.Request, *rds.DescribeEventsOutput)
+	DescribeEventsWithContextFunc                         func(param0 aws.Context, param1 *rds.DescribeEventsInput, param2 ...request.Option) (*rds.DescribeEventsOutput, error)
+	DescribeOptionGroupOptionsFunc                        func(param0 *rds.DescribeOptionGroupOptionsInput) (*rds.DescribeOptionGroupOptionsOutput, error)
+	DescribeOptionGroupOptionsRequestFunc                 func(param0 *rds.DescribeOptionGroupOptionsInput) (*request.Request, *rds.DescribeOptionGroupOptionsOutput)
+	DescribeOptionGroupOptionsWithContextFunc             func(param0 aws.Context, param1 *rds.DescribeOptionGroupOptionsInput, param2 ...request.Option) (*rds.DescribeOptionGroupOptionsOutput, error)
+	DescribeOptionGroupsFunc                              func(param0 *rds.DescribeOptionGroupsInput) (*rds.DescribeOptionGroupsOutput, error)
+	DescribeOptionGroupsRequestFunc                       func(param0 *rds.DescribeOptionGroupsInput) (*request.Request, *rds.DescribeOptionGroupsOutput)
+	DescribeOptionGroupsWithContextFunc                   func(param0 aws.Context, param1 *rds.DescribeOptionGroupsInput, param2 ...request.Option) (*rds.DescribeOptionGroupsOutput, error)
+	DescribeOrderableDBInstanceOptionsFunc                func(param0 *rds.DescribeOrderableDBInstanceOptionsInput) (*rds.DescribeOrderableDBInstanceOptionsOutput, error)
+	DescribeOrderableDBInstanceOptionsRequestFunc         func(param0 *rds.DescribeOrderableDBInstanceOptionsInput) (*request.Request, *rds.DescribeOrderableDBInstanceOptionsOutput)
+	DescribeOrderableDBInstanceOptionsWithContextFunc     func(param0 aws.Context, param1 *rds.DescribeOrderableDBInstanceOptionsInput, param2 ...request.Option) (*rds.DescribeOrderableDBInstanceOptionsOutput, error)
+	DescribePendingMaintenanceActionsFunc                 func(param0 *rds.DescribePendingMaintenanceActionsInput) (*rds.DescribePendingMaintenanceActionsOutput, error)
+	DescribePendingMaintenanceActionsRequestFunc          func(param0 *rds.DescribePendingMaintenanceActionsInput) (*request.Request, *rds.DescribePendingMaintenanceActionsOutput)
+	DescribePendingMaintenanceActionsWithContextFunc      func(param0 aws.Context, param1 *rds.DescribePendingMaintenanceActionsInput, param2 ...request.Option) (*rds.DescribePendingMaintenanceActionsOutput, error)
+	DescribeReservedDBInstancesFunc                       func(param0 *rds.DescribeReservedDBInstancesInput) (*rds.DescribeReservedDBInstancesOutput, error)
+	DescribeReservedDBInstancesOfferingsFunc              func(param0 *rds.DescribeReservedDBInstancesOfferingsInput) (*rds.DescribeReservedDBInstancesOfferingsOutput, error)
+	DescribeReservedDBInstancesOfferingsRequestFunc       func(param0 *rds.DescribeReservedDBInstancesOfferingsInput) (*request.Request, *rds.DescribeReservedDBInstancesOfferingsOutput)
+	DescribeReservedDBInstancesOfferingsWithContextFunc   func(param0 aws.Context, param1 *rds.DescribeReservedDBInstancesOfferingsInput, param2 ...request.Option) (*rds.DescribeReservedDBInstancesOfferingsOutput, error)
+	DescribeReservedDBInstancesRequestFunc                func(param0 *rds.DescribeReservedDBInstancesInput) (*request.Request, *rds.DescribeReservedDBInstancesOutput)
+	DescribeReservedDBInstancesWithContextFunc            func(param0 aws.Context, param1 *rds.DescribeReservedDBInstancesInput, param2 ...request.Option) (*rds.DescribeReservedDBInstancesOutput, error)
+	DescribeSourceRegionsFunc                             func(param0 *rds.DescribeSourceRegionsInput) (*rds.DescribeSourceRegionsOutput, error)
+	DescribeSourceRegionsRequestFunc                      func(param0 *rds.DescribeSourceRegionsInput) (*request.Request, *rds.DescribeSourceRegionsOutput)
+	DescribeSourceRegionsWithContextFunc                  func(param0 aws.Context, param1 *rds.DescribeSourceRegionsInput, param2 ...request.Option) (*rds.DescribeSourceRegionsOutput, error)
+	DownloadDBLogFilePortionFunc                          func(param0 *rds.DownloadDBLogFilePortionInput) (*rds.DownloadDBLogFilePortionOutput, error)
+	DownloadDBLogFilePortionRequestFunc                   func(param0 *rds.DownloadDBLogFilePortionInput) (*request.Request, *rds.DownloadDBLogFilePortionOutput)
+	DownloadDBLogFilePortionWithContextFunc               func(param0 aws.Context, param1 *rds.DownloadDBLogFilePortionInput, param2 ...request.Option) (*rds.DownloadDBLogFilePortionOutput, error)
+	FailoverDBClusterFunc                                 func(param0 *rds.FailoverDBClusterInput) (*rds.FailoverDBClusterOutput, error)
+	FailoverDBClusterRequestFunc                          func(param0 *rds.FailoverDBClusterInput) (*request.Request, *rds.FailoverDBClusterOutput)
+	FailoverDBClusterWithContextFunc                      func(param0 aws.Context, param1 *rds.FailoverDBClusterInput, param2 ...request.Option) (*rds.FailoverDBClusterOutput, error)
+	ListTagsForResourceFunc                               func(param0 *rds.ListTagsForResourceInput) (*rds.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequestFunc                        func(param0 *rds.ListTagsForResourceInput) (*request.Request, *rds.ListTagsForResourceOutput)
+	ListTagsForResourceWithContextFunc                    func(param0 aws.Context, param1 *rds.ListTagsForResourceInput, param2 ...request.Option) (*rds.ListTagsForResourceOutput, error)
+	ModifyDBClusterFunc                                   func(param0 *rds.ModifyDBClusterInput) (*rds.ModifyDBClusterOutput, error)
+	ModifyDBClusterParameterGroupFunc                     func(param0 *rds.ModifyDBClusterParameterGroupInput) (*rds.DBClusterParameterGroupNameMessage, error)
+	ModifyDBClusterParameterGroupRequestFunc              func(param0 *rds.ModifyDBClusterParameterGroupInput) (*request.Request, *rds.DBClusterParameterGroupNameMessage)
+	ModifyDBClusterParameterGroupWithContextFunc          func(param0 aws.Context, param1 *rds.ModifyDBClusterParameterGroupInput, param2 ...request.Option) (*rds.DBClusterParameterGroupNameMessage, error)
+	ModifyDBClusterRequestFunc                            func(param0 *rds.ModifyDBClusterInput) (*request.Request, *rds.ModifyDBClusterOutput)
+	ModifyDBClusterSnapshotAttributeFunc                  func(param0 *rds.ModifyDBClusterSnapshotAttributeInput) (*rds.ModifyDBClusterSnapshotAttributeOutput, error)
+	ModifyDBClusterSnapshotAttributeRequestFunc           func(param0 *rds.ModifyDBClusterSnapshotAttributeInput) (*request.Request, *rds.ModifyDBClusterSnapshotAttributeOutput)
+	ModifyDBClusterSnapshotAttributeWithContextFunc       func(param0 aws.Context, param1 *rds.ModifyDBClusterSnapshotAttributeInput, param2 ...request.Option) (*rds.ModifyDBClusterSnapshotAttributeOutput, error)
+	ModifyDBClusterWithContextFunc                        func(param0 aws.Context, param1 *rds.ModifyDBClusterInput, param2 ...request.Option) (*rds.ModifyDBClusterOutput, error)
+	ModifyDBInstanceFunc                                  func(param0 *rds.ModifyDBInstanceInput) (*rds.ModifyDBInstanceOutput, error)
+	ModifyDBInstanceRequestFunc                           func(param0 *rds.ModifyDBInstanceInput) (*request.Request, *rds.ModifyDBInstanceOutput)
+	ModifyDBInstanceWithContextFunc                       func(param0 aws.Context, param1 *rds.ModifyDBInstanceInput, param2 ...request.Option) (*rds.ModifyDBInstanceOutput, error)
+	ModifyDBParameterGroupFunc                            func(param0 *rds.ModifyDBParameterGroupInput) (*rds.DBParameterGroupNameMessage, error)
+	ModifyDBParameterGroupRequestFunc                     func(param0 *rds.ModifyDBParameterGroupInput) (*request.Request, *rds.DBParameterGroupNameMessage)
+	ModifyDBParameterGroupWithContextFunc                 func(param0 aws.Context, param1 *rds.ModifyDBParameterGroupInput, param2 ...request.Option) (*rds.DBParameterGroupNameMessage, error)
+	ModifyDBSnapshotFunc                                  func(param0 *rds.ModifyDBSnapshotInput) (*rds.ModifyDBSnapshotOutput, error)
+	ModifyDBSnapshotAttributeFunc                         func(param0 *rds.ModifyDBSnapshotAttributeInput) (*rds.ModifyDBSnapshotAttributeOutput, error)
+	ModifyDBSnapshotAttributeRequestFunc                  func(param0 *rds.ModifyDBSnapshotAttributeInput) (*request.Request, *rds.ModifyDBSnapshotAttributeOutput)
+	ModifyDBSnapshotAttributeWithContextFunc              func(param0 aws.Context, param1 *rds.ModifyDBSnapshotAttributeInput, param2 ...request.Option) (*rds.ModifyDBSnapshotAttributeOutput, error)
+	ModifyDBSnapshotRequestFunc                           func(param0 *rds.ModifyDBSnapshotInput) (*request.Request, *rds.ModifyDBSnapshotOutput)
+	ModifyDBSnapshotWithContextFunc                       func(param0 aws.Context, param1 *rds.ModifyDBSnapshotInput, param2 ...request.Option) (*rds.ModifyDBSnapshotOutput, error)
+	ModifyDBSubnetGroupFunc                               func(param0 *rds.ModifyDBSubnetGroupInput) (*rds.ModifyDBSubnetGroupOutput, error)
+	ModifyDBSubnetGroupRequestFunc                        func(param0 *rds.ModifyDBSubnetGroupInput) (*request.Request, *rds.ModifyDBSubnetGroupOutput)
+	ModifyDBSubnetGroupWithContextFunc                    func(param0 aws.Context, param1 *rds.ModifyDBSubnetGroupInput, param2 ...request.Option) (*rds.ModifyDBSubnetGroupOutput, error)
+	ModifyEventSubscriptionFunc                           func(param0 *rds.ModifyEventSubscriptionInput) (*rds.ModifyEventSubscriptionOutput, error)
+	ModifyEventSubscriptionRequestFunc                    func(param0 *rds.ModifyEventSubscriptionInput) (*request.Request, *rds.ModifyEventSubscriptionOutput)
+	ModifyEventSubscriptionWithContextFunc                func(param0 aws.Context, param1 *rds.ModifyEventSubscriptionInput, param2 ...request.Option) (*rds.ModifyEventSubscriptionOutput, error)
+	ModifyOptionGroupFunc                                 func(param0 *rds.ModifyOptionGroupInput) (*rds.ModifyOptionGroupOutput, error)
+	ModifyOptionGroupRequestFunc                          func(param0 *rds.ModifyOptionGroupInput) (*request.Request, *rds.ModifyOptionGroupOutput)
+	ModifyOptionGroupWithContextFunc                      func(param0 aws.Context, param1 *rds.ModifyOptionGroupInput, param2 ...request.Option) (*rds.ModifyOptionGroupOutput, error)
+	PromoteReadReplicaFunc                                func(param0 *rds.PromoteReadReplicaInput) (*rds.PromoteReadReplicaOutput, error)
+	PromoteReadReplicaDBClusterFunc                       func(param0 *rds.PromoteReadReplicaDBClusterInput) (*rds.PromoteReadReplicaDBClusterOutput, error)
+	PromoteReadReplicaDBClusterRequestFunc                func(param0 *rds.PromoteReadReplicaDBClusterInput) (*request.Request, *rds.PromoteReadReplicaDBClusterOutput)
+	PromoteReadReplicaDBClusterWithContextFunc            func(param0 aws.Context, param1 *rds.PromoteReadReplicaDBClusterInput, param2 ...request.Option) (*rds.PromoteReadReplicaDBClusterOutput, error)
+	PromoteReadReplicaRequestFunc                         func(param0 *rds.PromoteReadReplicaInput) (*request.Request, *rds.PromoteReadReplicaOutput)
+	PromoteReadReplicaWithContextFunc                     func(param0 aws.Context, param1 *rds.PromoteReadReplicaInput, param2 ...request.Option) (*rds.PromoteReadReplicaOutput, error)
+	PurchaseReservedDBInstancesOfferingFunc               func(param0 *rds.PurchaseReservedDBInstancesOfferingInput) (*rds.PurchaseReservedDBInstancesOfferingOutput, error)
+	PurchaseReservedDBInstancesOfferingRequestFunc        func(param0 *rds.PurchaseReservedDBInstancesOfferingInput) (*request.Request, *rds.PurchaseReservedDBInstancesOfferingOutput)
+	PurchaseReservedDBInstancesOfferingWithContextFunc    func(param0 aws.Context, param1 *rds.PurchaseReservedDBInstancesOfferingInput, param2 ...request.Option) (*rds.PurchaseReservedDBInstancesOfferingOutput, error)
+	RebootDBInstanceFunc                                  func(param0 *rds.RebootDBInstanceInput) (*rds.RebootDBInstanceOutput, error)
+	RebootDBInstanceRequestFunc                           func(param0 *rds.RebootDBInstanceInput) (*request.Request, *rds.RebootDBInstanceOutput)
+	RebootDBInstanceWithContextFunc                       func(param0 aws.Context, param1 *rds.RebootDBInstanceInput, param2 ...request.Option) (*rds.RebootDBInstanceOutput, error)
+	RemoveRoleFromDBClusterFunc                           func(param0 *rds.RemoveRoleFromDBClusterInput) (*rds.RemoveRoleFromDBClusterOutput, error)
+	RemoveRoleFromDBClusterRequestFunc                    func(param0 *rds.RemoveRoleFromDBClusterInput) (*request.Request, *rds.RemoveRoleFromDBClusterOutput)
+	RemoveRoleFromDBClusterWithContextFunc                func(param0 aws.Context, param1 *rds.RemoveRoleFromDBClusterInput, param2 ...request.Option) (*rds.RemoveRoleFromDBClusterOutput, error)
+	RemoveSourceIdentifierFromSubscriptionFunc            func(param0 *rds.RemoveSourceIdentifierFromSubscriptionInput) (*rds.RemoveSourceIdentifierFromSubscriptionOutput, error)
+	RemoveSourceIdentifierFromSubscriptionRequestFunc     func(param0 *rds.RemoveSourceIdentifierFromSubscriptionInput) (*request.Request, *rds.RemoveSourceIdentifierFromSubscriptionOutput)
+	RemoveSourceIdentifierFromSubscriptionWithContextFunc func(param0 aws.Context, param1 *rds.RemoveSourceIdentifierFromSubscriptionInput, param2 ...request.Option) (*rds.RemoveSourceIdentifierFromSubscriptionOutput, error)
+	RemoveTagsFromResourceFunc                            func(param0 *rds.RemoveTagsFromResourceInput) (*rds.RemoveTagsFromResourceOutput, error)
+	RemoveTagsFromResourceRequestFunc                     func(param0 *rds.RemoveTagsFromResourceInput) (*request.Request, *rds.RemoveTagsFromResourceOutput)
+	RemoveTagsFromResourceWithContextFunc                 func(param0 aws.Context, param1 *rds.RemoveTagsFromResourceInput, param2 ...request.Option) (*rds.RemoveTagsFromResourceOutput, error)
+	ResetDBClusterParameterGroupFunc                      func(param0 *rds.ResetDBClusterParameterGroupInput) (*rds.DBClusterParameterGroupNameMessage, error)
+	ResetDBClusterParameterGroupRequestFunc               func(param0 *rds.ResetDBClusterParameterGroupInput) (*request.Request, *rds.DBClusterParameterGroupNameMessage)
+	ResetDBClusterParameterGroupWithContextFunc           func(param0 aws.Context, param1 *rds.ResetDBClusterParameterGroupInput, param2 ...request.Option) (*rds.DBClusterParameterGroupNameMessage, error)
+	ResetDBParameterGroupFunc                             func(param0 *rds.ResetDBParameterGroupInput) (*rds.DBParameterGroupNameMessage, error)
+	ResetDBParameterGroupRequestFunc                      func(param0 *rds.ResetDBParameterGroupInput) (*request.Request, *rds.DBParameterGroupNameMessage)
+	ResetDBParameterGroupWithContextFunc                  func(param0 aws.Context, param1 *rds.ResetDBParameterGroupInput, param2 ...request.Option) (*rds.DBParameterGroupNameMessage, error)
+	RestoreDBClusterFromS3Func                            func(param0 *rds.RestoreDBClusterFromS3Input) (*rds.RestoreDBClusterFromS3Output, error)
+	RestoreDBClusterFromS3RequestFunc                     func(param0 *rds.RestoreDBClusterFromS3Input) (*request.Request, *rds.RestoreDBClusterFromS3Output)
+	RestoreDBClusterFromS3WithContextFunc                 func(param0 aws.Context, param1 *rds.RestoreDBClusterFromS3Input, param2 ...request.Option) (*rds.RestoreDBClusterFromS3Output, error)
+	RestoreDBClusterFromSnapshotFunc                      func(param0 *rds.RestoreDBClusterFromSnapshotInput) (*rds.RestoreDBClusterFromSnapshotOutput, error)
+	RestoreDBClusterFromSnapshotRequestFunc               func(param0 *rds.RestoreDBClusterFromSnapshotInput) (*request.Request, *rds.RestoreDBClusterFromSnapshotOutput)
+	RestoreDBClusterFromSnapshotWithContextFunc           func(param0 aws.Context, param1 *rds.RestoreDBClusterFromSnapshotInput, param2 ...request.Option) (*rds.RestoreDBClusterFromSnapshotOutput, error)
+	RestoreDBClusterToPointInTimeFunc                     func(param0 *rds.RestoreDBClusterToPointInTimeInput) (*rds.RestoreDBClusterToPointInTimeOutput, error)
+	RestoreDBClusterToPointInTimeRequestFunc              func(param0 *rds.RestoreDBClusterToPointInTimeInput) (*request.Request, *rds.RestoreDBClusterToPointInTimeOutput)
+	RestoreDBClusterToPointInTimeWithContextFunc          func(param0 aws.Context, param1 *rds.RestoreDBClusterToPointInTimeInput, param2 ...request.Option) (*rds.RestoreDBClusterToPointInTimeOutput, error)
+	RestoreDBInstanceFromDBSnapshotFunc                   func(param0 *rds.RestoreDBInstanceFromDBSnapshotInput) (*rds.RestoreDBInstanceFromDBSnapshotOutput, error)
+	RestoreDBInstanceFromDBSnapshotRequestFunc            func(param0 *rds.RestoreDBInstanceFromDBSnapshotInput) (*request.Request, *rds.RestoreDBInstanceFromDBSnapshotOutput)
+	RestoreDBInstanceFromDBSnapshotWithContextFunc        func(param0 aws.Context, param1 *rds.RestoreDBInstanceFromDBSnapshotInput, param2 ...request.Option) (*rds.RestoreDBInstanceFromDBSnapshotOutput, error)
+	RestoreDBInstanceToPointInTimeFunc                    func(param0 *rds.RestoreDBInstanceToPointInTimeInput) (*rds.RestoreDBInstanceToPointInTimeOutput, error)
+	RestoreDBInstanceToPointInTimeRequestFunc             func(param0 *rds.RestoreDBInstanceToPointInTimeInput) (*request.Request, *rds.RestoreDBInstanceToPointInTimeOutput)
+	RestoreDBInstanceToPointInTimeWithContextFunc         func(param0 aws.Context, param1 *rds.RestoreDBInstanceToPointInTimeInput, param2 ...request.Option) (*rds.RestoreDBInstanceToPointInTimeOutput, error)
+	RevokeDBSecurityGroupIngressFunc                      func(param0 *rds.RevokeDBSecurityGroupIngressInput) (*rds.RevokeDBSecurityGroupIngressOutput, error)
+	RevokeDBSecurityGroupIngressRequestFunc               func(param0 *rds.RevokeDBSecurityGroupIngressInput) (*request.Request, *rds.RevokeDBSecurityGroupIngressOutput)
+	RevokeDBSecurityGroupIngressWithContextFunc           func(param0 aws.Context, param1 *rds.RevokeDBSecurityGroupIngressInput, param2 ...request.Option) (*rds.RevokeDBSecurityGroupIngressOutput, error)
+	StartDBInstanceFunc                                   func(param0 *rds.StartDBInstanceInput) (*rds.StartDBInstanceOutput, error)
+	StartDBInstanceRequestFunc                            func(param0 *rds.StartDBInstanceInput) (*request.Request, *rds.StartDBInstanceOutput)
+	StartDBInstanceWithContextFunc                        func(param0 aws.Context, param1 *rds.StartDBInstanceInput, param2 ...request.Option) (*rds.StartDBInstanceOutput, error)
+	StopDBInstanceFunc                                    func(param0 *rds.StopDBInstanceInput) (*rds.StopDBInstanceOutput, error)
+	StopDBInstanceRequestFunc                             func(param0 *rds.StopDBInstanceInput) (*request.Request, *rds.StopDBInstanceOutput)
+	StopDBInstanceWithContextFunc                         func(param0 aws.Context, param1 *rds.StopDBInstanceInput, param2 ...request.Option) (*rds.StopDBInstanceOutput, error)
+	WaitUntilDBInstanceAvailableFunc                      func(param0 *rds.DescribeDBInstancesInput) error
+	WaitUntilDBInstanceAvailableWithContextFunc           func(param0 aws.Context, param1 *rds.DescribeDBInstancesInput, param2 ...request.WaiterOption) error
+	WaitUntilDBInstanceDeletedFunc                        func(param0 *rds.DescribeDBInstancesInput) error
+	WaitUntilDBInstanceDeletedWithContextFunc             func(param0 aws.Context, param1 *rds.DescribeDBInstancesInput, param2 ...request.WaiterOption) error
+}
+
+func (m *rdsMock) AddRoleToDBCluster(param0 *rds.AddRoleToDBClusterInput) (*rds.AddRoleToDBClusterOutput, error) {
+	m.addCall("AddRoleToDBCluster")
+	m.verifyInput("AddRoleToDBCluster", param0)
+	return m.AddRoleToDBClusterFunc(param0)
+}
+
+func (m *rdsMock) AddRoleToDBClusterRequest(param0 *rds.AddRoleToDBClusterInput) (*request.Request, *rds.AddRoleToDBClusterOutput) {
+	m.addCall("AddRoleToDBClusterRequest")
+	m.verifyInput("AddRoleToDBClusterRequest", param0)
+	return m.AddRoleToDBClusterRequestFunc(param0)
+}
+
+func (m *rdsMock) AddRoleToDBClusterWithContext(param0 aws.Context, param1 *rds.AddRoleToDBClusterInput, param2 ...request.Option) (*rds.AddRoleToDBClusterOutput, error) {
+	m.addCall("AddRoleToDBClusterWithContext")
+	m.verifyInput("AddRoleToDBClusterWithContext", param0)
+	return m.AddRoleToDBClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) AddSourceIdentifierToSubscription(param0 *rds.AddSourceIdentifierToSubscriptionInput) (*rds.AddSourceIdentifierToSubscriptionOutput, error) {
+	m.addCall("AddSourceIdentifierToSubscription")
+	m.verifyInput("AddSourceIdentifierToSubscription", param0)
+	return m.AddSourceIdentifierToSubscriptionFunc(param0)
+}
+
+func (m *rdsMock) AddSourceIdentifierToSubscriptionRequest(param0 *rds.AddSourceIdentifierToSubscriptionInput) (*request.Request, *rds.AddSourceIdentifierToSubscriptionOutput) {
+	m.addCall("AddSourceIdentifierToSubscriptionRequest")
+	m.verifyInput("AddSourceIdentifierToSubscriptionRequest", param0)
+	return m.AddSourceIdentifierToSubscriptionRequestFunc(param0)
+}
+
+func (m *rdsMock) AddSourceIdentifierToSubscriptionWithContext(param0 aws.Context, param1 *rds.AddSourceIdentifierToSubscriptionInput, param2 ...request.Option) (*rds.AddSourceIdentifierToSubscriptionOutput, error) {
+	m.addCall("AddSourceIdentifierToSubscriptionWithContext")
+	m.verifyInput("AddSourceIdentifierToSubscriptionWithContext", param0)
+	return m.AddSourceIdentifierToSubscriptionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) AddTagsToResource(param0 *rds.AddTagsToResourceInput) (*rds.AddTagsToResourceOutput, error) {
+	m.addCall("AddTagsToResource")
+	m.verifyInput("AddTagsToResource", param0)
+	return m.AddTagsToResourceFunc(param0)
+}
+
+func (m *rdsMock) AddTagsToResourceRequest(param0 *rds.AddTagsToResourceInput) (*request.Request, *rds.AddTagsToResourceOutput) {
+	m.addCall("AddTagsToResourceRequest")
+	m.verifyInput("AddTagsToResourceRequest", param0)
+	return m.AddTagsToResourceRequestFunc(param0)
+}
+
+func (m *rdsMock) AddTagsToResourceWithContext(param0 aws.Context, param1 *rds.AddTagsToResourceInput, param2 ...request.Option) (*rds.AddTagsToResourceOutput, error) {
+	m.addCall("AddTagsToResourceWithContext")
+	m.verifyInput("AddTagsToResourceWithContext", param0)
+	return m.AddTagsToResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ApplyPendingMaintenanceAction(param0 *rds.ApplyPendingMaintenanceActionInput) (*rds.ApplyPendingMaintenanceActionOutput, error) {
+	m.addCall("ApplyPendingMaintenanceAction")
+	m.verifyInput("ApplyPendingMaintenanceAction", param0)
+	return m.ApplyPendingMaintenanceActionFunc(param0)
+}
+
+func (m *rdsMock) ApplyPendingMaintenanceActionRequest(param0 *rds.ApplyPendingMaintenanceActionInput) (*request.Request, *rds.ApplyPendingMaintenanceActionOutput) {
+	m.addCall("ApplyPendingMaintenanceActionRequest")
+	m.verifyInput("ApplyPendingMaintenanceActionRequest", param0)
+	return m.ApplyPendingMaintenanceActionRequestFunc(param0)
+}
+
+func (m *rdsMock) ApplyPendingMaintenanceActionWithContext(param0 aws.Context, param1 *rds.ApplyPendingMaintenanceActionInput, param2 ...request.Option) (*rds.ApplyPendingMaintenanceActionOutput, error) {
+	m.addCall("ApplyPendingMaintenanceActionWithContext")
+	m.verifyInput("ApplyPendingMaintenanceActionWithContext", param0)
+	return m.ApplyPendingMaintenanceActionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) AuthorizeDBSecurityGroupIngress(param0 *rds.AuthorizeDBSecurityGroupIngressInput) (*rds.AuthorizeDBSecurityGroupIngressOutput, error) {
+	m.addCall("AuthorizeDBSecurityGroupIngress")
+	m.verifyInput("AuthorizeDBSecurityGroupIngress", param0)
+	return m.AuthorizeDBSecurityGroupIngressFunc(param0)
+}
+
+func (m *rdsMock) AuthorizeDBSecurityGroupIngressRequest(param0 *rds.AuthorizeDBSecurityGroupIngressInput) (*request.Request, *rds.AuthorizeDBSecurityGroupIngressOutput) {
+	m.addCall("AuthorizeDBSecurityGroupIngressRequest")
+	m.verifyInput("AuthorizeDBSecurityGroupIngressRequest", param0)
+	return m.AuthorizeDBSecurityGroupIngressRequestFunc(param0)
+}
+
+func (m *rdsMock) AuthorizeDBSecurityGroupIngressWithContext(param0 aws.Context, param1 *rds.AuthorizeDBSecurityGroupIngressInput, param2 ...request.Option) (*rds.AuthorizeDBSecurityGroupIngressOutput, error) {
+	m.addCall("AuthorizeDBSecurityGroupIngressWithContext")
+	m.verifyInput("AuthorizeDBSecurityGroupIngressWithContext", param0)
+	return m.AuthorizeDBSecurityGroupIngressWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CopyDBClusterParameterGroup(param0 *rds.CopyDBClusterParameterGroupInput) (*rds.CopyDBClusterParameterGroupOutput, error) {
+	m.addCall("CopyDBClusterParameterGroup")
+	m.verifyInput("CopyDBClusterParameterGroup", param0)
+	return m.CopyDBClusterParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) CopyDBClusterParameterGroupRequest(param0 *rds.CopyDBClusterParameterGroupInput) (*request.Request, *rds.CopyDBClusterParameterGroupOutput) {
+	m.addCall("CopyDBClusterParameterGroupRequest")
+	m.verifyInput("CopyDBClusterParameterGroupRequest", param0)
+	return m.CopyDBClusterParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CopyDBClusterParameterGroupWithContext(param0 aws.Context, param1 *rds.CopyDBClusterParameterGroupInput, param2 ...request.Option) (*rds.CopyDBClusterParameterGroupOutput, error) {
+	m.addCall("CopyDBClusterParameterGroupWithContext")
+	m.verifyInput("CopyDBClusterParameterGroupWithContext", param0)
+	return m.CopyDBClusterParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CopyDBClusterSnapshot(param0 *rds.CopyDBClusterSnapshotInput) (*rds.CopyDBClusterSnapshotOutput, error) {
+	m.addCall("CopyDBClusterSnapshot")
+	m.verifyInput("CopyDBClusterSnapshot", param0)
+	return m.CopyDBClusterSnapshotFunc(param0)
+}
+
+func (m *rdsMock) CopyDBClusterSnapshotRequest(param0 *rds.CopyDBClusterSnapshotInput) (*request.Request, *rds.CopyDBClusterSnapshotOutput) {
+	m.addCall("CopyDBClusterSnapshotRequest")
+	m.verifyInput("CopyDBClusterSnapshotRequest", param0)
+	return m.CopyDBClusterSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) CopyDBClusterSnapshotWithContext(param0 aws.Context, param1 *rds.CopyDBClusterSnapshotInput, param2 ...request.Option) (*rds.CopyDBClusterSnapshotOutput, error) {
+	m.addCall("CopyDBClusterSnapshotWithContext")
+	m.verifyInput("CopyDBClusterSnapshotWithContext", param0)
+	return m.CopyDBClusterSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CopyDBParameterGroup(param0 *rds.CopyDBParameterGroupInput) (*rds.CopyDBParameterGroupOutput, error) {
+	m.addCall("CopyDBParameterGroup")
+	m.verifyInput("CopyDBParameterGroup", param0)
+	return m.CopyDBParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) CopyDBParameterGroupRequest(param0 *rds.CopyDBParameterGroupInput) (*request.Request, *rds.CopyDBParameterGroupOutput) {
+	m.addCall("CopyDBParameterGroupRequest")
+	m.verifyInput("CopyDBParameterGroupRequest", param0)
+	return m.CopyDBParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CopyDBParameterGroupWithContext(param0 aws.Context, param1 *rds.CopyDBParameterGroupInput, param2 ...request.Option) (*rds.CopyDBParameterGroupOutput, error) {
+	m.addCall("CopyDBParameterGroupWithContext")
+	m.verifyInput("CopyDBParameterGroupWithContext", param0)
+	return m.CopyDBParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CopyDBSnapshot(param0 *rds.CopyDBSnapshotInput) (*rds.CopyDBSnapshotOutput, error) {
+	m.addCall("CopyDBSnapshot")
+	m.verifyInput("CopyDBSnapshot", param0)
+	return m.CopyDBSnapshotFunc(param0)
+}
+
+func (m *rdsMock) CopyDBSnapshotRequest(param0 *rds.CopyDBSnapshotInput) (*request.Request, *rds.CopyDBSnapshotOutput) {
+	m.addCall("CopyDBSnapshotRequest")
+	m.verifyInput("CopyDBSnapshotRequest", param0)
+	return m.CopyDBSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) CopyDBSnapshotWithContext(param0 aws.Context, param1 *rds.CopyDBSnapshotInput, param2 ...request.Option) (*rds.CopyDBSnapshotOutput, error) {
+	m.addCall("CopyDBSnapshotWithContext")
+	m.verifyInput("CopyDBSnapshotWithContext", param0)
+	return m.CopyDBSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CopyOptionGroup(param0 *rds.CopyOptionGroupInput) (*rds.CopyOptionGroupOutput, error) {
+	m.addCall("CopyOptionGroup")
+	m.verifyInput("CopyOptionGroup", param0)
+	return m.CopyOptionGroupFunc(param0)
+}
+
+func (m *rdsMock) CopyOptionGroupRequest(param0 *rds.CopyOptionGroupInput) (*request.Request, *rds.CopyOptionGroupOutput) {
+	m.addCall("CopyOptionGroupRequest")
+	m.verifyInput("CopyOptionGroupRequest", param0)
+	return m.CopyOptionGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CopyOptionGroupWithContext(param0 aws.Context, param1 *rds.CopyOptionGroupInput, param2 ...request.Option) (*rds.CopyOptionGroupOutput, error) {
+	m.addCall("CopyOptionGroupWithContext")
+	m.verifyInput("CopyOptionGroupWithContext", param0)
+	return m.CopyOptionGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBCluster(param0 *rds.CreateDBClusterInput) (*rds.CreateDBClusterOutput, error) {
+	m.addCall("CreateDBCluster")
+	m.verifyInput("CreateDBCluster", param0)
+	return m.CreateDBClusterFunc(param0)
+}
+
+func (m *rdsMock) CreateDBClusterParameterGroup(param0 *rds.CreateDBClusterParameterGroupInput) (*rds.CreateDBClusterParameterGroupOutput, error) {
+	m.addCall("CreateDBClusterParameterGroup")
+	m.verifyInput("CreateDBClusterParameterGroup", param0)
+	return m.CreateDBClusterParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) CreateDBClusterParameterGroupRequest(param0 *rds.CreateDBClusterParameterGroupInput) (*request.Request, *rds.CreateDBClusterParameterGroupOutput) {
+	m.addCall("CreateDBClusterParameterGroupRequest")
+	m.verifyInput("CreateDBClusterParameterGroupRequest", param0)
+	return m.CreateDBClusterParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBClusterParameterGroupWithContext(param0 aws.Context, param1 *rds.CreateDBClusterParameterGroupInput, param2 ...request.Option) (*rds.CreateDBClusterParameterGroupOutput, error) {
+	m.addCall("CreateDBClusterParameterGroupWithContext")
+	m.verifyInput("CreateDBClusterParameterGroupWithContext", param0)
+	return m.CreateDBClusterParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBClusterRequest(param0 *rds.CreateDBClusterInput) (*request.Request, *rds.CreateDBClusterOutput) {
+	m.addCall("CreateDBClusterRequest")
+	m.verifyInput("CreateDBClusterRequest", param0)
+	return m.CreateDBClusterRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBClusterSnapshot(param0 *rds.CreateDBClusterSnapshotInput) (*rds.CreateDBClusterSnapshotOutput, error) {
+	m.addCall("CreateDBClusterSnapshot")
+	m.verifyInput("CreateDBClusterSnapshot", param0)
+	return m.CreateDBClusterSnapshotFunc(param0)
+}
+
+func (m *rdsMock) CreateDBClusterSnapshotRequest(param0 *rds.CreateDBClusterSnapshotInput) (*request.Request, *rds.CreateDBClusterSnapshotOutput) {
+	m.addCall("CreateDBClusterSnapshotRequest")
+	m.verifyInput("CreateDBClusterSnapshotRequest", param0)
+	return m.CreateDBClusterSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBClusterSnapshotWithContext(param0 aws.Context, param1 *rds.CreateDBClusterSnapshotInput, param2 ...request.Option) (*rds.CreateDBClusterSnapshotOutput, error) {
+	m.addCall("CreateDBClusterSnapshotWithContext")
+	m.verifyInput("CreateDBClusterSnapshotWithContext", param0)
+	return m.CreateDBClusterSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBClusterWithContext(param0 aws.Context, param1 *rds.CreateDBClusterInput, param2 ...request.Option) (*rds.CreateDBClusterOutput, error) {
+	m.addCall("CreateDBClusterWithContext")
+	m.verifyInput("CreateDBClusterWithContext", param0)
+	return m.CreateDBClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBInstance(param0 *rds.CreateDBInstanceInput) (*rds.CreateDBInstanceOutput, error) {
+	m.addCall("CreateDBInstance")
+	m.verifyInput("CreateDBInstance", param0)
+	return m.CreateDBInstanceFunc(param0)
+}
+
+func (m *rdsMock) CreateDBInstanceReadReplica(param0 *rds.CreateDBInstanceReadReplicaInput) (*rds.CreateDBInstanceReadReplicaOutput, error) {
+	m.addCall("CreateDBInstanceReadReplica")
+	m.verifyInput("CreateDBInstanceReadReplica", param0)
+	return m.CreateDBInstanceReadReplicaFunc(param0)
+}
+
+func (m *rdsMock) CreateDBInstanceReadReplicaRequest(param0 *rds.CreateDBInstanceReadReplicaInput) (*request.Request, *rds.CreateDBInstanceReadReplicaOutput) {
+	m.addCall("CreateDBInstanceReadReplicaRequest")
+	m.verifyInput("CreateDBInstanceReadReplicaRequest", param0)
+	return m.CreateDBInstanceReadReplicaRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBInstanceReadReplicaWithContext(param0 aws.Context, param1 *rds.CreateDBInstanceReadReplicaInput, param2 ...request.Option) (*rds.CreateDBInstanceReadReplicaOutput, error) {
+	m.addCall("CreateDBInstanceReadReplicaWithContext")
+	m.verifyInput("CreateDBInstanceReadReplicaWithContext", param0)
+	return m.CreateDBInstanceReadReplicaWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBInstanceRequest(param0 *rds.CreateDBInstanceInput) (*request.Request, *rds.CreateDBInstanceOutput) {
+	m.addCall("CreateDBInstanceRequest")
+	m.verifyInput("CreateDBInstanceRequest", param0)
+	return m.CreateDBInstanceRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBInstanceWithContext(param0 aws.Context, param1 *rds.CreateDBInstanceInput, param2 ...request.Option) (*rds.CreateDBInstanceOutput, error) {
+	m.addCall("CreateDBInstanceWithContext")
+	m.verifyInput("CreateDBInstanceWithContext", param0)
+	return m.CreateDBInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBParameterGroup(param0 *rds.CreateDBParameterGroupInput) (*rds.CreateDBParameterGroupOutput, error) {
+	m.addCall("CreateDBParameterGroup")
+	m.verifyInput("CreateDBParameterGroup", param0)
+	return m.CreateDBParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) CreateDBParameterGroupRequest(param0 *rds.CreateDBParameterGroupInput) (*request.Request, *rds.CreateDBParameterGroupOutput) {
+	m.addCall("CreateDBParameterGroupRequest")
+	m.verifyInput("CreateDBParameterGroupRequest", param0)
+	return m.CreateDBParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBParameterGroupWithContext(param0 aws.Context, param1 *rds.CreateDBParameterGroupInput, param2 ...request.Option) (*rds.CreateDBParameterGroupOutput, error) {
+	m.addCall("CreateDBParameterGroupWithContext")
+	m.verifyInput("CreateDBParameterGroupWithContext", param0)
+	return m.CreateDBParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBSecurityGroup(param0 *rds.CreateDBSecurityGroupInput) (*rds.CreateDBSecurityGroupOutput, error) {
+	m.addCall("CreateDBSecurityGroup")
+	m.verifyInput("CreateDBSecurityGroup", param0)
+	return m.CreateDBSecurityGroupFunc(param0)
+}
+
+func (m *rdsMock) CreateDBSecurityGroupRequest(param0 *rds.CreateDBSecurityGroupInput) (*request.Request, *rds.CreateDBSecurityGroupOutput) {
+	m.addCall("CreateDBSecurityGroupRequest")
+	m.verifyInput("CreateDBSecurityGroupRequest", param0)
+	return m.CreateDBSecurityGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBSecurityGroupWithContext(param0 aws.Context, param1 *rds.CreateDBSecurityGroupInput, param2 ...request.Option) (*rds.CreateDBSecurityGroupOutput, error) {
+	m.addCall("CreateDBSecurityGroupWithContext")
+	m.verifyInput("CreateDBSecurityGroupWithContext", param0)
+	return m.CreateDBSecurityGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBSnapshot(param0 *rds.CreateDBSnapshotInput) (*rds.CreateDBSnapshotOutput, error) {
+	m.addCall("CreateDBSnapshot")
+	m.verifyInput("CreateDBSnapshot", param0)
+	return m.CreateDBSnapshotFunc(param0)
+}
+
+func (m *rdsMock) CreateDBSnapshotRequest(param0 *rds.CreateDBSnapshotInput) (*request.Request, *rds.CreateDBSnapshotOutput) {
+	m.addCall("CreateDBSnapshotRequest")
+	m.verifyInput("CreateDBSnapshotRequest", param0)
+	return m.CreateDBSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBSnapshotWithContext(param0 aws.Context, param1 *rds.CreateDBSnapshotInput, param2 ...request.Option) (*rds.CreateDBSnapshotOutput, error) {
+	m.addCall("CreateDBSnapshotWithContext")
+	m.verifyInput("CreateDBSnapshotWithContext", param0)
+	return m.CreateDBSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateDBSubnetGroup(param0 *rds.CreateDBSubnetGroupInput) (*rds.CreateDBSubnetGroupOutput, error) {
+	m.addCall("CreateDBSubnetGroup")
+	m.verifyInput("CreateDBSubnetGroup", param0)
+	return m.CreateDBSubnetGroupFunc(param0)
+}
+
+func (m *rdsMock) CreateDBSubnetGroupRequest(param0 *rds.CreateDBSubnetGroupInput) (*request.Request, *rds.CreateDBSubnetGroupOutput) {
+	m.addCall("CreateDBSubnetGroupRequest")
+	m.verifyInput("CreateDBSubnetGroupRequest", param0)
+	return m.CreateDBSubnetGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateDBSubnetGroupWithContext(param0 aws.Context, param1 *rds.CreateDBSubnetGroupInput, param2 ...request.Option) (*rds.CreateDBSubnetGroupOutput, error) {
+	m.addCall("CreateDBSubnetGroupWithContext")
+	m.verifyInput("CreateDBSubnetGroupWithContext", param0)
+	return m.CreateDBSubnetGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateEventSubscription(param0 *rds.CreateEventSubscriptionInput) (*rds.CreateEventSubscriptionOutput, error) {
+	m.addCall("CreateEventSubscription")
+	m.verifyInput("CreateEventSubscription", param0)
+	return m.CreateEventSubscriptionFunc(param0)
+}
+
+func (m *rdsMock) CreateEventSubscriptionRequest(param0 *rds.CreateEventSubscriptionInput) (*request.Request, *rds.CreateEventSubscriptionOutput) {
+	m.addCall("CreateEventSubscriptionRequest")
+	m.verifyInput("CreateEventSubscriptionRequest", param0)
+	return m.CreateEventSubscriptionRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateEventSubscriptionWithContext(param0 aws.Context, param1 *rds.CreateEventSubscriptionInput, param2 ...request.Option) (*rds.CreateEventSubscriptionOutput, error) {
+	m.addCall("CreateEventSubscriptionWithContext")
+	m.verifyInput("CreateEventSubscriptionWithContext", param0)
+	return m.CreateEventSubscriptionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) CreateOptionGroup(param0 *rds.CreateOptionGroupInput) (*rds.CreateOptionGroupOutput, error) {
+	m.addCall("CreateOptionGroup")
+	m.verifyInput("CreateOptionGroup", param0)
+	return m.CreateOptionGroupFunc(param0)
+}
+
+func (m *rdsMock) CreateOptionGroupRequest(param0 *rds.CreateOptionGroupInput) (*request.Request, *rds.CreateOptionGroupOutput) {
+	m.addCall("CreateOptionGroupRequest")
+	m.verifyInput("CreateOptionGroupRequest", param0)
+	return m.CreateOptionGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) CreateOptionGroupWithContext(param0 aws.Context, param1 *rds.CreateOptionGroupInput, param2 ...request.Option) (*rds.CreateOptionGroupOutput, error) {
+	m.addCall("CreateOptionGroupWithContext")
+	m.verifyInput("CreateOptionGroupWithContext", param0)
+	return m.CreateOptionGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBCluster(param0 *rds.DeleteDBClusterInput) (*rds.DeleteDBClusterOutput, error) {
+	m.addCall("DeleteDBCluster")
+	m.verifyInput("DeleteDBCluster", param0)
+	return m.DeleteDBClusterFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBClusterParameterGroup(param0 *rds.DeleteDBClusterParameterGroupInput) (*rds.DeleteDBClusterParameterGroupOutput, error) {
+	m.addCall("DeleteDBClusterParameterGroup")
+	m.verifyInput("DeleteDBClusterParameterGroup", param0)
+	return m.DeleteDBClusterParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBClusterParameterGroupRequest(param0 *rds.DeleteDBClusterParameterGroupInput) (*request.Request, *rds.DeleteDBClusterParameterGroupOutput) {
+	m.addCall("DeleteDBClusterParameterGroupRequest")
+	m.verifyInput("DeleteDBClusterParameterGroupRequest", param0)
+	return m.DeleteDBClusterParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBClusterParameterGroupWithContext(param0 aws.Context, param1 *rds.DeleteDBClusterParameterGroupInput, param2 ...request.Option) (*rds.DeleteDBClusterParameterGroupOutput, error) {
+	m.addCall("DeleteDBClusterParameterGroupWithContext")
+	m.verifyInput("DeleteDBClusterParameterGroupWithContext", param0)
+	return m.DeleteDBClusterParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBClusterRequest(param0 *rds.DeleteDBClusterInput) (*request.Request, *rds.DeleteDBClusterOutput) {
+	m.addCall("DeleteDBClusterRequest")
+	m.verifyInput("DeleteDBClusterRequest", param0)
+	return m.DeleteDBClusterRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBClusterSnapshot(param0 *rds.DeleteDBClusterSnapshotInput) (*rds.DeleteDBClusterSnapshotOutput, error) {
+	m.addCall("DeleteDBClusterSnapshot")
+	m.verifyInput("DeleteDBClusterSnapshot", param0)
+	return m.DeleteDBClusterSnapshotFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBClusterSnapshotRequest(param0 *rds.DeleteDBClusterSnapshotInput) (*request.Request, *rds.DeleteDBClusterSnapshotOutput) {
+	m.addCall("DeleteDBClusterSnapshotRequest")
+	m.verifyInput("DeleteDBClusterSnapshotRequest", param0)
+	return m.DeleteDBClusterSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBClusterSnapshotWithContext(param0 aws.Context, param1 *rds.DeleteDBClusterSnapshotInput, param2 ...request.Option) (*rds.DeleteDBClusterSnapshotOutput, error) {
+	m.addCall("DeleteDBClusterSnapshotWithContext")
+	m.verifyInput("DeleteDBClusterSnapshotWithContext", param0)
+	return m.DeleteDBClusterSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBClusterWithContext(param0 aws.Context, param1 *rds.DeleteDBClusterInput, param2 ...request.Option) (*rds.DeleteDBClusterOutput, error) {
+	m.addCall("DeleteDBClusterWithContext")
+	m.verifyInput("DeleteDBClusterWithContext", param0)
+	return m.DeleteDBClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBInstance(param0 *rds.DeleteDBInstanceInput) (*rds.DeleteDBInstanceOutput, error) {
+	m.addCall("DeleteDBInstance")
+	m.verifyInput("DeleteDBInstance", param0)
+	return m.DeleteDBInstanceFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBInstanceRequest(param0 *rds.DeleteDBInstanceInput) (*request.Request, *rds.DeleteDBInstanceOutput) {
+	m.addCall("DeleteDBInstanceRequest")
+	m.verifyInput("DeleteDBInstanceRequest", param0)
+	return m.DeleteDBInstanceRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBInstanceWithContext(param0 aws.Context, param1 *rds.DeleteDBInstanceInput, param2 ...request.Option) (*rds.DeleteDBInstanceOutput, error) {
+	m.addCall("DeleteDBInstanceWithContext")
+	m.verifyInput("DeleteDBInstanceWithContext", param0)
+	return m.DeleteDBInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBParameterGroup(param0 *rds.DeleteDBParameterGroupInput) (*rds.DeleteDBParameterGroupOutput, error) {
+	m.addCall("DeleteDBParameterGroup")
+	m.verifyInput("DeleteDBParameterGroup", param0)
+	return m.DeleteDBParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBParameterGroupRequest(param0 *rds.DeleteDBParameterGroupInput) (*request.Request, *rds.DeleteDBParameterGroupOutput) {
+	m.addCall("DeleteDBParameterGroupRequest")
+	m.verifyInput("DeleteDBParameterGroupRequest", param0)
+	return m.DeleteDBParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBParameterGroupWithContext(param0 aws.Context, param1 *rds.DeleteDBParameterGroupInput, param2 ...request.Option) (*rds.DeleteDBParameterGroupOutput, error) {
+	m.addCall("DeleteDBParameterGroupWithContext")
+	m.verifyInput("DeleteDBParameterGroupWithContext", param0)
+	return m.DeleteDBParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBSecurityGroup(param0 *rds.DeleteDBSecurityGroupInput) (*rds.DeleteDBSecurityGroupOutput, error) {
+	m.addCall("DeleteDBSecurityGroup")
+	m.verifyInput("DeleteDBSecurityGroup", param0)
+	return m.DeleteDBSecurityGroupFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBSecurityGroupRequest(param0 *rds.DeleteDBSecurityGroupInput) (*request.Request, *rds.DeleteDBSecurityGroupOutput) {
+	m.addCall("DeleteDBSecurityGroupRequest")
+	m.verifyInput("DeleteDBSecurityGroupRequest", param0)
+	return m.DeleteDBSecurityGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBSecurityGroupWithContext(param0 aws.Context, param1 *rds.DeleteDBSecurityGroupInput, param2 ...request.Option) (*rds.DeleteDBSecurityGroupOutput, error) {
+	m.addCall("DeleteDBSecurityGroupWithContext")
+	m.verifyInput("DeleteDBSecurityGroupWithContext", param0)
+	return m.DeleteDBSecurityGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBSnapshot(param0 *rds.DeleteDBSnapshotInput) (*rds.DeleteDBSnapshotOutput, error) {
+	m.addCall("DeleteDBSnapshot")
+	m.verifyInput("DeleteDBSnapshot", param0)
+	return m.DeleteDBSnapshotFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBSnapshotRequest(param0 *rds.DeleteDBSnapshotInput) (*request.Request, *rds.DeleteDBSnapshotOutput) {
+	m.addCall("DeleteDBSnapshotRequest")
+	m.verifyInput("DeleteDBSnapshotRequest", param0)
+	return m.DeleteDBSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBSnapshotWithContext(param0 aws.Context, param1 *rds.DeleteDBSnapshotInput, param2 ...request.Option) (*rds.DeleteDBSnapshotOutput, error) {
+	m.addCall("DeleteDBSnapshotWithContext")
+	m.verifyInput("DeleteDBSnapshotWithContext", param0)
+	return m.DeleteDBSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteDBSubnetGroup(param0 *rds.DeleteDBSubnetGroupInput) (*rds.DeleteDBSubnetGroupOutput, error) {
+	m.addCall("DeleteDBSubnetGroup")
+	m.verifyInput("DeleteDBSubnetGroup", param0)
+	return m.DeleteDBSubnetGroupFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBSubnetGroupRequest(param0 *rds.DeleteDBSubnetGroupInput) (*request.Request, *rds.DeleteDBSubnetGroupOutput) {
+	m.addCall("DeleteDBSubnetGroupRequest")
+	m.verifyInput("DeleteDBSubnetGroupRequest", param0)
+	return m.DeleteDBSubnetGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteDBSubnetGroupWithContext(param0 aws.Context, param1 *rds.DeleteDBSubnetGroupInput, param2 ...request.Option) (*rds.DeleteDBSubnetGroupOutput, error) {
+	m.addCall("DeleteDBSubnetGroupWithContext")
+	m.verifyInput("DeleteDBSubnetGroupWithContext", param0)
+	return m.DeleteDBSubnetGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteEventSubscription(param0 *rds.DeleteEventSubscriptionInput) (*rds.DeleteEventSubscriptionOutput, error) {
+	m.addCall("DeleteEventSubscription")
+	m.verifyInput("DeleteEventSubscription", param0)
+	return m.DeleteEventSubscriptionFunc(param0)
+}
+
+func (m *rdsMock) DeleteEventSubscriptionRequest(param0 *rds.DeleteEventSubscriptionInput) (*request.Request, *rds.DeleteEventSubscriptionOutput) {
+	m.addCall("DeleteEventSubscriptionRequest")
+	m.verifyInput("DeleteEventSubscriptionRequest", param0)
+	return m.DeleteEventSubscriptionRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteEventSubscriptionWithContext(param0 aws.Context, param1 *rds.DeleteEventSubscriptionInput, param2 ...request.Option) (*rds.DeleteEventSubscriptionOutput, error) {
+	m.addCall("DeleteEventSubscriptionWithContext")
+	m.verifyInput("DeleteEventSubscriptionWithContext", param0)
+	return m.DeleteEventSubscriptionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DeleteOptionGroup(param0 *rds.DeleteOptionGroupInput) (*rds.DeleteOptionGroupOutput, error) {
+	m.addCall("DeleteOptionGroup")
+	m.verifyInput("DeleteOptionGroup", param0)
+	return m.DeleteOptionGroupFunc(param0)
+}
+
+func (m *rdsMock) DeleteOptionGroupRequest(param0 *rds.DeleteOptionGroupInput) (*request.Request, *rds.DeleteOptionGroupOutput) {
+	m.addCall("DeleteOptionGroupRequest")
+	m.verifyInput("DeleteOptionGroupRequest", param0)
+	return m.DeleteOptionGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) DeleteOptionGroupWithContext(param0 aws.Context, param1 *rds.DeleteOptionGroupInput, param2 ...request.Option) (*rds.DeleteOptionGroupOutput, error) {
+	m.addCall("DeleteOptionGroupWithContext")
+	m.verifyInput("DeleteOptionGroupWithContext", param0)
+	return m.DeleteOptionGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeAccountAttributes(param0 *rds.DescribeAccountAttributesInput) (*rds.DescribeAccountAttributesOutput, error) {
+	m.addCall("DescribeAccountAttributes")
+	m.verifyInput("DescribeAccountAttributes", param0)
+	return m.DescribeAccountAttributesFunc(param0)
+}
+
+func (m *rdsMock) DescribeAccountAttributesRequest(param0 *rds.DescribeAccountAttributesInput) (*request.Request, *rds.DescribeAccountAttributesOutput) {
+	m.addCall("DescribeAccountAttributesRequest")
+	m.verifyInput("DescribeAccountAttributesRequest", param0)
+	return m.DescribeAccountAttributesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeAccountAttributesWithContext(param0 aws.Context, param1 *rds.DescribeAccountAttributesInput, param2 ...request.Option) (*rds.DescribeAccountAttributesOutput, error) {
+	m.addCall("DescribeAccountAttributesWithContext")
+	m.verifyInput("DescribeAccountAttributesWithContext", param0)
+	return m.DescribeAccountAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeCertificates(param0 *rds.DescribeCertificatesInput) (*rds.DescribeCertificatesOutput, error) {
+	m.addCall("DescribeCertificates")
+	m.verifyInput("DescribeCertificates", param0)
+	return m.DescribeCertificatesFunc(param0)
+}
+
+func (m *rdsMock) DescribeCertificatesRequest(param0 *rds.DescribeCertificatesInput) (*request.Request, *rds.DescribeCertificatesOutput) {
+	m.addCall("DescribeCertificatesRequest")
+	m.verifyInput("DescribeCertificatesRequest", param0)
+	return m.DescribeCertificatesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeCertificatesWithContext(param0 aws.Context, param1 *rds.DescribeCertificatesInput, param2 ...request.Option) (*rds.DescribeCertificatesOutput, error) {
+	m.addCall("DescribeCertificatesWithContext")
+	m.verifyInput("DescribeCertificatesWithContext", param0)
+	return m.DescribeCertificatesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBClusterParameterGroups(param0 *rds.DescribeDBClusterParameterGroupsInput) (*rds.DescribeDBClusterParameterGroupsOutput, error) {
+	m.addCall("DescribeDBClusterParameterGroups")
+	m.verifyInput("DescribeDBClusterParameterGroups", param0)
+	return m.DescribeDBClusterParameterGroupsFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterParameterGroupsRequest(param0 *rds.DescribeDBClusterParameterGroupsInput) (*request.Request, *rds.DescribeDBClusterParameterGroupsOutput) {
+	m.addCall("DescribeDBClusterParameterGroupsRequest")
+	m.verifyInput("DescribeDBClusterParameterGroupsRequest", param0)
+	return m.DescribeDBClusterParameterGroupsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterParameterGroupsWithContext(param0 aws.Context, param1 *rds.DescribeDBClusterParameterGroupsInput, param2 ...request.Option) (*rds.DescribeDBClusterParameterGroupsOutput, error) {
+	m.addCall("DescribeDBClusterParameterGroupsWithContext")
+	m.verifyInput("DescribeDBClusterParameterGroupsWithContext", param0)
+	return m.DescribeDBClusterParameterGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBClusterParameters(param0 *rds.DescribeDBClusterParametersInput) (*rds.DescribeDBClusterParametersOutput, error) {
+	m.addCall("DescribeDBClusterParameters")
+	m.verifyInput("DescribeDBClusterParameters", param0)
+	return m.DescribeDBClusterParametersFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterParametersRequest(param0 *rds.DescribeDBClusterParametersInput) (*request.Request, *rds.DescribeDBClusterParametersOutput) {
+	m.addCall("DescribeDBClusterParametersRequest")
+	m.verifyInput("DescribeDBClusterParametersRequest", param0)
+	return m.DescribeDBClusterParametersRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterParametersWithContext(param0 aws.Context, param1 *rds.DescribeDBClusterParametersInput, param2 ...request.Option) (*rds.DescribeDBClusterParametersOutput, error) {
+	m.addCall("DescribeDBClusterParametersWithContext")
+	m.verifyInput("DescribeDBClusterParametersWithContext", param0)
+	return m.DescribeDBClusterParametersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBClusterSnapshotAttributes(param0 *rds.DescribeDBClusterSnapshotAttributesInput) (*rds.DescribeDBClusterSnapshotAttributesOutput, error) {
+	m.addCall("DescribeDBClusterSnapshotAttributes")
+	m.verifyInput("DescribeDBClusterSnapshotAttributes", param0)
+	return m.DescribeDBClusterSnapshotAttributesFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterSnapshotAttributesRequest(param0 *rds.DescribeDBClusterSnapshotAttributesInput) (*request.Request, *rds.DescribeDBClusterSnapshotAttributesOutput) {
+	m.addCall("DescribeDBClusterSnapshotAttributesRequest")
+	m.verifyInput("DescribeDBClusterSnapshotAttributesRequest", param0)
+	return m.DescribeDBClusterSnapshotAttributesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterSnapshotAttributesWithContext(param0 aws.Context, param1 *rds.DescribeDBClusterSnapshotAttributesInput, param2 ...request.Option) (*rds.DescribeDBClusterSnapshotAttributesOutput, error) {
+	m.addCall("DescribeDBClusterSnapshotAttributesWithContext")
+	m.verifyInput("DescribeDBClusterSnapshotAttributesWithContext", param0)
+	return m.DescribeDBClusterSnapshotAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBClusterSnapshots(param0 *rds.DescribeDBClusterSnapshotsInput) (*rds.DescribeDBClusterSnapshotsOutput, error) {
+	m.addCall("DescribeDBClusterSnapshots")
+	m.verifyInput("DescribeDBClusterSnapshots", param0)
+	return m.DescribeDBClusterSnapshotsFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterSnapshotsRequest(param0 *rds.DescribeDBClusterSnapshotsInput) (*request.Request, *rds.DescribeDBClusterSnapshotsOutput) {
+	m.addCall("DescribeDBClusterSnapshotsRequest")
+	m.verifyInput("DescribeDBClusterSnapshotsRequest", param0)
+	return m.DescribeDBClusterSnapshotsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClusterSnapshotsWithContext(param0 aws.Context, param1 *rds.DescribeDBClusterSnapshotsInput, param2 ...request.Option) (*rds.DescribeDBClusterSnapshotsOutput, error) {
+	m.addCall("DescribeDBClusterSnapshotsWithContext")
+	m.verifyInput("DescribeDBClusterSnapshotsWithContext", param0)
+	return m.DescribeDBClusterSnapshotsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBClusters(param0 *rds.DescribeDBClustersInput) (*rds.DescribeDBClustersOutput, error) {
+	m.addCall("DescribeDBClusters")
+	m.verifyInput("DescribeDBClusters", param0)
+	return m.DescribeDBClustersFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClustersRequest(param0 *rds.DescribeDBClustersInput) (*request.Request, *rds.DescribeDBClustersOutput) {
+	m.addCall("DescribeDBClustersRequest")
+	m.verifyInput("DescribeDBClustersRequest", param0)
+	return m.DescribeDBClustersRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBClustersWithContext(param0 aws.Context, param1 *rds.DescribeDBClustersInput, param2 ...request.Option) (*rds.DescribeDBClustersOutput, error) {
+	m.addCall("DescribeDBClustersWithContext")
+	m.verifyInput("DescribeDBClustersWithContext", param0)
+	return m.DescribeDBClustersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBEngineVersions(param0 *rds.DescribeDBEngineVersionsInput) (*rds.DescribeDBEngineVersionsOutput, error) {
+	m.addCall("DescribeDBEngineVersions")
+	m.verifyInput("DescribeDBEngineVersions", param0)
+	return m.DescribeDBEngineVersionsFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBEngineVersionsRequest(param0 *rds.DescribeDBEngineVersionsInput) (*request.Request, *rds.DescribeDBEngineVersionsOutput) {
+	m.addCall("DescribeDBEngineVersionsRequest")
+	m.verifyInput("DescribeDBEngineVersionsRequest", param0)
+	return m.DescribeDBEngineVersionsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBEngineVersionsWithContext(param0 aws.Context, param1 *rds.DescribeDBEngineVersionsInput, param2 ...request.Option) (*rds.DescribeDBEngineVersionsOutput, error) {
+	m.addCall("DescribeDBEngineVersionsWithContext")
+	m.verifyInput("DescribeDBEngineVersionsWithContext", param0)
+	return m.DescribeDBEngineVersionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBInstances(param0 *rds.DescribeDBInstancesInput) (*rds.DescribeDBInstancesOutput, error) {
+	m.addCall("DescribeDBInstances")
+	m.verifyInput("DescribeDBInstances", param0)
+	return m.DescribeDBInstancesFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBInstancesRequest(param0 *rds.DescribeDBInstancesInput) (*request.Request, *rds.DescribeDBInstancesOutput) {
+	m.addCall("DescribeDBInstancesRequest")
+	m.verifyInput("DescribeDBInstancesRequest", param0)
+	return m.DescribeDBInstancesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBInstancesWithContext(param0 aws.Context, param1 *rds.DescribeDBInstancesInput, param2 ...request.Option) (*rds.DescribeDBInstancesOutput, error) {
+	m.addCall("DescribeDBInstancesWithContext")
+	m.verifyInput("DescribeDBInstancesWithContext", param0)
+	return m.DescribeDBInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBLogFiles(param0 *rds.DescribeDBLogFilesInput) (*rds.DescribeDBLogFilesOutput, error) {
+	m.addCall("DescribeDBLogFiles")
+	m.verifyInput("DescribeDBLogFiles", param0)
+	return m.DescribeDBLogFilesFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBLogFilesRequest(param0 *rds.DescribeDBLogFilesInput) (*request.Request, *rds.DescribeDBLogFilesOutput) {
+	m.addCall("DescribeDBLogFilesRequest")
+	m.verifyInput("DescribeDBLogFilesRequest", param0)
+	return m.DescribeDBLogFilesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBLogFilesWithContext(param0 aws.Context, param1 *rds.DescribeDBLogFilesInput, param2 ...request.Option) (*rds.DescribeDBLogFilesOutput, error) {
+	m.addCall("DescribeDBLogFilesWithContext")
+	m.verifyInput("DescribeDBLogFilesWithContext", param0)
+	return m.DescribeDBLogFilesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBParameterGroups(param0 *rds.DescribeDBParameterGroupsInput) (*rds.DescribeDBParameterGroupsOutput, error) {
+	m.addCall("DescribeDBParameterGroups")
+	m.verifyInput("DescribeDBParameterGroups", param0)
+	return m.DescribeDBParameterGroupsFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBParameterGroupsRequest(param0 *rds.DescribeDBParameterGroupsInput) (*request.Request, *rds.DescribeDBParameterGroupsOutput) {
+	m.addCall("DescribeDBParameterGroupsRequest")
+	m.verifyInput("DescribeDBParameterGroupsRequest", param0)
+	return m.DescribeDBParameterGroupsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBParameterGroupsWithContext(param0 aws.Context, param1 *rds.DescribeDBParameterGroupsInput, param2 ...request.Option) (*rds.DescribeDBParameterGroupsOutput, error) {
+	m.addCall("DescribeDBParameterGroupsWithContext")
+	m.verifyInput("DescribeDBParameterGroupsWithContext", param0)
+	return m.DescribeDBParameterGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBParameters(param0 *rds.DescribeDBParametersInput) (*rds.DescribeDBParametersOutput, error) {
+	m.addCall("DescribeDBParameters")
+	m.verifyInput("DescribeDBParameters", param0)
+	return m.DescribeDBParametersFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBParametersRequest(param0 *rds.DescribeDBParametersInput) (*request.Request, *rds.DescribeDBParametersOutput) {
+	m.addCall("DescribeDBParametersRequest")
+	m.verifyInput("DescribeDBParametersRequest", param0)
+	return m.DescribeDBParametersRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBParametersWithContext(param0 aws.Context, param1 *rds.DescribeDBParametersInput, param2 ...request.Option) (*rds.DescribeDBParametersOutput, error) {
+	m.addCall("DescribeDBParametersWithContext")
+	m.verifyInput("DescribeDBParametersWithContext", param0)
+	return m.DescribeDBParametersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBSecurityGroups(param0 *rds.DescribeDBSecurityGroupsInput) (*rds.DescribeDBSecurityGroupsOutput, error) {
+	m.addCall("DescribeDBSecurityGroups")
+	m.verifyInput("DescribeDBSecurityGroups", param0)
+	return m.DescribeDBSecurityGroupsFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSecurityGroupsRequest(param0 *rds.DescribeDBSecurityGroupsInput) (*request.Request, *rds.DescribeDBSecurityGroupsOutput) {
+	m.addCall("DescribeDBSecurityGroupsRequest")
+	m.verifyInput("DescribeDBSecurityGroupsRequest", param0)
+	return m.DescribeDBSecurityGroupsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSecurityGroupsWithContext(param0 aws.Context, param1 *rds.DescribeDBSecurityGroupsInput, param2 ...request.Option) (*rds.DescribeDBSecurityGroupsOutput, error) {
+	m.addCall("DescribeDBSecurityGroupsWithContext")
+	m.verifyInput("DescribeDBSecurityGroupsWithContext", param0)
+	return m.DescribeDBSecurityGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBSnapshotAttributes(param0 *rds.DescribeDBSnapshotAttributesInput) (*rds.DescribeDBSnapshotAttributesOutput, error) {
+	m.addCall("DescribeDBSnapshotAttributes")
+	m.verifyInput("DescribeDBSnapshotAttributes", param0)
+	return m.DescribeDBSnapshotAttributesFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSnapshotAttributesRequest(param0 *rds.DescribeDBSnapshotAttributesInput) (*request.Request, *rds.DescribeDBSnapshotAttributesOutput) {
+	m.addCall("DescribeDBSnapshotAttributesRequest")
+	m.verifyInput("DescribeDBSnapshotAttributesRequest", param0)
+	return m.DescribeDBSnapshotAttributesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSnapshotAttributesWithContext(param0 aws.Context, param1 *rds.DescribeDBSnapshotAttributesInput, param2 ...request.Option) (*rds.DescribeDBSnapshotAttributesOutput, error) {
+	m.addCall("DescribeDBSnapshotAttributesWithContext")
+	m.verifyInput("DescribeDBSnapshotAttributesWithContext", param0)
+	return m.DescribeDBSnapshotAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBSnapshots(param0 *rds.DescribeDBSnapshotsInput) (*rds.DescribeDBSnapshotsOutput, error) {
+	m.addCall("DescribeDBSnapshots")
+	m.verifyInput("DescribeDBSnapshots", param0)
+	return m.DescribeDBSnapshotsFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSnapshotsRequest(param0 *rds.DescribeDBSnapshotsInput) (*request.Request, *rds.DescribeDBSnapshotsOutput) {
+	m.addCall("DescribeDBSnapshotsRequest")
+	m.verifyInput("DescribeDBSnapshotsRequest", param0)
+	return m.DescribeDBSnapshotsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSnapshotsWithContext(param0 aws.Context, param1 *rds.DescribeDBSnapshotsInput, param2 ...request.Option) (*rds.DescribeDBSnapshotsOutput, error) {
+	m.addCall("DescribeDBSnapshotsWithContext")
+	m.verifyInput("DescribeDBSnapshotsWithContext", param0)
+	return m.DescribeDBSnapshotsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeDBSubnetGroups(param0 *rds.DescribeDBSubnetGroupsInput) (*rds.DescribeDBSubnetGroupsOutput, error) {
+	m.addCall("DescribeDBSubnetGroups")
+	m.verifyInput("DescribeDBSubnetGroups", param0)
+	return m.DescribeDBSubnetGroupsFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSubnetGroupsRequest(param0 *rds.DescribeDBSubnetGroupsInput) (*request.Request, *rds.DescribeDBSubnetGroupsOutput) {
+	m.addCall("DescribeDBSubnetGroupsRequest")
+	m.verifyInput("DescribeDBSubnetGroupsRequest", param0)
+	return m.DescribeDBSubnetGroupsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeDBSubnetGroupsWithContext(param0 aws.Context, param1 *rds.DescribeDBSubnetGroupsInput, param2 ...request.Option) (*rds.DescribeDBSubnetGroupsOutput, error) {
+	m.addCall("DescribeDBSubnetGroupsWithContext")
+	m.verifyInput("DescribeDBSubnetGroupsWithContext", param0)
+	return m.DescribeDBSubnetGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeEngineDefaultClusterParameters(param0 *rds.DescribeEngineDefaultClusterParametersInput) (*rds.DescribeEngineDefaultClusterParametersOutput, error) {
+	m.addCall("DescribeEngineDefaultClusterParameters")
+	m.verifyInput("DescribeEngineDefaultClusterParameters", param0)
+	return m.DescribeEngineDefaultClusterParametersFunc(param0)
+}
+
+func (m *rdsMock) DescribeEngineDefaultClusterParametersRequest(param0 *rds.DescribeEngineDefaultClusterParametersInput) (*request.Request, *rds.DescribeEngineDefaultClusterParametersOutput) {
+	m.addCall("DescribeEngineDefaultClusterParametersRequest")
+	m.verifyInput("DescribeEngineDefaultClusterParametersRequest", param0)
+	return m.DescribeEngineDefaultClusterParametersRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeEngineDefaultClusterParametersWithContext(param0 aws.Context, param1 *rds.DescribeEngineDefaultClusterParametersInput, param2 ...request.Option) (*rds.DescribeEngineDefaultClusterParametersOutput, error) {
+	m.addCall("DescribeEngineDefaultClusterParametersWithContext")
+	m.verifyInput("DescribeEngineDefaultClusterParametersWithContext", param0)
+	return m.DescribeEngineDefaultClusterParametersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeEngineDefaultParameters(param0 *rds.DescribeEngineDefaultParametersInput) (*rds.DescribeEngineDefaultParametersOutput, error) {
+	m.addCall("DescribeEngineDefaultParameters")
+	m.verifyInput("DescribeEngineDefaultParameters", param0)
+	return m.DescribeEngineDefaultParametersFunc(param0)
+}
+
+func (m *rdsMock) DescribeEngineDefaultParametersRequest(param0 *rds.DescribeEngineDefaultParametersInput) (*request.Request, *rds.DescribeEngineDefaultParametersOutput) {
+	m.addCall("DescribeEngineDefaultParametersRequest")
+	m.verifyInput("DescribeEngineDefaultParametersRequest", param0)
+	return m.DescribeEngineDefaultParametersRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeEngineDefaultParametersWithContext(param0 aws.Context, param1 *rds.DescribeEngineDefaultParametersInput, param2 ...request.Option) (*rds.DescribeEngineDefaultParametersOutput, error) {
+	m.addCall("DescribeEngineDefaultParametersWithContext")
+	m.verifyInput("DescribeEngineDefaultParametersWithContext", param0)
+	return m.DescribeEngineDefaultParametersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeEventCategories(param0 *rds.DescribeEventCategoriesInput) (*rds.DescribeEventCategoriesOutput, error) {
+	m.addCall("DescribeEventCategories")
+	m.verifyInput("DescribeEventCategories", param0)
+	return m.DescribeEventCategoriesFunc(param0)
+}
+
+func (m *rdsMock) DescribeEventCategoriesRequest(param0 *rds.DescribeEventCategoriesInput) (*request.Request, *rds.DescribeEventCategoriesOutput) {
+	m.addCall("DescribeEventCategoriesRequest")
+	m.verifyInput("DescribeEventCategoriesRequest", param0)
+	return m.DescribeEventCategoriesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeEventCategoriesWithContext(param0 aws.Context, param1 *rds.DescribeEventCategoriesInput, param2 ...request.Option) (*rds.DescribeEventCategoriesOutput, error) {
+	m.addCall("DescribeEventCategoriesWithContext")
+	m.verifyInput("DescribeEventCategoriesWithContext", param0)
+	return m.DescribeEventCategoriesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeEventSubscriptions(param0 *rds.DescribeEventSubscriptionsInput) (*rds.DescribeEventSubscriptionsOutput, error) {
+	m.addCall("DescribeEventSubscriptions")
+	m.verifyInput("DescribeEventSubscriptions", param0)
+	return m.DescribeEventSubscriptionsFunc(param0)
+}
+
+func (m *rdsMock) DescribeEventSubscriptionsRequest(param0 *rds.DescribeEventSubscriptionsInput) (*request.Request, *rds.DescribeEventSubscriptionsOutput) {
+	m.addCall("DescribeEventSubscriptionsRequest")
+	m.verifyInput("DescribeEventSubscriptionsRequest", param0)
+	return m.DescribeEventSubscriptionsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeEventSubscriptionsWithContext(param0 aws.Context, param1 *rds.DescribeEventSubscriptionsInput, param2 ...request.Option) (*rds.DescribeEventSubscriptionsOutput, error) {
+	m.addCall("DescribeEventSubscriptionsWithContext")
+	m.verifyInput("DescribeEventSubscriptionsWithContext", param0)
+	return m.DescribeEventSubscriptionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeEvents(param0 *rds.DescribeEventsInput) (*rds.DescribeEventsOutput, error) {
+	m.addCall("DescribeEvents")
+	m.verifyInput("DescribeEvents", param0)
+	return m.DescribeEventsFunc(param0)
+}
+
+func (m *rdsMock) DescribeEventsRequest(param0 *rds.DescribeEventsInput) (*request.Request, *rds.DescribeEventsOutput) {
+	m.addCall("DescribeEventsRequest")
+	m.verifyInput("DescribeEventsRequest", param0)
+	return m.DescribeEventsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeEventsWithContext(param0 aws.Context, param1 *rds.DescribeEventsInput, param2 ...request.Option) (*rds.DescribeEventsOutput, error) {
+	m.addCall("DescribeEventsWithContext")
+	m.verifyInput("DescribeEventsWithContext", param0)
+	return m.DescribeEventsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeOptionGroupOptions(param0 *rds.DescribeOptionGroupOptionsInput) (*rds.DescribeOptionGroupOptionsOutput, error) {
+	m.addCall("DescribeOptionGroupOptions")
+	m.verifyInput("DescribeOptionGroupOptions", param0)
+	return m.DescribeOptionGroupOptionsFunc(param0)
+}
+
+func (m *rdsMock) DescribeOptionGroupOptionsRequest(param0 *rds.DescribeOptionGroupOptionsInput) (*request.Request, *rds.DescribeOptionGroupOptionsOutput) {
+	m.addCall("DescribeOptionGroupOptionsRequest")
+	m.verifyInput("DescribeOptionGroupOptionsRequest", param0)
+	return m.DescribeOptionGroupOptionsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeOptionGroupOptionsWithContext(param0 aws.Context, param1 *rds.DescribeOptionGroupOptionsInput, param2 ...request.Option) (*rds.DescribeOptionGroupOptionsOutput, error) {
+	m.addCall("DescribeOptionGroupOptionsWithContext")
+	m.verifyInput("DescribeOptionGroupOptionsWithContext", param0)
+	return m.DescribeOptionGroupOptionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeOptionGroups(param0 *rds.DescribeOptionGroupsInput) (*rds.DescribeOptionGroupsOutput, error) {
+	m.addCall("DescribeOptionGroups")
+	m.verifyInput("DescribeOptionGroups", param0)
+	return m.DescribeOptionGroupsFunc(param0)
+}
+
+func (m *rdsMock) DescribeOptionGroupsRequest(param0 *rds.DescribeOptionGroupsInput) (*request.Request, *rds.DescribeOptionGroupsOutput) {
+	m.addCall("DescribeOptionGroupsRequest")
+	m.verifyInput("DescribeOptionGroupsRequest", param0)
+	return m.DescribeOptionGroupsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeOptionGroupsWithContext(param0 aws.Context, param1 *rds.DescribeOptionGroupsInput, param2 ...request.Option) (*rds.DescribeOptionGroupsOutput, error) {
+	m.addCall("DescribeOptionGroupsWithContext")
+	m.verifyInput("DescribeOptionGroupsWithContext", param0)
+	return m.DescribeOptionGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeOrderableDBInstanceOptions(param0 *rds.DescribeOrderableDBInstanceOptionsInput) (*rds.DescribeOrderableDBInstanceOptionsOutput, error) {
+	m.addCall("DescribeOrderableDBInstanceOptions")
+	m.verifyInput("DescribeOrderableDBInstanceOptions", param0)
+	return m.DescribeOrderableDBInstanceOptionsFunc(param0)
+}
+
+func (m *rdsMock) DescribeOrderableDBInstanceOptionsRequest(param0 *rds.DescribeOrderableDBInstanceOptionsInput) (*request.Request, *rds.DescribeOrderableDBInstanceOptionsOutput) {
+	m.addCall("DescribeOrderableDBInstanceOptionsRequest")
+	m.verifyInput("DescribeOrderableDBInstanceOptionsRequest", param0)
+	return m.DescribeOrderableDBInstanceOptionsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeOrderableDBInstanceOptionsWithContext(param0 aws.Context, param1 *rds.DescribeOrderableDBInstanceOptionsInput, param2 ...request.Option) (*rds.DescribeOrderableDBInstanceOptionsOutput, error) {
+	m.addCall("DescribeOrderableDBInstanceOptionsWithContext")
+	m.verifyInput("DescribeOrderableDBInstanceOptionsWithContext", param0)
+	return m.DescribeOrderableDBInstanceOptionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribePendingMaintenanceActions(param0 *rds.DescribePendingMaintenanceActionsInput) (*rds.DescribePendingMaintenanceActionsOutput, error) {
+	m.addCall("DescribePendingMaintenanceActions")
+	m.verifyInput("DescribePendingMaintenanceActions", param0)
+	return m.DescribePendingMaintenanceActionsFunc(param0)
+}
+
+func (m *rdsMock) DescribePendingMaintenanceActionsRequest(param0 *rds.DescribePendingMaintenanceActionsInput) (*request.Request, *rds.DescribePendingMaintenanceActionsOutput) {
+	m.addCall("DescribePendingMaintenanceActionsRequest")
+	m.verifyInput("DescribePendingMaintenanceActionsRequest", param0)
+	return m.DescribePendingMaintenanceActionsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribePendingMaintenanceActionsWithContext(param0 aws.Context, param1 *rds.DescribePendingMaintenanceActionsInput, param2 ...request.Option) (*rds.DescribePendingMaintenanceActionsOutput, error) {
+	m.addCall("DescribePendingMaintenanceActionsWithContext")
+	m.verifyInput("DescribePendingMaintenanceActionsWithContext", param0)
+	return m.DescribePendingMaintenanceActionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeReservedDBInstances(param0 *rds.DescribeReservedDBInstancesInput) (*rds.DescribeReservedDBInstancesOutput, error) {
+	m.addCall("DescribeReservedDBInstances")
+	m.verifyInput("DescribeReservedDBInstances", param0)
+	return m.DescribeReservedDBInstancesFunc(param0)
+}
+
+func (m *rdsMock) DescribeReservedDBInstancesOfferings(param0 *rds.DescribeReservedDBInstancesOfferingsInput) (*rds.DescribeReservedDBInstancesOfferingsOutput, error) {
+	m.addCall("DescribeReservedDBInstancesOfferings")
+	m.verifyInput("DescribeReservedDBInstancesOfferings", param0)
+	return m.DescribeReservedDBInstancesOfferingsFunc(param0)
+}
+
+func (m *rdsMock) DescribeReservedDBInstancesOfferingsRequest(param0 *rds.DescribeReservedDBInstancesOfferingsInput) (*request.Request, *rds.DescribeReservedDBInstancesOfferingsOutput) {
+	m.addCall("DescribeReservedDBInstancesOfferingsRequest")
+	m.verifyInput("DescribeReservedDBInstancesOfferingsRequest", param0)
+	return m.DescribeReservedDBInstancesOfferingsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeReservedDBInstancesOfferingsWithContext(param0 aws.Context, param1 *rds.DescribeReservedDBInstancesOfferingsInput, param2 ...request.Option) (*rds.DescribeReservedDBInstancesOfferingsOutput, error) {
+	m.addCall("DescribeReservedDBInstancesOfferingsWithContext")
+	m.verifyInput("DescribeReservedDBInstancesOfferingsWithContext", param0)
+	return m.DescribeReservedDBInstancesOfferingsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeReservedDBInstancesRequest(param0 *rds.DescribeReservedDBInstancesInput) (*request.Request, *rds.DescribeReservedDBInstancesOutput) {
+	m.addCall("DescribeReservedDBInstancesRequest")
+	m.verifyInput("DescribeReservedDBInstancesRequest", param0)
+	return m.DescribeReservedDBInstancesRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeReservedDBInstancesWithContext(param0 aws.Context, param1 *rds.DescribeReservedDBInstancesInput, param2 ...request.Option) (*rds.DescribeReservedDBInstancesOutput, error) {
+	m.addCall("DescribeReservedDBInstancesWithContext")
+	m.verifyInput("DescribeReservedDBInstancesWithContext", param0)
+	return m.DescribeReservedDBInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DescribeSourceRegions(param0 *rds.DescribeSourceRegionsInput) (*rds.DescribeSourceRegionsOutput, error) {
+	m.addCall("DescribeSourceRegions")
+	m.verifyInput("DescribeSourceRegions", param0)
+	return m.DescribeSourceRegionsFunc(param0)
+}
+
+func (m *rdsMock) DescribeSourceRegionsRequest(param0 *rds.DescribeSourceRegionsInput) (*request.Request, *rds.DescribeSourceRegionsOutput) {
+	m.addCall("DescribeSourceRegionsRequest")
+	m.verifyInput("DescribeSourceRegionsRequest", param0)
+	return m.DescribeSourceRegionsRequestFunc(param0)
+}
+
+func (m *rdsMock) DescribeSourceRegionsWithContext(param0 aws.Context, param1 *rds.DescribeSourceRegionsInput, param2 ...request.Option) (*rds.DescribeSourceRegionsOutput, error) {
+	m.addCall("DescribeSourceRegionsWithContext")
+	m.verifyInput("DescribeSourceRegionsWithContext", param0)
+	return m.DescribeSourceRegionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) DownloadDBLogFilePortion(param0 *rds.DownloadDBLogFilePortionInput) (*rds.DownloadDBLogFilePortionOutput, error) {
+	m.addCall("DownloadDBLogFilePortion")
+	m.verifyInput("DownloadDBLogFilePortion", param0)
+	return m.DownloadDBLogFilePortionFunc(param0)
+}
+
+func (m *rdsMock) DownloadDBLogFilePortionRequest(param0 *rds.DownloadDBLogFilePortionInput) (*request.Request, *rds.DownloadDBLogFilePortionOutput) {
+	m.addCall("DownloadDBLogFilePortionRequest")
+	m.verifyInput("DownloadDBLogFilePortionRequest", param0)
+	return m.DownloadDBLogFilePortionRequestFunc(param0)
+}
+
+func (m *rdsMock) DownloadDBLogFilePortionWithContext(param0 aws.Context, param1 *rds.DownloadDBLogFilePortionInput, param2 ...request.Option) (*rds.DownloadDBLogFilePortionOutput, error) {
+	m.addCall("DownloadDBLogFilePortionWithContext")
+	m.verifyInput("DownloadDBLogFilePortionWithContext", param0)
+	return m.DownloadDBLogFilePortionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) FailoverDBCluster(param0 *rds.FailoverDBClusterInput) (*rds.FailoverDBClusterOutput, error) {
+	m.addCall("FailoverDBCluster")
+	m.verifyInput("FailoverDBCluster", param0)
+	return m.FailoverDBClusterFunc(param0)
+}
+
+func (m *rdsMock) FailoverDBClusterRequest(param0 *rds.FailoverDBClusterInput) (*request.Request, *rds.FailoverDBClusterOutput) {
+	m.addCall("FailoverDBClusterRequest")
+	m.verifyInput("FailoverDBClusterRequest", param0)
+	return m.FailoverDBClusterRequestFunc(param0)
+}
+
+func (m *rdsMock) FailoverDBClusterWithContext(param0 aws.Context, param1 *rds.FailoverDBClusterInput, param2 ...request.Option) (*rds.FailoverDBClusterOutput, error) {
+	m.addCall("FailoverDBClusterWithContext")
+	m.verifyInput("FailoverDBClusterWithContext", param0)
+	return m.FailoverDBClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ListTagsForResource(param0 *rds.ListTagsForResourceInput) (*rds.ListTagsForResourceOutput, error) {
+	m.addCall("ListTagsForResource")
+	m.verifyInput("ListTagsForResource", param0)
+	return m.ListTagsForResourceFunc(param0)
+}
+
+func (m *rdsMock) ListTagsForResourceRequest(param0 *rds.ListTagsForResourceInput) (*request.Request, *rds.ListTagsForResourceOutput) {
+	m.addCall("ListTagsForResourceRequest")
+	m.verifyInput("ListTagsForResourceRequest", param0)
+	return m.ListTagsForResourceRequestFunc(param0)
+}
+
+func (m *rdsMock) ListTagsForResourceWithContext(param0 aws.Context, param1 *rds.ListTagsForResourceInput, param2 ...request.Option) (*rds.ListTagsForResourceOutput, error) {
+	m.addCall("ListTagsForResourceWithContext")
+	m.verifyInput("ListTagsForResourceWithContext", param0)
+	return m.ListTagsForResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBCluster(param0 *rds.ModifyDBClusterInput) (*rds.ModifyDBClusterOutput, error) {
+	m.addCall("ModifyDBCluster")
+	m.verifyInput("ModifyDBCluster", param0)
+	return m.ModifyDBClusterFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBClusterParameterGroup(param0 *rds.ModifyDBClusterParameterGroupInput) (*rds.DBClusterParameterGroupNameMessage, error) {
+	m.addCall("ModifyDBClusterParameterGroup")
+	m.verifyInput("ModifyDBClusterParameterGroup", param0)
+	return m.ModifyDBClusterParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBClusterParameterGroupRequest(param0 *rds.ModifyDBClusterParameterGroupInput) (*request.Request, *rds.DBClusterParameterGroupNameMessage) {
+	m.addCall("ModifyDBClusterParameterGroupRequest")
+	m.verifyInput("ModifyDBClusterParameterGroupRequest", param0)
+	return m.ModifyDBClusterParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBClusterParameterGroupWithContext(param0 aws.Context, param1 *rds.ModifyDBClusterParameterGroupInput, param2 ...request.Option) (*rds.DBClusterParameterGroupNameMessage, error) {
+	m.addCall("ModifyDBClusterParameterGroupWithContext")
+	m.verifyInput("ModifyDBClusterParameterGroupWithContext", param0)
+	return m.ModifyDBClusterParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBClusterRequest(param0 *rds.ModifyDBClusterInput) (*request.Request, *rds.ModifyDBClusterOutput) {
+	m.addCall("ModifyDBClusterRequest")
+	m.verifyInput("ModifyDBClusterRequest", param0)
+	return m.ModifyDBClusterRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBClusterSnapshotAttribute(param0 *rds.ModifyDBClusterSnapshotAttributeInput) (*rds.ModifyDBClusterSnapshotAttributeOutput, error) {
+	m.addCall("ModifyDBClusterSnapshotAttribute")
+	m.verifyInput("ModifyDBClusterSnapshotAttribute", param0)
+	return m.ModifyDBClusterSnapshotAttributeFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBClusterSnapshotAttributeRequest(param0 *rds.ModifyDBClusterSnapshotAttributeInput) (*request.Request, *rds.ModifyDBClusterSnapshotAttributeOutput) {
+	m.addCall("ModifyDBClusterSnapshotAttributeRequest")
+	m.verifyInput("ModifyDBClusterSnapshotAttributeRequest", param0)
+	return m.ModifyDBClusterSnapshotAttributeRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBClusterSnapshotAttributeWithContext(param0 aws.Context, param1 *rds.ModifyDBClusterSnapshotAttributeInput, param2 ...request.Option) (*rds.ModifyDBClusterSnapshotAttributeOutput, error) {
+	m.addCall("ModifyDBClusterSnapshotAttributeWithContext")
+	m.verifyInput("ModifyDBClusterSnapshotAttributeWithContext", param0)
+	return m.ModifyDBClusterSnapshotAttributeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBClusterWithContext(param0 aws.Context, param1 *rds.ModifyDBClusterInput, param2 ...request.Option) (*rds.ModifyDBClusterOutput, error) {
+	m.addCall("ModifyDBClusterWithContext")
+	m.verifyInput("ModifyDBClusterWithContext", param0)
+	return m.ModifyDBClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBInstance(param0 *rds.ModifyDBInstanceInput) (*rds.ModifyDBInstanceOutput, error) {
+	m.addCall("ModifyDBInstance")
+	m.verifyInput("ModifyDBInstance", param0)
+	return m.ModifyDBInstanceFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBInstanceRequest(param0 *rds.ModifyDBInstanceInput) (*request.Request, *rds.ModifyDBInstanceOutput) {
+	m.addCall("ModifyDBInstanceRequest")
+	m.verifyInput("ModifyDBInstanceRequest", param0)
+	return m.ModifyDBInstanceRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBInstanceWithContext(param0 aws.Context, param1 *rds.ModifyDBInstanceInput, param2 ...request.Option) (*rds.ModifyDBInstanceOutput, error) {
+	m.addCall("ModifyDBInstanceWithContext")
+	m.verifyInput("ModifyDBInstanceWithContext", param0)
+	return m.ModifyDBInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBParameterGroup(param0 *rds.ModifyDBParameterGroupInput) (*rds.DBParameterGroupNameMessage, error) {
+	m.addCall("ModifyDBParameterGroup")
+	m.verifyInput("ModifyDBParameterGroup", param0)
+	return m.ModifyDBParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBParameterGroupRequest(param0 *rds.ModifyDBParameterGroupInput) (*request.Request, *rds.DBParameterGroupNameMessage) {
+	m.addCall("ModifyDBParameterGroupRequest")
+	m.verifyInput("ModifyDBParameterGroupRequest", param0)
+	return m.ModifyDBParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBParameterGroupWithContext(param0 aws.Context, param1 *rds.ModifyDBParameterGroupInput, param2 ...request.Option) (*rds.DBParameterGroupNameMessage, error) {
+	m.addCall("ModifyDBParameterGroupWithContext")
+	m.verifyInput("ModifyDBParameterGroupWithContext", param0)
+	return m.ModifyDBParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBSnapshot(param0 *rds.ModifyDBSnapshotInput) (*rds.ModifyDBSnapshotOutput, error) {
+	m.addCall("ModifyDBSnapshot")
+	m.verifyInput("ModifyDBSnapshot", param0)
+	return m.ModifyDBSnapshotFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBSnapshotAttribute(param0 *rds.ModifyDBSnapshotAttributeInput) (*rds.ModifyDBSnapshotAttributeOutput, error) {
+	m.addCall("ModifyDBSnapshotAttribute")
+	m.verifyInput("ModifyDBSnapshotAttribute", param0)
+	return m.ModifyDBSnapshotAttributeFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBSnapshotAttributeRequest(param0 *rds.ModifyDBSnapshotAttributeInput) (*request.Request, *rds.ModifyDBSnapshotAttributeOutput) {
+	m.addCall("ModifyDBSnapshotAttributeRequest")
+	m.verifyInput("ModifyDBSnapshotAttributeRequest", param0)
+	return m.ModifyDBSnapshotAttributeRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBSnapshotAttributeWithContext(param0 aws.Context, param1 *rds.ModifyDBSnapshotAttributeInput, param2 ...request.Option) (*rds.ModifyDBSnapshotAttributeOutput, error) {
+	m.addCall("ModifyDBSnapshotAttributeWithContext")
+	m.verifyInput("ModifyDBSnapshotAttributeWithContext", param0)
+	return m.ModifyDBSnapshotAttributeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBSnapshotRequest(param0 *rds.ModifyDBSnapshotInput) (*request.Request, *rds.ModifyDBSnapshotOutput) {
+	m.addCall("ModifyDBSnapshotRequest")
+	m.verifyInput("ModifyDBSnapshotRequest", param0)
+	return m.ModifyDBSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBSnapshotWithContext(param0 aws.Context, param1 *rds.ModifyDBSnapshotInput, param2 ...request.Option) (*rds.ModifyDBSnapshotOutput, error) {
+	m.addCall("ModifyDBSnapshotWithContext")
+	m.verifyInput("ModifyDBSnapshotWithContext", param0)
+	return m.ModifyDBSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyDBSubnetGroup(param0 *rds.ModifyDBSubnetGroupInput) (*rds.ModifyDBSubnetGroupOutput, error) {
+	m.addCall("ModifyDBSubnetGroup")
+	m.verifyInput("ModifyDBSubnetGroup", param0)
+	return m.ModifyDBSubnetGroupFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBSubnetGroupRequest(param0 *rds.ModifyDBSubnetGroupInput) (*request.Request, *rds.ModifyDBSubnetGroupOutput) {
+	m.addCall("ModifyDBSubnetGroupRequest")
+	m.verifyInput("ModifyDBSubnetGroupRequest", param0)
+	return m.ModifyDBSubnetGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyDBSubnetGroupWithContext(param0 aws.Context, param1 *rds.ModifyDBSubnetGroupInput, param2 ...request.Option) (*rds.ModifyDBSubnetGroupOutput, error) {
+	m.addCall("ModifyDBSubnetGroupWithContext")
+	m.verifyInput("ModifyDBSubnetGroupWithContext", param0)
+	return m.ModifyDBSubnetGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyEventSubscription(param0 *rds.ModifyEventSubscriptionInput) (*rds.ModifyEventSubscriptionOutput, error) {
+	m.addCall("ModifyEventSubscription")
+	m.verifyInput("ModifyEventSubscription", param0)
+	return m.ModifyEventSubscriptionFunc(param0)
+}
+
+func (m *rdsMock) ModifyEventSubscriptionRequest(param0 *rds.ModifyEventSubscriptionInput) (*request.Request, *rds.ModifyEventSubscriptionOutput) {
+	m.addCall("ModifyEventSubscriptionRequest")
+	m.verifyInput("ModifyEventSubscriptionRequest", param0)
+	return m.ModifyEventSubscriptionRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyEventSubscriptionWithContext(param0 aws.Context, param1 *rds.ModifyEventSubscriptionInput, param2 ...request.Option) (*rds.ModifyEventSubscriptionOutput, error) {
+	m.addCall("ModifyEventSubscriptionWithContext")
+	m.verifyInput("ModifyEventSubscriptionWithContext", param0)
+	return m.ModifyEventSubscriptionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ModifyOptionGroup(param0 *rds.ModifyOptionGroupInput) (*rds.ModifyOptionGroupOutput, error) {
+	m.addCall("ModifyOptionGroup")
+	m.verifyInput("ModifyOptionGroup", param0)
+	return m.ModifyOptionGroupFunc(param0)
+}
+
+func (m *rdsMock) ModifyOptionGroupRequest(param0 *rds.ModifyOptionGroupInput) (*request.Request, *rds.ModifyOptionGroupOutput) {
+	m.addCall("ModifyOptionGroupRequest")
+	m.verifyInput("ModifyOptionGroupRequest", param0)
+	return m.ModifyOptionGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) ModifyOptionGroupWithContext(param0 aws.Context, param1 *rds.ModifyOptionGroupInput, param2 ...request.Option) (*rds.ModifyOptionGroupOutput, error) {
+	m.addCall("ModifyOptionGroupWithContext")
+	m.verifyInput("ModifyOptionGroupWithContext", param0)
+	return m.ModifyOptionGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) PromoteReadReplica(param0 *rds.PromoteReadReplicaInput) (*rds.PromoteReadReplicaOutput, error) {
+	m.addCall("PromoteReadReplica")
+	m.verifyInput("PromoteReadReplica", param0)
+	return m.PromoteReadReplicaFunc(param0)
+}
+
+func (m *rdsMock) PromoteReadReplicaDBCluster(param0 *rds.PromoteReadReplicaDBClusterInput) (*rds.PromoteReadReplicaDBClusterOutput, error) {
+	m.addCall("PromoteReadReplicaDBCluster")
+	m.verifyInput("PromoteReadReplicaDBCluster", param0)
+	return m.PromoteReadReplicaDBClusterFunc(param0)
+}
+
+func (m *rdsMock) PromoteReadReplicaDBClusterRequest(param0 *rds.PromoteReadReplicaDBClusterInput) (*request.Request, *rds.PromoteReadReplicaDBClusterOutput) {
+	m.addCall("PromoteReadReplicaDBClusterRequest")
+	m.verifyInput("PromoteReadReplicaDBClusterRequest", param0)
+	return m.PromoteReadReplicaDBClusterRequestFunc(param0)
+}
+
+func (m *rdsMock) PromoteReadReplicaDBClusterWithContext(param0 aws.Context, param1 *rds.PromoteReadReplicaDBClusterInput, param2 ...request.Option) (*rds.PromoteReadReplicaDBClusterOutput, error) {
+	m.addCall("PromoteReadReplicaDBClusterWithContext")
+	m.verifyInput("PromoteReadReplicaDBClusterWithContext", param0)
+	return m.PromoteReadReplicaDBClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) PromoteReadReplicaRequest(param0 *rds.PromoteReadReplicaInput) (*request.Request, *rds.PromoteReadReplicaOutput) {
+	m.addCall("PromoteReadReplicaRequest")
+	m.verifyInput("PromoteReadReplicaRequest", param0)
+	return m.PromoteReadReplicaRequestFunc(param0)
+}
+
+func (m *rdsMock) PromoteReadReplicaWithContext(param0 aws.Context, param1 *rds.PromoteReadReplicaInput, param2 ...request.Option) (*rds.PromoteReadReplicaOutput, error) {
+	m.addCall("PromoteReadReplicaWithContext")
+	m.verifyInput("PromoteReadReplicaWithContext", param0)
+	return m.PromoteReadReplicaWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) PurchaseReservedDBInstancesOffering(param0 *rds.PurchaseReservedDBInstancesOfferingInput) (*rds.PurchaseReservedDBInstancesOfferingOutput, error) {
+	m.addCall("PurchaseReservedDBInstancesOffering")
+	m.verifyInput("PurchaseReservedDBInstancesOffering", param0)
+	return m.PurchaseReservedDBInstancesOfferingFunc(param0)
+}
+
+func (m *rdsMock) PurchaseReservedDBInstancesOfferingRequest(param0 *rds.PurchaseReservedDBInstancesOfferingInput) (*request.Request, *rds.PurchaseReservedDBInstancesOfferingOutput) {
+	m.addCall("PurchaseReservedDBInstancesOfferingRequest")
+	m.verifyInput("PurchaseReservedDBInstancesOfferingRequest", param0)
+	return m.PurchaseReservedDBInstancesOfferingRequestFunc(param0)
+}
+
+func (m *rdsMock) PurchaseReservedDBInstancesOfferingWithContext(param0 aws.Context, param1 *rds.PurchaseReservedDBInstancesOfferingInput, param2 ...request.Option) (*rds.PurchaseReservedDBInstancesOfferingOutput, error) {
+	m.addCall("PurchaseReservedDBInstancesOfferingWithContext")
+	m.verifyInput("PurchaseReservedDBInstancesOfferingWithContext", param0)
+	return m.PurchaseReservedDBInstancesOfferingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RebootDBInstance(param0 *rds.RebootDBInstanceInput) (*rds.RebootDBInstanceOutput, error) {
+	m.addCall("RebootDBInstance")
+	m.verifyInput("RebootDBInstance", param0)
+	return m.RebootDBInstanceFunc(param0)
+}
+
+func (m *rdsMock) RebootDBInstanceRequest(param0 *rds.RebootDBInstanceInput) (*request.Request, *rds.RebootDBInstanceOutput) {
+	m.addCall("RebootDBInstanceRequest")
+	m.verifyInput("RebootDBInstanceRequest", param0)
+	return m.RebootDBInstanceRequestFunc(param0)
+}
+
+func (m *rdsMock) RebootDBInstanceWithContext(param0 aws.Context, param1 *rds.RebootDBInstanceInput, param2 ...request.Option) (*rds.RebootDBInstanceOutput, error) {
+	m.addCall("RebootDBInstanceWithContext")
+	m.verifyInput("RebootDBInstanceWithContext", param0)
+	return m.RebootDBInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RemoveRoleFromDBCluster(param0 *rds.RemoveRoleFromDBClusterInput) (*rds.RemoveRoleFromDBClusterOutput, error) {
+	m.addCall("RemoveRoleFromDBCluster")
+	m.verifyInput("RemoveRoleFromDBCluster", param0)
+	return m.RemoveRoleFromDBClusterFunc(param0)
+}
+
+func (m *rdsMock) RemoveRoleFromDBClusterRequest(param0 *rds.RemoveRoleFromDBClusterInput) (*request.Request, *rds.RemoveRoleFromDBClusterOutput) {
+	m.addCall("RemoveRoleFromDBClusterRequest")
+	m.verifyInput("RemoveRoleFromDBClusterRequest", param0)
+	return m.RemoveRoleFromDBClusterRequestFunc(param0)
+}
+
+func (m *rdsMock) RemoveRoleFromDBClusterWithContext(param0 aws.Context, param1 *rds.RemoveRoleFromDBClusterInput, param2 ...request.Option) (*rds.RemoveRoleFromDBClusterOutput, error) {
+	m.addCall("RemoveRoleFromDBClusterWithContext")
+	m.verifyInput("RemoveRoleFromDBClusterWithContext", param0)
+	return m.RemoveRoleFromDBClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RemoveSourceIdentifierFromSubscription(param0 *rds.RemoveSourceIdentifierFromSubscriptionInput) (*rds.RemoveSourceIdentifierFromSubscriptionOutput, error) {
+	m.addCall("RemoveSourceIdentifierFromSubscription")
+	m.verifyInput("RemoveSourceIdentifierFromSubscription", param0)
+	return m.RemoveSourceIdentifierFromSubscriptionFunc(param0)
+}
+
+func (m *rdsMock) RemoveSourceIdentifierFromSubscriptionRequest(param0 *rds.RemoveSourceIdentifierFromSubscriptionInput) (*request.Request, *rds.RemoveSourceIdentifierFromSubscriptionOutput) {
+	m.addCall("RemoveSourceIdentifierFromSubscriptionRequest")
+	m.verifyInput("RemoveSourceIdentifierFromSubscriptionRequest", param0)
+	return m.RemoveSourceIdentifierFromSubscriptionRequestFunc(param0)
+}
+
+func (m *rdsMock) RemoveSourceIdentifierFromSubscriptionWithContext(param0 aws.Context, param1 *rds.RemoveSourceIdentifierFromSubscriptionInput, param2 ...request.Option) (*rds.RemoveSourceIdentifierFromSubscriptionOutput, error) {
+	m.addCall("RemoveSourceIdentifierFromSubscriptionWithContext")
+	m.verifyInput("RemoveSourceIdentifierFromSubscriptionWithContext", param0)
+	return m.RemoveSourceIdentifierFromSubscriptionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RemoveTagsFromResource(param0 *rds.RemoveTagsFromResourceInput) (*rds.RemoveTagsFromResourceOutput, error) {
+	m.addCall("RemoveTagsFromResource")
+	m.verifyInput("RemoveTagsFromResource", param0)
+	return m.RemoveTagsFromResourceFunc(param0)
+}
+
+func (m *rdsMock) RemoveTagsFromResourceRequest(param0 *rds.RemoveTagsFromResourceInput) (*request.Request, *rds.RemoveTagsFromResourceOutput) {
+	m.addCall("RemoveTagsFromResourceRequest")
+	m.verifyInput("RemoveTagsFromResourceRequest", param0)
+	return m.RemoveTagsFromResourceRequestFunc(param0)
+}
+
+func (m *rdsMock) RemoveTagsFromResourceWithContext(param0 aws.Context, param1 *rds.RemoveTagsFromResourceInput, param2 ...request.Option) (*rds.RemoveTagsFromResourceOutput, error) {
+	m.addCall("RemoveTagsFromResourceWithContext")
+	m.verifyInput("RemoveTagsFromResourceWithContext", param0)
+	return m.RemoveTagsFromResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ResetDBClusterParameterGroup(param0 *rds.ResetDBClusterParameterGroupInput) (*rds.DBClusterParameterGroupNameMessage, error) {
+	m.addCall("ResetDBClusterParameterGroup")
+	m.verifyInput("ResetDBClusterParameterGroup", param0)
+	return m.ResetDBClusterParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) ResetDBClusterParameterGroupRequest(param0 *rds.ResetDBClusterParameterGroupInput) (*request.Request, *rds.DBClusterParameterGroupNameMessage) {
+	m.addCall("ResetDBClusterParameterGroupRequest")
+	m.verifyInput("ResetDBClusterParameterGroupRequest", param0)
+	return m.ResetDBClusterParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) ResetDBClusterParameterGroupWithContext(param0 aws.Context, param1 *rds.ResetDBClusterParameterGroupInput, param2 ...request.Option) (*rds.DBClusterParameterGroupNameMessage, error) {
+	m.addCall("ResetDBClusterParameterGroupWithContext")
+	m.verifyInput("ResetDBClusterParameterGroupWithContext", param0)
+	return m.ResetDBClusterParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) ResetDBParameterGroup(param0 *rds.ResetDBParameterGroupInput) (*rds.DBParameterGroupNameMessage, error) {
+	m.addCall("ResetDBParameterGroup")
+	m.verifyInput("ResetDBParameterGroup", param0)
+	return m.ResetDBParameterGroupFunc(param0)
+}
+
+func (m *rdsMock) ResetDBParameterGroupRequest(param0 *rds.ResetDBParameterGroupInput) (*request.Request, *rds.DBParameterGroupNameMessage) {
+	m.addCall("ResetDBParameterGroupRequest")
+	m.verifyInput("ResetDBParameterGroupRequest", param0)
+	return m.ResetDBParameterGroupRequestFunc(param0)
+}
+
+func (m *rdsMock) ResetDBParameterGroupWithContext(param0 aws.Context, param1 *rds.ResetDBParameterGroupInput, param2 ...request.Option) (*rds.DBParameterGroupNameMessage, error) {
+	m.addCall("ResetDBParameterGroupWithContext")
+	m.verifyInput("ResetDBParameterGroupWithContext", param0)
+	return m.ResetDBParameterGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RestoreDBClusterFromS3(param0 *rds.RestoreDBClusterFromS3Input) (*rds.RestoreDBClusterFromS3Output, error) {
+	m.addCall("RestoreDBClusterFromS3")
+	m.verifyInput("RestoreDBClusterFromS3", param0)
+	return m.RestoreDBClusterFromS3Func(param0)
+}
+
+func (m *rdsMock) RestoreDBClusterFromS3Request(param0 *rds.RestoreDBClusterFromS3Input) (*request.Request, *rds.RestoreDBClusterFromS3Output) {
+	m.addCall("RestoreDBClusterFromS3Request")
+	m.verifyInput("RestoreDBClusterFromS3Request", param0)
+	return m.RestoreDBClusterFromS3RequestFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBClusterFromS3WithContext(param0 aws.Context, param1 *rds.RestoreDBClusterFromS3Input, param2 ...request.Option) (*rds.RestoreDBClusterFromS3Output, error) {
+	m.addCall("RestoreDBClusterFromS3WithContext")
+	m.verifyInput("RestoreDBClusterFromS3WithContext", param0)
+	return m.RestoreDBClusterFromS3WithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RestoreDBClusterFromSnapshot(param0 *rds.RestoreDBClusterFromSnapshotInput) (*rds.RestoreDBClusterFromSnapshotOutput, error) {
+	m.addCall("RestoreDBClusterFromSnapshot")
+	m.verifyInput("RestoreDBClusterFromSnapshot", param0)
+	return m.RestoreDBClusterFromSnapshotFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBClusterFromSnapshotRequest(param0 *rds.RestoreDBClusterFromSnapshotInput) (*request.Request, *rds.RestoreDBClusterFromSnapshotOutput) {
+	m.addCall("RestoreDBClusterFromSnapshotRequest")
+	m.verifyInput("RestoreDBClusterFromSnapshotRequest", param0)
+	return m.RestoreDBClusterFromSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBClusterFromSnapshotWithContext(param0 aws.Context, param1 *rds.RestoreDBClusterFromSnapshotInput, param2 ...request.Option) (*rds.RestoreDBClusterFromSnapshotOutput, error) {
+	m.addCall("RestoreDBClusterFromSnapshotWithContext")
+	m.verifyInput("RestoreDBClusterFromSnapshotWithContext", param0)
+	return m.RestoreDBClusterFromSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RestoreDBClusterToPointInTime(param0 *rds.RestoreDBClusterToPointInTimeInput) (*rds.RestoreDBClusterToPointInTimeOutput, error) {
+	m.addCall("RestoreDBClusterToPointInTime")
+	m.verifyInput("RestoreDBClusterToPointInTime", param0)
+	return m.RestoreDBClusterToPointInTimeFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBClusterToPointInTimeRequest(param0 *rds.RestoreDBClusterToPointInTimeInput) (*request.Request, *rds.RestoreDBClusterToPointInTimeOutput) {
+	m.addCall("RestoreDBClusterToPointInTimeRequest")
+	m.verifyInput("RestoreDBClusterToPointInTimeRequest", param0)
+	return m.RestoreDBClusterToPointInTimeRequestFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBClusterToPointInTimeWithContext(param0 aws.Context, param1 *rds.RestoreDBClusterToPointInTimeInput, param2 ...request.Option) (*rds.RestoreDBClusterToPointInTimeOutput, error) {
+	m.addCall("RestoreDBClusterToPointInTimeWithContext")
+	m.verifyInput("RestoreDBClusterToPointInTimeWithContext", param0)
+	return m.RestoreDBClusterToPointInTimeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RestoreDBInstanceFromDBSnapshot(param0 *rds.RestoreDBInstanceFromDBSnapshotInput) (*rds.RestoreDBInstanceFromDBSnapshotOutput, error) {
+	m.addCall("RestoreDBInstanceFromDBSnapshot")
+	m.verifyInput("RestoreDBInstanceFromDBSnapshot", param0)
+	return m.RestoreDBInstanceFromDBSnapshotFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBInstanceFromDBSnapshotRequest(param0 *rds.RestoreDBInstanceFromDBSnapshotInput) (*request.Request, *rds.RestoreDBInstanceFromDBSnapshotOutput) {
+	m.addCall("RestoreDBInstanceFromDBSnapshotRequest")
+	m.verifyInput("RestoreDBInstanceFromDBSnapshotRequest", param0)
+	return m.RestoreDBInstanceFromDBSnapshotRequestFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBInstanceFromDBSnapshotWithContext(param0 aws.Context, param1 *rds.RestoreDBInstanceFromDBSnapshotInput, param2 ...request.Option) (*rds.RestoreDBInstanceFromDBSnapshotOutput, error) {
+	m.addCall("RestoreDBInstanceFromDBSnapshotWithContext")
+	m.verifyInput("RestoreDBInstanceFromDBSnapshotWithContext", param0)
+	return m.RestoreDBInstanceFromDBSnapshotWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RestoreDBInstanceToPointInTime(param0 *rds.RestoreDBInstanceToPointInTimeInput) (*rds.RestoreDBInstanceToPointInTimeOutput, error) {
+	m.addCall("RestoreDBInstanceToPointInTime")
+	m.verifyInput("RestoreDBInstanceToPointInTime", param0)
+	return m.RestoreDBInstanceToPointInTimeFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBInstanceToPointInTimeRequest(param0 *rds.RestoreDBInstanceToPointInTimeInput) (*request.Request, *rds.RestoreDBInstanceToPointInTimeOutput) {
+	m.addCall("RestoreDBInstanceToPointInTimeRequest")
+	m.verifyInput("RestoreDBInstanceToPointInTimeRequest", param0)
+	return m.RestoreDBInstanceToPointInTimeRequestFunc(param0)
+}
+
+func (m *rdsMock) RestoreDBInstanceToPointInTimeWithContext(param0 aws.Context, param1 *rds.RestoreDBInstanceToPointInTimeInput, param2 ...request.Option) (*rds.RestoreDBInstanceToPointInTimeOutput, error) {
+	m.addCall("RestoreDBInstanceToPointInTimeWithContext")
+	m.verifyInput("RestoreDBInstanceToPointInTimeWithContext", param0)
+	return m.RestoreDBInstanceToPointInTimeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) RevokeDBSecurityGroupIngress(param0 *rds.RevokeDBSecurityGroupIngressInput) (*rds.RevokeDBSecurityGroupIngressOutput, error) {
+	m.addCall("RevokeDBSecurityGroupIngress")
+	m.verifyInput("RevokeDBSecurityGroupIngress", param0)
+	return m.RevokeDBSecurityGroupIngressFunc(param0)
+}
+
+func (m *rdsMock) RevokeDBSecurityGroupIngressRequest(param0 *rds.RevokeDBSecurityGroupIngressInput) (*request.Request, *rds.RevokeDBSecurityGroupIngressOutput) {
+	m.addCall("RevokeDBSecurityGroupIngressRequest")
+	m.verifyInput("RevokeDBSecurityGroupIngressRequest", param0)
+	return m.RevokeDBSecurityGroupIngressRequestFunc(param0)
+}
+
+func (m *rdsMock) RevokeDBSecurityGroupIngressWithContext(param0 aws.Context, param1 *rds.RevokeDBSecurityGroupIngressInput, param2 ...request.Option) (*rds.RevokeDBSecurityGroupIngressOutput, error) {
+	m.addCall("RevokeDBSecurityGroupIngressWithContext")
+	m.verifyInput("RevokeDBSecurityGroupIngressWithContext", param0)
+	return m.RevokeDBSecurityGroupIngressWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) StartDBInstance(param0 *rds.StartDBInstanceInput) (*rds.StartDBInstanceOutput, error) {
+	m.addCall("StartDBInstance")
+	m.verifyInput("StartDBInstance", param0)
+	return m.StartDBInstanceFunc(param0)
+}
+
+func (m *rdsMock) StartDBInstanceRequest(param0 *rds.StartDBInstanceInput) (*request.Request, *rds.StartDBInstanceOutput) {
+	m.addCall("StartDBInstanceRequest")
+	m.verifyInput("StartDBInstanceRequest", param0)
+	return m.StartDBInstanceRequestFunc(param0)
+}
+
+func (m *rdsMock) StartDBInstanceWithContext(param0 aws.Context, param1 *rds.StartDBInstanceInput, param2 ...request.Option) (*rds.StartDBInstanceOutput, error) {
+	m.addCall("StartDBInstanceWithContext")
+	m.verifyInput("StartDBInstanceWithContext", param0)
+	return m.StartDBInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) StopDBInstance(param0 *rds.StopDBInstanceInput) (*rds.StopDBInstanceOutput, error) {
+	m.addCall("StopDBInstance")
+	m.verifyInput("StopDBInstance", param0)
+	return m.StopDBInstanceFunc(param0)
+}
+
+func (m *rdsMock) StopDBInstanceRequest(param0 *rds.StopDBInstanceInput) (*request.Request, *rds.StopDBInstanceOutput) {
+	m.addCall("StopDBInstanceRequest")
+	m.verifyInput("StopDBInstanceRequest", param0)
+	return m.StopDBInstanceRequestFunc(param0)
+}
+
+func (m *rdsMock) StopDBInstanceWithContext(param0 aws.Context, param1 *rds.StopDBInstanceInput, param2 ...request.Option) (*rds.StopDBInstanceOutput, error) {
+	m.addCall("StopDBInstanceWithContext")
+	m.verifyInput("StopDBInstanceWithContext", param0)
+	return m.StopDBInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) WaitUntilDBInstanceAvailable(param0 *rds.DescribeDBInstancesInput) error {
+	m.addCall("WaitUntilDBInstanceAvailable")
+	m.verifyInput("WaitUntilDBInstanceAvailable", param0)
+	return m.WaitUntilDBInstanceAvailableFunc(param0)
+}
+
+func (m *rdsMock) WaitUntilDBInstanceAvailableWithContext(param0 aws.Context, param1 *rds.DescribeDBInstancesInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilDBInstanceAvailableWithContext")
+	m.verifyInput("WaitUntilDBInstanceAvailableWithContext", param0)
+	return m.WaitUntilDBInstanceAvailableWithContextFunc(param0, param1, param2...)
+}
+
+func (m *rdsMock) WaitUntilDBInstanceDeleted(param0 *rds.DescribeDBInstancesInput) error {
+	m.addCall("WaitUntilDBInstanceDeleted")
+	m.verifyInput("WaitUntilDBInstanceDeleted", param0)
+	return m.WaitUntilDBInstanceDeletedFunc(param0)
+}
+
+func (m *rdsMock) WaitUntilDBInstanceDeletedWithContext(param0 aws.Context, param1 *rds.DescribeDBInstancesInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilDBInstanceDeletedWithContext")
+	m.verifyInput("WaitUntilDBInstanceDeletedWithContext", param0)
+	return m.WaitUntilDBInstanceDeletedWithContextFunc(param0, param1, param2...)
 }
 
 type route53Mock struct {

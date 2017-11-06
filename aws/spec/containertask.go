@@ -203,7 +203,7 @@ type AttachContainertask struct {
 	ContainerName   *string   `templateName:"container-name" required:""`
 	Image           *string   `templateName:"image" required:""`
 	MemoryHardLimit *int64    `templateName:"memory-hard-limit" required:""`
-	Commands         []*string `templateName:"command"`
+	Commands        []*string `templateName:"command"`
 	Env             []*string `templateName:"env"`
 	Privileged      *bool     `templateName:"privileged"`
 	Workdir         *string   `templateName:"workdir"`

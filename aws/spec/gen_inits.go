@@ -53,6 +53,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachVolume(f.Sess, f.Log) }
 	case "checkcertificate":
 		return func() interface{} { return NewCheckCertificate(f.Sess, f.Log) }
+	case "checkdatabase":
+		return func() interface{} { return NewCheckDatabase(f.Sess, f.Log) }
 	case "checkinstance":
 		return func() interface{} { return NewCheckInstance(f.Sess, f.Log) }
 	case "checksecuritygroup":
@@ -73,6 +75,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateCertificate(f.Sess, f.Log) }
 	case "createcontainercluster":
 		return func() interface{} { return NewCreateContainercluster(f.Sess, f.Log) }
+	case "createdatabase":
+		return func() interface{} { return NewCreateDatabase(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -119,6 +123,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteContainercluster(f.Sess, f.Log) }
 	case "deletecontainertask":
 		return func() interface{} { return NewDeleteContainertask(f.Sess, f.Log) }
+	case "deletedatabase":
+		return func() interface{} { return NewDeleteDatabase(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -197,6 +203,7 @@ var (
 	_ command = &AttachUser{}
 	_ command = &AttachVolume{}
 	_ command = &CheckCertificate{}
+	_ command = &CheckDatabase{}
 	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CheckVolume{}
@@ -207,6 +214,7 @@ var (
 	_ command = &CreateBucket{}
 	_ command = &CreateCertificate{}
 	_ command = &CreateContainercluster{}
+	_ command = &CreateDatabase{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -230,6 +238,7 @@ var (
 	_ command = &DeleteCertificate{}
 	_ command = &DeleteContainercluster{}
 	_ command = &DeleteContainertask{}
+	_ command = &DeleteDatabase{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}

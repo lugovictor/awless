@@ -36,6 +36,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/rds"
+	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -756,6 +758,74 @@ func (cmd *CheckCertificate) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCheckDatabase(sess *session.Session, l ...*logger.Logger) *CheckDatabase {
+	cmd := new(CheckDatabase)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = rds.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckDatabase) SetApi(api rdsiface.RDSAPI) {
+	cmd.api = api
+}
+
+func (cmd *CheckDatabase) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckDatabase) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckDatabase) ParamsHelp() string {
+	return generateParamsHelp("checkdatabase", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckDatabase) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCheckInstance(sess *session.Session, l ...*logger.Logger) *CheckInstance {
 	cmd := new(CheckInstance)
 	if len(l) > 0 {
@@ -1469,6 +1539,80 @@ func (cmd *CreateContainercluster) ParamsHelp() string {
 }
 
 func (cmd *CreateContainercluster) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateDatabase(sess *session.Session, l ...*logger.Logger) *CreateDatabase {
+	cmd := new(CreateDatabase)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = rds.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateDatabase) SetApi(api rdsiface.RDSAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateDatabase) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &rds.CreateDBInstanceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in rds.CreateDBInstanceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateDBInstance(input)
+	cmd.logger.ExtraVerbosef("rds.CreateDBInstance call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateDatabase) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateDatabase) ParamsHelp() string {
+	return generateParamsHelp("createdatabase", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateDatabase) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -3359,6 +3503,80 @@ func (cmd *DeleteContainertask) ParamsHelp() string {
 }
 
 func (cmd *DeleteContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteDatabase(sess *session.Session, l ...*logger.Logger) *DeleteDatabase {
+	cmd := new(DeleteDatabase)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = rds.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteDatabase) SetApi(api rdsiface.RDSAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteDatabase) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &rds.DeleteDBInstanceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in rds.DeleteDBInstanceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteDBInstance(input)
+	cmd.logger.ExtraVerbosef("rds.DeleteDBInstance call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteDatabase) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteDatabase) ParamsHelp() string {
+	return generateParamsHelp("deletedatabase", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteDatabase) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

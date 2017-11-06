@@ -33,6 +33,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/rds"
+	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -155,6 +157,9 @@ var (
 	newDetachPolicy    = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachUser      = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdatePolicy    = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCheckDatabase   = func() *CheckDatabase { return &CheckDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
+	newCreateDatabase  = func() *CreateDatabase { return &CreateDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
+	newDeleteDatabase  = func() *DeleteDatabase { return &DeleteDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
 	newCreateZone      = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newDeleteZone      = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newCreateBucket    = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
@@ -181,6 +186,9 @@ type mockEcs struct {
 }
 type mockIam struct {
 	iamiface.IAMAPI
+}
+type mockRds struct {
+	rdsiface.RDSAPI
 }
 type mockRoute53 struct {
 	route53iface.Route53API
@@ -668,6 +676,26 @@ func (m *mockIam) CreatePolicyVersion(input *iam.CreatePolicyVersionInput) (*iam
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["updatepolicy"]; ok {
 		return outFunc().(*iam.CreatePolicyVersionOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockRds) CreateDBInstance(input *rds.CreateDBInstanceInput) (*rds.CreateDBInstanceOutput, error) {
+	if got, want := input, genTestsExpected["createdatabase"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createdatabase"]; ok {
+		return outFunc().(*rds.CreateDBInstanceOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockRds) DeleteDBInstance(input *rds.DeleteDBInstanceInput) (*rds.DeleteDBInstanceOutput, error) {
+	if got, want := input, genTestsExpected["deletedatabase"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletedatabase"]; ok {
+		return outFunc().(*rds.DeleteDBInstanceOutput), nil
 	}
 	return nil, nil
 }
