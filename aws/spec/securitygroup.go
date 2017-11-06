@@ -85,7 +85,7 @@ func (cmd *UpdateSecuritygroup) ValidateOutbound() error {
 	return NewEnumValidator("authorize", "revoke").Validate(cmd.Outbound)
 }
 
-func (cmd *UpdateSecuritygroup) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *UpdateSecuritygroup) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	ipPerms, err := cmd.buildIpPermissions()
 	if err != nil {
 		return nil, err
@@ -169,7 +169,7 @@ func (cmd *CheckSecuritygroup) ValidateState() error {
 	return NewEnumValidator("unused").Validate(cmd.State)
 }
 
-func (cmd *CheckSecuritygroup) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *CheckSecuritygroup) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	input := &ec2.DescribeNetworkInterfacesInput{
 		Filters: []*ec2.Filter{
 			{Name: String("group-id"), Values: []*string{cmd.Id}},
@@ -194,7 +194,7 @@ func (cmd *CheckSecuritygroup) ManualRun(ctx, params map[string]interface{}) (in
 			}
 			return fmt.Sprintf("used by %s", strings.Join(niIds, ", ")), nil
 		},
-		expect: fmt.Sprint(params["state"]),
+		expect: StringValue(cmd.State),
 		logger: cmd.logger,
 	}
 	return nil, c.check()
@@ -212,7 +212,7 @@ func (cmd *AttachSecuritygroup) ValidateParams(params []string) ([]string, error
 	return validateParams(cmd, params)
 }
 
-func (cmd *AttachSecuritygroup) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *AttachSecuritygroup) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	start := time.Now()
 	groups, err := fetchInstanceSecurityGroups(cmd.api, StringValue(cmd.Instance))
 	if err != nil {
@@ -246,7 +246,7 @@ func (cmd *DetachSecuritygroup) ValidateParams(params []string) ([]string, error
 	return validateParams(cmd, params)
 }
 
-func (cmd *DetachSecuritygroup) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *DetachSecuritygroup) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	start := time.Now()
 	groups, err := fetchInstanceSecurityGroups(cmd.api, StringValue(cmd.Instance))
 	if err != nil {

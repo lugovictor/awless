@@ -58,7 +58,7 @@ func (cmd *CheckVolume) ValidateState() error {
 	return NewEnumValidator("available", "in-use", notFoundState).Validate(cmd.State)
 }
 
-func (cmd *CheckVolume) ManualRun(ctx, params map[string]interface{}) ([]string, error) {
+func (cmd *CheckVolume) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	input := &ec2.DescribeVolumesInput{VolumeIds: []*string{cmd.Id}}
 
 	c := &checker{

@@ -20,7 +20,7 @@ const (
 )
 
 type BeforeRunner interface {
-	BeforeRun(ctx, params map[string]interface{}) error
+	BeforeRun(ctx map[string]interface{}) error
 }
 
 type AfterRunner interface {

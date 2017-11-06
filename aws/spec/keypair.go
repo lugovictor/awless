@@ -56,7 +56,7 @@ func (cmd *CreateKeypair) ValidateName() error {
 	return nil
 }
 
-func (cmd *CreateKeypair) BeforeRun(ctx, params map[string]interface{}) error {
+func (cmd *CreateKeypair) BeforeRun(ctx map[string]interface{}) error {
 	var encryptedMsg string
 	var encrypted bool
 

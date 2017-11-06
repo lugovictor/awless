@@ -39,7 +39,7 @@ func (cmd *CreateCertificate) ValidateParams(params []string) ([]string, error) 
 	return validateParams(cmd, params)
 }
 
-func (cmd *CreateCertificate) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *CreateCertificate) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	input := &acm.RequestCertificateInput{}
 	domains := awssdk.StringValueSlice(cmd.Domains)
 	if len(domains) == 0 {
@@ -64,7 +64,7 @@ func (cmd *CreateCertificate) ManualRun(ctx, params map[string]interface{}) (int
 		validation := awssdk.StringValueSlice(cmd.ValidationDomains)
 		for i, validationDomain := range validation {
 			if i >= len(domains) {
-				return nil, fmt.Errorf("there is more validation-domains than certificate domains: %v", params["validation-domains"])
+				return nil, fmt.Errorf("there is more validation-domains than certificate domains: %v", validation)
 			}
 			domainsToValidate[domains[i]] = validationDomain
 			validationOptions = append(validationOptions, &acm.DomainValidationOption{DomainName: String(domains[i]), ValidationDomain: String(validationDomain)})
@@ -123,14 +123,18 @@ func (cmd *CheckCertificate) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *CheckCertificate) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *CheckCertificate) ValidateState() error {
+	return NewEnumValidator("issued", "pending_validation", notFoundState).Validate(cmd.State)
+}
+
+func (cmd *CheckCertificate) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	input := &acm.DescribeCertificateInput{
 		CertificateArn: cmd.Arn,
 	}
 
 	c := &checker{
 		description: fmt.Sprintf("certificate %s", StringValue(cmd.Arn)),
-		timeout:     time.Duration(params["timeout"].(int)) * time.Second,
+		timeout:     time.Duration(Int64AsIntValue(cmd.Timeout)) * time.Second,
 		frequency:   5 * time.Second,
 		fetchFunc: func() (string, error) {
 			output, err := cmd.api.DescribeCertificate(input)
@@ -152,8 +156,4 @@ func (cmd *CheckCertificate) ManualRun(ctx, params map[string]interface{}) (inte
 		logger: cmd.logger,
 	}
 	return nil, c.check()
-}
-
-func (cmd *CheckCertificate) ValidateState() error {
-	return NewEnumValidator("issued", "pending_validation", notFoundState).Validate(cmd.State)
 }

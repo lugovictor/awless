@@ -103,12 +103,12 @@ func (cmd *AttachAlarm) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *AttachAlarm) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
-	alarm, err := getAlarm(cmd.api, params)
+func (cmd *AttachAlarm) ManualRun(ctx map[string]interface{}) (interface{}, error) {
+	alarm, err := getAlarm(cmd.api, cmd.Name)
 	if err != nil {
 		return nil, fmt.Errorf("attach alarm: %s", err)
 	}
-	alarm.AlarmActions = append(alarm.AlarmActions, aws.String(params["action-arn"].(string)))
+	alarm.AlarmActions = append(alarm.AlarmActions, cmd.ActionArn)
 
 	return cmd.api.PutMetricAlarm(&cloudwatch.PutMetricAlarmInput{
 		ActionsEnabled:                   alarm.ActionsEnabled,
@@ -144,12 +144,12 @@ func (cmd *DetachAlarm) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *DetachAlarm) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
-	alarm, err := getAlarm(cmd.api, params)
+func (cmd *DetachAlarm) ManualRun(ctx map[string]interface{}) (interface{}, error) {
+	alarm, err := getAlarm(cmd.api, cmd.Name)
 	if err != nil {
 		return nil, fmt.Errorf("detach alarm: %s", err)
 	}
-	actionArn := params["action-arn"].(string)
+	actionArn := aws.StringValue(cmd.ActionArn)
 	var found bool
 	var updatedActions []*string
 	for _, action := range alarm.AlarmActions {
@@ -185,19 +185,18 @@ func (cmd *DetachAlarm) ManualRun(ctx, params map[string]interface{}) (interface
 	})
 }
 
-func getAlarm(api cloudwatchiface.CloudWatchAPI, params map[string]interface{}) (*cloudwatch.MetricAlarm, error) {
-	alarm, ok := params["name"].(string)
-	if !ok {
+func getAlarm(api cloudwatchiface.CloudWatchAPI, name *string) (*cloudwatch.MetricAlarm, error) {
+	if name == nil {
 		return nil, errors.New("missing required params 'name'")
 	}
-	out, err := api.DescribeAlarms(&cloudwatch.DescribeAlarmsInput{AlarmNames: []*string{aws.String(alarm)}})
+	out, err := api.DescribeAlarms(&cloudwatch.DescribeAlarmsInput{AlarmNames: []*string{name}})
 	if err != nil {
 		return nil, err
 	}
 	if l := len(out.MetricAlarms); l == 0 {
-		return nil, fmt.Errorf("alarm '%s' not found", alarm)
+		return nil, fmt.Errorf("alarm '%s' not found", StringValue(name))
 	} else if l > 1 {
-		return nil, fmt.Errorf("%d alarms found with name '%s'", l, alarm)
+		return nil, fmt.Errorf("%d alarms found with name '%s'", l, StringValue(name))
 	}
 	return out.MetricAlarms[0], nil
 }

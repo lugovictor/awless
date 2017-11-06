@@ -41,8 +41,8 @@ type CreatePolicy struct {
 	api         iamiface.IAMAPI
 	Name        *string   `awsName:"PolicyName" awsType:"awsstr" templateName:"name" required:""`
 	Effect      *string   `templateName:"effect" required:""`
-	Action      *string   `templateName:"action" required:""`
-	Resource    *string   `templateName:"resource" required:""`
+	Action      []*string `templateName:"action" required:""`
+	Resource    []*string `templateName:"resource" required:""`
 	Description *string   `awsName:"Description" awsType:"awsstr" templateName:"description"`
 	Document    *string   `awsName:"PolicyDocument" awsType:"awsstr"`
 	Conditions  []*string `templateName:"conditions"`
@@ -52,8 +52,8 @@ func (cmd *CreatePolicy) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *CreatePolicy) BeforeRun(ctx, params map[string]interface{}) error {
-	stat, err := buildStatementFromParams(params)
+func (cmd *CreatePolicy) BeforeRun(ctx map[string]interface{}) error {
+	stat, err := buildStatementFromParams(cmd.Effect, cmd.Resource, cmd.Action, cmd.Conditions)
 	if err != nil {
 		return err
 	}
@@ -81,8 +81,8 @@ type UpdatePolicy struct {
 	api            iamiface.IAMAPI
 	Arn            *string   `awsName:"PolicyArn" awsType:"awsstr" templateName:"arn" required:""`
 	Effect         *string   `templateName:"effect" required:""`
-	Action         *string   `templateName:"action" required:""`
-	Resource       *string   `templateName:"resource" required:""`
+	Action         []*string `templateName:"action" required:""`
+	Resource       []*string `templateName:"resource" required:""`
 	Conditions     []*string `templateName:"conditions"`
 	Document       *string   `awsName:"PolicyDocument" awsType:"awsstr"`
 	DefaultVersion *bool     `awsName:"SetAsDefault" awsType:"awsbool"`
@@ -92,7 +92,7 @@ func (cmd *UpdatePolicy) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *UpdatePolicy) BeforeRun(ctx, params map[string]interface{}) error {
+func (cmd *UpdatePolicy) BeforeRun(ctx map[string]interface{}) error {
 	document, err := cmd.getPolicyLastVersionDocument(cmd.Arn)
 	if err != nil {
 		return err
@@ -106,7 +106,7 @@ func (cmd *UpdatePolicy) BeforeRun(ctx, params map[string]interface{}) error {
 	if err = json.Unmarshal([]byte(document), &defaultPolicyDocument); err != nil {
 		return err
 	}
-	stat, err := buildStatementFromParams(params)
+	stat, err := buildStatementFromParams(cmd.Effect, cmd.Resource, cmd.Action, cmd.Conditions)
 	if err != nil {
 		return err
 	}
@@ -171,7 +171,7 @@ func (cmd *DeletePolicy) ValidateParams(params []string) ([]string, error) {
 	return validateParams(cmd, params)
 }
 
-func (cmd *DeletePolicy) BeforeRun(ctx, params map[string]interface{}) error {
+func (cmd *DeletePolicy) BeforeRun(ctx map[string]interface{}) error {
 	if BoolValue(cmd.AllVersions) {
 		list, err := cmd.api.ListPolicyVersions(&iam.ListPolicyVersionsInput{PolicyArn: cmd.Arn})
 		if err != nil {
@@ -233,7 +233,7 @@ func (cmd *AttachPolicy) ManualValidateCommand(params map[string]interface{}, re
 	return
 }
 
-func (cmd *AttachPolicy) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *AttachPolicy) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	start := time.Now()
 	switch {
 	case cmd.User != nil:
@@ -313,7 +313,7 @@ func (cmd *DetachPolicy) ManualValidateCommand(params map[string]interface{}, re
 	return
 }
 
-func (cmd *DetachPolicy) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *DetachPolicy) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	start := time.Now()
 	switch {
 	case cmd.User != nil:
@@ -373,11 +373,9 @@ type policyCondition struct {
 	Value string
 }
 
-func buildStatementFromParams(params map[string]interface{}) (*policyStatement, error) {
-	effect, _ := params["effect"].(string)
-
-	stat := &policyStatement{Effect: strings.Title(effect)}
-	if resource, ok := params["resource"]; ok {
+func buildStatementFromParams(effect *string, resource, action, condition []*string) (*policyStatement, error) {
+	stat := &policyStatement{Effect: strings.Title(StringValue(effect))}
+	if resource != nil {
 		res := castStringSlice(resource)
 		if len(res) == 1 && res[0] == "all" {
 			res[0] = "*"
@@ -385,11 +383,11 @@ func buildStatementFromParams(params map[string]interface{}) (*policyStatement, 
 		stat.Resources = res
 	}
 
-	if actions, ok := params["action"]; ok {
-		stat.Actions = castStringSlice(actions)
+	if action != nil {
+		stat.Actions = castStringSlice(action)
 	}
-	if conditions, ok := params["conditions"]; ok {
-		condStr := castStringSlice(conditions)
+	if condition != nil {
+		condStr := castStringSlice(condition)
 		for _, str := range condStr {
 			cond, err := parseCondition(str)
 			if err != nil {

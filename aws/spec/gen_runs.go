@@ -66,12 +66,12 @@ func (cmd *AttachAlarm) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func (cmd *AttachInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -233,12 +233,12 @@ func (cmd *AttachPolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -301,7 +301,7 @@ func (cmd *AttachRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -400,12 +400,12 @@ func (cmd *AttachSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -468,7 +468,7 @@ func (cmd *AttachUser) Run(ctx, params map[string]interface{}) (interface{}, err
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -542,7 +542,7 @@ func (cmd *AttachVolume) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -641,12 +641,12 @@ func (cmd *CheckCertificate) Run(ctx, params map[string]interface{}) (interface{
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -709,12 +709,12 @@ func (cmd *CheckInstance) Run(ctx, params map[string]interface{}) (interface{}, 
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -777,12 +777,12 @@ func (cmd *CheckSecuritygroup) Run(ctx, params map[string]interface{}) (interfac
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -845,12 +845,12 @@ func (cmd *CheckVolume) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -913,7 +913,7 @@ func (cmd *CreateAccesskey) Run(ctx, params map[string]interface{}) (interface{}
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -987,7 +987,7 @@ func (cmd *CreateAlarm) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1061,7 +1061,7 @@ func (cmd *CreateAppscalingpolicy) Run(ctx, params map[string]interface{}) (inte
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1135,7 +1135,7 @@ func (cmd *CreateAppscalingtarget) Run(ctx, params map[string]interface{}) (inte
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1209,7 +1209,7 @@ func (cmd *CreateBucket) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1283,12 +1283,12 @@ func (cmd *CreateCertificate) Run(ctx, params map[string]interface{}) (interface
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -1351,7 +1351,7 @@ func (cmd *CreateGroup) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1425,7 +1425,7 @@ func (cmd *CreateInstance) Run(ctx, params map[string]interface{}) (interface{},
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1524,7 +1524,7 @@ func (cmd *CreateInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1623,7 +1623,7 @@ func (cmd *CreateKeypair) Run(ctx, params map[string]interface{}) (interface{}, 
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1697,7 +1697,7 @@ func (cmd *CreatePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1771,7 +1771,7 @@ func (cmd *CreateRoute) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1870,7 +1870,7 @@ func (cmd *CreateRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -1969,7 +1969,7 @@ func (cmd *CreateSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2068,7 +2068,7 @@ func (cmd *CreateSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2167,12 +2167,12 @@ func (cmd *CreateTag) Run(ctx, params map[string]interface{}) (interface{}, erro
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -2235,7 +2235,7 @@ func (cmd *CreateTopic) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2309,7 +2309,7 @@ func (cmd *CreateUser) Run(ctx, params map[string]interface{}) (interface{}, err
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2383,7 +2383,7 @@ func (cmd *CreateVolume) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2482,7 +2482,7 @@ func (cmd *CreateVpc) Run(ctx, params map[string]interface{}) (interface{}, erro
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2581,7 +2581,7 @@ func (cmd *CreateZone) Run(ctx, params map[string]interface{}) (interface{}, err
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2655,7 +2655,7 @@ func (cmd *DeleteAccesskey) Run(ctx, params map[string]interface{}) (interface{}
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2729,7 +2729,7 @@ func (cmd *DeleteAlarm) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2803,7 +2803,7 @@ func (cmd *DeleteAppscalingpolicy) Run(ctx, params map[string]interface{}) (inte
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2877,7 +2877,7 @@ func (cmd *DeleteAppscalingtarget) Run(ctx, params map[string]interface{}) (inte
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -2951,7 +2951,7 @@ func (cmd *DeleteBucket) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3025,7 +3025,7 @@ func (cmd *DeleteCertificate) Run(ctx, params map[string]interface{}) (interface
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3099,7 +3099,7 @@ func (cmd *DeleteGroup) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3173,7 +3173,7 @@ func (cmd *DeleteInstance) Run(ctx, params map[string]interface{}) (interface{},
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3272,7 +3272,7 @@ func (cmd *DeleteInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3371,7 +3371,7 @@ func (cmd *DeleteKeypair) Run(ctx, params map[string]interface{}) (interface{}, 
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3470,7 +3470,7 @@ func (cmd *DeletePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3544,7 +3544,7 @@ func (cmd *DeleteRoute) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3643,7 +3643,7 @@ func (cmd *DeleteRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3742,7 +3742,7 @@ func (cmd *DeleteSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3841,7 +3841,7 @@ func (cmd *DeleteSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -3940,12 +3940,12 @@ func (cmd *DeleteTag) Run(ctx, params map[string]interface{}) (interface{}, erro
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -4008,7 +4008,7 @@ func (cmd *DeleteTopic) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4082,7 +4082,7 @@ func (cmd *DeleteUser) Run(ctx, params map[string]interface{}) (interface{}, err
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4156,7 +4156,7 @@ func (cmd *DeleteVolume) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4255,7 +4255,7 @@ func (cmd *DeleteVpc) Run(ctx, params map[string]interface{}) (interface{}, erro
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4354,7 +4354,7 @@ func (cmd *DeleteZone) Run(ctx, params map[string]interface{}) (interface{}, err
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4428,12 +4428,12 @@ func (cmd *DetachAlarm) Run(ctx, params map[string]interface{}) (interface{}, er
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -4496,7 +4496,7 @@ func (cmd *DetachInternetgateway) Run(ctx, params map[string]interface{}) (inter
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4595,12 +4595,12 @@ func (cmd *DetachPolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -4663,7 +4663,7 @@ func (cmd *DetachRoutetable) Run(ctx, params map[string]interface{}) (interface{
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4762,12 +4762,12 @@ func (cmd *DetachSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -4830,7 +4830,7 @@ func (cmd *DetachUser) Run(ctx, params map[string]interface{}) (interface{}, err
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -4904,7 +4904,7 @@ func (cmd *DetachVolume) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -5003,7 +5003,7 @@ func (cmd *StartAlarm) Run(ctx, params map[string]interface{}) (interface{}, err
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -5077,7 +5077,7 @@ func (cmd *StopAlarm) Run(ctx, params map[string]interface{}) (interface{}, erro
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -5151,12 +5151,12 @@ func (cmd *UpdateBucket) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -5219,7 +5219,7 @@ func (cmd *UpdatePolicy) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -5293,12 +5293,12 @@ func (cmd *UpdateSecuritygroup) Run(ctx, params map[string]interface{}) (interfa
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
 
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -5361,7 +5361,7 @@ func (cmd *UpdateSubnet) Run(ctx, params map[string]interface{}) (interface{}, e
 	}
 
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}

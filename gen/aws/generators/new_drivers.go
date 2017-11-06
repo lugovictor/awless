@@ -186,7 +186,7 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	}
 	
 	if v, ok := implementsBeforeRun(cmd); ok {
-		if brErr := v.BeforeRun(ctx, params); brErr != nil {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
 			return nil, fmt.Errorf("before run: %s", brErr)
 		}
 	}
@@ -204,7 +204,7 @@ func (cmd *{{ $cmdName }}) Run(ctx, params map[string]interface{}) (interface{},
 	}
 	{{- else }}
 	
-	output, err := cmd.ManualRun(ctx, params)
+	output, err := cmd.ManualRun(ctx)
 	if err != nil {
 		return nil, err
 	}

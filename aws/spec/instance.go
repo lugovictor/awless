@@ -97,7 +97,7 @@ func (cmd *CheckInstance) ValidateState() error {
 	return NewEnumValidator("pending", "running", "shutting-down", "terminated", "stopping", "stopped", notFoundState).Validate(cmd.State)
 }
 
-func (cmd *CheckInstance) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *CheckInstance) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	input := &ec2.DescribeInstancesInput{
 		InstanceIds: []*string{cmd.Id},
 	}

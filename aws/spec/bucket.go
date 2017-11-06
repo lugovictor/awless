@@ -59,7 +59,7 @@ func (cmd *UpdateBucket) ValidateParams(params []string) ([]string, error) {
 	}.verify(params)
 }
 
-func (cmd *UpdateBucket) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *UpdateBucket) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	start := time.Now()
 
 	if cmd.Acl != nil { // Update the canned ACL to apply to the bucket

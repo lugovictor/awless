@@ -70,7 +70,7 @@ func (cmd *CreateTag) DryRun(ctx, params map[string]interface{}) (interface{}, e
 	return nil, fmt.Errorf("dry run: %s", err)
 }
 
-func (cmd *CreateTag) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *CreateTag) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	input := &ec2.CreateTagsInput{}
 	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("cannot inject in ec2.CreateTagsInput: %s", err)
@@ -126,7 +126,7 @@ func (cmd *DeleteTag) DryRun(ctx, params map[string]interface{}) (interface{}, e
 	return nil, fmt.Errorf("dry run: %s", err)
 }
 
-func (cmd *DeleteTag) ManualRun(ctx, params map[string]interface{}) (interface{}, error) {
+func (cmd *DeleteTag) ManualRun(ctx map[string]interface{}) (interface{}, error) {
 	input := &ec2.DeleteTagsInput{}
 	if err := structInjector(cmd, input, ctx); err != nil {
 		return nil, fmt.Errorf("cannot inject in ec2.DeleteTagsInput: %s", err)
