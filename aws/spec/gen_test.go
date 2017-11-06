@@ -29,6 +29,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecs"
+	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53"
@@ -119,7 +121,13 @@ var (
 	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
 		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newUpdateSubnet    = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newUpdateSubnet           = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateContainercluster = func() *CreateContainercluster {
+		return &CreateContainercluster{api: &mockEcs{}, logger: logger.DiscardLogger}
+	}
+	newDeleteContainercluster = func() *DeleteContainercluster {
+		return &DeleteContainercluster{api: &mockEcs{}, logger: logger.DiscardLogger}
+	}
 	newAttachPolicy    = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newAttachUser      = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateAccesskey = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -153,6 +161,9 @@ type mockCloudwatch struct {
 }
 type mockEc2 struct {
 	ec2iface.EC2API
+}
+type mockEcs struct {
+	ecsiface.ECSAPI
 }
 type mockIam struct {
 	iamiface.IAMAPI
@@ -503,6 +514,26 @@ func (m *mockEc2) ModifySubnetAttribute(input *ec2.ModifySubnetAttributeInput) (
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["updatesubnet"]; ok {
 		return outFunc().(*ec2.ModifySubnetAttributeOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEcs) CreateCluster(input *ecs.CreateClusterInput) (*ecs.CreateClusterOutput, error) {
+	if got, want := input, genTestsExpected["createcontainercluster"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createcontainercluster"]; ok {
+		return outFunc().(*ecs.CreateClusterOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEcs) DeleteCluster(input *ecs.DeleteClusterInput) (*ecs.DeleteClusterOutput, error) {
+	if got, want := input, genTestsExpected["deletecontainercluster"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletecontainercluster"]; ok {
+		return outFunc().(*ecs.DeleteClusterOutput), nil
 	}
 	return nil, nil
 }

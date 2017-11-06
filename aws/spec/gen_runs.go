@@ -32,6 +32,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecs"
+	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53"
@@ -1325,6 +1327,80 @@ func (cmd *CreateCertificate) ParamsHelp() string {
 }
 
 func (cmd *CreateCertificate) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateContainercluster(sess *session.Session, l ...*logger.Logger) *CreateContainercluster {
+	cmd := new(CreateContainercluster)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateContainercluster) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateContainercluster) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ecs.CreateClusterInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ecs.CreateClusterInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateCluster(input)
+	cmd.logger.ExtraVerbosef("ecs.CreateCluster call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateContainercluster) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateContainercluster) ParamsHelp() string {
+	return generateParamsHelp("createcontainercluster", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateContainercluster) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -3073,6 +3149,80 @@ func (cmd *DeleteCertificate) ParamsHelp() string {
 }
 
 func (cmd *DeleteCertificate) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteContainercluster(sess *session.Session, l ...*logger.Logger) *DeleteContainercluster {
+	cmd := new(DeleteContainercluster)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteContainercluster) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteContainercluster) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ecs.DeleteClusterInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ecs.DeleteClusterInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteCluster(input)
+	cmd.logger.ExtraVerbosef("ecs.DeleteCluster call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteContainercluster) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteContainercluster) ParamsHelp() string {
+	return generateParamsHelp("deletecontainercluster", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteContainercluster) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

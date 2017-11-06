@@ -22,6 +22,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
@@ -139,6 +140,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateCertificate(nil)
 			cmd.SetApi(f.Mock.(acmiface.ACMAPI))
+			return cmd
+		}
+	case "createcontainercluster":
+		return func() interface{} {
+			cmd := awsspec.NewCreateContainercluster(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
 			return cmd
 		}
 	case "creategroup":
@@ -265,6 +272,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteCertificate(nil)
 			cmd.SetApi(f.Mock.(acmiface.ACMAPI))
+			return cmd
+		}
+	case "deletecontainercluster":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteContainercluster(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
 			return cmd
 		}
 	case "deletegroup":

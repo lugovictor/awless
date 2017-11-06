@@ -28,6 +28,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecs"
+	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/route53"
@@ -6237,6 +6239,718 @@ func (m *ec2Mock) WaitUntilVpnConnectionDeletedWithContext(param0 aws.Context, p
 	m.addCall("WaitUntilVpnConnectionDeletedWithContext")
 	m.verifyInput("WaitUntilVpnConnectionDeletedWithContext", param0)
 	return m.WaitUntilVpnConnectionDeletedWithContextFunc(param0, param1, param2...)
+}
+
+type ecsMock struct {
+	basicMock
+	ecsiface.ECSAPI
+	CreateClusterFunc                            func(param0 *ecs.CreateClusterInput) (*ecs.CreateClusterOutput, error)
+	CreateClusterRequestFunc                     func(param0 *ecs.CreateClusterInput) (*request.Request, *ecs.CreateClusterOutput)
+	CreateClusterWithContextFunc                 func(param0 aws.Context, param1 *ecs.CreateClusterInput, param2 ...request.Option) (*ecs.CreateClusterOutput, error)
+	CreateServiceFunc                            func(param0 *ecs.CreateServiceInput) (*ecs.CreateServiceOutput, error)
+	CreateServiceRequestFunc                     func(param0 *ecs.CreateServiceInput) (*request.Request, *ecs.CreateServiceOutput)
+	CreateServiceWithContextFunc                 func(param0 aws.Context, param1 *ecs.CreateServiceInput, param2 ...request.Option) (*ecs.CreateServiceOutput, error)
+	DeleteAttributesFunc                         func(param0 *ecs.DeleteAttributesInput) (*ecs.DeleteAttributesOutput, error)
+	DeleteAttributesRequestFunc                  func(param0 *ecs.DeleteAttributesInput) (*request.Request, *ecs.DeleteAttributesOutput)
+	DeleteAttributesWithContextFunc              func(param0 aws.Context, param1 *ecs.DeleteAttributesInput, param2 ...request.Option) (*ecs.DeleteAttributesOutput, error)
+	DeleteClusterFunc                            func(param0 *ecs.DeleteClusterInput) (*ecs.DeleteClusterOutput, error)
+	DeleteClusterRequestFunc                     func(param0 *ecs.DeleteClusterInput) (*request.Request, *ecs.DeleteClusterOutput)
+	DeleteClusterWithContextFunc                 func(param0 aws.Context, param1 *ecs.DeleteClusterInput, param2 ...request.Option) (*ecs.DeleteClusterOutput, error)
+	DeleteServiceFunc                            func(param0 *ecs.DeleteServiceInput) (*ecs.DeleteServiceOutput, error)
+	DeleteServiceRequestFunc                     func(param0 *ecs.DeleteServiceInput) (*request.Request, *ecs.DeleteServiceOutput)
+	DeleteServiceWithContextFunc                 func(param0 aws.Context, param1 *ecs.DeleteServiceInput, param2 ...request.Option) (*ecs.DeleteServiceOutput, error)
+	DeregisterContainerInstanceFunc              func(param0 *ecs.DeregisterContainerInstanceInput) (*ecs.DeregisterContainerInstanceOutput, error)
+	DeregisterContainerInstanceRequestFunc       func(param0 *ecs.DeregisterContainerInstanceInput) (*request.Request, *ecs.DeregisterContainerInstanceOutput)
+	DeregisterContainerInstanceWithContextFunc   func(param0 aws.Context, param1 *ecs.DeregisterContainerInstanceInput, param2 ...request.Option) (*ecs.DeregisterContainerInstanceOutput, error)
+	DeregisterTaskDefinitionFunc                 func(param0 *ecs.DeregisterTaskDefinitionInput) (*ecs.DeregisterTaskDefinitionOutput, error)
+	DeregisterTaskDefinitionRequestFunc          func(param0 *ecs.DeregisterTaskDefinitionInput) (*request.Request, *ecs.DeregisterTaskDefinitionOutput)
+	DeregisterTaskDefinitionWithContextFunc      func(param0 aws.Context, param1 *ecs.DeregisterTaskDefinitionInput, param2 ...request.Option) (*ecs.DeregisterTaskDefinitionOutput, error)
+	DescribeClustersFunc                         func(param0 *ecs.DescribeClustersInput) (*ecs.DescribeClustersOutput, error)
+	DescribeClustersRequestFunc                  func(param0 *ecs.DescribeClustersInput) (*request.Request, *ecs.DescribeClustersOutput)
+	DescribeClustersWithContextFunc              func(param0 aws.Context, param1 *ecs.DescribeClustersInput, param2 ...request.Option) (*ecs.DescribeClustersOutput, error)
+	DescribeContainerInstancesFunc               func(param0 *ecs.DescribeContainerInstancesInput) (*ecs.DescribeContainerInstancesOutput, error)
+	DescribeContainerInstancesRequestFunc        func(param0 *ecs.DescribeContainerInstancesInput) (*request.Request, *ecs.DescribeContainerInstancesOutput)
+	DescribeContainerInstancesWithContextFunc    func(param0 aws.Context, param1 *ecs.DescribeContainerInstancesInput, param2 ...request.Option) (*ecs.DescribeContainerInstancesOutput, error)
+	DescribeServicesFunc                         func(param0 *ecs.DescribeServicesInput) (*ecs.DescribeServicesOutput, error)
+	DescribeServicesRequestFunc                  func(param0 *ecs.DescribeServicesInput) (*request.Request, *ecs.DescribeServicesOutput)
+	DescribeServicesWithContextFunc              func(param0 aws.Context, param1 *ecs.DescribeServicesInput, param2 ...request.Option) (*ecs.DescribeServicesOutput, error)
+	DescribeTaskDefinitionFunc                   func(param0 *ecs.DescribeTaskDefinitionInput) (*ecs.DescribeTaskDefinitionOutput, error)
+	DescribeTaskDefinitionRequestFunc            func(param0 *ecs.DescribeTaskDefinitionInput) (*request.Request, *ecs.DescribeTaskDefinitionOutput)
+	DescribeTaskDefinitionWithContextFunc        func(param0 aws.Context, param1 *ecs.DescribeTaskDefinitionInput, param2 ...request.Option) (*ecs.DescribeTaskDefinitionOutput, error)
+	DescribeTasksFunc                            func(param0 *ecs.DescribeTasksInput) (*ecs.DescribeTasksOutput, error)
+	DescribeTasksRequestFunc                     func(param0 *ecs.DescribeTasksInput) (*request.Request, *ecs.DescribeTasksOutput)
+	DescribeTasksWithContextFunc                 func(param0 aws.Context, param1 *ecs.DescribeTasksInput, param2 ...request.Option) (*ecs.DescribeTasksOutput, error)
+	DiscoverPollEndpointFunc                     func(param0 *ecs.DiscoverPollEndpointInput) (*ecs.DiscoverPollEndpointOutput, error)
+	DiscoverPollEndpointRequestFunc              func(param0 *ecs.DiscoverPollEndpointInput) (*request.Request, *ecs.DiscoverPollEndpointOutput)
+	DiscoverPollEndpointWithContextFunc          func(param0 aws.Context, param1 *ecs.DiscoverPollEndpointInput, param2 ...request.Option) (*ecs.DiscoverPollEndpointOutput, error)
+	ListAttributesFunc                           func(param0 *ecs.ListAttributesInput) (*ecs.ListAttributesOutput, error)
+	ListAttributesRequestFunc                    func(param0 *ecs.ListAttributesInput) (*request.Request, *ecs.ListAttributesOutput)
+	ListAttributesWithContextFunc                func(param0 aws.Context, param1 *ecs.ListAttributesInput, param2 ...request.Option) (*ecs.ListAttributesOutput, error)
+	ListClustersFunc                             func(param0 *ecs.ListClustersInput) (*ecs.ListClustersOutput, error)
+	ListClustersRequestFunc                      func(param0 *ecs.ListClustersInput) (*request.Request, *ecs.ListClustersOutput)
+	ListClustersWithContextFunc                  func(param0 aws.Context, param1 *ecs.ListClustersInput, param2 ...request.Option) (*ecs.ListClustersOutput, error)
+	ListContainerInstancesFunc                   func(param0 *ecs.ListContainerInstancesInput) (*ecs.ListContainerInstancesOutput, error)
+	ListContainerInstancesRequestFunc            func(param0 *ecs.ListContainerInstancesInput) (*request.Request, *ecs.ListContainerInstancesOutput)
+	ListContainerInstancesWithContextFunc        func(param0 aws.Context, param1 *ecs.ListContainerInstancesInput, param2 ...request.Option) (*ecs.ListContainerInstancesOutput, error)
+	ListServicesFunc                             func(param0 *ecs.ListServicesInput) (*ecs.ListServicesOutput, error)
+	ListServicesRequestFunc                      func(param0 *ecs.ListServicesInput) (*request.Request, *ecs.ListServicesOutput)
+	ListServicesWithContextFunc                  func(param0 aws.Context, param1 *ecs.ListServicesInput, param2 ...request.Option) (*ecs.ListServicesOutput, error)
+	ListTaskDefinitionFamiliesFunc               func(param0 *ecs.ListTaskDefinitionFamiliesInput) (*ecs.ListTaskDefinitionFamiliesOutput, error)
+	ListTaskDefinitionFamiliesRequestFunc        func(param0 *ecs.ListTaskDefinitionFamiliesInput) (*request.Request, *ecs.ListTaskDefinitionFamiliesOutput)
+	ListTaskDefinitionFamiliesWithContextFunc    func(param0 aws.Context, param1 *ecs.ListTaskDefinitionFamiliesInput, param2 ...request.Option) (*ecs.ListTaskDefinitionFamiliesOutput, error)
+	ListTaskDefinitionsFunc                      func(param0 *ecs.ListTaskDefinitionsInput) (*ecs.ListTaskDefinitionsOutput, error)
+	ListTaskDefinitionsRequestFunc               func(param0 *ecs.ListTaskDefinitionsInput) (*request.Request, *ecs.ListTaskDefinitionsOutput)
+	ListTaskDefinitionsWithContextFunc           func(param0 aws.Context, param1 *ecs.ListTaskDefinitionsInput, param2 ...request.Option) (*ecs.ListTaskDefinitionsOutput, error)
+	ListTasksFunc                                func(param0 *ecs.ListTasksInput) (*ecs.ListTasksOutput, error)
+	ListTasksRequestFunc                         func(param0 *ecs.ListTasksInput) (*request.Request, *ecs.ListTasksOutput)
+	ListTasksWithContextFunc                     func(param0 aws.Context, param1 *ecs.ListTasksInput, param2 ...request.Option) (*ecs.ListTasksOutput, error)
+	PutAttributesFunc                            func(param0 *ecs.PutAttributesInput) (*ecs.PutAttributesOutput, error)
+	PutAttributesRequestFunc                     func(param0 *ecs.PutAttributesInput) (*request.Request, *ecs.PutAttributesOutput)
+	PutAttributesWithContextFunc                 func(param0 aws.Context, param1 *ecs.PutAttributesInput, param2 ...request.Option) (*ecs.PutAttributesOutput, error)
+	RegisterContainerInstanceFunc                func(param0 *ecs.RegisterContainerInstanceInput) (*ecs.RegisterContainerInstanceOutput, error)
+	RegisterContainerInstanceRequestFunc         func(param0 *ecs.RegisterContainerInstanceInput) (*request.Request, *ecs.RegisterContainerInstanceOutput)
+	RegisterContainerInstanceWithContextFunc     func(param0 aws.Context, param1 *ecs.RegisterContainerInstanceInput, param2 ...request.Option) (*ecs.RegisterContainerInstanceOutput, error)
+	RegisterTaskDefinitionFunc                   func(param0 *ecs.RegisterTaskDefinitionInput) (*ecs.RegisterTaskDefinitionOutput, error)
+	RegisterTaskDefinitionRequestFunc            func(param0 *ecs.RegisterTaskDefinitionInput) (*request.Request, *ecs.RegisterTaskDefinitionOutput)
+	RegisterTaskDefinitionWithContextFunc        func(param0 aws.Context, param1 *ecs.RegisterTaskDefinitionInput, param2 ...request.Option) (*ecs.RegisterTaskDefinitionOutput, error)
+	RunTaskFunc                                  func(param0 *ecs.RunTaskInput) (*ecs.RunTaskOutput, error)
+	RunTaskRequestFunc                           func(param0 *ecs.RunTaskInput) (*request.Request, *ecs.RunTaskOutput)
+	RunTaskWithContextFunc                       func(param0 aws.Context, param1 *ecs.RunTaskInput, param2 ...request.Option) (*ecs.RunTaskOutput, error)
+	StartTaskFunc                                func(param0 *ecs.StartTaskInput) (*ecs.StartTaskOutput, error)
+	StartTaskRequestFunc                         func(param0 *ecs.StartTaskInput) (*request.Request, *ecs.StartTaskOutput)
+	StartTaskWithContextFunc                     func(param0 aws.Context, param1 *ecs.StartTaskInput, param2 ...request.Option) (*ecs.StartTaskOutput, error)
+	StopTaskFunc                                 func(param0 *ecs.StopTaskInput) (*ecs.StopTaskOutput, error)
+	StopTaskRequestFunc                          func(param0 *ecs.StopTaskInput) (*request.Request, *ecs.StopTaskOutput)
+	StopTaskWithContextFunc                      func(param0 aws.Context, param1 *ecs.StopTaskInput, param2 ...request.Option) (*ecs.StopTaskOutput, error)
+	SubmitContainerStateChangeFunc               func(param0 *ecs.SubmitContainerStateChangeInput) (*ecs.SubmitContainerStateChangeOutput, error)
+	SubmitContainerStateChangeRequestFunc        func(param0 *ecs.SubmitContainerStateChangeInput) (*request.Request, *ecs.SubmitContainerStateChangeOutput)
+	SubmitContainerStateChangeWithContextFunc    func(param0 aws.Context, param1 *ecs.SubmitContainerStateChangeInput, param2 ...request.Option) (*ecs.SubmitContainerStateChangeOutput, error)
+	SubmitTaskStateChangeFunc                    func(param0 *ecs.SubmitTaskStateChangeInput) (*ecs.SubmitTaskStateChangeOutput, error)
+	SubmitTaskStateChangeRequestFunc             func(param0 *ecs.SubmitTaskStateChangeInput) (*request.Request, *ecs.SubmitTaskStateChangeOutput)
+	SubmitTaskStateChangeWithContextFunc         func(param0 aws.Context, param1 *ecs.SubmitTaskStateChangeInput, param2 ...request.Option) (*ecs.SubmitTaskStateChangeOutput, error)
+	UpdateContainerAgentFunc                     func(param0 *ecs.UpdateContainerAgentInput) (*ecs.UpdateContainerAgentOutput, error)
+	UpdateContainerAgentRequestFunc              func(param0 *ecs.UpdateContainerAgentInput) (*request.Request, *ecs.UpdateContainerAgentOutput)
+	UpdateContainerAgentWithContextFunc          func(param0 aws.Context, param1 *ecs.UpdateContainerAgentInput, param2 ...request.Option) (*ecs.UpdateContainerAgentOutput, error)
+	UpdateContainerInstancesStateFunc            func(param0 *ecs.UpdateContainerInstancesStateInput) (*ecs.UpdateContainerInstancesStateOutput, error)
+	UpdateContainerInstancesStateRequestFunc     func(param0 *ecs.UpdateContainerInstancesStateInput) (*request.Request, *ecs.UpdateContainerInstancesStateOutput)
+	UpdateContainerInstancesStateWithContextFunc func(param0 aws.Context, param1 *ecs.UpdateContainerInstancesStateInput, param2 ...request.Option) (*ecs.UpdateContainerInstancesStateOutput, error)
+	UpdateServiceFunc                            func(param0 *ecs.UpdateServiceInput) (*ecs.UpdateServiceOutput, error)
+	UpdateServiceRequestFunc                     func(param0 *ecs.UpdateServiceInput) (*request.Request, *ecs.UpdateServiceOutput)
+	UpdateServiceWithContextFunc                 func(param0 aws.Context, param1 *ecs.UpdateServiceInput, param2 ...request.Option) (*ecs.UpdateServiceOutput, error)
+	WaitUntilServicesInactiveFunc                func(param0 *ecs.DescribeServicesInput) error
+	WaitUntilServicesInactiveWithContextFunc     func(param0 aws.Context, param1 *ecs.DescribeServicesInput, param2 ...request.WaiterOption) error
+	WaitUntilServicesStableFunc                  func(param0 *ecs.DescribeServicesInput) error
+	WaitUntilServicesStableWithContextFunc       func(param0 aws.Context, param1 *ecs.DescribeServicesInput, param2 ...request.WaiterOption) error
+	WaitUntilTasksRunningFunc                    func(param0 *ecs.DescribeTasksInput) error
+	WaitUntilTasksRunningWithContextFunc         func(param0 aws.Context, param1 *ecs.DescribeTasksInput, param2 ...request.WaiterOption) error
+	WaitUntilTasksStoppedFunc                    func(param0 *ecs.DescribeTasksInput) error
+	WaitUntilTasksStoppedWithContextFunc         func(param0 aws.Context, param1 *ecs.DescribeTasksInput, param2 ...request.WaiterOption) error
+}
+
+func (m *ecsMock) CreateCluster(param0 *ecs.CreateClusterInput) (*ecs.CreateClusterOutput, error) {
+	m.addCall("CreateCluster")
+	m.verifyInput("CreateCluster", param0)
+	return m.CreateClusterFunc(param0)
+}
+
+func (m *ecsMock) CreateClusterRequest(param0 *ecs.CreateClusterInput) (*request.Request, *ecs.CreateClusterOutput) {
+	m.addCall("CreateClusterRequest")
+	m.verifyInput("CreateClusterRequest", param0)
+	return m.CreateClusterRequestFunc(param0)
+}
+
+func (m *ecsMock) CreateClusterWithContext(param0 aws.Context, param1 *ecs.CreateClusterInput, param2 ...request.Option) (*ecs.CreateClusterOutput, error) {
+	m.addCall("CreateClusterWithContext")
+	m.verifyInput("CreateClusterWithContext", param0)
+	return m.CreateClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) CreateService(param0 *ecs.CreateServiceInput) (*ecs.CreateServiceOutput, error) {
+	m.addCall("CreateService")
+	m.verifyInput("CreateService", param0)
+	return m.CreateServiceFunc(param0)
+}
+
+func (m *ecsMock) CreateServiceRequest(param0 *ecs.CreateServiceInput) (*request.Request, *ecs.CreateServiceOutput) {
+	m.addCall("CreateServiceRequest")
+	m.verifyInput("CreateServiceRequest", param0)
+	return m.CreateServiceRequestFunc(param0)
+}
+
+func (m *ecsMock) CreateServiceWithContext(param0 aws.Context, param1 *ecs.CreateServiceInput, param2 ...request.Option) (*ecs.CreateServiceOutput, error) {
+	m.addCall("CreateServiceWithContext")
+	m.verifyInput("CreateServiceWithContext", param0)
+	return m.CreateServiceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DeleteAttributes(param0 *ecs.DeleteAttributesInput) (*ecs.DeleteAttributesOutput, error) {
+	m.addCall("DeleteAttributes")
+	m.verifyInput("DeleteAttributes", param0)
+	return m.DeleteAttributesFunc(param0)
+}
+
+func (m *ecsMock) DeleteAttributesRequest(param0 *ecs.DeleteAttributesInput) (*request.Request, *ecs.DeleteAttributesOutput) {
+	m.addCall("DeleteAttributesRequest")
+	m.verifyInput("DeleteAttributesRequest", param0)
+	return m.DeleteAttributesRequestFunc(param0)
+}
+
+func (m *ecsMock) DeleteAttributesWithContext(param0 aws.Context, param1 *ecs.DeleteAttributesInput, param2 ...request.Option) (*ecs.DeleteAttributesOutput, error) {
+	m.addCall("DeleteAttributesWithContext")
+	m.verifyInput("DeleteAttributesWithContext", param0)
+	return m.DeleteAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DeleteCluster(param0 *ecs.DeleteClusterInput) (*ecs.DeleteClusterOutput, error) {
+	m.addCall("DeleteCluster")
+	m.verifyInput("DeleteCluster", param0)
+	return m.DeleteClusterFunc(param0)
+}
+
+func (m *ecsMock) DeleteClusterRequest(param0 *ecs.DeleteClusterInput) (*request.Request, *ecs.DeleteClusterOutput) {
+	m.addCall("DeleteClusterRequest")
+	m.verifyInput("DeleteClusterRequest", param0)
+	return m.DeleteClusterRequestFunc(param0)
+}
+
+func (m *ecsMock) DeleteClusterWithContext(param0 aws.Context, param1 *ecs.DeleteClusterInput, param2 ...request.Option) (*ecs.DeleteClusterOutput, error) {
+	m.addCall("DeleteClusterWithContext")
+	m.verifyInput("DeleteClusterWithContext", param0)
+	return m.DeleteClusterWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DeleteService(param0 *ecs.DeleteServiceInput) (*ecs.DeleteServiceOutput, error) {
+	m.addCall("DeleteService")
+	m.verifyInput("DeleteService", param0)
+	return m.DeleteServiceFunc(param0)
+}
+
+func (m *ecsMock) DeleteServiceRequest(param0 *ecs.DeleteServiceInput) (*request.Request, *ecs.DeleteServiceOutput) {
+	m.addCall("DeleteServiceRequest")
+	m.verifyInput("DeleteServiceRequest", param0)
+	return m.DeleteServiceRequestFunc(param0)
+}
+
+func (m *ecsMock) DeleteServiceWithContext(param0 aws.Context, param1 *ecs.DeleteServiceInput, param2 ...request.Option) (*ecs.DeleteServiceOutput, error) {
+	m.addCall("DeleteServiceWithContext")
+	m.verifyInput("DeleteServiceWithContext", param0)
+	return m.DeleteServiceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DeregisterContainerInstance(param0 *ecs.DeregisterContainerInstanceInput) (*ecs.DeregisterContainerInstanceOutput, error) {
+	m.addCall("DeregisterContainerInstance")
+	m.verifyInput("DeregisterContainerInstance", param0)
+	return m.DeregisterContainerInstanceFunc(param0)
+}
+
+func (m *ecsMock) DeregisterContainerInstanceRequest(param0 *ecs.DeregisterContainerInstanceInput) (*request.Request, *ecs.DeregisterContainerInstanceOutput) {
+	m.addCall("DeregisterContainerInstanceRequest")
+	m.verifyInput("DeregisterContainerInstanceRequest", param0)
+	return m.DeregisterContainerInstanceRequestFunc(param0)
+}
+
+func (m *ecsMock) DeregisterContainerInstanceWithContext(param0 aws.Context, param1 *ecs.DeregisterContainerInstanceInput, param2 ...request.Option) (*ecs.DeregisterContainerInstanceOutput, error) {
+	m.addCall("DeregisterContainerInstanceWithContext")
+	m.verifyInput("DeregisterContainerInstanceWithContext", param0)
+	return m.DeregisterContainerInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DeregisterTaskDefinition(param0 *ecs.DeregisterTaskDefinitionInput) (*ecs.DeregisterTaskDefinitionOutput, error) {
+	m.addCall("DeregisterTaskDefinition")
+	m.verifyInput("DeregisterTaskDefinition", param0)
+	return m.DeregisterTaskDefinitionFunc(param0)
+}
+
+func (m *ecsMock) DeregisterTaskDefinitionRequest(param0 *ecs.DeregisterTaskDefinitionInput) (*request.Request, *ecs.DeregisterTaskDefinitionOutput) {
+	m.addCall("DeregisterTaskDefinitionRequest")
+	m.verifyInput("DeregisterTaskDefinitionRequest", param0)
+	return m.DeregisterTaskDefinitionRequestFunc(param0)
+}
+
+func (m *ecsMock) DeregisterTaskDefinitionWithContext(param0 aws.Context, param1 *ecs.DeregisterTaskDefinitionInput, param2 ...request.Option) (*ecs.DeregisterTaskDefinitionOutput, error) {
+	m.addCall("DeregisterTaskDefinitionWithContext")
+	m.verifyInput("DeregisterTaskDefinitionWithContext", param0)
+	return m.DeregisterTaskDefinitionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DescribeClusters(param0 *ecs.DescribeClustersInput) (*ecs.DescribeClustersOutput, error) {
+	m.addCall("DescribeClusters")
+	m.verifyInput("DescribeClusters", param0)
+	return m.DescribeClustersFunc(param0)
+}
+
+func (m *ecsMock) DescribeClustersRequest(param0 *ecs.DescribeClustersInput) (*request.Request, *ecs.DescribeClustersOutput) {
+	m.addCall("DescribeClustersRequest")
+	m.verifyInput("DescribeClustersRequest", param0)
+	return m.DescribeClustersRequestFunc(param0)
+}
+
+func (m *ecsMock) DescribeClustersWithContext(param0 aws.Context, param1 *ecs.DescribeClustersInput, param2 ...request.Option) (*ecs.DescribeClustersOutput, error) {
+	m.addCall("DescribeClustersWithContext")
+	m.verifyInput("DescribeClustersWithContext", param0)
+	return m.DescribeClustersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DescribeContainerInstances(param0 *ecs.DescribeContainerInstancesInput) (*ecs.DescribeContainerInstancesOutput, error) {
+	m.addCall("DescribeContainerInstances")
+	m.verifyInput("DescribeContainerInstances", param0)
+	return m.DescribeContainerInstancesFunc(param0)
+}
+
+func (m *ecsMock) DescribeContainerInstancesRequest(param0 *ecs.DescribeContainerInstancesInput) (*request.Request, *ecs.DescribeContainerInstancesOutput) {
+	m.addCall("DescribeContainerInstancesRequest")
+	m.verifyInput("DescribeContainerInstancesRequest", param0)
+	return m.DescribeContainerInstancesRequestFunc(param0)
+}
+
+func (m *ecsMock) DescribeContainerInstancesWithContext(param0 aws.Context, param1 *ecs.DescribeContainerInstancesInput, param2 ...request.Option) (*ecs.DescribeContainerInstancesOutput, error) {
+	m.addCall("DescribeContainerInstancesWithContext")
+	m.verifyInput("DescribeContainerInstancesWithContext", param0)
+	return m.DescribeContainerInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DescribeServices(param0 *ecs.DescribeServicesInput) (*ecs.DescribeServicesOutput, error) {
+	m.addCall("DescribeServices")
+	m.verifyInput("DescribeServices", param0)
+	return m.DescribeServicesFunc(param0)
+}
+
+func (m *ecsMock) DescribeServicesRequest(param0 *ecs.DescribeServicesInput) (*request.Request, *ecs.DescribeServicesOutput) {
+	m.addCall("DescribeServicesRequest")
+	m.verifyInput("DescribeServicesRequest", param0)
+	return m.DescribeServicesRequestFunc(param0)
+}
+
+func (m *ecsMock) DescribeServicesWithContext(param0 aws.Context, param1 *ecs.DescribeServicesInput, param2 ...request.Option) (*ecs.DescribeServicesOutput, error) {
+	m.addCall("DescribeServicesWithContext")
+	m.verifyInput("DescribeServicesWithContext", param0)
+	return m.DescribeServicesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DescribeTaskDefinition(param0 *ecs.DescribeTaskDefinitionInput) (*ecs.DescribeTaskDefinitionOutput, error) {
+	m.addCall("DescribeTaskDefinition")
+	m.verifyInput("DescribeTaskDefinition", param0)
+	return m.DescribeTaskDefinitionFunc(param0)
+}
+
+func (m *ecsMock) DescribeTaskDefinitionRequest(param0 *ecs.DescribeTaskDefinitionInput) (*request.Request, *ecs.DescribeTaskDefinitionOutput) {
+	m.addCall("DescribeTaskDefinitionRequest")
+	m.verifyInput("DescribeTaskDefinitionRequest", param0)
+	return m.DescribeTaskDefinitionRequestFunc(param0)
+}
+
+func (m *ecsMock) DescribeTaskDefinitionWithContext(param0 aws.Context, param1 *ecs.DescribeTaskDefinitionInput, param2 ...request.Option) (*ecs.DescribeTaskDefinitionOutput, error) {
+	m.addCall("DescribeTaskDefinitionWithContext")
+	m.verifyInput("DescribeTaskDefinitionWithContext", param0)
+	return m.DescribeTaskDefinitionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DescribeTasks(param0 *ecs.DescribeTasksInput) (*ecs.DescribeTasksOutput, error) {
+	m.addCall("DescribeTasks")
+	m.verifyInput("DescribeTasks", param0)
+	return m.DescribeTasksFunc(param0)
+}
+
+func (m *ecsMock) DescribeTasksRequest(param0 *ecs.DescribeTasksInput) (*request.Request, *ecs.DescribeTasksOutput) {
+	m.addCall("DescribeTasksRequest")
+	m.verifyInput("DescribeTasksRequest", param0)
+	return m.DescribeTasksRequestFunc(param0)
+}
+
+func (m *ecsMock) DescribeTasksWithContext(param0 aws.Context, param1 *ecs.DescribeTasksInput, param2 ...request.Option) (*ecs.DescribeTasksOutput, error) {
+	m.addCall("DescribeTasksWithContext")
+	m.verifyInput("DescribeTasksWithContext", param0)
+	return m.DescribeTasksWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) DiscoverPollEndpoint(param0 *ecs.DiscoverPollEndpointInput) (*ecs.DiscoverPollEndpointOutput, error) {
+	m.addCall("DiscoverPollEndpoint")
+	m.verifyInput("DiscoverPollEndpoint", param0)
+	return m.DiscoverPollEndpointFunc(param0)
+}
+
+func (m *ecsMock) DiscoverPollEndpointRequest(param0 *ecs.DiscoverPollEndpointInput) (*request.Request, *ecs.DiscoverPollEndpointOutput) {
+	m.addCall("DiscoverPollEndpointRequest")
+	m.verifyInput("DiscoverPollEndpointRequest", param0)
+	return m.DiscoverPollEndpointRequestFunc(param0)
+}
+
+func (m *ecsMock) DiscoverPollEndpointWithContext(param0 aws.Context, param1 *ecs.DiscoverPollEndpointInput, param2 ...request.Option) (*ecs.DiscoverPollEndpointOutput, error) {
+	m.addCall("DiscoverPollEndpointWithContext")
+	m.verifyInput("DiscoverPollEndpointWithContext", param0)
+	return m.DiscoverPollEndpointWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) ListAttributes(param0 *ecs.ListAttributesInput) (*ecs.ListAttributesOutput, error) {
+	m.addCall("ListAttributes")
+	m.verifyInput("ListAttributes", param0)
+	return m.ListAttributesFunc(param0)
+}
+
+func (m *ecsMock) ListAttributesRequest(param0 *ecs.ListAttributesInput) (*request.Request, *ecs.ListAttributesOutput) {
+	m.addCall("ListAttributesRequest")
+	m.verifyInput("ListAttributesRequest", param0)
+	return m.ListAttributesRequestFunc(param0)
+}
+
+func (m *ecsMock) ListAttributesWithContext(param0 aws.Context, param1 *ecs.ListAttributesInput, param2 ...request.Option) (*ecs.ListAttributesOutput, error) {
+	m.addCall("ListAttributesWithContext")
+	m.verifyInput("ListAttributesWithContext", param0)
+	return m.ListAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) ListClusters(param0 *ecs.ListClustersInput) (*ecs.ListClustersOutput, error) {
+	m.addCall("ListClusters")
+	m.verifyInput("ListClusters", param0)
+	return m.ListClustersFunc(param0)
+}
+
+func (m *ecsMock) ListClustersRequest(param0 *ecs.ListClustersInput) (*request.Request, *ecs.ListClustersOutput) {
+	m.addCall("ListClustersRequest")
+	m.verifyInput("ListClustersRequest", param0)
+	return m.ListClustersRequestFunc(param0)
+}
+
+func (m *ecsMock) ListClustersWithContext(param0 aws.Context, param1 *ecs.ListClustersInput, param2 ...request.Option) (*ecs.ListClustersOutput, error) {
+	m.addCall("ListClustersWithContext")
+	m.verifyInput("ListClustersWithContext", param0)
+	return m.ListClustersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) ListContainerInstances(param0 *ecs.ListContainerInstancesInput) (*ecs.ListContainerInstancesOutput, error) {
+	m.addCall("ListContainerInstances")
+	m.verifyInput("ListContainerInstances", param0)
+	return m.ListContainerInstancesFunc(param0)
+}
+
+func (m *ecsMock) ListContainerInstancesRequest(param0 *ecs.ListContainerInstancesInput) (*request.Request, *ecs.ListContainerInstancesOutput) {
+	m.addCall("ListContainerInstancesRequest")
+	m.verifyInput("ListContainerInstancesRequest", param0)
+	return m.ListContainerInstancesRequestFunc(param0)
+}
+
+func (m *ecsMock) ListContainerInstancesWithContext(param0 aws.Context, param1 *ecs.ListContainerInstancesInput, param2 ...request.Option) (*ecs.ListContainerInstancesOutput, error) {
+	m.addCall("ListContainerInstancesWithContext")
+	m.verifyInput("ListContainerInstancesWithContext", param0)
+	return m.ListContainerInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) ListServices(param0 *ecs.ListServicesInput) (*ecs.ListServicesOutput, error) {
+	m.addCall("ListServices")
+	m.verifyInput("ListServices", param0)
+	return m.ListServicesFunc(param0)
+}
+
+func (m *ecsMock) ListServicesRequest(param0 *ecs.ListServicesInput) (*request.Request, *ecs.ListServicesOutput) {
+	m.addCall("ListServicesRequest")
+	m.verifyInput("ListServicesRequest", param0)
+	return m.ListServicesRequestFunc(param0)
+}
+
+func (m *ecsMock) ListServicesWithContext(param0 aws.Context, param1 *ecs.ListServicesInput, param2 ...request.Option) (*ecs.ListServicesOutput, error) {
+	m.addCall("ListServicesWithContext")
+	m.verifyInput("ListServicesWithContext", param0)
+	return m.ListServicesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) ListTaskDefinitionFamilies(param0 *ecs.ListTaskDefinitionFamiliesInput) (*ecs.ListTaskDefinitionFamiliesOutput, error) {
+	m.addCall("ListTaskDefinitionFamilies")
+	m.verifyInput("ListTaskDefinitionFamilies", param0)
+	return m.ListTaskDefinitionFamiliesFunc(param0)
+}
+
+func (m *ecsMock) ListTaskDefinitionFamiliesRequest(param0 *ecs.ListTaskDefinitionFamiliesInput) (*request.Request, *ecs.ListTaskDefinitionFamiliesOutput) {
+	m.addCall("ListTaskDefinitionFamiliesRequest")
+	m.verifyInput("ListTaskDefinitionFamiliesRequest", param0)
+	return m.ListTaskDefinitionFamiliesRequestFunc(param0)
+}
+
+func (m *ecsMock) ListTaskDefinitionFamiliesWithContext(param0 aws.Context, param1 *ecs.ListTaskDefinitionFamiliesInput, param2 ...request.Option) (*ecs.ListTaskDefinitionFamiliesOutput, error) {
+	m.addCall("ListTaskDefinitionFamiliesWithContext")
+	m.verifyInput("ListTaskDefinitionFamiliesWithContext", param0)
+	return m.ListTaskDefinitionFamiliesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) ListTaskDefinitions(param0 *ecs.ListTaskDefinitionsInput) (*ecs.ListTaskDefinitionsOutput, error) {
+	m.addCall("ListTaskDefinitions")
+	m.verifyInput("ListTaskDefinitions", param0)
+	return m.ListTaskDefinitionsFunc(param0)
+}
+
+func (m *ecsMock) ListTaskDefinitionsRequest(param0 *ecs.ListTaskDefinitionsInput) (*request.Request, *ecs.ListTaskDefinitionsOutput) {
+	m.addCall("ListTaskDefinitionsRequest")
+	m.verifyInput("ListTaskDefinitionsRequest", param0)
+	return m.ListTaskDefinitionsRequestFunc(param0)
+}
+
+func (m *ecsMock) ListTaskDefinitionsWithContext(param0 aws.Context, param1 *ecs.ListTaskDefinitionsInput, param2 ...request.Option) (*ecs.ListTaskDefinitionsOutput, error) {
+	m.addCall("ListTaskDefinitionsWithContext")
+	m.verifyInput("ListTaskDefinitionsWithContext", param0)
+	return m.ListTaskDefinitionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) ListTasks(param0 *ecs.ListTasksInput) (*ecs.ListTasksOutput, error) {
+	m.addCall("ListTasks")
+	m.verifyInput("ListTasks", param0)
+	return m.ListTasksFunc(param0)
+}
+
+func (m *ecsMock) ListTasksRequest(param0 *ecs.ListTasksInput) (*request.Request, *ecs.ListTasksOutput) {
+	m.addCall("ListTasksRequest")
+	m.verifyInput("ListTasksRequest", param0)
+	return m.ListTasksRequestFunc(param0)
+}
+
+func (m *ecsMock) ListTasksWithContext(param0 aws.Context, param1 *ecs.ListTasksInput, param2 ...request.Option) (*ecs.ListTasksOutput, error) {
+	m.addCall("ListTasksWithContext")
+	m.verifyInput("ListTasksWithContext", param0)
+	return m.ListTasksWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) PutAttributes(param0 *ecs.PutAttributesInput) (*ecs.PutAttributesOutput, error) {
+	m.addCall("PutAttributes")
+	m.verifyInput("PutAttributes", param0)
+	return m.PutAttributesFunc(param0)
+}
+
+func (m *ecsMock) PutAttributesRequest(param0 *ecs.PutAttributesInput) (*request.Request, *ecs.PutAttributesOutput) {
+	m.addCall("PutAttributesRequest")
+	m.verifyInput("PutAttributesRequest", param0)
+	return m.PutAttributesRequestFunc(param0)
+}
+
+func (m *ecsMock) PutAttributesWithContext(param0 aws.Context, param1 *ecs.PutAttributesInput, param2 ...request.Option) (*ecs.PutAttributesOutput, error) {
+	m.addCall("PutAttributesWithContext")
+	m.verifyInput("PutAttributesWithContext", param0)
+	return m.PutAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) RegisterContainerInstance(param0 *ecs.RegisterContainerInstanceInput) (*ecs.RegisterContainerInstanceOutput, error) {
+	m.addCall("RegisterContainerInstance")
+	m.verifyInput("RegisterContainerInstance", param0)
+	return m.RegisterContainerInstanceFunc(param0)
+}
+
+func (m *ecsMock) RegisterContainerInstanceRequest(param0 *ecs.RegisterContainerInstanceInput) (*request.Request, *ecs.RegisterContainerInstanceOutput) {
+	m.addCall("RegisterContainerInstanceRequest")
+	m.verifyInput("RegisterContainerInstanceRequest", param0)
+	return m.RegisterContainerInstanceRequestFunc(param0)
+}
+
+func (m *ecsMock) RegisterContainerInstanceWithContext(param0 aws.Context, param1 *ecs.RegisterContainerInstanceInput, param2 ...request.Option) (*ecs.RegisterContainerInstanceOutput, error) {
+	m.addCall("RegisterContainerInstanceWithContext")
+	m.verifyInput("RegisterContainerInstanceWithContext", param0)
+	return m.RegisterContainerInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) RegisterTaskDefinition(param0 *ecs.RegisterTaskDefinitionInput) (*ecs.RegisterTaskDefinitionOutput, error) {
+	m.addCall("RegisterTaskDefinition")
+	m.verifyInput("RegisterTaskDefinition", param0)
+	return m.RegisterTaskDefinitionFunc(param0)
+}
+
+func (m *ecsMock) RegisterTaskDefinitionRequest(param0 *ecs.RegisterTaskDefinitionInput) (*request.Request, *ecs.RegisterTaskDefinitionOutput) {
+	m.addCall("RegisterTaskDefinitionRequest")
+	m.verifyInput("RegisterTaskDefinitionRequest", param0)
+	return m.RegisterTaskDefinitionRequestFunc(param0)
+}
+
+func (m *ecsMock) RegisterTaskDefinitionWithContext(param0 aws.Context, param1 *ecs.RegisterTaskDefinitionInput, param2 ...request.Option) (*ecs.RegisterTaskDefinitionOutput, error) {
+	m.addCall("RegisterTaskDefinitionWithContext")
+	m.verifyInput("RegisterTaskDefinitionWithContext", param0)
+	return m.RegisterTaskDefinitionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) RunTask(param0 *ecs.RunTaskInput) (*ecs.RunTaskOutput, error) {
+	m.addCall("RunTask")
+	m.verifyInput("RunTask", param0)
+	return m.RunTaskFunc(param0)
+}
+
+func (m *ecsMock) RunTaskRequest(param0 *ecs.RunTaskInput) (*request.Request, *ecs.RunTaskOutput) {
+	m.addCall("RunTaskRequest")
+	m.verifyInput("RunTaskRequest", param0)
+	return m.RunTaskRequestFunc(param0)
+}
+
+func (m *ecsMock) RunTaskWithContext(param0 aws.Context, param1 *ecs.RunTaskInput, param2 ...request.Option) (*ecs.RunTaskOutput, error) {
+	m.addCall("RunTaskWithContext")
+	m.verifyInput("RunTaskWithContext", param0)
+	return m.RunTaskWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) StartTask(param0 *ecs.StartTaskInput) (*ecs.StartTaskOutput, error) {
+	m.addCall("StartTask")
+	m.verifyInput("StartTask", param0)
+	return m.StartTaskFunc(param0)
+}
+
+func (m *ecsMock) StartTaskRequest(param0 *ecs.StartTaskInput) (*request.Request, *ecs.StartTaskOutput) {
+	m.addCall("StartTaskRequest")
+	m.verifyInput("StartTaskRequest", param0)
+	return m.StartTaskRequestFunc(param0)
+}
+
+func (m *ecsMock) StartTaskWithContext(param0 aws.Context, param1 *ecs.StartTaskInput, param2 ...request.Option) (*ecs.StartTaskOutput, error) {
+	m.addCall("StartTaskWithContext")
+	m.verifyInput("StartTaskWithContext", param0)
+	return m.StartTaskWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) StopTask(param0 *ecs.StopTaskInput) (*ecs.StopTaskOutput, error) {
+	m.addCall("StopTask")
+	m.verifyInput("StopTask", param0)
+	return m.StopTaskFunc(param0)
+}
+
+func (m *ecsMock) StopTaskRequest(param0 *ecs.StopTaskInput) (*request.Request, *ecs.StopTaskOutput) {
+	m.addCall("StopTaskRequest")
+	m.verifyInput("StopTaskRequest", param0)
+	return m.StopTaskRequestFunc(param0)
+}
+
+func (m *ecsMock) StopTaskWithContext(param0 aws.Context, param1 *ecs.StopTaskInput, param2 ...request.Option) (*ecs.StopTaskOutput, error) {
+	m.addCall("StopTaskWithContext")
+	m.verifyInput("StopTaskWithContext", param0)
+	return m.StopTaskWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) SubmitContainerStateChange(param0 *ecs.SubmitContainerStateChangeInput) (*ecs.SubmitContainerStateChangeOutput, error) {
+	m.addCall("SubmitContainerStateChange")
+	m.verifyInput("SubmitContainerStateChange", param0)
+	return m.SubmitContainerStateChangeFunc(param0)
+}
+
+func (m *ecsMock) SubmitContainerStateChangeRequest(param0 *ecs.SubmitContainerStateChangeInput) (*request.Request, *ecs.SubmitContainerStateChangeOutput) {
+	m.addCall("SubmitContainerStateChangeRequest")
+	m.verifyInput("SubmitContainerStateChangeRequest", param0)
+	return m.SubmitContainerStateChangeRequestFunc(param0)
+}
+
+func (m *ecsMock) SubmitContainerStateChangeWithContext(param0 aws.Context, param1 *ecs.SubmitContainerStateChangeInput, param2 ...request.Option) (*ecs.SubmitContainerStateChangeOutput, error) {
+	m.addCall("SubmitContainerStateChangeWithContext")
+	m.verifyInput("SubmitContainerStateChangeWithContext", param0)
+	return m.SubmitContainerStateChangeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) SubmitTaskStateChange(param0 *ecs.SubmitTaskStateChangeInput) (*ecs.SubmitTaskStateChangeOutput, error) {
+	m.addCall("SubmitTaskStateChange")
+	m.verifyInput("SubmitTaskStateChange", param0)
+	return m.SubmitTaskStateChangeFunc(param0)
+}
+
+func (m *ecsMock) SubmitTaskStateChangeRequest(param0 *ecs.SubmitTaskStateChangeInput) (*request.Request, *ecs.SubmitTaskStateChangeOutput) {
+	m.addCall("SubmitTaskStateChangeRequest")
+	m.verifyInput("SubmitTaskStateChangeRequest", param0)
+	return m.SubmitTaskStateChangeRequestFunc(param0)
+}
+
+func (m *ecsMock) SubmitTaskStateChangeWithContext(param0 aws.Context, param1 *ecs.SubmitTaskStateChangeInput, param2 ...request.Option) (*ecs.SubmitTaskStateChangeOutput, error) {
+	m.addCall("SubmitTaskStateChangeWithContext")
+	m.verifyInput("SubmitTaskStateChangeWithContext", param0)
+	return m.SubmitTaskStateChangeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) UpdateContainerAgent(param0 *ecs.UpdateContainerAgentInput) (*ecs.UpdateContainerAgentOutput, error) {
+	m.addCall("UpdateContainerAgent")
+	m.verifyInput("UpdateContainerAgent", param0)
+	return m.UpdateContainerAgentFunc(param0)
+}
+
+func (m *ecsMock) UpdateContainerAgentRequest(param0 *ecs.UpdateContainerAgentInput) (*request.Request, *ecs.UpdateContainerAgentOutput) {
+	m.addCall("UpdateContainerAgentRequest")
+	m.verifyInput("UpdateContainerAgentRequest", param0)
+	return m.UpdateContainerAgentRequestFunc(param0)
+}
+
+func (m *ecsMock) UpdateContainerAgentWithContext(param0 aws.Context, param1 *ecs.UpdateContainerAgentInput, param2 ...request.Option) (*ecs.UpdateContainerAgentOutput, error) {
+	m.addCall("UpdateContainerAgentWithContext")
+	m.verifyInput("UpdateContainerAgentWithContext", param0)
+	return m.UpdateContainerAgentWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) UpdateContainerInstancesState(param0 *ecs.UpdateContainerInstancesStateInput) (*ecs.UpdateContainerInstancesStateOutput, error) {
+	m.addCall("UpdateContainerInstancesState")
+	m.verifyInput("UpdateContainerInstancesState", param0)
+	return m.UpdateContainerInstancesStateFunc(param0)
+}
+
+func (m *ecsMock) UpdateContainerInstancesStateRequest(param0 *ecs.UpdateContainerInstancesStateInput) (*request.Request, *ecs.UpdateContainerInstancesStateOutput) {
+	m.addCall("UpdateContainerInstancesStateRequest")
+	m.verifyInput("UpdateContainerInstancesStateRequest", param0)
+	return m.UpdateContainerInstancesStateRequestFunc(param0)
+}
+
+func (m *ecsMock) UpdateContainerInstancesStateWithContext(param0 aws.Context, param1 *ecs.UpdateContainerInstancesStateInput, param2 ...request.Option) (*ecs.UpdateContainerInstancesStateOutput, error) {
+	m.addCall("UpdateContainerInstancesStateWithContext")
+	m.verifyInput("UpdateContainerInstancesStateWithContext", param0)
+	return m.UpdateContainerInstancesStateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) UpdateService(param0 *ecs.UpdateServiceInput) (*ecs.UpdateServiceOutput, error) {
+	m.addCall("UpdateService")
+	m.verifyInput("UpdateService", param0)
+	return m.UpdateServiceFunc(param0)
+}
+
+func (m *ecsMock) UpdateServiceRequest(param0 *ecs.UpdateServiceInput) (*request.Request, *ecs.UpdateServiceOutput) {
+	m.addCall("UpdateServiceRequest")
+	m.verifyInput("UpdateServiceRequest", param0)
+	return m.UpdateServiceRequestFunc(param0)
+}
+
+func (m *ecsMock) UpdateServiceWithContext(param0 aws.Context, param1 *ecs.UpdateServiceInput, param2 ...request.Option) (*ecs.UpdateServiceOutput, error) {
+	m.addCall("UpdateServiceWithContext")
+	m.verifyInput("UpdateServiceWithContext", param0)
+	return m.UpdateServiceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) WaitUntilServicesInactive(param0 *ecs.DescribeServicesInput) error {
+	m.addCall("WaitUntilServicesInactive")
+	m.verifyInput("WaitUntilServicesInactive", param0)
+	return m.WaitUntilServicesInactiveFunc(param0)
+}
+
+func (m *ecsMock) WaitUntilServicesInactiveWithContext(param0 aws.Context, param1 *ecs.DescribeServicesInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilServicesInactiveWithContext")
+	m.verifyInput("WaitUntilServicesInactiveWithContext", param0)
+	return m.WaitUntilServicesInactiveWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) WaitUntilServicesStable(param0 *ecs.DescribeServicesInput) error {
+	m.addCall("WaitUntilServicesStable")
+	m.verifyInput("WaitUntilServicesStable", param0)
+	return m.WaitUntilServicesStableFunc(param0)
+}
+
+func (m *ecsMock) WaitUntilServicesStableWithContext(param0 aws.Context, param1 *ecs.DescribeServicesInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilServicesStableWithContext")
+	m.verifyInput("WaitUntilServicesStableWithContext", param0)
+	return m.WaitUntilServicesStableWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) WaitUntilTasksRunning(param0 *ecs.DescribeTasksInput) error {
+	m.addCall("WaitUntilTasksRunning")
+	m.verifyInput("WaitUntilTasksRunning", param0)
+	return m.WaitUntilTasksRunningFunc(param0)
+}
+
+func (m *ecsMock) WaitUntilTasksRunningWithContext(param0 aws.Context, param1 *ecs.DescribeTasksInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilTasksRunningWithContext")
+	m.verifyInput("WaitUntilTasksRunningWithContext", param0)
+	return m.WaitUntilTasksRunningWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecsMock) WaitUntilTasksStopped(param0 *ecs.DescribeTasksInput) error {
+	m.addCall("WaitUntilTasksStopped")
+	m.verifyInput("WaitUntilTasksStopped", param0)
+	return m.WaitUntilTasksStoppedFunc(param0)
+}
+
+func (m *ecsMock) WaitUntilTasksStoppedWithContext(param0 aws.Context, param1 *ecs.DescribeTasksInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilTasksStoppedWithContext")
+	m.verifyInput("WaitUntilTasksStoppedWithContext", param0)
+	return m.WaitUntilTasksStoppedWithContextFunc(param0, param1, param2...)
 }
 
 type iamMock struct {

@@ -69,6 +69,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateBucket(f.Sess, f.Log) }
 	case "createcertificate":
 		return func() interface{} { return NewCreateCertificate(f.Sess, f.Log) }
+	case "createcontainercluster":
+		return func() interface{} { return NewCreateContainercluster(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -111,6 +113,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteBucket(f.Sess, f.Log) }
 	case "deletecertificate":
 		return func() interface{} { return NewDeleteCertificate(f.Sess, f.Log) }
+	case "deletecontainercluster":
+		return func() interface{} { return NewDeleteContainercluster(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -189,6 +193,7 @@ var (
 	_ command = &CreateAppscalingtarget{}
 	_ command = &CreateBucket{}
 	_ command = &CreateCertificate{}
+	_ command = &CreateContainercluster{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -210,6 +215,7 @@ var (
 	_ command = &DeleteAppscalingtarget{}
 	_ command = &DeleteBucket{}
 	_ command = &DeleteCertificate{}
+	_ command = &DeleteContainercluster{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
