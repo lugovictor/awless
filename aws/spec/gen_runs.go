@@ -113,6 +113,74 @@ func (cmd *AttachAlarm) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewAttachContainertask(sess *session.Session, l ...*logger.Logger) *AttachContainertask {
+	cmd := new(AttachContainertask)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachContainertask) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *AttachContainertask) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachContainertask) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachContainertask) ParamsHelp() string {
+	return generateParamsHelp("attachcontainertask", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewAttachInternetgateway(sess *session.Session, l ...*logger.Logger) *AttachInternetgateway {
 	cmd := new(AttachInternetgateway)
 	if len(l) > 0 {
@@ -3226,6 +3294,74 @@ func (cmd *DeleteContainercluster) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteContainertask(sess *session.Session, l ...*logger.Logger) *DeleteContainertask {
+	cmd := new(DeleteContainertask)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteContainertask) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteContainertask) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteContainertask) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteContainertask) ParamsHelp() string {
+	return generateParamsHelp("deletecontainertask", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteGroup(sess *session.Session, l ...*logger.Logger) *DeleteGroup {
 	cmd := new(DeleteGroup)
 	if len(l) > 0 {
@@ -4623,6 +4759,74 @@ func (cmd *DetachAlarm) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDetachContainertask(sess *session.Session, l ...*logger.Logger) *DetachContainertask {
+	cmd := new(DetachContainertask)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachContainertask) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *DetachContainertask) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachContainertask) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachContainertask) ParamsHelp() string {
+	return generateParamsHelp("detachcontainertask", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDetachInternetgateway(sess *session.Session, l ...*logger.Logger) *DetachInternetgateway {
 	cmd := new(DetachInternetgateway)
 	if len(l) > 0 {
@@ -5204,6 +5408,74 @@ func (cmd *StartAlarm) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewStartContainertask(sess *session.Session, l ...*logger.Logger) *StartContainertask {
+	cmd := new(StartContainertask)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *StartContainertask) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *StartContainertask) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *StartContainertask) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *StartContainertask) ParamsHelp() string {
+	return generateParamsHelp("startcontainertask", structListParamsKeys(cmd))
+}
+
+func (cmd *StartContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewStopAlarm(sess *session.Session, l ...*logger.Logger) *StopAlarm {
 	cmd := new(StopAlarm)
 	if len(l) > 0 {
@@ -5278,6 +5550,74 @@ func (cmd *StopAlarm) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewStopContainertask(sess *session.Session, l ...*logger.Logger) *StopContainertask {
+	cmd := new(StopContainertask)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *StopContainertask) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *StopContainertask) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *StopContainertask) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *StopContainertask) ParamsHelp() string {
+	return generateParamsHelp("stopcontainertask", structListParamsKeys(cmd))
+}
+
+func (cmd *StopContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewUpdateBucket(sess *session.Session, l ...*logger.Logger) *UpdateBucket {
 	cmd := new(UpdateBucket)
 	if len(l) > 0 {
@@ -5343,6 +5683,80 @@ func (cmd *UpdateBucket) ParamsHelp() string {
 }
 
 func (cmd *UpdateBucket) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateContainertask(sess *session.Session, l ...*logger.Logger) *UpdateContainertask {
+	cmd := new(UpdateContainertask)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecs.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateContainertask) SetApi(api ecsiface.ECSAPI) {
+	cmd.api = api
+}
+
+func (cmd *UpdateContainertask) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ecs.UpdateServiceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ecs.UpdateServiceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.UpdateService(input)
+	cmd.logger.ExtraVerbosef("ecs.UpdateService call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateContainertask) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateContainertask) ParamsHelp() string {
+	return generateParamsHelp("updatecontainertask", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateContainertask) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

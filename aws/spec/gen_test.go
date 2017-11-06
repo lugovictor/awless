@@ -121,12 +121,26 @@ var (
 	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
 		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newUpdateSubnet           = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newUpdateSubnet        = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newAttachContainertask = func() *AttachContainertask {
+		return &AttachContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
+	}
 	newCreateContainercluster = func() *CreateContainercluster {
 		return &CreateContainercluster{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
 	newDeleteContainercluster = func() *DeleteContainercluster {
 		return &DeleteContainercluster{api: &mockEcs{}, logger: logger.DiscardLogger}
+	}
+	newDeleteContainertask = func() *DeleteContainertask {
+		return &DeleteContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
+	}
+	newDetachContainertask = func() *DetachContainertask {
+		return &DetachContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
+	}
+	newStartContainertask  = func() *StartContainertask { return &StartContainertask{api: &mockEcs{}, logger: logger.DiscardLogger} }
+	newStopContainertask   = func() *StopContainertask { return &StopContainertask{api: &mockEcs{}, logger: logger.DiscardLogger} }
+	newUpdateContainertask = func() *UpdateContainertask {
+		return &UpdateContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
 	newAttachPolicy    = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newAttachUser      = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -534,6 +548,16 @@ func (m *mockEcs) DeleteCluster(input *ecs.DeleteClusterInput) (*ecs.DeleteClust
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletecontainercluster"]; ok {
 		return outFunc().(*ecs.DeleteClusterOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEcs) UpdateService(input *ecs.UpdateServiceInput) (*ecs.UpdateServiceOutput, error) {
+	if got, want := input, genTestsExpected["updatecontainertask"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["updatecontainertask"]; ok {
+		return outFunc().(*ecs.UpdateServiceOutput), nil
 	}
 	return nil, nil
 }

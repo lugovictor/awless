@@ -46,6 +46,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
 			return cmd
 		}
+	case "attachcontainertask":
+		return func() interface{} {
+			cmd := awsspec.NewAttachContainertask(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
 	case "attachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewAttachInternetgateway(nil)
@@ -280,6 +286,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
 			return cmd
 		}
+	case "deletecontainertask":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteContainertask(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
 	case "deletegroup":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteGroup(nil)
@@ -376,6 +388,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
 			return cmd
 		}
+	case "detachcontainertask":
+		return func() interface{} {
+			cmd := awsspec.NewDetachContainertask(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
 	case "detachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewDetachInternetgateway(nil)
@@ -418,16 +436,34 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
 			return cmd
 		}
+	case "startcontainertask":
+		return func() interface{} {
+			cmd := awsspec.NewStartContainertask(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
 	case "stopalarm":
 		return func() interface{} {
 			cmd := awsspec.NewStopAlarm(nil)
 			cmd.SetApi(f.Mock.(cloudwatchiface.CloudWatchAPI))
 			return cmd
 		}
+	case "stopcontainertask":
+		return func() interface{} {
+			cmd := awsspec.NewStopContainertask(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
 	case "updatebucket":
 		return func() interface{} {
 			cmd := awsspec.NewUpdateBucket(nil)
 			cmd.SetApi(f.Mock.(s3iface.S3API))
+			return cmd
+		}
+	case "updatecontainertask":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateContainertask(nil)
+			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
 			return cmd
 		}
 	case "updatepolicy":
