@@ -25,6 +25,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/autoscaling"
+	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudformation"
 	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
@@ -73,6 +75,12 @@ var (
 	}
 	newDeleteAppscalingtarget = func() *DeleteAppscalingtarget {
 		return &DeleteAppscalingtarget{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
+	}
+	newCreateScalingpolicy = func() *CreateScalingpolicy {
+		return &CreateScalingpolicy{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
+	}
+	newDeleteScalingpolicy = func() *DeleteScalingpolicy {
+		return &DeleteScalingpolicy{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
 	}
 	newCreateStack       = func() *CreateStack { return &CreateStack{api: &mockCloudformation{}, logger: logger.DiscardLogger} }
 	newDeleteStack       = func() *DeleteStack { return &DeleteStack{api: &mockCloudformation{}, logger: logger.DiscardLogger} }
@@ -214,6 +222,9 @@ type mockAcm struct {
 type mockApplicationautoscaling struct {
 	applicationautoscalingiface.ApplicationAutoScalingAPI
 }
+type mockAutoscaling struct {
+	autoscalingiface.AutoScalingAPI
+}
 type mockCloudformation struct {
 	cloudformationiface.CloudFormationAPI
 }
@@ -297,6 +308,26 @@ func (m *mockApplicationautoscaling) DeregisterScalableTarget(input *application
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteappscalingtarget"]; ok {
 		return outFunc().(*applicationautoscaling.DeregisterScalableTargetOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockAutoscaling) PutScalingPolicy(input *autoscaling.PutScalingPolicyInput) (*autoscaling.PutScalingPolicyOutput, error) {
+	if got, want := input, genTestsExpected["createscalingpolicy"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createscalingpolicy"]; ok {
+		return outFunc().(*autoscaling.PutScalingPolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockAutoscaling) DeletePolicy(input *autoscaling.DeletePolicyInput) (*autoscaling.DeletePolicyOutput, error) {
+	if got, want := input, genTestsExpected["deletescalingpolicy"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletescalingpolicy"]; ok {
+		return outFunc().(*autoscaling.DeletePolicyOutput), nil
 	}
 	return nil, nil
 }

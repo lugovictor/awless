@@ -28,6 +28,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/autoscaling"
+	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudformation"
 	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront"
@@ -2724,6 +2726,80 @@ func (cmd *CreateRoutetable) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateScalingpolicy(sess *session.Session, l ...*logger.Logger) *CreateScalingpolicy {
+	cmd := new(CreateScalingpolicy)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateScalingpolicy) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateScalingpolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &autoscaling.PutScalingPolicyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in autoscaling.PutScalingPolicyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.PutScalingPolicy(input)
+	cmd.logger.ExtraVerbosef("autoscaling.PutScalingPolicy call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateScalingpolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateScalingpolicy) ParamsHelp() string {
+	return generateParamsHelp("createscalingpolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateScalingpolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateSecuritygroup(sess *session.Session, l ...*logger.Logger) *CreateSecuritygroup {
 	cmd := new(CreateSecuritygroup)
 	if len(l) > 0 {
@@ -5247,6 +5323,80 @@ func (cmd *DeleteRoutetable) ParamsHelp() string {
 }
 
 func (cmd *DeleteRoutetable) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteScalingpolicy(sess *session.Session, l ...*logger.Logger) *DeleteScalingpolicy {
+	cmd := new(DeleteScalingpolicy)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteScalingpolicy) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteScalingpolicy) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &autoscaling.DeletePolicyInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in autoscaling.DeletePolicyInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeletePolicy(input)
+	cmd.logger.ExtraVerbosef("autoscaling.DeletePolicy call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteScalingpolicy) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteScalingpolicy) ParamsHelp() string {
+	return generateParamsHelp("deletescalingpolicy", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteScalingpolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

@@ -24,6 +24,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/autoscaling"
+	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudformation"
 	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront"
@@ -415,6 +417,1145 @@ func (m *applicationautoscalingMock) RegisterScalableTargetWithContext(param0 aw
 	m.addCall("RegisterScalableTargetWithContext")
 	m.verifyInput("RegisterScalableTargetWithContext", param0)
 	return m.RegisterScalableTargetWithContextFunc(param0, param1, param2...)
+}
+
+type autoscalingMock struct {
+	basicMock
+	autoscalingiface.AutoScalingAPI
+	AttachInstancesFunc                                 func(param0 *autoscaling.AttachInstancesInput) (*autoscaling.AttachInstancesOutput, error)
+	AttachInstancesRequestFunc                          func(param0 *autoscaling.AttachInstancesInput) (*request.Request, *autoscaling.AttachInstancesOutput)
+	AttachInstancesWithContextFunc                      func(param0 aws.Context, param1 *autoscaling.AttachInstancesInput, param2 ...request.Option) (*autoscaling.AttachInstancesOutput, error)
+	AttachLoadBalancerTargetGroupsFunc                  func(param0 *autoscaling.AttachLoadBalancerTargetGroupsInput) (*autoscaling.AttachLoadBalancerTargetGroupsOutput, error)
+	AttachLoadBalancerTargetGroupsRequestFunc           func(param0 *autoscaling.AttachLoadBalancerTargetGroupsInput) (*request.Request, *autoscaling.AttachLoadBalancerTargetGroupsOutput)
+	AttachLoadBalancerTargetGroupsWithContextFunc       func(param0 aws.Context, param1 *autoscaling.AttachLoadBalancerTargetGroupsInput, param2 ...request.Option) (*autoscaling.AttachLoadBalancerTargetGroupsOutput, error)
+	AttachLoadBalancersFunc                             func(param0 *autoscaling.AttachLoadBalancersInput) (*autoscaling.AttachLoadBalancersOutput, error)
+	AttachLoadBalancersRequestFunc                      func(param0 *autoscaling.AttachLoadBalancersInput) (*request.Request, *autoscaling.AttachLoadBalancersOutput)
+	AttachLoadBalancersWithContextFunc                  func(param0 aws.Context, param1 *autoscaling.AttachLoadBalancersInput, param2 ...request.Option) (*autoscaling.AttachLoadBalancersOutput, error)
+	CompleteLifecycleActionFunc                         func(param0 *autoscaling.CompleteLifecycleActionInput) (*autoscaling.CompleteLifecycleActionOutput, error)
+	CompleteLifecycleActionRequestFunc                  func(param0 *autoscaling.CompleteLifecycleActionInput) (*request.Request, *autoscaling.CompleteLifecycleActionOutput)
+	CompleteLifecycleActionWithContextFunc              func(param0 aws.Context, param1 *autoscaling.CompleteLifecycleActionInput, param2 ...request.Option) (*autoscaling.CompleteLifecycleActionOutput, error)
+	CreateAutoScalingGroupFunc                          func(param0 *autoscaling.CreateAutoScalingGroupInput) (*autoscaling.CreateAutoScalingGroupOutput, error)
+	CreateAutoScalingGroupRequestFunc                   func(param0 *autoscaling.CreateAutoScalingGroupInput) (*request.Request, *autoscaling.CreateAutoScalingGroupOutput)
+	CreateAutoScalingGroupWithContextFunc               func(param0 aws.Context, param1 *autoscaling.CreateAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.CreateAutoScalingGroupOutput, error)
+	CreateLaunchConfigurationFunc                       func(param0 *autoscaling.CreateLaunchConfigurationInput) (*autoscaling.CreateLaunchConfigurationOutput, error)
+	CreateLaunchConfigurationRequestFunc                func(param0 *autoscaling.CreateLaunchConfigurationInput) (*request.Request, *autoscaling.CreateLaunchConfigurationOutput)
+	CreateLaunchConfigurationWithContextFunc            func(param0 aws.Context, param1 *autoscaling.CreateLaunchConfigurationInput, param2 ...request.Option) (*autoscaling.CreateLaunchConfigurationOutput, error)
+	CreateOrUpdateTagsFunc                              func(param0 *autoscaling.CreateOrUpdateTagsInput) (*autoscaling.CreateOrUpdateTagsOutput, error)
+	CreateOrUpdateTagsRequestFunc                       func(param0 *autoscaling.CreateOrUpdateTagsInput) (*request.Request, *autoscaling.CreateOrUpdateTagsOutput)
+	CreateOrUpdateTagsWithContextFunc                   func(param0 aws.Context, param1 *autoscaling.CreateOrUpdateTagsInput, param2 ...request.Option) (*autoscaling.CreateOrUpdateTagsOutput, error)
+	DeleteAutoScalingGroupFunc                          func(param0 *autoscaling.DeleteAutoScalingGroupInput) (*autoscaling.DeleteAutoScalingGroupOutput, error)
+	DeleteAutoScalingGroupRequestFunc                   func(param0 *autoscaling.DeleteAutoScalingGroupInput) (*request.Request, *autoscaling.DeleteAutoScalingGroupOutput)
+	DeleteAutoScalingGroupWithContextFunc               func(param0 aws.Context, param1 *autoscaling.DeleteAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.DeleteAutoScalingGroupOutput, error)
+	DeleteLaunchConfigurationFunc                       func(param0 *autoscaling.DeleteLaunchConfigurationInput) (*autoscaling.DeleteLaunchConfigurationOutput, error)
+	DeleteLaunchConfigurationRequestFunc                func(param0 *autoscaling.DeleteLaunchConfigurationInput) (*request.Request, *autoscaling.DeleteLaunchConfigurationOutput)
+	DeleteLaunchConfigurationWithContextFunc            func(param0 aws.Context, param1 *autoscaling.DeleteLaunchConfigurationInput, param2 ...request.Option) (*autoscaling.DeleteLaunchConfigurationOutput, error)
+	DeleteLifecycleHookFunc                             func(param0 *autoscaling.DeleteLifecycleHookInput) (*autoscaling.DeleteLifecycleHookOutput, error)
+	DeleteLifecycleHookRequestFunc                      func(param0 *autoscaling.DeleteLifecycleHookInput) (*request.Request, *autoscaling.DeleteLifecycleHookOutput)
+	DeleteLifecycleHookWithContextFunc                  func(param0 aws.Context, param1 *autoscaling.DeleteLifecycleHookInput, param2 ...request.Option) (*autoscaling.DeleteLifecycleHookOutput, error)
+	DeleteNotificationConfigurationFunc                 func(param0 *autoscaling.DeleteNotificationConfigurationInput) (*autoscaling.DeleteNotificationConfigurationOutput, error)
+	DeleteNotificationConfigurationRequestFunc          func(param0 *autoscaling.DeleteNotificationConfigurationInput) (*request.Request, *autoscaling.DeleteNotificationConfigurationOutput)
+	DeleteNotificationConfigurationWithContextFunc      func(param0 aws.Context, param1 *autoscaling.DeleteNotificationConfigurationInput, param2 ...request.Option) (*autoscaling.DeleteNotificationConfigurationOutput, error)
+	DeletePolicyFunc                                    func(param0 *autoscaling.DeletePolicyInput) (*autoscaling.DeletePolicyOutput, error)
+	DeletePolicyRequestFunc                             func(param0 *autoscaling.DeletePolicyInput) (*request.Request, *autoscaling.DeletePolicyOutput)
+	DeletePolicyWithContextFunc                         func(param0 aws.Context, param1 *autoscaling.DeletePolicyInput, param2 ...request.Option) (*autoscaling.DeletePolicyOutput, error)
+	DeleteScheduledActionFunc                           func(param0 *autoscaling.DeleteScheduledActionInput) (*autoscaling.DeleteScheduledActionOutput, error)
+	DeleteScheduledActionRequestFunc                    func(param0 *autoscaling.DeleteScheduledActionInput) (*request.Request, *autoscaling.DeleteScheduledActionOutput)
+	DeleteScheduledActionWithContextFunc                func(param0 aws.Context, param1 *autoscaling.DeleteScheduledActionInput, param2 ...request.Option) (*autoscaling.DeleteScheduledActionOutput, error)
+	DeleteTagsFunc                                      func(param0 *autoscaling.DeleteTagsInput) (*autoscaling.DeleteTagsOutput, error)
+	DeleteTagsRequestFunc                               func(param0 *autoscaling.DeleteTagsInput) (*request.Request, *autoscaling.DeleteTagsOutput)
+	DeleteTagsWithContextFunc                           func(param0 aws.Context, param1 *autoscaling.DeleteTagsInput, param2 ...request.Option) (*autoscaling.DeleteTagsOutput, error)
+	DescribeAccountLimitsFunc                           func(param0 *autoscaling.DescribeAccountLimitsInput) (*autoscaling.DescribeAccountLimitsOutput, error)
+	DescribeAccountLimitsRequestFunc                    func(param0 *autoscaling.DescribeAccountLimitsInput) (*request.Request, *autoscaling.DescribeAccountLimitsOutput)
+	DescribeAccountLimitsWithContextFunc                func(param0 aws.Context, param1 *autoscaling.DescribeAccountLimitsInput, param2 ...request.Option) (*autoscaling.DescribeAccountLimitsOutput, error)
+	DescribeAdjustmentTypesFunc                         func(param0 *autoscaling.DescribeAdjustmentTypesInput) (*autoscaling.DescribeAdjustmentTypesOutput, error)
+	DescribeAdjustmentTypesRequestFunc                  func(param0 *autoscaling.DescribeAdjustmentTypesInput) (*request.Request, *autoscaling.DescribeAdjustmentTypesOutput)
+	DescribeAdjustmentTypesWithContextFunc              func(param0 aws.Context, param1 *autoscaling.DescribeAdjustmentTypesInput, param2 ...request.Option) (*autoscaling.DescribeAdjustmentTypesOutput, error)
+	DescribeAutoScalingGroupsFunc                       func(param0 *autoscaling.DescribeAutoScalingGroupsInput) (*autoscaling.DescribeAutoScalingGroupsOutput, error)
+	DescribeAutoScalingGroupsRequestFunc                func(param0 *autoscaling.DescribeAutoScalingGroupsInput) (*request.Request, *autoscaling.DescribeAutoScalingGroupsOutput)
+	DescribeAutoScalingGroupsWithContextFunc            func(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.Option) (*autoscaling.DescribeAutoScalingGroupsOutput, error)
+	DescribeAutoScalingInstancesFunc                    func(param0 *autoscaling.DescribeAutoScalingInstancesInput) (*autoscaling.DescribeAutoScalingInstancesOutput, error)
+	DescribeAutoScalingInstancesRequestFunc             func(param0 *autoscaling.DescribeAutoScalingInstancesInput) (*request.Request, *autoscaling.DescribeAutoScalingInstancesOutput)
+	DescribeAutoScalingInstancesWithContextFunc         func(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingInstancesInput, param2 ...request.Option) (*autoscaling.DescribeAutoScalingInstancesOutput, error)
+	DescribeAutoScalingNotificationTypesFunc            func(param0 *autoscaling.DescribeAutoScalingNotificationTypesInput) (*autoscaling.DescribeAutoScalingNotificationTypesOutput, error)
+	DescribeAutoScalingNotificationTypesRequestFunc     func(param0 *autoscaling.DescribeAutoScalingNotificationTypesInput) (*request.Request, *autoscaling.DescribeAutoScalingNotificationTypesOutput)
+	DescribeAutoScalingNotificationTypesWithContextFunc func(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingNotificationTypesInput, param2 ...request.Option) (*autoscaling.DescribeAutoScalingNotificationTypesOutput, error)
+	DescribeLaunchConfigurationsFunc                    func(param0 *autoscaling.DescribeLaunchConfigurationsInput) (*autoscaling.DescribeLaunchConfigurationsOutput, error)
+	DescribeLaunchConfigurationsRequestFunc             func(param0 *autoscaling.DescribeLaunchConfigurationsInput) (*request.Request, *autoscaling.DescribeLaunchConfigurationsOutput)
+	DescribeLaunchConfigurationsWithContextFunc         func(param0 aws.Context, param1 *autoscaling.DescribeLaunchConfigurationsInput, param2 ...request.Option) (*autoscaling.DescribeLaunchConfigurationsOutput, error)
+	DescribeLifecycleHookTypesFunc                      func(param0 *autoscaling.DescribeLifecycleHookTypesInput) (*autoscaling.DescribeLifecycleHookTypesOutput, error)
+	DescribeLifecycleHookTypesRequestFunc               func(param0 *autoscaling.DescribeLifecycleHookTypesInput) (*request.Request, *autoscaling.DescribeLifecycleHookTypesOutput)
+	DescribeLifecycleHookTypesWithContextFunc           func(param0 aws.Context, param1 *autoscaling.DescribeLifecycleHookTypesInput, param2 ...request.Option) (*autoscaling.DescribeLifecycleHookTypesOutput, error)
+	DescribeLifecycleHooksFunc                          func(param0 *autoscaling.DescribeLifecycleHooksInput) (*autoscaling.DescribeLifecycleHooksOutput, error)
+	DescribeLifecycleHooksRequestFunc                   func(param0 *autoscaling.DescribeLifecycleHooksInput) (*request.Request, *autoscaling.DescribeLifecycleHooksOutput)
+	DescribeLifecycleHooksWithContextFunc               func(param0 aws.Context, param1 *autoscaling.DescribeLifecycleHooksInput, param2 ...request.Option) (*autoscaling.DescribeLifecycleHooksOutput, error)
+	DescribeLoadBalancerTargetGroupsFunc                func(param0 *autoscaling.DescribeLoadBalancerTargetGroupsInput) (*autoscaling.DescribeLoadBalancerTargetGroupsOutput, error)
+	DescribeLoadBalancerTargetGroupsRequestFunc         func(param0 *autoscaling.DescribeLoadBalancerTargetGroupsInput) (*request.Request, *autoscaling.DescribeLoadBalancerTargetGroupsOutput)
+	DescribeLoadBalancerTargetGroupsWithContextFunc     func(param0 aws.Context, param1 *autoscaling.DescribeLoadBalancerTargetGroupsInput, param2 ...request.Option) (*autoscaling.DescribeLoadBalancerTargetGroupsOutput, error)
+	DescribeLoadBalancersFunc                           func(param0 *autoscaling.DescribeLoadBalancersInput) (*autoscaling.DescribeLoadBalancersOutput, error)
+	DescribeLoadBalancersRequestFunc                    func(param0 *autoscaling.DescribeLoadBalancersInput) (*request.Request, *autoscaling.DescribeLoadBalancersOutput)
+	DescribeLoadBalancersWithContextFunc                func(param0 aws.Context, param1 *autoscaling.DescribeLoadBalancersInput, param2 ...request.Option) (*autoscaling.DescribeLoadBalancersOutput, error)
+	DescribeMetricCollectionTypesFunc                   func(param0 *autoscaling.DescribeMetricCollectionTypesInput) (*autoscaling.DescribeMetricCollectionTypesOutput, error)
+	DescribeMetricCollectionTypesRequestFunc            func(param0 *autoscaling.DescribeMetricCollectionTypesInput) (*request.Request, *autoscaling.DescribeMetricCollectionTypesOutput)
+	DescribeMetricCollectionTypesWithContextFunc        func(param0 aws.Context, param1 *autoscaling.DescribeMetricCollectionTypesInput, param2 ...request.Option) (*autoscaling.DescribeMetricCollectionTypesOutput, error)
+	DescribeNotificationConfigurationsFunc              func(param0 *autoscaling.DescribeNotificationConfigurationsInput) (*autoscaling.DescribeNotificationConfigurationsOutput, error)
+	DescribeNotificationConfigurationsRequestFunc       func(param0 *autoscaling.DescribeNotificationConfigurationsInput) (*request.Request, *autoscaling.DescribeNotificationConfigurationsOutput)
+	DescribeNotificationConfigurationsWithContextFunc   func(param0 aws.Context, param1 *autoscaling.DescribeNotificationConfigurationsInput, param2 ...request.Option) (*autoscaling.DescribeNotificationConfigurationsOutput, error)
+	DescribePoliciesFunc                                func(param0 *autoscaling.DescribePoliciesInput) (*autoscaling.DescribePoliciesOutput, error)
+	DescribePoliciesRequestFunc                         func(param0 *autoscaling.DescribePoliciesInput) (*request.Request, *autoscaling.DescribePoliciesOutput)
+	DescribePoliciesWithContextFunc                     func(param0 aws.Context, param1 *autoscaling.DescribePoliciesInput, param2 ...request.Option) (*autoscaling.DescribePoliciesOutput, error)
+	DescribeScalingActivitiesFunc                       func(param0 *autoscaling.DescribeScalingActivitiesInput) (*autoscaling.DescribeScalingActivitiesOutput, error)
+	DescribeScalingActivitiesRequestFunc                func(param0 *autoscaling.DescribeScalingActivitiesInput) (*request.Request, *autoscaling.DescribeScalingActivitiesOutput)
+	DescribeScalingActivitiesWithContextFunc            func(param0 aws.Context, param1 *autoscaling.DescribeScalingActivitiesInput, param2 ...request.Option) (*autoscaling.DescribeScalingActivitiesOutput, error)
+	DescribeScalingProcessTypesFunc                     func(param0 *autoscaling.DescribeScalingProcessTypesInput) (*autoscaling.DescribeScalingProcessTypesOutput, error)
+	DescribeScalingProcessTypesRequestFunc              func(param0 *autoscaling.DescribeScalingProcessTypesInput) (*request.Request, *autoscaling.DescribeScalingProcessTypesOutput)
+	DescribeScalingProcessTypesWithContextFunc          func(param0 aws.Context, param1 *autoscaling.DescribeScalingProcessTypesInput, param2 ...request.Option) (*autoscaling.DescribeScalingProcessTypesOutput, error)
+	DescribeScheduledActionsFunc                        func(param0 *autoscaling.DescribeScheduledActionsInput) (*autoscaling.DescribeScheduledActionsOutput, error)
+	DescribeScheduledActionsRequestFunc                 func(param0 *autoscaling.DescribeScheduledActionsInput) (*request.Request, *autoscaling.DescribeScheduledActionsOutput)
+	DescribeScheduledActionsWithContextFunc             func(param0 aws.Context, param1 *autoscaling.DescribeScheduledActionsInput, param2 ...request.Option) (*autoscaling.DescribeScheduledActionsOutput, error)
+	DescribeTagsFunc                                    func(param0 *autoscaling.DescribeTagsInput) (*autoscaling.DescribeTagsOutput, error)
+	DescribeTagsRequestFunc                             func(param0 *autoscaling.DescribeTagsInput) (*request.Request, *autoscaling.DescribeTagsOutput)
+	DescribeTagsWithContextFunc                         func(param0 aws.Context, param1 *autoscaling.DescribeTagsInput, param2 ...request.Option) (*autoscaling.DescribeTagsOutput, error)
+	DescribeTerminationPolicyTypesFunc                  func(param0 *autoscaling.DescribeTerminationPolicyTypesInput) (*autoscaling.DescribeTerminationPolicyTypesOutput, error)
+	DescribeTerminationPolicyTypesRequestFunc           func(param0 *autoscaling.DescribeTerminationPolicyTypesInput) (*request.Request, *autoscaling.DescribeTerminationPolicyTypesOutput)
+	DescribeTerminationPolicyTypesWithContextFunc       func(param0 aws.Context, param1 *autoscaling.DescribeTerminationPolicyTypesInput, param2 ...request.Option) (*autoscaling.DescribeTerminationPolicyTypesOutput, error)
+	DetachInstancesFunc                                 func(param0 *autoscaling.DetachInstancesInput) (*autoscaling.DetachInstancesOutput, error)
+	DetachInstancesRequestFunc                          func(param0 *autoscaling.DetachInstancesInput) (*request.Request, *autoscaling.DetachInstancesOutput)
+	DetachInstancesWithContextFunc                      func(param0 aws.Context, param1 *autoscaling.DetachInstancesInput, param2 ...request.Option) (*autoscaling.DetachInstancesOutput, error)
+	DetachLoadBalancerTargetGroupsFunc                  func(param0 *autoscaling.DetachLoadBalancerTargetGroupsInput) (*autoscaling.DetachLoadBalancerTargetGroupsOutput, error)
+	DetachLoadBalancerTargetGroupsRequestFunc           func(param0 *autoscaling.DetachLoadBalancerTargetGroupsInput) (*request.Request, *autoscaling.DetachLoadBalancerTargetGroupsOutput)
+	DetachLoadBalancerTargetGroupsWithContextFunc       func(param0 aws.Context, param1 *autoscaling.DetachLoadBalancerTargetGroupsInput, param2 ...request.Option) (*autoscaling.DetachLoadBalancerTargetGroupsOutput, error)
+	DetachLoadBalancersFunc                             func(param0 *autoscaling.DetachLoadBalancersInput) (*autoscaling.DetachLoadBalancersOutput, error)
+	DetachLoadBalancersRequestFunc                      func(param0 *autoscaling.DetachLoadBalancersInput) (*request.Request, *autoscaling.DetachLoadBalancersOutput)
+	DetachLoadBalancersWithContextFunc                  func(param0 aws.Context, param1 *autoscaling.DetachLoadBalancersInput, param2 ...request.Option) (*autoscaling.DetachLoadBalancersOutput, error)
+	DisableMetricsCollectionFunc                        func(param0 *autoscaling.DisableMetricsCollectionInput) (*autoscaling.DisableMetricsCollectionOutput, error)
+	DisableMetricsCollectionRequestFunc                 func(param0 *autoscaling.DisableMetricsCollectionInput) (*request.Request, *autoscaling.DisableMetricsCollectionOutput)
+	DisableMetricsCollectionWithContextFunc             func(param0 aws.Context, param1 *autoscaling.DisableMetricsCollectionInput, param2 ...request.Option) (*autoscaling.DisableMetricsCollectionOutput, error)
+	EnableMetricsCollectionFunc                         func(param0 *autoscaling.EnableMetricsCollectionInput) (*autoscaling.EnableMetricsCollectionOutput, error)
+	EnableMetricsCollectionRequestFunc                  func(param0 *autoscaling.EnableMetricsCollectionInput) (*request.Request, *autoscaling.EnableMetricsCollectionOutput)
+	EnableMetricsCollectionWithContextFunc              func(param0 aws.Context, param1 *autoscaling.EnableMetricsCollectionInput, param2 ...request.Option) (*autoscaling.EnableMetricsCollectionOutput, error)
+	EnterStandbyFunc                                    func(param0 *autoscaling.EnterStandbyInput) (*autoscaling.EnterStandbyOutput, error)
+	EnterStandbyRequestFunc                             func(param0 *autoscaling.EnterStandbyInput) (*request.Request, *autoscaling.EnterStandbyOutput)
+	EnterStandbyWithContextFunc                         func(param0 aws.Context, param1 *autoscaling.EnterStandbyInput, param2 ...request.Option) (*autoscaling.EnterStandbyOutput, error)
+	ExecutePolicyFunc                                   func(param0 *autoscaling.ExecutePolicyInput) (*autoscaling.ExecutePolicyOutput, error)
+	ExecutePolicyRequestFunc                            func(param0 *autoscaling.ExecutePolicyInput) (*request.Request, *autoscaling.ExecutePolicyOutput)
+	ExecutePolicyWithContextFunc                        func(param0 aws.Context, param1 *autoscaling.ExecutePolicyInput, param2 ...request.Option) (*autoscaling.ExecutePolicyOutput, error)
+	ExitStandbyFunc                                     func(param0 *autoscaling.ExitStandbyInput) (*autoscaling.ExitStandbyOutput, error)
+	ExitStandbyRequestFunc                              func(param0 *autoscaling.ExitStandbyInput) (*request.Request, *autoscaling.ExitStandbyOutput)
+	ExitStandbyWithContextFunc                          func(param0 aws.Context, param1 *autoscaling.ExitStandbyInput, param2 ...request.Option) (*autoscaling.ExitStandbyOutput, error)
+	PutLifecycleHookFunc                                func(param0 *autoscaling.PutLifecycleHookInput) (*autoscaling.PutLifecycleHookOutput, error)
+	PutLifecycleHookRequestFunc                         func(param0 *autoscaling.PutLifecycleHookInput) (*request.Request, *autoscaling.PutLifecycleHookOutput)
+	PutLifecycleHookWithContextFunc                     func(param0 aws.Context, param1 *autoscaling.PutLifecycleHookInput, param2 ...request.Option) (*autoscaling.PutLifecycleHookOutput, error)
+	PutNotificationConfigurationFunc                    func(param0 *autoscaling.PutNotificationConfigurationInput) (*autoscaling.PutNotificationConfigurationOutput, error)
+	PutNotificationConfigurationRequestFunc             func(param0 *autoscaling.PutNotificationConfigurationInput) (*request.Request, *autoscaling.PutNotificationConfigurationOutput)
+	PutNotificationConfigurationWithContextFunc         func(param0 aws.Context, param1 *autoscaling.PutNotificationConfigurationInput, param2 ...request.Option) (*autoscaling.PutNotificationConfigurationOutput, error)
+	PutScalingPolicyFunc                                func(param0 *autoscaling.PutScalingPolicyInput) (*autoscaling.PutScalingPolicyOutput, error)
+	PutScalingPolicyRequestFunc                         func(param0 *autoscaling.PutScalingPolicyInput) (*request.Request, *autoscaling.PutScalingPolicyOutput)
+	PutScalingPolicyWithContextFunc                     func(param0 aws.Context, param1 *autoscaling.PutScalingPolicyInput, param2 ...request.Option) (*autoscaling.PutScalingPolicyOutput, error)
+	PutScheduledUpdateGroupActionFunc                   func(param0 *autoscaling.PutScheduledUpdateGroupActionInput) (*autoscaling.PutScheduledUpdateGroupActionOutput, error)
+	PutScheduledUpdateGroupActionRequestFunc            func(param0 *autoscaling.PutScheduledUpdateGroupActionInput) (*request.Request, *autoscaling.PutScheduledUpdateGroupActionOutput)
+	PutScheduledUpdateGroupActionWithContextFunc        func(param0 aws.Context, param1 *autoscaling.PutScheduledUpdateGroupActionInput, param2 ...request.Option) (*autoscaling.PutScheduledUpdateGroupActionOutput, error)
+	RecordLifecycleActionHeartbeatFunc                  func(param0 *autoscaling.RecordLifecycleActionHeartbeatInput) (*autoscaling.RecordLifecycleActionHeartbeatOutput, error)
+	RecordLifecycleActionHeartbeatRequestFunc           func(param0 *autoscaling.RecordLifecycleActionHeartbeatInput) (*request.Request, *autoscaling.RecordLifecycleActionHeartbeatOutput)
+	RecordLifecycleActionHeartbeatWithContextFunc       func(param0 aws.Context, param1 *autoscaling.RecordLifecycleActionHeartbeatInput, param2 ...request.Option) (*autoscaling.RecordLifecycleActionHeartbeatOutput, error)
+	ResumeProcessesFunc                                 func(param0 *autoscaling.ScalingProcessQuery) (*autoscaling.ResumeProcessesOutput, error)
+	ResumeProcessesRequestFunc                          func(param0 *autoscaling.ScalingProcessQuery) (*request.Request, *autoscaling.ResumeProcessesOutput)
+	ResumeProcessesWithContextFunc                      func(param0 aws.Context, param1 *autoscaling.ScalingProcessQuery, param2 ...request.Option) (*autoscaling.ResumeProcessesOutput, error)
+	SetDesiredCapacityFunc                              func(param0 *autoscaling.SetDesiredCapacityInput) (*autoscaling.SetDesiredCapacityOutput, error)
+	SetDesiredCapacityRequestFunc                       func(param0 *autoscaling.SetDesiredCapacityInput) (*request.Request, *autoscaling.SetDesiredCapacityOutput)
+	SetDesiredCapacityWithContextFunc                   func(param0 aws.Context, param1 *autoscaling.SetDesiredCapacityInput, param2 ...request.Option) (*autoscaling.SetDesiredCapacityOutput, error)
+	SetInstanceHealthFunc                               func(param0 *autoscaling.SetInstanceHealthInput) (*autoscaling.SetInstanceHealthOutput, error)
+	SetInstanceHealthRequestFunc                        func(param0 *autoscaling.SetInstanceHealthInput) (*request.Request, *autoscaling.SetInstanceHealthOutput)
+	SetInstanceHealthWithContextFunc                    func(param0 aws.Context, param1 *autoscaling.SetInstanceHealthInput, param2 ...request.Option) (*autoscaling.SetInstanceHealthOutput, error)
+	SetInstanceProtectionFunc                           func(param0 *autoscaling.SetInstanceProtectionInput) (*autoscaling.SetInstanceProtectionOutput, error)
+	SetInstanceProtectionRequestFunc                    func(param0 *autoscaling.SetInstanceProtectionInput) (*request.Request, *autoscaling.SetInstanceProtectionOutput)
+	SetInstanceProtectionWithContextFunc                func(param0 aws.Context, param1 *autoscaling.SetInstanceProtectionInput, param2 ...request.Option) (*autoscaling.SetInstanceProtectionOutput, error)
+	SuspendProcessesFunc                                func(param0 *autoscaling.ScalingProcessQuery) (*autoscaling.SuspendProcessesOutput, error)
+	SuspendProcessesRequestFunc                         func(param0 *autoscaling.ScalingProcessQuery) (*request.Request, *autoscaling.SuspendProcessesOutput)
+	SuspendProcessesWithContextFunc                     func(param0 aws.Context, param1 *autoscaling.ScalingProcessQuery, param2 ...request.Option) (*autoscaling.SuspendProcessesOutput, error)
+	TerminateInstanceInAutoScalingGroupFunc             func(param0 *autoscaling.TerminateInstanceInAutoScalingGroupInput) (*autoscaling.TerminateInstanceInAutoScalingGroupOutput, error)
+	TerminateInstanceInAutoScalingGroupRequestFunc      func(param0 *autoscaling.TerminateInstanceInAutoScalingGroupInput) (*request.Request, *autoscaling.TerminateInstanceInAutoScalingGroupOutput)
+	TerminateInstanceInAutoScalingGroupWithContextFunc  func(param0 aws.Context, param1 *autoscaling.TerminateInstanceInAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.TerminateInstanceInAutoScalingGroupOutput, error)
+	UpdateAutoScalingGroupFunc                          func(param0 *autoscaling.UpdateAutoScalingGroupInput) (*autoscaling.UpdateAutoScalingGroupOutput, error)
+	UpdateAutoScalingGroupRequestFunc                   func(param0 *autoscaling.UpdateAutoScalingGroupInput) (*request.Request, *autoscaling.UpdateAutoScalingGroupOutput)
+	UpdateAutoScalingGroupWithContextFunc               func(param0 aws.Context, param1 *autoscaling.UpdateAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.UpdateAutoScalingGroupOutput, error)
+	WaitUntilGroupExistsFunc                            func(param0 *autoscaling.DescribeAutoScalingGroupsInput) error
+	WaitUntilGroupExistsWithContextFunc                 func(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.WaiterOption) error
+	WaitUntilGroupInServiceFunc                         func(param0 *autoscaling.DescribeAutoScalingGroupsInput) error
+	WaitUntilGroupInServiceWithContextFunc              func(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.WaiterOption) error
+	WaitUntilGroupNotExistsFunc                         func(param0 *autoscaling.DescribeAutoScalingGroupsInput) error
+	WaitUntilGroupNotExistsWithContextFunc              func(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.WaiterOption) error
+}
+
+func (m *autoscalingMock) AttachInstances(param0 *autoscaling.AttachInstancesInput) (*autoscaling.AttachInstancesOutput, error) {
+	m.addCall("AttachInstances")
+	m.verifyInput("AttachInstances", param0)
+	return m.AttachInstancesFunc(param0)
+}
+
+func (m *autoscalingMock) AttachInstancesRequest(param0 *autoscaling.AttachInstancesInput) (*request.Request, *autoscaling.AttachInstancesOutput) {
+	m.addCall("AttachInstancesRequest")
+	m.verifyInput("AttachInstancesRequest", param0)
+	return m.AttachInstancesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) AttachInstancesWithContext(param0 aws.Context, param1 *autoscaling.AttachInstancesInput, param2 ...request.Option) (*autoscaling.AttachInstancesOutput, error) {
+	m.addCall("AttachInstancesWithContext")
+	m.verifyInput("AttachInstancesWithContext", param0)
+	return m.AttachInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) AttachLoadBalancerTargetGroups(param0 *autoscaling.AttachLoadBalancerTargetGroupsInput) (*autoscaling.AttachLoadBalancerTargetGroupsOutput, error) {
+	m.addCall("AttachLoadBalancerTargetGroups")
+	m.verifyInput("AttachLoadBalancerTargetGroups", param0)
+	return m.AttachLoadBalancerTargetGroupsFunc(param0)
+}
+
+func (m *autoscalingMock) AttachLoadBalancerTargetGroupsRequest(param0 *autoscaling.AttachLoadBalancerTargetGroupsInput) (*request.Request, *autoscaling.AttachLoadBalancerTargetGroupsOutput) {
+	m.addCall("AttachLoadBalancerTargetGroupsRequest")
+	m.verifyInput("AttachLoadBalancerTargetGroupsRequest", param0)
+	return m.AttachLoadBalancerTargetGroupsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) AttachLoadBalancerTargetGroupsWithContext(param0 aws.Context, param1 *autoscaling.AttachLoadBalancerTargetGroupsInput, param2 ...request.Option) (*autoscaling.AttachLoadBalancerTargetGroupsOutput, error) {
+	m.addCall("AttachLoadBalancerTargetGroupsWithContext")
+	m.verifyInput("AttachLoadBalancerTargetGroupsWithContext", param0)
+	return m.AttachLoadBalancerTargetGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) AttachLoadBalancers(param0 *autoscaling.AttachLoadBalancersInput) (*autoscaling.AttachLoadBalancersOutput, error) {
+	m.addCall("AttachLoadBalancers")
+	m.verifyInput("AttachLoadBalancers", param0)
+	return m.AttachLoadBalancersFunc(param0)
+}
+
+func (m *autoscalingMock) AttachLoadBalancersRequest(param0 *autoscaling.AttachLoadBalancersInput) (*request.Request, *autoscaling.AttachLoadBalancersOutput) {
+	m.addCall("AttachLoadBalancersRequest")
+	m.verifyInput("AttachLoadBalancersRequest", param0)
+	return m.AttachLoadBalancersRequestFunc(param0)
+}
+
+func (m *autoscalingMock) AttachLoadBalancersWithContext(param0 aws.Context, param1 *autoscaling.AttachLoadBalancersInput, param2 ...request.Option) (*autoscaling.AttachLoadBalancersOutput, error) {
+	m.addCall("AttachLoadBalancersWithContext")
+	m.verifyInput("AttachLoadBalancersWithContext", param0)
+	return m.AttachLoadBalancersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) CompleteLifecycleAction(param0 *autoscaling.CompleteLifecycleActionInput) (*autoscaling.CompleteLifecycleActionOutput, error) {
+	m.addCall("CompleteLifecycleAction")
+	m.verifyInput("CompleteLifecycleAction", param0)
+	return m.CompleteLifecycleActionFunc(param0)
+}
+
+func (m *autoscalingMock) CompleteLifecycleActionRequest(param0 *autoscaling.CompleteLifecycleActionInput) (*request.Request, *autoscaling.CompleteLifecycleActionOutput) {
+	m.addCall("CompleteLifecycleActionRequest")
+	m.verifyInput("CompleteLifecycleActionRequest", param0)
+	return m.CompleteLifecycleActionRequestFunc(param0)
+}
+
+func (m *autoscalingMock) CompleteLifecycleActionWithContext(param0 aws.Context, param1 *autoscaling.CompleteLifecycleActionInput, param2 ...request.Option) (*autoscaling.CompleteLifecycleActionOutput, error) {
+	m.addCall("CompleteLifecycleActionWithContext")
+	m.verifyInput("CompleteLifecycleActionWithContext", param0)
+	return m.CompleteLifecycleActionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) CreateAutoScalingGroup(param0 *autoscaling.CreateAutoScalingGroupInput) (*autoscaling.CreateAutoScalingGroupOutput, error) {
+	m.addCall("CreateAutoScalingGroup")
+	m.verifyInput("CreateAutoScalingGroup", param0)
+	return m.CreateAutoScalingGroupFunc(param0)
+}
+
+func (m *autoscalingMock) CreateAutoScalingGroupRequest(param0 *autoscaling.CreateAutoScalingGroupInput) (*request.Request, *autoscaling.CreateAutoScalingGroupOutput) {
+	m.addCall("CreateAutoScalingGroupRequest")
+	m.verifyInput("CreateAutoScalingGroupRequest", param0)
+	return m.CreateAutoScalingGroupRequestFunc(param0)
+}
+
+func (m *autoscalingMock) CreateAutoScalingGroupWithContext(param0 aws.Context, param1 *autoscaling.CreateAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.CreateAutoScalingGroupOutput, error) {
+	m.addCall("CreateAutoScalingGroupWithContext")
+	m.verifyInput("CreateAutoScalingGroupWithContext", param0)
+	return m.CreateAutoScalingGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) CreateLaunchConfiguration(param0 *autoscaling.CreateLaunchConfigurationInput) (*autoscaling.CreateLaunchConfigurationOutput, error) {
+	m.addCall("CreateLaunchConfiguration")
+	m.verifyInput("CreateLaunchConfiguration", param0)
+	return m.CreateLaunchConfigurationFunc(param0)
+}
+
+func (m *autoscalingMock) CreateLaunchConfigurationRequest(param0 *autoscaling.CreateLaunchConfigurationInput) (*request.Request, *autoscaling.CreateLaunchConfigurationOutput) {
+	m.addCall("CreateLaunchConfigurationRequest")
+	m.verifyInput("CreateLaunchConfigurationRequest", param0)
+	return m.CreateLaunchConfigurationRequestFunc(param0)
+}
+
+func (m *autoscalingMock) CreateLaunchConfigurationWithContext(param0 aws.Context, param1 *autoscaling.CreateLaunchConfigurationInput, param2 ...request.Option) (*autoscaling.CreateLaunchConfigurationOutput, error) {
+	m.addCall("CreateLaunchConfigurationWithContext")
+	m.verifyInput("CreateLaunchConfigurationWithContext", param0)
+	return m.CreateLaunchConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) CreateOrUpdateTags(param0 *autoscaling.CreateOrUpdateTagsInput) (*autoscaling.CreateOrUpdateTagsOutput, error) {
+	m.addCall("CreateOrUpdateTags")
+	m.verifyInput("CreateOrUpdateTags", param0)
+	return m.CreateOrUpdateTagsFunc(param0)
+}
+
+func (m *autoscalingMock) CreateOrUpdateTagsRequest(param0 *autoscaling.CreateOrUpdateTagsInput) (*request.Request, *autoscaling.CreateOrUpdateTagsOutput) {
+	m.addCall("CreateOrUpdateTagsRequest")
+	m.verifyInput("CreateOrUpdateTagsRequest", param0)
+	return m.CreateOrUpdateTagsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) CreateOrUpdateTagsWithContext(param0 aws.Context, param1 *autoscaling.CreateOrUpdateTagsInput, param2 ...request.Option) (*autoscaling.CreateOrUpdateTagsOutput, error) {
+	m.addCall("CreateOrUpdateTagsWithContext")
+	m.verifyInput("CreateOrUpdateTagsWithContext", param0)
+	return m.CreateOrUpdateTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DeleteAutoScalingGroup(param0 *autoscaling.DeleteAutoScalingGroupInput) (*autoscaling.DeleteAutoScalingGroupOutput, error) {
+	m.addCall("DeleteAutoScalingGroup")
+	m.verifyInput("DeleteAutoScalingGroup", param0)
+	return m.DeleteAutoScalingGroupFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteAutoScalingGroupRequest(param0 *autoscaling.DeleteAutoScalingGroupInput) (*request.Request, *autoscaling.DeleteAutoScalingGroupOutput) {
+	m.addCall("DeleteAutoScalingGroupRequest")
+	m.verifyInput("DeleteAutoScalingGroupRequest", param0)
+	return m.DeleteAutoScalingGroupRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteAutoScalingGroupWithContext(param0 aws.Context, param1 *autoscaling.DeleteAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.DeleteAutoScalingGroupOutput, error) {
+	m.addCall("DeleteAutoScalingGroupWithContext")
+	m.verifyInput("DeleteAutoScalingGroupWithContext", param0)
+	return m.DeleteAutoScalingGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DeleteLaunchConfiguration(param0 *autoscaling.DeleteLaunchConfigurationInput) (*autoscaling.DeleteLaunchConfigurationOutput, error) {
+	m.addCall("DeleteLaunchConfiguration")
+	m.verifyInput("DeleteLaunchConfiguration", param0)
+	return m.DeleteLaunchConfigurationFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteLaunchConfigurationRequest(param0 *autoscaling.DeleteLaunchConfigurationInput) (*request.Request, *autoscaling.DeleteLaunchConfigurationOutput) {
+	m.addCall("DeleteLaunchConfigurationRequest")
+	m.verifyInput("DeleteLaunchConfigurationRequest", param0)
+	return m.DeleteLaunchConfigurationRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteLaunchConfigurationWithContext(param0 aws.Context, param1 *autoscaling.DeleteLaunchConfigurationInput, param2 ...request.Option) (*autoscaling.DeleteLaunchConfigurationOutput, error) {
+	m.addCall("DeleteLaunchConfigurationWithContext")
+	m.verifyInput("DeleteLaunchConfigurationWithContext", param0)
+	return m.DeleteLaunchConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DeleteLifecycleHook(param0 *autoscaling.DeleteLifecycleHookInput) (*autoscaling.DeleteLifecycleHookOutput, error) {
+	m.addCall("DeleteLifecycleHook")
+	m.verifyInput("DeleteLifecycleHook", param0)
+	return m.DeleteLifecycleHookFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteLifecycleHookRequest(param0 *autoscaling.DeleteLifecycleHookInput) (*request.Request, *autoscaling.DeleteLifecycleHookOutput) {
+	m.addCall("DeleteLifecycleHookRequest")
+	m.verifyInput("DeleteLifecycleHookRequest", param0)
+	return m.DeleteLifecycleHookRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteLifecycleHookWithContext(param0 aws.Context, param1 *autoscaling.DeleteLifecycleHookInput, param2 ...request.Option) (*autoscaling.DeleteLifecycleHookOutput, error) {
+	m.addCall("DeleteLifecycleHookWithContext")
+	m.verifyInput("DeleteLifecycleHookWithContext", param0)
+	return m.DeleteLifecycleHookWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DeleteNotificationConfiguration(param0 *autoscaling.DeleteNotificationConfigurationInput) (*autoscaling.DeleteNotificationConfigurationOutput, error) {
+	m.addCall("DeleteNotificationConfiguration")
+	m.verifyInput("DeleteNotificationConfiguration", param0)
+	return m.DeleteNotificationConfigurationFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteNotificationConfigurationRequest(param0 *autoscaling.DeleteNotificationConfigurationInput) (*request.Request, *autoscaling.DeleteNotificationConfigurationOutput) {
+	m.addCall("DeleteNotificationConfigurationRequest")
+	m.verifyInput("DeleteNotificationConfigurationRequest", param0)
+	return m.DeleteNotificationConfigurationRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteNotificationConfigurationWithContext(param0 aws.Context, param1 *autoscaling.DeleteNotificationConfigurationInput, param2 ...request.Option) (*autoscaling.DeleteNotificationConfigurationOutput, error) {
+	m.addCall("DeleteNotificationConfigurationWithContext")
+	m.verifyInput("DeleteNotificationConfigurationWithContext", param0)
+	return m.DeleteNotificationConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DeletePolicy(param0 *autoscaling.DeletePolicyInput) (*autoscaling.DeletePolicyOutput, error) {
+	m.addCall("DeletePolicy")
+	m.verifyInput("DeletePolicy", param0)
+	return m.DeletePolicyFunc(param0)
+}
+
+func (m *autoscalingMock) DeletePolicyRequest(param0 *autoscaling.DeletePolicyInput) (*request.Request, *autoscaling.DeletePolicyOutput) {
+	m.addCall("DeletePolicyRequest")
+	m.verifyInput("DeletePolicyRequest", param0)
+	return m.DeletePolicyRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DeletePolicyWithContext(param0 aws.Context, param1 *autoscaling.DeletePolicyInput, param2 ...request.Option) (*autoscaling.DeletePolicyOutput, error) {
+	m.addCall("DeletePolicyWithContext")
+	m.verifyInput("DeletePolicyWithContext", param0)
+	return m.DeletePolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DeleteScheduledAction(param0 *autoscaling.DeleteScheduledActionInput) (*autoscaling.DeleteScheduledActionOutput, error) {
+	m.addCall("DeleteScheduledAction")
+	m.verifyInput("DeleteScheduledAction", param0)
+	return m.DeleteScheduledActionFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteScheduledActionRequest(param0 *autoscaling.DeleteScheduledActionInput) (*request.Request, *autoscaling.DeleteScheduledActionOutput) {
+	m.addCall("DeleteScheduledActionRequest")
+	m.verifyInput("DeleteScheduledActionRequest", param0)
+	return m.DeleteScheduledActionRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteScheduledActionWithContext(param0 aws.Context, param1 *autoscaling.DeleteScheduledActionInput, param2 ...request.Option) (*autoscaling.DeleteScheduledActionOutput, error) {
+	m.addCall("DeleteScheduledActionWithContext")
+	m.verifyInput("DeleteScheduledActionWithContext", param0)
+	return m.DeleteScheduledActionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DeleteTags(param0 *autoscaling.DeleteTagsInput) (*autoscaling.DeleteTagsOutput, error) {
+	m.addCall("DeleteTags")
+	m.verifyInput("DeleteTags", param0)
+	return m.DeleteTagsFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteTagsRequest(param0 *autoscaling.DeleteTagsInput) (*request.Request, *autoscaling.DeleteTagsOutput) {
+	m.addCall("DeleteTagsRequest")
+	m.verifyInput("DeleteTagsRequest", param0)
+	return m.DeleteTagsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DeleteTagsWithContext(param0 aws.Context, param1 *autoscaling.DeleteTagsInput, param2 ...request.Option) (*autoscaling.DeleteTagsOutput, error) {
+	m.addCall("DeleteTagsWithContext")
+	m.verifyInput("DeleteTagsWithContext", param0)
+	return m.DeleteTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeAccountLimits(param0 *autoscaling.DescribeAccountLimitsInput) (*autoscaling.DescribeAccountLimitsOutput, error) {
+	m.addCall("DescribeAccountLimits")
+	m.verifyInput("DescribeAccountLimits", param0)
+	return m.DescribeAccountLimitsFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAccountLimitsRequest(param0 *autoscaling.DescribeAccountLimitsInput) (*request.Request, *autoscaling.DescribeAccountLimitsOutput) {
+	m.addCall("DescribeAccountLimitsRequest")
+	m.verifyInput("DescribeAccountLimitsRequest", param0)
+	return m.DescribeAccountLimitsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAccountLimitsWithContext(param0 aws.Context, param1 *autoscaling.DescribeAccountLimitsInput, param2 ...request.Option) (*autoscaling.DescribeAccountLimitsOutput, error) {
+	m.addCall("DescribeAccountLimitsWithContext")
+	m.verifyInput("DescribeAccountLimitsWithContext", param0)
+	return m.DescribeAccountLimitsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeAdjustmentTypes(param0 *autoscaling.DescribeAdjustmentTypesInput) (*autoscaling.DescribeAdjustmentTypesOutput, error) {
+	m.addCall("DescribeAdjustmentTypes")
+	m.verifyInput("DescribeAdjustmentTypes", param0)
+	return m.DescribeAdjustmentTypesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAdjustmentTypesRequest(param0 *autoscaling.DescribeAdjustmentTypesInput) (*request.Request, *autoscaling.DescribeAdjustmentTypesOutput) {
+	m.addCall("DescribeAdjustmentTypesRequest")
+	m.verifyInput("DescribeAdjustmentTypesRequest", param0)
+	return m.DescribeAdjustmentTypesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAdjustmentTypesWithContext(param0 aws.Context, param1 *autoscaling.DescribeAdjustmentTypesInput, param2 ...request.Option) (*autoscaling.DescribeAdjustmentTypesOutput, error) {
+	m.addCall("DescribeAdjustmentTypesWithContext")
+	m.verifyInput("DescribeAdjustmentTypesWithContext", param0)
+	return m.DescribeAdjustmentTypesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingGroups(param0 *autoscaling.DescribeAutoScalingGroupsInput) (*autoscaling.DescribeAutoScalingGroupsOutput, error) {
+	m.addCall("DescribeAutoScalingGroups")
+	m.verifyInput("DescribeAutoScalingGroups", param0)
+	return m.DescribeAutoScalingGroupsFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingGroupsRequest(param0 *autoscaling.DescribeAutoScalingGroupsInput) (*request.Request, *autoscaling.DescribeAutoScalingGroupsOutput) {
+	m.addCall("DescribeAutoScalingGroupsRequest")
+	m.verifyInput("DescribeAutoScalingGroupsRequest", param0)
+	return m.DescribeAutoScalingGroupsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingGroupsWithContext(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.Option) (*autoscaling.DescribeAutoScalingGroupsOutput, error) {
+	m.addCall("DescribeAutoScalingGroupsWithContext")
+	m.verifyInput("DescribeAutoScalingGroupsWithContext", param0)
+	return m.DescribeAutoScalingGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingInstances(param0 *autoscaling.DescribeAutoScalingInstancesInput) (*autoscaling.DescribeAutoScalingInstancesOutput, error) {
+	m.addCall("DescribeAutoScalingInstances")
+	m.verifyInput("DescribeAutoScalingInstances", param0)
+	return m.DescribeAutoScalingInstancesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingInstancesRequest(param0 *autoscaling.DescribeAutoScalingInstancesInput) (*request.Request, *autoscaling.DescribeAutoScalingInstancesOutput) {
+	m.addCall("DescribeAutoScalingInstancesRequest")
+	m.verifyInput("DescribeAutoScalingInstancesRequest", param0)
+	return m.DescribeAutoScalingInstancesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingInstancesWithContext(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingInstancesInput, param2 ...request.Option) (*autoscaling.DescribeAutoScalingInstancesOutput, error) {
+	m.addCall("DescribeAutoScalingInstancesWithContext")
+	m.verifyInput("DescribeAutoScalingInstancesWithContext", param0)
+	return m.DescribeAutoScalingInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingNotificationTypes(param0 *autoscaling.DescribeAutoScalingNotificationTypesInput) (*autoscaling.DescribeAutoScalingNotificationTypesOutput, error) {
+	m.addCall("DescribeAutoScalingNotificationTypes")
+	m.verifyInput("DescribeAutoScalingNotificationTypes", param0)
+	return m.DescribeAutoScalingNotificationTypesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingNotificationTypesRequest(param0 *autoscaling.DescribeAutoScalingNotificationTypesInput) (*request.Request, *autoscaling.DescribeAutoScalingNotificationTypesOutput) {
+	m.addCall("DescribeAutoScalingNotificationTypesRequest")
+	m.verifyInput("DescribeAutoScalingNotificationTypesRequest", param0)
+	return m.DescribeAutoScalingNotificationTypesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeAutoScalingNotificationTypesWithContext(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingNotificationTypesInput, param2 ...request.Option) (*autoscaling.DescribeAutoScalingNotificationTypesOutput, error) {
+	m.addCall("DescribeAutoScalingNotificationTypesWithContext")
+	m.verifyInput("DescribeAutoScalingNotificationTypesWithContext", param0)
+	return m.DescribeAutoScalingNotificationTypesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeLaunchConfigurations(param0 *autoscaling.DescribeLaunchConfigurationsInput) (*autoscaling.DescribeLaunchConfigurationsOutput, error) {
+	m.addCall("DescribeLaunchConfigurations")
+	m.verifyInput("DescribeLaunchConfigurations", param0)
+	return m.DescribeLaunchConfigurationsFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLaunchConfigurationsRequest(param0 *autoscaling.DescribeLaunchConfigurationsInput) (*request.Request, *autoscaling.DescribeLaunchConfigurationsOutput) {
+	m.addCall("DescribeLaunchConfigurationsRequest")
+	m.verifyInput("DescribeLaunchConfigurationsRequest", param0)
+	return m.DescribeLaunchConfigurationsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLaunchConfigurationsWithContext(param0 aws.Context, param1 *autoscaling.DescribeLaunchConfigurationsInput, param2 ...request.Option) (*autoscaling.DescribeLaunchConfigurationsOutput, error) {
+	m.addCall("DescribeLaunchConfigurationsWithContext")
+	m.verifyInput("DescribeLaunchConfigurationsWithContext", param0)
+	return m.DescribeLaunchConfigurationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeLifecycleHookTypes(param0 *autoscaling.DescribeLifecycleHookTypesInput) (*autoscaling.DescribeLifecycleHookTypesOutput, error) {
+	m.addCall("DescribeLifecycleHookTypes")
+	m.verifyInput("DescribeLifecycleHookTypes", param0)
+	return m.DescribeLifecycleHookTypesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLifecycleHookTypesRequest(param0 *autoscaling.DescribeLifecycleHookTypesInput) (*request.Request, *autoscaling.DescribeLifecycleHookTypesOutput) {
+	m.addCall("DescribeLifecycleHookTypesRequest")
+	m.verifyInput("DescribeLifecycleHookTypesRequest", param0)
+	return m.DescribeLifecycleHookTypesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLifecycleHookTypesWithContext(param0 aws.Context, param1 *autoscaling.DescribeLifecycleHookTypesInput, param2 ...request.Option) (*autoscaling.DescribeLifecycleHookTypesOutput, error) {
+	m.addCall("DescribeLifecycleHookTypesWithContext")
+	m.verifyInput("DescribeLifecycleHookTypesWithContext", param0)
+	return m.DescribeLifecycleHookTypesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeLifecycleHooks(param0 *autoscaling.DescribeLifecycleHooksInput) (*autoscaling.DescribeLifecycleHooksOutput, error) {
+	m.addCall("DescribeLifecycleHooks")
+	m.verifyInput("DescribeLifecycleHooks", param0)
+	return m.DescribeLifecycleHooksFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLifecycleHooksRequest(param0 *autoscaling.DescribeLifecycleHooksInput) (*request.Request, *autoscaling.DescribeLifecycleHooksOutput) {
+	m.addCall("DescribeLifecycleHooksRequest")
+	m.verifyInput("DescribeLifecycleHooksRequest", param0)
+	return m.DescribeLifecycleHooksRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLifecycleHooksWithContext(param0 aws.Context, param1 *autoscaling.DescribeLifecycleHooksInput, param2 ...request.Option) (*autoscaling.DescribeLifecycleHooksOutput, error) {
+	m.addCall("DescribeLifecycleHooksWithContext")
+	m.verifyInput("DescribeLifecycleHooksWithContext", param0)
+	return m.DescribeLifecycleHooksWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeLoadBalancerTargetGroups(param0 *autoscaling.DescribeLoadBalancerTargetGroupsInput) (*autoscaling.DescribeLoadBalancerTargetGroupsOutput, error) {
+	m.addCall("DescribeLoadBalancerTargetGroups")
+	m.verifyInput("DescribeLoadBalancerTargetGroups", param0)
+	return m.DescribeLoadBalancerTargetGroupsFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLoadBalancerTargetGroupsRequest(param0 *autoscaling.DescribeLoadBalancerTargetGroupsInput) (*request.Request, *autoscaling.DescribeLoadBalancerTargetGroupsOutput) {
+	m.addCall("DescribeLoadBalancerTargetGroupsRequest")
+	m.verifyInput("DescribeLoadBalancerTargetGroupsRequest", param0)
+	return m.DescribeLoadBalancerTargetGroupsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLoadBalancerTargetGroupsWithContext(param0 aws.Context, param1 *autoscaling.DescribeLoadBalancerTargetGroupsInput, param2 ...request.Option) (*autoscaling.DescribeLoadBalancerTargetGroupsOutput, error) {
+	m.addCall("DescribeLoadBalancerTargetGroupsWithContext")
+	m.verifyInput("DescribeLoadBalancerTargetGroupsWithContext", param0)
+	return m.DescribeLoadBalancerTargetGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeLoadBalancers(param0 *autoscaling.DescribeLoadBalancersInput) (*autoscaling.DescribeLoadBalancersOutput, error) {
+	m.addCall("DescribeLoadBalancers")
+	m.verifyInput("DescribeLoadBalancers", param0)
+	return m.DescribeLoadBalancersFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLoadBalancersRequest(param0 *autoscaling.DescribeLoadBalancersInput) (*request.Request, *autoscaling.DescribeLoadBalancersOutput) {
+	m.addCall("DescribeLoadBalancersRequest")
+	m.verifyInput("DescribeLoadBalancersRequest", param0)
+	return m.DescribeLoadBalancersRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeLoadBalancersWithContext(param0 aws.Context, param1 *autoscaling.DescribeLoadBalancersInput, param2 ...request.Option) (*autoscaling.DescribeLoadBalancersOutput, error) {
+	m.addCall("DescribeLoadBalancersWithContext")
+	m.verifyInput("DescribeLoadBalancersWithContext", param0)
+	return m.DescribeLoadBalancersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeMetricCollectionTypes(param0 *autoscaling.DescribeMetricCollectionTypesInput) (*autoscaling.DescribeMetricCollectionTypesOutput, error) {
+	m.addCall("DescribeMetricCollectionTypes")
+	m.verifyInput("DescribeMetricCollectionTypes", param0)
+	return m.DescribeMetricCollectionTypesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeMetricCollectionTypesRequest(param0 *autoscaling.DescribeMetricCollectionTypesInput) (*request.Request, *autoscaling.DescribeMetricCollectionTypesOutput) {
+	m.addCall("DescribeMetricCollectionTypesRequest")
+	m.verifyInput("DescribeMetricCollectionTypesRequest", param0)
+	return m.DescribeMetricCollectionTypesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeMetricCollectionTypesWithContext(param0 aws.Context, param1 *autoscaling.DescribeMetricCollectionTypesInput, param2 ...request.Option) (*autoscaling.DescribeMetricCollectionTypesOutput, error) {
+	m.addCall("DescribeMetricCollectionTypesWithContext")
+	m.verifyInput("DescribeMetricCollectionTypesWithContext", param0)
+	return m.DescribeMetricCollectionTypesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeNotificationConfigurations(param0 *autoscaling.DescribeNotificationConfigurationsInput) (*autoscaling.DescribeNotificationConfigurationsOutput, error) {
+	m.addCall("DescribeNotificationConfigurations")
+	m.verifyInput("DescribeNotificationConfigurations", param0)
+	return m.DescribeNotificationConfigurationsFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeNotificationConfigurationsRequest(param0 *autoscaling.DescribeNotificationConfigurationsInput) (*request.Request, *autoscaling.DescribeNotificationConfigurationsOutput) {
+	m.addCall("DescribeNotificationConfigurationsRequest")
+	m.verifyInput("DescribeNotificationConfigurationsRequest", param0)
+	return m.DescribeNotificationConfigurationsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeNotificationConfigurationsWithContext(param0 aws.Context, param1 *autoscaling.DescribeNotificationConfigurationsInput, param2 ...request.Option) (*autoscaling.DescribeNotificationConfigurationsOutput, error) {
+	m.addCall("DescribeNotificationConfigurationsWithContext")
+	m.verifyInput("DescribeNotificationConfigurationsWithContext", param0)
+	return m.DescribeNotificationConfigurationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribePolicies(param0 *autoscaling.DescribePoliciesInput) (*autoscaling.DescribePoliciesOutput, error) {
+	m.addCall("DescribePolicies")
+	m.verifyInput("DescribePolicies", param0)
+	return m.DescribePoliciesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribePoliciesRequest(param0 *autoscaling.DescribePoliciesInput) (*request.Request, *autoscaling.DescribePoliciesOutput) {
+	m.addCall("DescribePoliciesRequest")
+	m.verifyInput("DescribePoliciesRequest", param0)
+	return m.DescribePoliciesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribePoliciesWithContext(param0 aws.Context, param1 *autoscaling.DescribePoliciesInput, param2 ...request.Option) (*autoscaling.DescribePoliciesOutput, error) {
+	m.addCall("DescribePoliciesWithContext")
+	m.verifyInput("DescribePoliciesWithContext", param0)
+	return m.DescribePoliciesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeScalingActivities(param0 *autoscaling.DescribeScalingActivitiesInput) (*autoscaling.DescribeScalingActivitiesOutput, error) {
+	m.addCall("DescribeScalingActivities")
+	m.verifyInput("DescribeScalingActivities", param0)
+	return m.DescribeScalingActivitiesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeScalingActivitiesRequest(param0 *autoscaling.DescribeScalingActivitiesInput) (*request.Request, *autoscaling.DescribeScalingActivitiesOutput) {
+	m.addCall("DescribeScalingActivitiesRequest")
+	m.verifyInput("DescribeScalingActivitiesRequest", param0)
+	return m.DescribeScalingActivitiesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeScalingActivitiesWithContext(param0 aws.Context, param1 *autoscaling.DescribeScalingActivitiesInput, param2 ...request.Option) (*autoscaling.DescribeScalingActivitiesOutput, error) {
+	m.addCall("DescribeScalingActivitiesWithContext")
+	m.verifyInput("DescribeScalingActivitiesWithContext", param0)
+	return m.DescribeScalingActivitiesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeScalingProcessTypes(param0 *autoscaling.DescribeScalingProcessTypesInput) (*autoscaling.DescribeScalingProcessTypesOutput, error) {
+	m.addCall("DescribeScalingProcessTypes")
+	m.verifyInput("DescribeScalingProcessTypes", param0)
+	return m.DescribeScalingProcessTypesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeScalingProcessTypesRequest(param0 *autoscaling.DescribeScalingProcessTypesInput) (*request.Request, *autoscaling.DescribeScalingProcessTypesOutput) {
+	m.addCall("DescribeScalingProcessTypesRequest")
+	m.verifyInput("DescribeScalingProcessTypesRequest", param0)
+	return m.DescribeScalingProcessTypesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeScalingProcessTypesWithContext(param0 aws.Context, param1 *autoscaling.DescribeScalingProcessTypesInput, param2 ...request.Option) (*autoscaling.DescribeScalingProcessTypesOutput, error) {
+	m.addCall("DescribeScalingProcessTypesWithContext")
+	m.verifyInput("DescribeScalingProcessTypesWithContext", param0)
+	return m.DescribeScalingProcessTypesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeScheduledActions(param0 *autoscaling.DescribeScheduledActionsInput) (*autoscaling.DescribeScheduledActionsOutput, error) {
+	m.addCall("DescribeScheduledActions")
+	m.verifyInput("DescribeScheduledActions", param0)
+	return m.DescribeScheduledActionsFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeScheduledActionsRequest(param0 *autoscaling.DescribeScheduledActionsInput) (*request.Request, *autoscaling.DescribeScheduledActionsOutput) {
+	m.addCall("DescribeScheduledActionsRequest")
+	m.verifyInput("DescribeScheduledActionsRequest", param0)
+	return m.DescribeScheduledActionsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeScheduledActionsWithContext(param0 aws.Context, param1 *autoscaling.DescribeScheduledActionsInput, param2 ...request.Option) (*autoscaling.DescribeScheduledActionsOutput, error) {
+	m.addCall("DescribeScheduledActionsWithContext")
+	m.verifyInput("DescribeScheduledActionsWithContext", param0)
+	return m.DescribeScheduledActionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeTags(param0 *autoscaling.DescribeTagsInput) (*autoscaling.DescribeTagsOutput, error) {
+	m.addCall("DescribeTags")
+	m.verifyInput("DescribeTags", param0)
+	return m.DescribeTagsFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeTagsRequest(param0 *autoscaling.DescribeTagsInput) (*request.Request, *autoscaling.DescribeTagsOutput) {
+	m.addCall("DescribeTagsRequest")
+	m.verifyInput("DescribeTagsRequest", param0)
+	return m.DescribeTagsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeTagsWithContext(param0 aws.Context, param1 *autoscaling.DescribeTagsInput, param2 ...request.Option) (*autoscaling.DescribeTagsOutput, error) {
+	m.addCall("DescribeTagsWithContext")
+	m.verifyInput("DescribeTagsWithContext", param0)
+	return m.DescribeTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DescribeTerminationPolicyTypes(param0 *autoscaling.DescribeTerminationPolicyTypesInput) (*autoscaling.DescribeTerminationPolicyTypesOutput, error) {
+	m.addCall("DescribeTerminationPolicyTypes")
+	m.verifyInput("DescribeTerminationPolicyTypes", param0)
+	return m.DescribeTerminationPolicyTypesFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeTerminationPolicyTypesRequest(param0 *autoscaling.DescribeTerminationPolicyTypesInput) (*request.Request, *autoscaling.DescribeTerminationPolicyTypesOutput) {
+	m.addCall("DescribeTerminationPolicyTypesRequest")
+	m.verifyInput("DescribeTerminationPolicyTypesRequest", param0)
+	return m.DescribeTerminationPolicyTypesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DescribeTerminationPolicyTypesWithContext(param0 aws.Context, param1 *autoscaling.DescribeTerminationPolicyTypesInput, param2 ...request.Option) (*autoscaling.DescribeTerminationPolicyTypesOutput, error) {
+	m.addCall("DescribeTerminationPolicyTypesWithContext")
+	m.verifyInput("DescribeTerminationPolicyTypesWithContext", param0)
+	return m.DescribeTerminationPolicyTypesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DetachInstances(param0 *autoscaling.DetachInstancesInput) (*autoscaling.DetachInstancesOutput, error) {
+	m.addCall("DetachInstances")
+	m.verifyInput("DetachInstances", param0)
+	return m.DetachInstancesFunc(param0)
+}
+
+func (m *autoscalingMock) DetachInstancesRequest(param0 *autoscaling.DetachInstancesInput) (*request.Request, *autoscaling.DetachInstancesOutput) {
+	m.addCall("DetachInstancesRequest")
+	m.verifyInput("DetachInstancesRequest", param0)
+	return m.DetachInstancesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DetachInstancesWithContext(param0 aws.Context, param1 *autoscaling.DetachInstancesInput, param2 ...request.Option) (*autoscaling.DetachInstancesOutput, error) {
+	m.addCall("DetachInstancesWithContext")
+	m.verifyInput("DetachInstancesWithContext", param0)
+	return m.DetachInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DetachLoadBalancerTargetGroups(param0 *autoscaling.DetachLoadBalancerTargetGroupsInput) (*autoscaling.DetachLoadBalancerTargetGroupsOutput, error) {
+	m.addCall("DetachLoadBalancerTargetGroups")
+	m.verifyInput("DetachLoadBalancerTargetGroups", param0)
+	return m.DetachLoadBalancerTargetGroupsFunc(param0)
+}
+
+func (m *autoscalingMock) DetachLoadBalancerTargetGroupsRequest(param0 *autoscaling.DetachLoadBalancerTargetGroupsInput) (*request.Request, *autoscaling.DetachLoadBalancerTargetGroupsOutput) {
+	m.addCall("DetachLoadBalancerTargetGroupsRequest")
+	m.verifyInput("DetachLoadBalancerTargetGroupsRequest", param0)
+	return m.DetachLoadBalancerTargetGroupsRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DetachLoadBalancerTargetGroupsWithContext(param0 aws.Context, param1 *autoscaling.DetachLoadBalancerTargetGroupsInput, param2 ...request.Option) (*autoscaling.DetachLoadBalancerTargetGroupsOutput, error) {
+	m.addCall("DetachLoadBalancerTargetGroupsWithContext")
+	m.verifyInput("DetachLoadBalancerTargetGroupsWithContext", param0)
+	return m.DetachLoadBalancerTargetGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DetachLoadBalancers(param0 *autoscaling.DetachLoadBalancersInput) (*autoscaling.DetachLoadBalancersOutput, error) {
+	m.addCall("DetachLoadBalancers")
+	m.verifyInput("DetachLoadBalancers", param0)
+	return m.DetachLoadBalancersFunc(param0)
+}
+
+func (m *autoscalingMock) DetachLoadBalancersRequest(param0 *autoscaling.DetachLoadBalancersInput) (*request.Request, *autoscaling.DetachLoadBalancersOutput) {
+	m.addCall("DetachLoadBalancersRequest")
+	m.verifyInput("DetachLoadBalancersRequest", param0)
+	return m.DetachLoadBalancersRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DetachLoadBalancersWithContext(param0 aws.Context, param1 *autoscaling.DetachLoadBalancersInput, param2 ...request.Option) (*autoscaling.DetachLoadBalancersOutput, error) {
+	m.addCall("DetachLoadBalancersWithContext")
+	m.verifyInput("DetachLoadBalancersWithContext", param0)
+	return m.DetachLoadBalancersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) DisableMetricsCollection(param0 *autoscaling.DisableMetricsCollectionInput) (*autoscaling.DisableMetricsCollectionOutput, error) {
+	m.addCall("DisableMetricsCollection")
+	m.verifyInput("DisableMetricsCollection", param0)
+	return m.DisableMetricsCollectionFunc(param0)
+}
+
+func (m *autoscalingMock) DisableMetricsCollectionRequest(param0 *autoscaling.DisableMetricsCollectionInput) (*request.Request, *autoscaling.DisableMetricsCollectionOutput) {
+	m.addCall("DisableMetricsCollectionRequest")
+	m.verifyInput("DisableMetricsCollectionRequest", param0)
+	return m.DisableMetricsCollectionRequestFunc(param0)
+}
+
+func (m *autoscalingMock) DisableMetricsCollectionWithContext(param0 aws.Context, param1 *autoscaling.DisableMetricsCollectionInput, param2 ...request.Option) (*autoscaling.DisableMetricsCollectionOutput, error) {
+	m.addCall("DisableMetricsCollectionWithContext")
+	m.verifyInput("DisableMetricsCollectionWithContext", param0)
+	return m.DisableMetricsCollectionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) EnableMetricsCollection(param0 *autoscaling.EnableMetricsCollectionInput) (*autoscaling.EnableMetricsCollectionOutput, error) {
+	m.addCall("EnableMetricsCollection")
+	m.verifyInput("EnableMetricsCollection", param0)
+	return m.EnableMetricsCollectionFunc(param0)
+}
+
+func (m *autoscalingMock) EnableMetricsCollectionRequest(param0 *autoscaling.EnableMetricsCollectionInput) (*request.Request, *autoscaling.EnableMetricsCollectionOutput) {
+	m.addCall("EnableMetricsCollectionRequest")
+	m.verifyInput("EnableMetricsCollectionRequest", param0)
+	return m.EnableMetricsCollectionRequestFunc(param0)
+}
+
+func (m *autoscalingMock) EnableMetricsCollectionWithContext(param0 aws.Context, param1 *autoscaling.EnableMetricsCollectionInput, param2 ...request.Option) (*autoscaling.EnableMetricsCollectionOutput, error) {
+	m.addCall("EnableMetricsCollectionWithContext")
+	m.verifyInput("EnableMetricsCollectionWithContext", param0)
+	return m.EnableMetricsCollectionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) EnterStandby(param0 *autoscaling.EnterStandbyInput) (*autoscaling.EnterStandbyOutput, error) {
+	m.addCall("EnterStandby")
+	m.verifyInput("EnterStandby", param0)
+	return m.EnterStandbyFunc(param0)
+}
+
+func (m *autoscalingMock) EnterStandbyRequest(param0 *autoscaling.EnterStandbyInput) (*request.Request, *autoscaling.EnterStandbyOutput) {
+	m.addCall("EnterStandbyRequest")
+	m.verifyInput("EnterStandbyRequest", param0)
+	return m.EnterStandbyRequestFunc(param0)
+}
+
+func (m *autoscalingMock) EnterStandbyWithContext(param0 aws.Context, param1 *autoscaling.EnterStandbyInput, param2 ...request.Option) (*autoscaling.EnterStandbyOutput, error) {
+	m.addCall("EnterStandbyWithContext")
+	m.verifyInput("EnterStandbyWithContext", param0)
+	return m.EnterStandbyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) ExecutePolicy(param0 *autoscaling.ExecutePolicyInput) (*autoscaling.ExecutePolicyOutput, error) {
+	m.addCall("ExecutePolicy")
+	m.verifyInput("ExecutePolicy", param0)
+	return m.ExecutePolicyFunc(param0)
+}
+
+func (m *autoscalingMock) ExecutePolicyRequest(param0 *autoscaling.ExecutePolicyInput) (*request.Request, *autoscaling.ExecutePolicyOutput) {
+	m.addCall("ExecutePolicyRequest")
+	m.verifyInput("ExecutePolicyRequest", param0)
+	return m.ExecutePolicyRequestFunc(param0)
+}
+
+func (m *autoscalingMock) ExecutePolicyWithContext(param0 aws.Context, param1 *autoscaling.ExecutePolicyInput, param2 ...request.Option) (*autoscaling.ExecutePolicyOutput, error) {
+	m.addCall("ExecutePolicyWithContext")
+	m.verifyInput("ExecutePolicyWithContext", param0)
+	return m.ExecutePolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) ExitStandby(param0 *autoscaling.ExitStandbyInput) (*autoscaling.ExitStandbyOutput, error) {
+	m.addCall("ExitStandby")
+	m.verifyInput("ExitStandby", param0)
+	return m.ExitStandbyFunc(param0)
+}
+
+func (m *autoscalingMock) ExitStandbyRequest(param0 *autoscaling.ExitStandbyInput) (*request.Request, *autoscaling.ExitStandbyOutput) {
+	m.addCall("ExitStandbyRequest")
+	m.verifyInput("ExitStandbyRequest", param0)
+	return m.ExitStandbyRequestFunc(param0)
+}
+
+func (m *autoscalingMock) ExitStandbyWithContext(param0 aws.Context, param1 *autoscaling.ExitStandbyInput, param2 ...request.Option) (*autoscaling.ExitStandbyOutput, error) {
+	m.addCall("ExitStandbyWithContext")
+	m.verifyInput("ExitStandbyWithContext", param0)
+	return m.ExitStandbyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) PutLifecycleHook(param0 *autoscaling.PutLifecycleHookInput) (*autoscaling.PutLifecycleHookOutput, error) {
+	m.addCall("PutLifecycleHook")
+	m.verifyInput("PutLifecycleHook", param0)
+	return m.PutLifecycleHookFunc(param0)
+}
+
+func (m *autoscalingMock) PutLifecycleHookRequest(param0 *autoscaling.PutLifecycleHookInput) (*request.Request, *autoscaling.PutLifecycleHookOutput) {
+	m.addCall("PutLifecycleHookRequest")
+	m.verifyInput("PutLifecycleHookRequest", param0)
+	return m.PutLifecycleHookRequestFunc(param0)
+}
+
+func (m *autoscalingMock) PutLifecycleHookWithContext(param0 aws.Context, param1 *autoscaling.PutLifecycleHookInput, param2 ...request.Option) (*autoscaling.PutLifecycleHookOutput, error) {
+	m.addCall("PutLifecycleHookWithContext")
+	m.verifyInput("PutLifecycleHookWithContext", param0)
+	return m.PutLifecycleHookWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) PutNotificationConfiguration(param0 *autoscaling.PutNotificationConfigurationInput) (*autoscaling.PutNotificationConfigurationOutput, error) {
+	m.addCall("PutNotificationConfiguration")
+	m.verifyInput("PutNotificationConfiguration", param0)
+	return m.PutNotificationConfigurationFunc(param0)
+}
+
+func (m *autoscalingMock) PutNotificationConfigurationRequest(param0 *autoscaling.PutNotificationConfigurationInput) (*request.Request, *autoscaling.PutNotificationConfigurationOutput) {
+	m.addCall("PutNotificationConfigurationRequest")
+	m.verifyInput("PutNotificationConfigurationRequest", param0)
+	return m.PutNotificationConfigurationRequestFunc(param0)
+}
+
+func (m *autoscalingMock) PutNotificationConfigurationWithContext(param0 aws.Context, param1 *autoscaling.PutNotificationConfigurationInput, param2 ...request.Option) (*autoscaling.PutNotificationConfigurationOutput, error) {
+	m.addCall("PutNotificationConfigurationWithContext")
+	m.verifyInput("PutNotificationConfigurationWithContext", param0)
+	return m.PutNotificationConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) PutScalingPolicy(param0 *autoscaling.PutScalingPolicyInput) (*autoscaling.PutScalingPolicyOutput, error) {
+	m.addCall("PutScalingPolicy")
+	m.verifyInput("PutScalingPolicy", param0)
+	return m.PutScalingPolicyFunc(param0)
+}
+
+func (m *autoscalingMock) PutScalingPolicyRequest(param0 *autoscaling.PutScalingPolicyInput) (*request.Request, *autoscaling.PutScalingPolicyOutput) {
+	m.addCall("PutScalingPolicyRequest")
+	m.verifyInput("PutScalingPolicyRequest", param0)
+	return m.PutScalingPolicyRequestFunc(param0)
+}
+
+func (m *autoscalingMock) PutScalingPolicyWithContext(param0 aws.Context, param1 *autoscaling.PutScalingPolicyInput, param2 ...request.Option) (*autoscaling.PutScalingPolicyOutput, error) {
+	m.addCall("PutScalingPolicyWithContext")
+	m.verifyInput("PutScalingPolicyWithContext", param0)
+	return m.PutScalingPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) PutScheduledUpdateGroupAction(param0 *autoscaling.PutScheduledUpdateGroupActionInput) (*autoscaling.PutScheduledUpdateGroupActionOutput, error) {
+	m.addCall("PutScheduledUpdateGroupAction")
+	m.verifyInput("PutScheduledUpdateGroupAction", param0)
+	return m.PutScheduledUpdateGroupActionFunc(param0)
+}
+
+func (m *autoscalingMock) PutScheduledUpdateGroupActionRequest(param0 *autoscaling.PutScheduledUpdateGroupActionInput) (*request.Request, *autoscaling.PutScheduledUpdateGroupActionOutput) {
+	m.addCall("PutScheduledUpdateGroupActionRequest")
+	m.verifyInput("PutScheduledUpdateGroupActionRequest", param0)
+	return m.PutScheduledUpdateGroupActionRequestFunc(param0)
+}
+
+func (m *autoscalingMock) PutScheduledUpdateGroupActionWithContext(param0 aws.Context, param1 *autoscaling.PutScheduledUpdateGroupActionInput, param2 ...request.Option) (*autoscaling.PutScheduledUpdateGroupActionOutput, error) {
+	m.addCall("PutScheduledUpdateGroupActionWithContext")
+	m.verifyInput("PutScheduledUpdateGroupActionWithContext", param0)
+	return m.PutScheduledUpdateGroupActionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) RecordLifecycleActionHeartbeat(param0 *autoscaling.RecordLifecycleActionHeartbeatInput) (*autoscaling.RecordLifecycleActionHeartbeatOutput, error) {
+	m.addCall("RecordLifecycleActionHeartbeat")
+	m.verifyInput("RecordLifecycleActionHeartbeat", param0)
+	return m.RecordLifecycleActionHeartbeatFunc(param0)
+}
+
+func (m *autoscalingMock) RecordLifecycleActionHeartbeatRequest(param0 *autoscaling.RecordLifecycleActionHeartbeatInput) (*request.Request, *autoscaling.RecordLifecycleActionHeartbeatOutput) {
+	m.addCall("RecordLifecycleActionHeartbeatRequest")
+	m.verifyInput("RecordLifecycleActionHeartbeatRequest", param0)
+	return m.RecordLifecycleActionHeartbeatRequestFunc(param0)
+}
+
+func (m *autoscalingMock) RecordLifecycleActionHeartbeatWithContext(param0 aws.Context, param1 *autoscaling.RecordLifecycleActionHeartbeatInput, param2 ...request.Option) (*autoscaling.RecordLifecycleActionHeartbeatOutput, error) {
+	m.addCall("RecordLifecycleActionHeartbeatWithContext")
+	m.verifyInput("RecordLifecycleActionHeartbeatWithContext", param0)
+	return m.RecordLifecycleActionHeartbeatWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) ResumeProcesses(param0 *autoscaling.ScalingProcessQuery) (*autoscaling.ResumeProcessesOutput, error) {
+	m.addCall("ResumeProcesses")
+	m.verifyInput("ResumeProcesses", param0)
+	return m.ResumeProcessesFunc(param0)
+}
+
+func (m *autoscalingMock) ResumeProcessesRequest(param0 *autoscaling.ScalingProcessQuery) (*request.Request, *autoscaling.ResumeProcessesOutput) {
+	m.addCall("ResumeProcessesRequest")
+	m.verifyInput("ResumeProcessesRequest", param0)
+	return m.ResumeProcessesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) ResumeProcessesWithContext(param0 aws.Context, param1 *autoscaling.ScalingProcessQuery, param2 ...request.Option) (*autoscaling.ResumeProcessesOutput, error) {
+	m.addCall("ResumeProcessesWithContext")
+	m.verifyInput("ResumeProcessesWithContext", param0)
+	return m.ResumeProcessesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) SetDesiredCapacity(param0 *autoscaling.SetDesiredCapacityInput) (*autoscaling.SetDesiredCapacityOutput, error) {
+	m.addCall("SetDesiredCapacity")
+	m.verifyInput("SetDesiredCapacity", param0)
+	return m.SetDesiredCapacityFunc(param0)
+}
+
+func (m *autoscalingMock) SetDesiredCapacityRequest(param0 *autoscaling.SetDesiredCapacityInput) (*request.Request, *autoscaling.SetDesiredCapacityOutput) {
+	m.addCall("SetDesiredCapacityRequest")
+	m.verifyInput("SetDesiredCapacityRequest", param0)
+	return m.SetDesiredCapacityRequestFunc(param0)
+}
+
+func (m *autoscalingMock) SetDesiredCapacityWithContext(param0 aws.Context, param1 *autoscaling.SetDesiredCapacityInput, param2 ...request.Option) (*autoscaling.SetDesiredCapacityOutput, error) {
+	m.addCall("SetDesiredCapacityWithContext")
+	m.verifyInput("SetDesiredCapacityWithContext", param0)
+	return m.SetDesiredCapacityWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) SetInstanceHealth(param0 *autoscaling.SetInstanceHealthInput) (*autoscaling.SetInstanceHealthOutput, error) {
+	m.addCall("SetInstanceHealth")
+	m.verifyInput("SetInstanceHealth", param0)
+	return m.SetInstanceHealthFunc(param0)
+}
+
+func (m *autoscalingMock) SetInstanceHealthRequest(param0 *autoscaling.SetInstanceHealthInput) (*request.Request, *autoscaling.SetInstanceHealthOutput) {
+	m.addCall("SetInstanceHealthRequest")
+	m.verifyInput("SetInstanceHealthRequest", param0)
+	return m.SetInstanceHealthRequestFunc(param0)
+}
+
+func (m *autoscalingMock) SetInstanceHealthWithContext(param0 aws.Context, param1 *autoscaling.SetInstanceHealthInput, param2 ...request.Option) (*autoscaling.SetInstanceHealthOutput, error) {
+	m.addCall("SetInstanceHealthWithContext")
+	m.verifyInput("SetInstanceHealthWithContext", param0)
+	return m.SetInstanceHealthWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) SetInstanceProtection(param0 *autoscaling.SetInstanceProtectionInput) (*autoscaling.SetInstanceProtectionOutput, error) {
+	m.addCall("SetInstanceProtection")
+	m.verifyInput("SetInstanceProtection", param0)
+	return m.SetInstanceProtectionFunc(param0)
+}
+
+func (m *autoscalingMock) SetInstanceProtectionRequest(param0 *autoscaling.SetInstanceProtectionInput) (*request.Request, *autoscaling.SetInstanceProtectionOutput) {
+	m.addCall("SetInstanceProtectionRequest")
+	m.verifyInput("SetInstanceProtectionRequest", param0)
+	return m.SetInstanceProtectionRequestFunc(param0)
+}
+
+func (m *autoscalingMock) SetInstanceProtectionWithContext(param0 aws.Context, param1 *autoscaling.SetInstanceProtectionInput, param2 ...request.Option) (*autoscaling.SetInstanceProtectionOutput, error) {
+	m.addCall("SetInstanceProtectionWithContext")
+	m.verifyInput("SetInstanceProtectionWithContext", param0)
+	return m.SetInstanceProtectionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) SuspendProcesses(param0 *autoscaling.ScalingProcessQuery) (*autoscaling.SuspendProcessesOutput, error) {
+	m.addCall("SuspendProcesses")
+	m.verifyInput("SuspendProcesses", param0)
+	return m.SuspendProcessesFunc(param0)
+}
+
+func (m *autoscalingMock) SuspendProcessesRequest(param0 *autoscaling.ScalingProcessQuery) (*request.Request, *autoscaling.SuspendProcessesOutput) {
+	m.addCall("SuspendProcessesRequest")
+	m.verifyInput("SuspendProcessesRequest", param0)
+	return m.SuspendProcessesRequestFunc(param0)
+}
+
+func (m *autoscalingMock) SuspendProcessesWithContext(param0 aws.Context, param1 *autoscaling.ScalingProcessQuery, param2 ...request.Option) (*autoscaling.SuspendProcessesOutput, error) {
+	m.addCall("SuspendProcessesWithContext")
+	m.verifyInput("SuspendProcessesWithContext", param0)
+	return m.SuspendProcessesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) TerminateInstanceInAutoScalingGroup(param0 *autoscaling.TerminateInstanceInAutoScalingGroupInput) (*autoscaling.TerminateInstanceInAutoScalingGroupOutput, error) {
+	m.addCall("TerminateInstanceInAutoScalingGroup")
+	m.verifyInput("TerminateInstanceInAutoScalingGroup", param0)
+	return m.TerminateInstanceInAutoScalingGroupFunc(param0)
+}
+
+func (m *autoscalingMock) TerminateInstanceInAutoScalingGroupRequest(param0 *autoscaling.TerminateInstanceInAutoScalingGroupInput) (*request.Request, *autoscaling.TerminateInstanceInAutoScalingGroupOutput) {
+	m.addCall("TerminateInstanceInAutoScalingGroupRequest")
+	m.verifyInput("TerminateInstanceInAutoScalingGroupRequest", param0)
+	return m.TerminateInstanceInAutoScalingGroupRequestFunc(param0)
+}
+
+func (m *autoscalingMock) TerminateInstanceInAutoScalingGroupWithContext(param0 aws.Context, param1 *autoscaling.TerminateInstanceInAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.TerminateInstanceInAutoScalingGroupOutput, error) {
+	m.addCall("TerminateInstanceInAutoScalingGroupWithContext")
+	m.verifyInput("TerminateInstanceInAutoScalingGroupWithContext", param0)
+	return m.TerminateInstanceInAutoScalingGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) UpdateAutoScalingGroup(param0 *autoscaling.UpdateAutoScalingGroupInput) (*autoscaling.UpdateAutoScalingGroupOutput, error) {
+	m.addCall("UpdateAutoScalingGroup")
+	m.verifyInput("UpdateAutoScalingGroup", param0)
+	return m.UpdateAutoScalingGroupFunc(param0)
+}
+
+func (m *autoscalingMock) UpdateAutoScalingGroupRequest(param0 *autoscaling.UpdateAutoScalingGroupInput) (*request.Request, *autoscaling.UpdateAutoScalingGroupOutput) {
+	m.addCall("UpdateAutoScalingGroupRequest")
+	m.verifyInput("UpdateAutoScalingGroupRequest", param0)
+	return m.UpdateAutoScalingGroupRequestFunc(param0)
+}
+
+func (m *autoscalingMock) UpdateAutoScalingGroupWithContext(param0 aws.Context, param1 *autoscaling.UpdateAutoScalingGroupInput, param2 ...request.Option) (*autoscaling.UpdateAutoScalingGroupOutput, error) {
+	m.addCall("UpdateAutoScalingGroupWithContext")
+	m.verifyInput("UpdateAutoScalingGroupWithContext", param0)
+	return m.UpdateAutoScalingGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) WaitUntilGroupExists(param0 *autoscaling.DescribeAutoScalingGroupsInput) error {
+	m.addCall("WaitUntilGroupExists")
+	m.verifyInput("WaitUntilGroupExists", param0)
+	return m.WaitUntilGroupExistsFunc(param0)
+}
+
+func (m *autoscalingMock) WaitUntilGroupExistsWithContext(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilGroupExistsWithContext")
+	m.verifyInput("WaitUntilGroupExistsWithContext", param0)
+	return m.WaitUntilGroupExistsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) WaitUntilGroupInService(param0 *autoscaling.DescribeAutoScalingGroupsInput) error {
+	m.addCall("WaitUntilGroupInService")
+	m.verifyInput("WaitUntilGroupInService", param0)
+	return m.WaitUntilGroupInServiceFunc(param0)
+}
+
+func (m *autoscalingMock) WaitUntilGroupInServiceWithContext(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilGroupInServiceWithContext")
+	m.verifyInput("WaitUntilGroupInServiceWithContext", param0)
+	return m.WaitUntilGroupInServiceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *autoscalingMock) WaitUntilGroupNotExists(param0 *autoscaling.DescribeAutoScalingGroupsInput) error {
+	m.addCall("WaitUntilGroupNotExists")
+	m.verifyInput("WaitUntilGroupNotExists", param0)
+	return m.WaitUntilGroupNotExistsFunc(param0)
+}
+
+func (m *autoscalingMock) WaitUntilGroupNotExistsWithContext(param0 aws.Context, param1 *autoscaling.DescribeAutoScalingGroupsInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilGroupNotExistsWithContext")
+	m.verifyInput("WaitUntilGroupNotExistsWithContext", param0)
+	return m.WaitUntilGroupNotExistsWithContextFunc(param0, param1, param2...)
 }
 
 type cloudformationMock struct {

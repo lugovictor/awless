@@ -103,6 +103,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateRoute(f.Sess, f.Log) }
 	case "createroutetable":
 		return func() interface{} { return NewCreateRoutetable(f.Sess, f.Log) }
+	case "createscalingpolicy":
+		return func() interface{} { return NewCreateScalingpolicy(f.Sess, f.Log) }
 	case "createsecuritygroup":
 		return func() interface{} { return NewCreateSecuritygroup(f.Sess, f.Log) }
 	case "createstack":
@@ -165,6 +167,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteRoute(f.Sess, f.Log) }
 	case "deleteroutetable":
 		return func() interface{} { return NewDeleteRoutetable(f.Sess, f.Log) }
+	case "deletescalingpolicy":
+		return func() interface{} { return NewDeleteScalingpolicy(f.Sess, f.Log) }
 	case "deletesecuritygroup":
 		return func() interface{} { return NewDeleteSecuritygroup(f.Sess, f.Log) }
 	case "deletestack":
@@ -268,6 +272,7 @@ var (
 	_ command = &CreatePolicy{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
+	_ command = &CreateScalingpolicy{}
 	_ command = &CreateSecuritygroup{}
 	_ command = &CreateStack{}
 	_ command = &CreateSubnet{}
@@ -299,6 +304,7 @@ var (
 	_ command = &DeletePolicy{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
+	_ command = &DeleteScalingpolicy{}
 	_ command = &DeleteSecuritygroup{}
 	_ command = &DeleteStack{}
 	_ command = &DeleteSubnet{}

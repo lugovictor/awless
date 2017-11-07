@@ -20,6 +20,7 @@ package awsat
 import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
 	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
@@ -249,6 +250,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createscalingpolicy":
+		return func() interface{} {
+			cmd := awsspec.NewCreateScalingpolicy(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
+			return cmd
+		}
 	case "createsecuritygroup":
 		return func() interface{} {
 			cmd := awsspec.NewCreateSecuritygroup(nil)
@@ -433,6 +440,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteRoutetable(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletescalingpolicy":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteScalingpolicy(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
 			return cmd
 		}
 	case "deletesecuritygroup":
