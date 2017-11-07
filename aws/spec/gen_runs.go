@@ -28,6 +28,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudfront"
+	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -823,6 +825,74 @@ func (cmd *CheckDatabase) ParamsHelp() string {
 }
 
 func (cmd *CheckDatabase) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCheckDistribution(sess *session.Session, l ...*logger.Logger) *CheckDistribution {
+	cmd := new(CheckDistribution)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudfront.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckDistribution) SetApi(api cloudfrontiface.CloudFrontAPI) {
+	cmd.api = api
+}
+
+func (cmd *CheckDistribution) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckDistribution) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckDistribution) ParamsHelp() string {
+	return generateParamsHelp("checkdistribution", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckDistribution) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -1687,6 +1757,74 @@ func (cmd *CreateDbsubnetgroup) ParamsHelp() string {
 }
 
 func (cmd *CreateDbsubnetgroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateDistribution(sess *session.Session, l ...*logger.Logger) *CreateDistribution {
+	cmd := new(CreateDistribution)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudfront.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateDistribution) SetApi(api cloudfrontiface.CloudFrontAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateDistribution) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateDistribution) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateDistribution) ParamsHelp() string {
+	return generateParamsHelp("createdistribution", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateDistribution) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -3725,6 +3863,74 @@ func (cmd *DeleteDbsubnetgroup) ParamsHelp() string {
 }
 
 func (cmd *DeleteDbsubnetgroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteDistribution(sess *session.Session, l ...*logger.Logger) *DeleteDistribution {
+	cmd := new(DeleteDistribution)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudfront.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteDistribution) SetApi(api cloudfrontiface.CloudFrontAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteDistribution) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteDistribution) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteDistribution) ParamsHelp() string {
+	return generateParamsHelp("deletedistribution", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteDistribution) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -6123,6 +6329,74 @@ func (cmd *UpdateContainertask) ParamsHelp() string {
 }
 
 func (cmd *UpdateContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateDistribution(sess *session.Session, l ...*logger.Logger) *UpdateDistribution {
+	cmd := new(UpdateDistribution)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudfront.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateDistribution) SetApi(api cloudfrontiface.CloudFrontAPI) {
+	cmd.api = api
+}
+
+func (cmd *UpdateDistribution) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateDistribution) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateDistribution) ParamsHelp() string {
+	return generateParamsHelp("updatedistribution", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateDistribution) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

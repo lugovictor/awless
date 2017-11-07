@@ -25,6 +25,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -66,6 +67,18 @@ var (
 	}
 	newDeleteAppscalingtarget = func() *DeleteAppscalingtarget {
 		return &DeleteAppscalingtarget{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
+	}
+	newCheckDistribution = func() *CheckDistribution {
+		return &CheckDistribution{api: &mockCloudfront{}, logger: logger.DiscardLogger}
+	}
+	newCreateDistribution = func() *CreateDistribution {
+		return &CreateDistribution{api: &mockCloudfront{}, logger: logger.DiscardLogger}
+	}
+	newDeleteDistribution = func() *DeleteDistribution {
+		return &DeleteDistribution{api: &mockCloudfront{}, logger: logger.DiscardLogger}
+	}
+	newUpdateDistribution = func() *UpdateDistribution {
+		return &UpdateDistribution{api: &mockCloudfront{}, logger: logger.DiscardLogger}
 	}
 	newAttachAlarm           = func() *AttachAlarm { return &AttachAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newCreateAlarm           = func() *CreateAlarm { return &CreateAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
@@ -180,6 +193,9 @@ type mockAcm struct {
 }
 type mockApplicationautoscaling struct {
 	applicationautoscalingiface.ApplicationAutoScalingAPI
+}
+type mockCloudfront struct {
+	cloudfrontiface.CloudFrontAPI
 }
 type mockCloudwatch struct {
 	cloudwatchiface.CloudWatchAPI

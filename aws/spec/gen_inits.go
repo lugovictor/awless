@@ -55,6 +55,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCheckCertificate(f.Sess, f.Log) }
 	case "checkdatabase":
 		return func() interface{} { return NewCheckDatabase(f.Sess, f.Log) }
+	case "checkdistribution":
+		return func() interface{} { return NewCheckDistribution(f.Sess, f.Log) }
 	case "checkinstance":
 		return func() interface{} { return NewCheckInstance(f.Sess, f.Log) }
 	case "checksecuritygroup":
@@ -79,6 +81,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateDatabase(f.Sess, f.Log) }
 	case "createdbsubnetgroup":
 		return func() interface{} { return NewCreateDbsubnetgroup(f.Sess, f.Log) }
+	case "createdistribution":
+		return func() interface{} { return NewCreateDistribution(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -129,6 +133,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteDatabase(f.Sess, f.Log) }
 	case "deletedbsubnetgroup":
 		return func() interface{} { return NewDeleteDbsubnetgroup(f.Sess, f.Log) }
+	case "deletedistribution":
+		return func() interface{} { return NewDeleteDistribution(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -187,6 +193,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewUpdateBucket(f.Sess, f.Log) }
 	case "updatecontainertask":
 		return func() interface{} { return NewUpdateContainertask(f.Sess, f.Log) }
+	case "updatedistribution":
+		return func() interface{} { return NewUpdateDistribution(f.Sess, f.Log) }
 	case "updatepolicy":
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
 	case "updatesecuritygroup":
@@ -208,6 +216,7 @@ var (
 	_ command = &AttachVolume{}
 	_ command = &CheckCertificate{}
 	_ command = &CheckDatabase{}
+	_ command = &CheckDistribution{}
 	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CheckVolume{}
@@ -220,6 +229,7 @@ var (
 	_ command = &CreateContainercluster{}
 	_ command = &CreateDatabase{}
 	_ command = &CreateDbsubnetgroup{}
+	_ command = &CreateDistribution{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -245,6 +255,7 @@ var (
 	_ command = &DeleteContainertask{}
 	_ command = &DeleteDatabase{}
 	_ command = &DeleteDbsubnetgroup{}
+	_ command = &DeleteDistribution{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
@@ -274,6 +285,7 @@ var (
 	_ command = &StopContainertask{}
 	_ command = &UpdateBucket{}
 	_ command = &UpdateContainertask{}
+	_ command = &UpdateDistribution{}
 	_ command = &UpdatePolicy{}
 	_ command = &UpdateSecuritygroup{}
 	_ command = &UpdateSubnet{}

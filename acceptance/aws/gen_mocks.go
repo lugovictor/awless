@@ -24,6 +24,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudfront"
+	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
@@ -407,6 +409,620 @@ func (m *applicationautoscalingMock) RegisterScalableTargetWithContext(param0 aw
 	m.addCall("RegisterScalableTargetWithContext")
 	m.verifyInput("RegisterScalableTargetWithContext", param0)
 	return m.RegisterScalableTargetWithContextFunc(param0, param1, param2...)
+}
+
+type cloudfrontMock struct {
+	basicMock
+	cloudfrontiface.CloudFrontAPI
+	CreateCloudFrontOriginAccessIdentityFunc               func(param0 *cloudfront.CreateCloudFrontOriginAccessIdentityInput) (*cloudfront.CreateCloudFrontOriginAccessIdentityOutput, error)
+	CreateCloudFrontOriginAccessIdentityRequestFunc        func(param0 *cloudfront.CreateCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.CreateCloudFrontOriginAccessIdentityOutput)
+	CreateCloudFrontOriginAccessIdentityWithContextFunc    func(param0 aws.Context, param1 *cloudfront.CreateCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.CreateCloudFrontOriginAccessIdentityOutput, error)
+	CreateDistributionFunc                                 func(param0 *cloudfront.CreateDistributionInput) (*cloudfront.CreateDistributionOutput, error)
+	CreateDistributionRequestFunc                          func(param0 *cloudfront.CreateDistributionInput) (*request.Request, *cloudfront.CreateDistributionOutput)
+	CreateDistributionWithContextFunc                      func(param0 aws.Context, param1 *cloudfront.CreateDistributionInput, param2 ...request.Option) (*cloudfront.CreateDistributionOutput, error)
+	CreateDistributionWithTagsFunc                         func(param0 *cloudfront.CreateDistributionWithTagsInput) (*cloudfront.CreateDistributionWithTagsOutput, error)
+	CreateDistributionWithTagsRequestFunc                  func(param0 *cloudfront.CreateDistributionWithTagsInput) (*request.Request, *cloudfront.CreateDistributionWithTagsOutput)
+	CreateDistributionWithTagsWithContextFunc              func(param0 aws.Context, param1 *cloudfront.CreateDistributionWithTagsInput, param2 ...request.Option) (*cloudfront.CreateDistributionWithTagsOutput, error)
+	CreateInvalidationFunc                                 func(param0 *cloudfront.CreateInvalidationInput) (*cloudfront.CreateInvalidationOutput, error)
+	CreateInvalidationRequestFunc                          func(param0 *cloudfront.CreateInvalidationInput) (*request.Request, *cloudfront.CreateInvalidationOutput)
+	CreateInvalidationWithContextFunc                      func(param0 aws.Context, param1 *cloudfront.CreateInvalidationInput, param2 ...request.Option) (*cloudfront.CreateInvalidationOutput, error)
+	CreateStreamingDistributionFunc                        func(param0 *cloudfront.CreateStreamingDistributionInput) (*cloudfront.CreateStreamingDistributionOutput, error)
+	CreateStreamingDistributionRequestFunc                 func(param0 *cloudfront.CreateStreamingDistributionInput) (*request.Request, *cloudfront.CreateStreamingDistributionOutput)
+	CreateStreamingDistributionWithContextFunc             func(param0 aws.Context, param1 *cloudfront.CreateStreamingDistributionInput, param2 ...request.Option) (*cloudfront.CreateStreamingDistributionOutput, error)
+	CreateStreamingDistributionWithTagsFunc                func(param0 *cloudfront.CreateStreamingDistributionWithTagsInput) (*cloudfront.CreateStreamingDistributionWithTagsOutput, error)
+	CreateStreamingDistributionWithTagsRequestFunc         func(param0 *cloudfront.CreateStreamingDistributionWithTagsInput) (*request.Request, *cloudfront.CreateStreamingDistributionWithTagsOutput)
+	CreateStreamingDistributionWithTagsWithContextFunc     func(param0 aws.Context, param1 *cloudfront.CreateStreamingDistributionWithTagsInput, param2 ...request.Option) (*cloudfront.CreateStreamingDistributionWithTagsOutput, error)
+	DeleteCloudFrontOriginAccessIdentityFunc               func(param0 *cloudfront.DeleteCloudFrontOriginAccessIdentityInput) (*cloudfront.DeleteCloudFrontOriginAccessIdentityOutput, error)
+	DeleteCloudFrontOriginAccessIdentityRequestFunc        func(param0 *cloudfront.DeleteCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.DeleteCloudFrontOriginAccessIdentityOutput)
+	DeleteCloudFrontOriginAccessIdentityWithContextFunc    func(param0 aws.Context, param1 *cloudfront.DeleteCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.DeleteCloudFrontOriginAccessIdentityOutput, error)
+	DeleteDistributionFunc                                 func(param0 *cloudfront.DeleteDistributionInput) (*cloudfront.DeleteDistributionOutput, error)
+	DeleteDistributionRequestFunc                          func(param0 *cloudfront.DeleteDistributionInput) (*request.Request, *cloudfront.DeleteDistributionOutput)
+	DeleteDistributionWithContextFunc                      func(param0 aws.Context, param1 *cloudfront.DeleteDistributionInput, param2 ...request.Option) (*cloudfront.DeleteDistributionOutput, error)
+	DeleteStreamingDistributionFunc                        func(param0 *cloudfront.DeleteStreamingDistributionInput) (*cloudfront.DeleteStreamingDistributionOutput, error)
+	DeleteStreamingDistributionRequestFunc                 func(param0 *cloudfront.DeleteStreamingDistributionInput) (*request.Request, *cloudfront.DeleteStreamingDistributionOutput)
+	DeleteStreamingDistributionWithContextFunc             func(param0 aws.Context, param1 *cloudfront.DeleteStreamingDistributionInput, param2 ...request.Option) (*cloudfront.DeleteStreamingDistributionOutput, error)
+	GetCloudFrontOriginAccessIdentityFunc                  func(param0 *cloudfront.GetCloudFrontOriginAccessIdentityInput) (*cloudfront.GetCloudFrontOriginAccessIdentityOutput, error)
+	GetCloudFrontOriginAccessIdentityConfigFunc            func(param0 *cloudfront.GetCloudFrontOriginAccessIdentityConfigInput) (*cloudfront.GetCloudFrontOriginAccessIdentityConfigOutput, error)
+	GetCloudFrontOriginAccessIdentityConfigRequestFunc     func(param0 *cloudfront.GetCloudFrontOriginAccessIdentityConfigInput) (*request.Request, *cloudfront.GetCloudFrontOriginAccessIdentityConfigOutput)
+	GetCloudFrontOriginAccessIdentityConfigWithContextFunc func(param0 aws.Context, param1 *cloudfront.GetCloudFrontOriginAccessIdentityConfigInput, param2 ...request.Option) (*cloudfront.GetCloudFrontOriginAccessIdentityConfigOutput, error)
+	GetCloudFrontOriginAccessIdentityRequestFunc           func(param0 *cloudfront.GetCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.GetCloudFrontOriginAccessIdentityOutput)
+	GetCloudFrontOriginAccessIdentityWithContextFunc       func(param0 aws.Context, param1 *cloudfront.GetCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.GetCloudFrontOriginAccessIdentityOutput, error)
+	GetDistributionFunc                                    func(param0 *cloudfront.GetDistributionInput) (*cloudfront.GetDistributionOutput, error)
+	GetDistributionConfigFunc                              func(param0 *cloudfront.GetDistributionConfigInput) (*cloudfront.GetDistributionConfigOutput, error)
+	GetDistributionConfigRequestFunc                       func(param0 *cloudfront.GetDistributionConfigInput) (*request.Request, *cloudfront.GetDistributionConfigOutput)
+	GetDistributionConfigWithContextFunc                   func(param0 aws.Context, param1 *cloudfront.GetDistributionConfigInput, param2 ...request.Option) (*cloudfront.GetDistributionConfigOutput, error)
+	GetDistributionRequestFunc                             func(param0 *cloudfront.GetDistributionInput) (*request.Request, *cloudfront.GetDistributionOutput)
+	GetDistributionWithContextFunc                         func(param0 aws.Context, param1 *cloudfront.GetDistributionInput, param2 ...request.Option) (*cloudfront.GetDistributionOutput, error)
+	GetInvalidationFunc                                    func(param0 *cloudfront.GetInvalidationInput) (*cloudfront.GetInvalidationOutput, error)
+	GetInvalidationRequestFunc                             func(param0 *cloudfront.GetInvalidationInput) (*request.Request, *cloudfront.GetInvalidationOutput)
+	GetInvalidationWithContextFunc                         func(param0 aws.Context, param1 *cloudfront.GetInvalidationInput, param2 ...request.Option) (*cloudfront.GetInvalidationOutput, error)
+	GetStreamingDistributionFunc                           func(param0 *cloudfront.GetStreamingDistributionInput) (*cloudfront.GetStreamingDistributionOutput, error)
+	GetStreamingDistributionConfigFunc                     func(param0 *cloudfront.GetStreamingDistributionConfigInput) (*cloudfront.GetStreamingDistributionConfigOutput, error)
+	GetStreamingDistributionConfigRequestFunc              func(param0 *cloudfront.GetStreamingDistributionConfigInput) (*request.Request, *cloudfront.GetStreamingDistributionConfigOutput)
+	GetStreamingDistributionConfigWithContextFunc          func(param0 aws.Context, param1 *cloudfront.GetStreamingDistributionConfigInput, param2 ...request.Option) (*cloudfront.GetStreamingDistributionConfigOutput, error)
+	GetStreamingDistributionRequestFunc                    func(param0 *cloudfront.GetStreamingDistributionInput) (*request.Request, *cloudfront.GetStreamingDistributionOutput)
+	GetStreamingDistributionWithContextFunc                func(param0 aws.Context, param1 *cloudfront.GetStreamingDistributionInput, param2 ...request.Option) (*cloudfront.GetStreamingDistributionOutput, error)
+	ListCloudFrontOriginAccessIdentitiesFunc               func(param0 *cloudfront.ListCloudFrontOriginAccessIdentitiesInput) (*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, error)
+	ListCloudFrontOriginAccessIdentitiesRequestFunc        func(param0 *cloudfront.ListCloudFrontOriginAccessIdentitiesInput) (*request.Request, *cloudfront.ListCloudFrontOriginAccessIdentitiesOutput)
+	ListCloudFrontOriginAccessIdentitiesWithContextFunc    func(param0 aws.Context, param1 *cloudfront.ListCloudFrontOriginAccessIdentitiesInput, param2 ...request.Option) (*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, error)
+	ListDistributionsFunc                                  func(param0 *cloudfront.ListDistributionsInput) (*cloudfront.ListDistributionsOutput, error)
+	ListDistributionsByWebACLIdFunc                        func(param0 *cloudfront.ListDistributionsByWebACLIdInput) (*cloudfront.ListDistributionsByWebACLIdOutput, error)
+	ListDistributionsByWebACLIdRequestFunc                 func(param0 *cloudfront.ListDistributionsByWebACLIdInput) (*request.Request, *cloudfront.ListDistributionsByWebACLIdOutput)
+	ListDistributionsByWebACLIdWithContextFunc             func(param0 aws.Context, param1 *cloudfront.ListDistributionsByWebACLIdInput, param2 ...request.Option) (*cloudfront.ListDistributionsByWebACLIdOutput, error)
+	ListDistributionsRequestFunc                           func(param0 *cloudfront.ListDistributionsInput) (*request.Request, *cloudfront.ListDistributionsOutput)
+	ListDistributionsWithContextFunc                       func(param0 aws.Context, param1 *cloudfront.ListDistributionsInput, param2 ...request.Option) (*cloudfront.ListDistributionsOutput, error)
+	ListInvalidationsFunc                                  func(param0 *cloudfront.ListInvalidationsInput) (*cloudfront.ListInvalidationsOutput, error)
+	ListInvalidationsRequestFunc                           func(param0 *cloudfront.ListInvalidationsInput) (*request.Request, *cloudfront.ListInvalidationsOutput)
+	ListInvalidationsWithContextFunc                       func(param0 aws.Context, param1 *cloudfront.ListInvalidationsInput, param2 ...request.Option) (*cloudfront.ListInvalidationsOutput, error)
+	ListStreamingDistributionsFunc                         func(param0 *cloudfront.ListStreamingDistributionsInput) (*cloudfront.ListStreamingDistributionsOutput, error)
+	ListStreamingDistributionsRequestFunc                  func(param0 *cloudfront.ListStreamingDistributionsInput) (*request.Request, *cloudfront.ListStreamingDistributionsOutput)
+	ListStreamingDistributionsWithContextFunc              func(param0 aws.Context, param1 *cloudfront.ListStreamingDistributionsInput, param2 ...request.Option) (*cloudfront.ListStreamingDistributionsOutput, error)
+	ListTagsForResourceFunc                                func(param0 *cloudfront.ListTagsForResourceInput) (*cloudfront.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequestFunc                         func(param0 *cloudfront.ListTagsForResourceInput) (*request.Request, *cloudfront.ListTagsForResourceOutput)
+	ListTagsForResourceWithContextFunc                     func(param0 aws.Context, param1 *cloudfront.ListTagsForResourceInput, param2 ...request.Option) (*cloudfront.ListTagsForResourceOutput, error)
+	TagResourceFunc                                        func(param0 *cloudfront.TagResourceInput) (*cloudfront.TagResourceOutput, error)
+	TagResourceRequestFunc                                 func(param0 *cloudfront.TagResourceInput) (*request.Request, *cloudfront.TagResourceOutput)
+	TagResourceWithContextFunc                             func(param0 aws.Context, param1 *cloudfront.TagResourceInput, param2 ...request.Option) (*cloudfront.TagResourceOutput, error)
+	UntagResourceFunc                                      func(param0 *cloudfront.UntagResourceInput) (*cloudfront.UntagResourceOutput, error)
+	UntagResourceRequestFunc                               func(param0 *cloudfront.UntagResourceInput) (*request.Request, *cloudfront.UntagResourceOutput)
+	UntagResourceWithContextFunc                           func(param0 aws.Context, param1 *cloudfront.UntagResourceInput, param2 ...request.Option) (*cloudfront.UntagResourceOutput, error)
+	UpdateCloudFrontOriginAccessIdentityFunc               func(param0 *cloudfront.UpdateCloudFrontOriginAccessIdentityInput) (*cloudfront.UpdateCloudFrontOriginAccessIdentityOutput, error)
+	UpdateCloudFrontOriginAccessIdentityRequestFunc        func(param0 *cloudfront.UpdateCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.UpdateCloudFrontOriginAccessIdentityOutput)
+	UpdateCloudFrontOriginAccessIdentityWithContextFunc    func(param0 aws.Context, param1 *cloudfront.UpdateCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.UpdateCloudFrontOriginAccessIdentityOutput, error)
+	UpdateDistributionFunc                                 func(param0 *cloudfront.UpdateDistributionInput) (*cloudfront.UpdateDistributionOutput, error)
+	UpdateDistributionRequestFunc                          func(param0 *cloudfront.UpdateDistributionInput) (*request.Request, *cloudfront.UpdateDistributionOutput)
+	UpdateDistributionWithContextFunc                      func(param0 aws.Context, param1 *cloudfront.UpdateDistributionInput, param2 ...request.Option) (*cloudfront.UpdateDistributionOutput, error)
+	UpdateStreamingDistributionFunc                        func(param0 *cloudfront.UpdateStreamingDistributionInput) (*cloudfront.UpdateStreamingDistributionOutput, error)
+	UpdateStreamingDistributionRequestFunc                 func(param0 *cloudfront.UpdateStreamingDistributionInput) (*request.Request, *cloudfront.UpdateStreamingDistributionOutput)
+	UpdateStreamingDistributionWithContextFunc             func(param0 aws.Context, param1 *cloudfront.UpdateStreamingDistributionInput, param2 ...request.Option) (*cloudfront.UpdateStreamingDistributionOutput, error)
+	WaitUntilDistributionDeployedFunc                      func(param0 *cloudfront.GetDistributionInput) error
+	WaitUntilDistributionDeployedWithContextFunc           func(param0 aws.Context, param1 *cloudfront.GetDistributionInput, param2 ...request.WaiterOption) error
+	WaitUntilInvalidationCompletedFunc                     func(param0 *cloudfront.GetInvalidationInput) error
+	WaitUntilInvalidationCompletedWithContextFunc          func(param0 aws.Context, param1 *cloudfront.GetInvalidationInput, param2 ...request.WaiterOption) error
+	WaitUntilStreamingDistributionDeployedFunc             func(param0 *cloudfront.GetStreamingDistributionInput) error
+	WaitUntilStreamingDistributionDeployedWithContextFunc  func(param0 aws.Context, param1 *cloudfront.GetStreamingDistributionInput, param2 ...request.WaiterOption) error
+}
+
+func (m *cloudfrontMock) CreateCloudFrontOriginAccessIdentity(param0 *cloudfront.CreateCloudFrontOriginAccessIdentityInput) (*cloudfront.CreateCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("CreateCloudFrontOriginAccessIdentity")
+	m.verifyInput("CreateCloudFrontOriginAccessIdentity", param0)
+	return m.CreateCloudFrontOriginAccessIdentityFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateCloudFrontOriginAccessIdentityRequest(param0 *cloudfront.CreateCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.CreateCloudFrontOriginAccessIdentityOutput) {
+	m.addCall("CreateCloudFrontOriginAccessIdentityRequest")
+	m.verifyInput("CreateCloudFrontOriginAccessIdentityRequest", param0)
+	return m.CreateCloudFrontOriginAccessIdentityRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateCloudFrontOriginAccessIdentityWithContext(param0 aws.Context, param1 *cloudfront.CreateCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.CreateCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("CreateCloudFrontOriginAccessIdentityWithContext")
+	m.verifyInput("CreateCloudFrontOriginAccessIdentityWithContext", param0)
+	return m.CreateCloudFrontOriginAccessIdentityWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) CreateDistribution(param0 *cloudfront.CreateDistributionInput) (*cloudfront.CreateDistributionOutput, error) {
+	m.addCall("CreateDistribution")
+	m.verifyInput("CreateDistribution", param0)
+	return m.CreateDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateDistributionRequest(param0 *cloudfront.CreateDistributionInput) (*request.Request, *cloudfront.CreateDistributionOutput) {
+	m.addCall("CreateDistributionRequest")
+	m.verifyInput("CreateDistributionRequest", param0)
+	return m.CreateDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateDistributionWithContext(param0 aws.Context, param1 *cloudfront.CreateDistributionInput, param2 ...request.Option) (*cloudfront.CreateDistributionOutput, error) {
+	m.addCall("CreateDistributionWithContext")
+	m.verifyInput("CreateDistributionWithContext", param0)
+	return m.CreateDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) CreateDistributionWithTags(param0 *cloudfront.CreateDistributionWithTagsInput) (*cloudfront.CreateDistributionWithTagsOutput, error) {
+	m.addCall("CreateDistributionWithTags")
+	m.verifyInput("CreateDistributionWithTags", param0)
+	return m.CreateDistributionWithTagsFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateDistributionWithTagsRequest(param0 *cloudfront.CreateDistributionWithTagsInput) (*request.Request, *cloudfront.CreateDistributionWithTagsOutput) {
+	m.addCall("CreateDistributionWithTagsRequest")
+	m.verifyInput("CreateDistributionWithTagsRequest", param0)
+	return m.CreateDistributionWithTagsRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateDistributionWithTagsWithContext(param0 aws.Context, param1 *cloudfront.CreateDistributionWithTagsInput, param2 ...request.Option) (*cloudfront.CreateDistributionWithTagsOutput, error) {
+	m.addCall("CreateDistributionWithTagsWithContext")
+	m.verifyInput("CreateDistributionWithTagsWithContext", param0)
+	return m.CreateDistributionWithTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) CreateInvalidation(param0 *cloudfront.CreateInvalidationInput) (*cloudfront.CreateInvalidationOutput, error) {
+	m.addCall("CreateInvalidation")
+	m.verifyInput("CreateInvalidation", param0)
+	return m.CreateInvalidationFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateInvalidationRequest(param0 *cloudfront.CreateInvalidationInput) (*request.Request, *cloudfront.CreateInvalidationOutput) {
+	m.addCall("CreateInvalidationRequest")
+	m.verifyInput("CreateInvalidationRequest", param0)
+	return m.CreateInvalidationRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateInvalidationWithContext(param0 aws.Context, param1 *cloudfront.CreateInvalidationInput, param2 ...request.Option) (*cloudfront.CreateInvalidationOutput, error) {
+	m.addCall("CreateInvalidationWithContext")
+	m.verifyInput("CreateInvalidationWithContext", param0)
+	return m.CreateInvalidationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) CreateStreamingDistribution(param0 *cloudfront.CreateStreamingDistributionInput) (*cloudfront.CreateStreamingDistributionOutput, error) {
+	m.addCall("CreateStreamingDistribution")
+	m.verifyInput("CreateStreamingDistribution", param0)
+	return m.CreateStreamingDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateStreamingDistributionRequest(param0 *cloudfront.CreateStreamingDistributionInput) (*request.Request, *cloudfront.CreateStreamingDistributionOutput) {
+	m.addCall("CreateStreamingDistributionRequest")
+	m.verifyInput("CreateStreamingDistributionRequest", param0)
+	return m.CreateStreamingDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateStreamingDistributionWithContext(param0 aws.Context, param1 *cloudfront.CreateStreamingDistributionInput, param2 ...request.Option) (*cloudfront.CreateStreamingDistributionOutput, error) {
+	m.addCall("CreateStreamingDistributionWithContext")
+	m.verifyInput("CreateStreamingDistributionWithContext", param0)
+	return m.CreateStreamingDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) CreateStreamingDistributionWithTags(param0 *cloudfront.CreateStreamingDistributionWithTagsInput) (*cloudfront.CreateStreamingDistributionWithTagsOutput, error) {
+	m.addCall("CreateStreamingDistributionWithTags")
+	m.verifyInput("CreateStreamingDistributionWithTags", param0)
+	return m.CreateStreamingDistributionWithTagsFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateStreamingDistributionWithTagsRequest(param0 *cloudfront.CreateStreamingDistributionWithTagsInput) (*request.Request, *cloudfront.CreateStreamingDistributionWithTagsOutput) {
+	m.addCall("CreateStreamingDistributionWithTagsRequest")
+	m.verifyInput("CreateStreamingDistributionWithTagsRequest", param0)
+	return m.CreateStreamingDistributionWithTagsRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) CreateStreamingDistributionWithTagsWithContext(param0 aws.Context, param1 *cloudfront.CreateStreamingDistributionWithTagsInput, param2 ...request.Option) (*cloudfront.CreateStreamingDistributionWithTagsOutput, error) {
+	m.addCall("CreateStreamingDistributionWithTagsWithContext")
+	m.verifyInput("CreateStreamingDistributionWithTagsWithContext", param0)
+	return m.CreateStreamingDistributionWithTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) DeleteCloudFrontOriginAccessIdentity(param0 *cloudfront.DeleteCloudFrontOriginAccessIdentityInput) (*cloudfront.DeleteCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("DeleteCloudFrontOriginAccessIdentity")
+	m.verifyInput("DeleteCloudFrontOriginAccessIdentity", param0)
+	return m.DeleteCloudFrontOriginAccessIdentityFunc(param0)
+}
+
+func (m *cloudfrontMock) DeleteCloudFrontOriginAccessIdentityRequest(param0 *cloudfront.DeleteCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.DeleteCloudFrontOriginAccessIdentityOutput) {
+	m.addCall("DeleteCloudFrontOriginAccessIdentityRequest")
+	m.verifyInput("DeleteCloudFrontOriginAccessIdentityRequest", param0)
+	return m.DeleteCloudFrontOriginAccessIdentityRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) DeleteCloudFrontOriginAccessIdentityWithContext(param0 aws.Context, param1 *cloudfront.DeleteCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.DeleteCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("DeleteCloudFrontOriginAccessIdentityWithContext")
+	m.verifyInput("DeleteCloudFrontOriginAccessIdentityWithContext", param0)
+	return m.DeleteCloudFrontOriginAccessIdentityWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) DeleteDistribution(param0 *cloudfront.DeleteDistributionInput) (*cloudfront.DeleteDistributionOutput, error) {
+	m.addCall("DeleteDistribution")
+	m.verifyInput("DeleteDistribution", param0)
+	return m.DeleteDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) DeleteDistributionRequest(param0 *cloudfront.DeleteDistributionInput) (*request.Request, *cloudfront.DeleteDistributionOutput) {
+	m.addCall("DeleteDistributionRequest")
+	m.verifyInput("DeleteDistributionRequest", param0)
+	return m.DeleteDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) DeleteDistributionWithContext(param0 aws.Context, param1 *cloudfront.DeleteDistributionInput, param2 ...request.Option) (*cloudfront.DeleteDistributionOutput, error) {
+	m.addCall("DeleteDistributionWithContext")
+	m.verifyInput("DeleteDistributionWithContext", param0)
+	return m.DeleteDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) DeleteStreamingDistribution(param0 *cloudfront.DeleteStreamingDistributionInput) (*cloudfront.DeleteStreamingDistributionOutput, error) {
+	m.addCall("DeleteStreamingDistribution")
+	m.verifyInput("DeleteStreamingDistribution", param0)
+	return m.DeleteStreamingDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) DeleteStreamingDistributionRequest(param0 *cloudfront.DeleteStreamingDistributionInput) (*request.Request, *cloudfront.DeleteStreamingDistributionOutput) {
+	m.addCall("DeleteStreamingDistributionRequest")
+	m.verifyInput("DeleteStreamingDistributionRequest", param0)
+	return m.DeleteStreamingDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) DeleteStreamingDistributionWithContext(param0 aws.Context, param1 *cloudfront.DeleteStreamingDistributionInput, param2 ...request.Option) (*cloudfront.DeleteStreamingDistributionOutput, error) {
+	m.addCall("DeleteStreamingDistributionWithContext")
+	m.verifyInput("DeleteStreamingDistributionWithContext", param0)
+	return m.DeleteStreamingDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) GetCloudFrontOriginAccessIdentity(param0 *cloudfront.GetCloudFrontOriginAccessIdentityInput) (*cloudfront.GetCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("GetCloudFrontOriginAccessIdentity")
+	m.verifyInput("GetCloudFrontOriginAccessIdentity", param0)
+	return m.GetCloudFrontOriginAccessIdentityFunc(param0)
+}
+
+func (m *cloudfrontMock) GetCloudFrontOriginAccessIdentityConfig(param0 *cloudfront.GetCloudFrontOriginAccessIdentityConfigInput) (*cloudfront.GetCloudFrontOriginAccessIdentityConfigOutput, error) {
+	m.addCall("GetCloudFrontOriginAccessIdentityConfig")
+	m.verifyInput("GetCloudFrontOriginAccessIdentityConfig", param0)
+	return m.GetCloudFrontOriginAccessIdentityConfigFunc(param0)
+}
+
+func (m *cloudfrontMock) GetCloudFrontOriginAccessIdentityConfigRequest(param0 *cloudfront.GetCloudFrontOriginAccessIdentityConfigInput) (*request.Request, *cloudfront.GetCloudFrontOriginAccessIdentityConfigOutput) {
+	m.addCall("GetCloudFrontOriginAccessIdentityConfigRequest")
+	m.verifyInput("GetCloudFrontOriginAccessIdentityConfigRequest", param0)
+	return m.GetCloudFrontOriginAccessIdentityConfigRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) GetCloudFrontOriginAccessIdentityConfigWithContext(param0 aws.Context, param1 *cloudfront.GetCloudFrontOriginAccessIdentityConfigInput, param2 ...request.Option) (*cloudfront.GetCloudFrontOriginAccessIdentityConfigOutput, error) {
+	m.addCall("GetCloudFrontOriginAccessIdentityConfigWithContext")
+	m.verifyInput("GetCloudFrontOriginAccessIdentityConfigWithContext", param0)
+	return m.GetCloudFrontOriginAccessIdentityConfigWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) GetCloudFrontOriginAccessIdentityRequest(param0 *cloudfront.GetCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.GetCloudFrontOriginAccessIdentityOutput) {
+	m.addCall("GetCloudFrontOriginAccessIdentityRequest")
+	m.verifyInput("GetCloudFrontOriginAccessIdentityRequest", param0)
+	return m.GetCloudFrontOriginAccessIdentityRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) GetCloudFrontOriginAccessIdentityWithContext(param0 aws.Context, param1 *cloudfront.GetCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.GetCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("GetCloudFrontOriginAccessIdentityWithContext")
+	m.verifyInput("GetCloudFrontOriginAccessIdentityWithContext", param0)
+	return m.GetCloudFrontOriginAccessIdentityWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) GetDistribution(param0 *cloudfront.GetDistributionInput) (*cloudfront.GetDistributionOutput, error) {
+	m.addCall("GetDistribution")
+	m.verifyInput("GetDistribution", param0)
+	return m.GetDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) GetDistributionConfig(param0 *cloudfront.GetDistributionConfigInput) (*cloudfront.GetDistributionConfigOutput, error) {
+	m.addCall("GetDistributionConfig")
+	m.verifyInput("GetDistributionConfig", param0)
+	return m.GetDistributionConfigFunc(param0)
+}
+
+func (m *cloudfrontMock) GetDistributionConfigRequest(param0 *cloudfront.GetDistributionConfigInput) (*request.Request, *cloudfront.GetDistributionConfigOutput) {
+	m.addCall("GetDistributionConfigRequest")
+	m.verifyInput("GetDistributionConfigRequest", param0)
+	return m.GetDistributionConfigRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) GetDistributionConfigWithContext(param0 aws.Context, param1 *cloudfront.GetDistributionConfigInput, param2 ...request.Option) (*cloudfront.GetDistributionConfigOutput, error) {
+	m.addCall("GetDistributionConfigWithContext")
+	m.verifyInput("GetDistributionConfigWithContext", param0)
+	return m.GetDistributionConfigWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) GetDistributionRequest(param0 *cloudfront.GetDistributionInput) (*request.Request, *cloudfront.GetDistributionOutput) {
+	m.addCall("GetDistributionRequest")
+	m.verifyInput("GetDistributionRequest", param0)
+	return m.GetDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) GetDistributionWithContext(param0 aws.Context, param1 *cloudfront.GetDistributionInput, param2 ...request.Option) (*cloudfront.GetDistributionOutput, error) {
+	m.addCall("GetDistributionWithContext")
+	m.verifyInput("GetDistributionWithContext", param0)
+	return m.GetDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) GetInvalidation(param0 *cloudfront.GetInvalidationInput) (*cloudfront.GetInvalidationOutput, error) {
+	m.addCall("GetInvalidation")
+	m.verifyInput("GetInvalidation", param0)
+	return m.GetInvalidationFunc(param0)
+}
+
+func (m *cloudfrontMock) GetInvalidationRequest(param0 *cloudfront.GetInvalidationInput) (*request.Request, *cloudfront.GetInvalidationOutput) {
+	m.addCall("GetInvalidationRequest")
+	m.verifyInput("GetInvalidationRequest", param0)
+	return m.GetInvalidationRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) GetInvalidationWithContext(param0 aws.Context, param1 *cloudfront.GetInvalidationInput, param2 ...request.Option) (*cloudfront.GetInvalidationOutput, error) {
+	m.addCall("GetInvalidationWithContext")
+	m.verifyInput("GetInvalidationWithContext", param0)
+	return m.GetInvalidationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) GetStreamingDistribution(param0 *cloudfront.GetStreamingDistributionInput) (*cloudfront.GetStreamingDistributionOutput, error) {
+	m.addCall("GetStreamingDistribution")
+	m.verifyInput("GetStreamingDistribution", param0)
+	return m.GetStreamingDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) GetStreamingDistributionConfig(param0 *cloudfront.GetStreamingDistributionConfigInput) (*cloudfront.GetStreamingDistributionConfigOutput, error) {
+	m.addCall("GetStreamingDistributionConfig")
+	m.verifyInput("GetStreamingDistributionConfig", param0)
+	return m.GetStreamingDistributionConfigFunc(param0)
+}
+
+func (m *cloudfrontMock) GetStreamingDistributionConfigRequest(param0 *cloudfront.GetStreamingDistributionConfigInput) (*request.Request, *cloudfront.GetStreamingDistributionConfigOutput) {
+	m.addCall("GetStreamingDistributionConfigRequest")
+	m.verifyInput("GetStreamingDistributionConfigRequest", param0)
+	return m.GetStreamingDistributionConfigRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) GetStreamingDistributionConfigWithContext(param0 aws.Context, param1 *cloudfront.GetStreamingDistributionConfigInput, param2 ...request.Option) (*cloudfront.GetStreamingDistributionConfigOutput, error) {
+	m.addCall("GetStreamingDistributionConfigWithContext")
+	m.verifyInput("GetStreamingDistributionConfigWithContext", param0)
+	return m.GetStreamingDistributionConfigWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) GetStreamingDistributionRequest(param0 *cloudfront.GetStreamingDistributionInput) (*request.Request, *cloudfront.GetStreamingDistributionOutput) {
+	m.addCall("GetStreamingDistributionRequest")
+	m.verifyInput("GetStreamingDistributionRequest", param0)
+	return m.GetStreamingDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) GetStreamingDistributionWithContext(param0 aws.Context, param1 *cloudfront.GetStreamingDistributionInput, param2 ...request.Option) (*cloudfront.GetStreamingDistributionOutput, error) {
+	m.addCall("GetStreamingDistributionWithContext")
+	m.verifyInput("GetStreamingDistributionWithContext", param0)
+	return m.GetStreamingDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) ListCloudFrontOriginAccessIdentities(param0 *cloudfront.ListCloudFrontOriginAccessIdentitiesInput) (*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, error) {
+	m.addCall("ListCloudFrontOriginAccessIdentities")
+	m.verifyInput("ListCloudFrontOriginAccessIdentities", param0)
+	return m.ListCloudFrontOriginAccessIdentitiesFunc(param0)
+}
+
+func (m *cloudfrontMock) ListCloudFrontOriginAccessIdentitiesRequest(param0 *cloudfront.ListCloudFrontOriginAccessIdentitiesInput) (*request.Request, *cloudfront.ListCloudFrontOriginAccessIdentitiesOutput) {
+	m.addCall("ListCloudFrontOriginAccessIdentitiesRequest")
+	m.verifyInput("ListCloudFrontOriginAccessIdentitiesRequest", param0)
+	return m.ListCloudFrontOriginAccessIdentitiesRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) ListCloudFrontOriginAccessIdentitiesWithContext(param0 aws.Context, param1 *cloudfront.ListCloudFrontOriginAccessIdentitiesInput, param2 ...request.Option) (*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, error) {
+	m.addCall("ListCloudFrontOriginAccessIdentitiesWithContext")
+	m.verifyInput("ListCloudFrontOriginAccessIdentitiesWithContext", param0)
+	return m.ListCloudFrontOriginAccessIdentitiesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) ListDistributions(param0 *cloudfront.ListDistributionsInput) (*cloudfront.ListDistributionsOutput, error) {
+	m.addCall("ListDistributions")
+	m.verifyInput("ListDistributions", param0)
+	return m.ListDistributionsFunc(param0)
+}
+
+func (m *cloudfrontMock) ListDistributionsByWebACLId(param0 *cloudfront.ListDistributionsByWebACLIdInput) (*cloudfront.ListDistributionsByWebACLIdOutput, error) {
+	m.addCall("ListDistributionsByWebACLId")
+	m.verifyInput("ListDistributionsByWebACLId", param0)
+	return m.ListDistributionsByWebACLIdFunc(param0)
+}
+
+func (m *cloudfrontMock) ListDistributionsByWebACLIdRequest(param0 *cloudfront.ListDistributionsByWebACLIdInput) (*request.Request, *cloudfront.ListDistributionsByWebACLIdOutput) {
+	m.addCall("ListDistributionsByWebACLIdRequest")
+	m.verifyInput("ListDistributionsByWebACLIdRequest", param0)
+	return m.ListDistributionsByWebACLIdRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) ListDistributionsByWebACLIdWithContext(param0 aws.Context, param1 *cloudfront.ListDistributionsByWebACLIdInput, param2 ...request.Option) (*cloudfront.ListDistributionsByWebACLIdOutput, error) {
+	m.addCall("ListDistributionsByWebACLIdWithContext")
+	m.verifyInput("ListDistributionsByWebACLIdWithContext", param0)
+	return m.ListDistributionsByWebACLIdWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) ListDistributionsRequest(param0 *cloudfront.ListDistributionsInput) (*request.Request, *cloudfront.ListDistributionsOutput) {
+	m.addCall("ListDistributionsRequest")
+	m.verifyInput("ListDistributionsRequest", param0)
+	return m.ListDistributionsRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) ListDistributionsWithContext(param0 aws.Context, param1 *cloudfront.ListDistributionsInput, param2 ...request.Option) (*cloudfront.ListDistributionsOutput, error) {
+	m.addCall("ListDistributionsWithContext")
+	m.verifyInput("ListDistributionsWithContext", param0)
+	return m.ListDistributionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) ListInvalidations(param0 *cloudfront.ListInvalidationsInput) (*cloudfront.ListInvalidationsOutput, error) {
+	m.addCall("ListInvalidations")
+	m.verifyInput("ListInvalidations", param0)
+	return m.ListInvalidationsFunc(param0)
+}
+
+func (m *cloudfrontMock) ListInvalidationsRequest(param0 *cloudfront.ListInvalidationsInput) (*request.Request, *cloudfront.ListInvalidationsOutput) {
+	m.addCall("ListInvalidationsRequest")
+	m.verifyInput("ListInvalidationsRequest", param0)
+	return m.ListInvalidationsRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) ListInvalidationsWithContext(param0 aws.Context, param1 *cloudfront.ListInvalidationsInput, param2 ...request.Option) (*cloudfront.ListInvalidationsOutput, error) {
+	m.addCall("ListInvalidationsWithContext")
+	m.verifyInput("ListInvalidationsWithContext", param0)
+	return m.ListInvalidationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) ListStreamingDistributions(param0 *cloudfront.ListStreamingDistributionsInput) (*cloudfront.ListStreamingDistributionsOutput, error) {
+	m.addCall("ListStreamingDistributions")
+	m.verifyInput("ListStreamingDistributions", param0)
+	return m.ListStreamingDistributionsFunc(param0)
+}
+
+func (m *cloudfrontMock) ListStreamingDistributionsRequest(param0 *cloudfront.ListStreamingDistributionsInput) (*request.Request, *cloudfront.ListStreamingDistributionsOutput) {
+	m.addCall("ListStreamingDistributionsRequest")
+	m.verifyInput("ListStreamingDistributionsRequest", param0)
+	return m.ListStreamingDistributionsRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) ListStreamingDistributionsWithContext(param0 aws.Context, param1 *cloudfront.ListStreamingDistributionsInput, param2 ...request.Option) (*cloudfront.ListStreamingDistributionsOutput, error) {
+	m.addCall("ListStreamingDistributionsWithContext")
+	m.verifyInput("ListStreamingDistributionsWithContext", param0)
+	return m.ListStreamingDistributionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) ListTagsForResource(param0 *cloudfront.ListTagsForResourceInput) (*cloudfront.ListTagsForResourceOutput, error) {
+	m.addCall("ListTagsForResource")
+	m.verifyInput("ListTagsForResource", param0)
+	return m.ListTagsForResourceFunc(param0)
+}
+
+func (m *cloudfrontMock) ListTagsForResourceRequest(param0 *cloudfront.ListTagsForResourceInput) (*request.Request, *cloudfront.ListTagsForResourceOutput) {
+	m.addCall("ListTagsForResourceRequest")
+	m.verifyInput("ListTagsForResourceRequest", param0)
+	return m.ListTagsForResourceRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) ListTagsForResourceWithContext(param0 aws.Context, param1 *cloudfront.ListTagsForResourceInput, param2 ...request.Option) (*cloudfront.ListTagsForResourceOutput, error) {
+	m.addCall("ListTagsForResourceWithContext")
+	m.verifyInput("ListTagsForResourceWithContext", param0)
+	return m.ListTagsForResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) TagResource(param0 *cloudfront.TagResourceInput) (*cloudfront.TagResourceOutput, error) {
+	m.addCall("TagResource")
+	m.verifyInput("TagResource", param0)
+	return m.TagResourceFunc(param0)
+}
+
+func (m *cloudfrontMock) TagResourceRequest(param0 *cloudfront.TagResourceInput) (*request.Request, *cloudfront.TagResourceOutput) {
+	m.addCall("TagResourceRequest")
+	m.verifyInput("TagResourceRequest", param0)
+	return m.TagResourceRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) TagResourceWithContext(param0 aws.Context, param1 *cloudfront.TagResourceInput, param2 ...request.Option) (*cloudfront.TagResourceOutput, error) {
+	m.addCall("TagResourceWithContext")
+	m.verifyInput("TagResourceWithContext", param0)
+	return m.TagResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) UntagResource(param0 *cloudfront.UntagResourceInput) (*cloudfront.UntagResourceOutput, error) {
+	m.addCall("UntagResource")
+	m.verifyInput("UntagResource", param0)
+	return m.UntagResourceFunc(param0)
+}
+
+func (m *cloudfrontMock) UntagResourceRequest(param0 *cloudfront.UntagResourceInput) (*request.Request, *cloudfront.UntagResourceOutput) {
+	m.addCall("UntagResourceRequest")
+	m.verifyInput("UntagResourceRequest", param0)
+	return m.UntagResourceRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) UntagResourceWithContext(param0 aws.Context, param1 *cloudfront.UntagResourceInput, param2 ...request.Option) (*cloudfront.UntagResourceOutput, error) {
+	m.addCall("UntagResourceWithContext")
+	m.verifyInput("UntagResourceWithContext", param0)
+	return m.UntagResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) UpdateCloudFrontOriginAccessIdentity(param0 *cloudfront.UpdateCloudFrontOriginAccessIdentityInput) (*cloudfront.UpdateCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("UpdateCloudFrontOriginAccessIdentity")
+	m.verifyInput("UpdateCloudFrontOriginAccessIdentity", param0)
+	return m.UpdateCloudFrontOriginAccessIdentityFunc(param0)
+}
+
+func (m *cloudfrontMock) UpdateCloudFrontOriginAccessIdentityRequest(param0 *cloudfront.UpdateCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.UpdateCloudFrontOriginAccessIdentityOutput) {
+	m.addCall("UpdateCloudFrontOriginAccessIdentityRequest")
+	m.verifyInput("UpdateCloudFrontOriginAccessIdentityRequest", param0)
+	return m.UpdateCloudFrontOriginAccessIdentityRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) UpdateCloudFrontOriginAccessIdentityWithContext(param0 aws.Context, param1 *cloudfront.UpdateCloudFrontOriginAccessIdentityInput, param2 ...request.Option) (*cloudfront.UpdateCloudFrontOriginAccessIdentityOutput, error) {
+	m.addCall("UpdateCloudFrontOriginAccessIdentityWithContext")
+	m.verifyInput("UpdateCloudFrontOriginAccessIdentityWithContext", param0)
+	return m.UpdateCloudFrontOriginAccessIdentityWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) UpdateDistribution(param0 *cloudfront.UpdateDistributionInput) (*cloudfront.UpdateDistributionOutput, error) {
+	m.addCall("UpdateDistribution")
+	m.verifyInput("UpdateDistribution", param0)
+	return m.UpdateDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) UpdateDistributionRequest(param0 *cloudfront.UpdateDistributionInput) (*request.Request, *cloudfront.UpdateDistributionOutput) {
+	m.addCall("UpdateDistributionRequest")
+	m.verifyInput("UpdateDistributionRequest", param0)
+	return m.UpdateDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) UpdateDistributionWithContext(param0 aws.Context, param1 *cloudfront.UpdateDistributionInput, param2 ...request.Option) (*cloudfront.UpdateDistributionOutput, error) {
+	m.addCall("UpdateDistributionWithContext")
+	m.verifyInput("UpdateDistributionWithContext", param0)
+	return m.UpdateDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) UpdateStreamingDistribution(param0 *cloudfront.UpdateStreamingDistributionInput) (*cloudfront.UpdateStreamingDistributionOutput, error) {
+	m.addCall("UpdateStreamingDistribution")
+	m.verifyInput("UpdateStreamingDistribution", param0)
+	return m.UpdateStreamingDistributionFunc(param0)
+}
+
+func (m *cloudfrontMock) UpdateStreamingDistributionRequest(param0 *cloudfront.UpdateStreamingDistributionInput) (*request.Request, *cloudfront.UpdateStreamingDistributionOutput) {
+	m.addCall("UpdateStreamingDistributionRequest")
+	m.verifyInput("UpdateStreamingDistributionRequest", param0)
+	return m.UpdateStreamingDistributionRequestFunc(param0)
+}
+
+func (m *cloudfrontMock) UpdateStreamingDistributionWithContext(param0 aws.Context, param1 *cloudfront.UpdateStreamingDistributionInput, param2 ...request.Option) (*cloudfront.UpdateStreamingDistributionOutput, error) {
+	m.addCall("UpdateStreamingDistributionWithContext")
+	m.verifyInput("UpdateStreamingDistributionWithContext", param0)
+	return m.UpdateStreamingDistributionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) WaitUntilDistributionDeployed(param0 *cloudfront.GetDistributionInput) error {
+	m.addCall("WaitUntilDistributionDeployed")
+	m.verifyInput("WaitUntilDistributionDeployed", param0)
+	return m.WaitUntilDistributionDeployedFunc(param0)
+}
+
+func (m *cloudfrontMock) WaitUntilDistributionDeployedWithContext(param0 aws.Context, param1 *cloudfront.GetDistributionInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilDistributionDeployedWithContext")
+	m.verifyInput("WaitUntilDistributionDeployedWithContext", param0)
+	return m.WaitUntilDistributionDeployedWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) WaitUntilInvalidationCompleted(param0 *cloudfront.GetInvalidationInput) error {
+	m.addCall("WaitUntilInvalidationCompleted")
+	m.verifyInput("WaitUntilInvalidationCompleted", param0)
+	return m.WaitUntilInvalidationCompletedFunc(param0)
+}
+
+func (m *cloudfrontMock) WaitUntilInvalidationCompletedWithContext(param0 aws.Context, param1 *cloudfront.GetInvalidationInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilInvalidationCompletedWithContext")
+	m.verifyInput("WaitUntilInvalidationCompletedWithContext", param0)
+	return m.WaitUntilInvalidationCompletedWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudfrontMock) WaitUntilStreamingDistributionDeployed(param0 *cloudfront.GetStreamingDistributionInput) error {
+	m.addCall("WaitUntilStreamingDistributionDeployed")
+	m.verifyInput("WaitUntilStreamingDistributionDeployed", param0)
+	return m.WaitUntilStreamingDistributionDeployedFunc(param0)
+}
+
+func (m *cloudfrontMock) WaitUntilStreamingDistributionDeployedWithContext(param0 aws.Context, param1 *cloudfront.GetStreamingDistributionInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilStreamingDistributionDeployedWithContext")
+	m.verifyInput("WaitUntilStreamingDistributionDeployedWithContext", param0)
+	return m.WaitUntilStreamingDistributionDeployedWithContextFunc(param0, param1, param2...)
 }
 
 type cloudwatchMock struct {

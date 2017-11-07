@@ -20,6 +20,7 @@ package awsat
 import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
@@ -101,6 +102,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
 			return cmd
 		}
+	case "checkdistribution":
+		return func() interface{} {
+			cmd := awsspec.NewCheckDistribution(nil)
+			cmd.SetApi(f.Mock.(cloudfrontiface.CloudFrontAPI))
+			return cmd
+		}
 	case "checkinstance":
 		return func() interface{} {
 			cmd := awsspec.NewCheckInstance(nil)
@@ -171,6 +178,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateDbsubnetgroup(nil)
 			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
+			return cmd
+		}
+	case "createdistribution":
+		return func() interface{} {
+			cmd := awsspec.NewCreateDistribution(nil)
+			cmd.SetApi(f.Mock.(cloudfrontiface.CloudFrontAPI))
 			return cmd
 		}
 	case "creategroup":
@@ -321,6 +334,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteDbsubnetgroup(nil)
 			cmd.SetApi(f.Mock.(rdsiface.RDSAPI))
+			return cmd
+		}
+	case "deletedistribution":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteDistribution(nil)
+			cmd.SetApi(f.Mock.(cloudfrontiface.CloudFrontAPI))
 			return cmd
 		}
 	case "deletegroup":
@@ -495,6 +514,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewUpdateContainertask(nil)
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
+	case "updatedistribution":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateDistribution(nil)
+			cmd.SetApi(f.Mock.(cloudfrontiface.CloudFrontAPI))
 			return cmd
 		}
 	case "updatepolicy":
