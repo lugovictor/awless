@@ -115,6 +115,8 @@ var (
 	newCheckInstance         = func() *CheckInstance { return &CheckInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckSecuritygroup    = func() *CheckSecuritygroup { return &CheckSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckVolume           = func() *CheckVolume { return &CheckVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCopyImage             = func() *CopyImage { return &CopyImage{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCopySnapshot          = func() *CopySnapshot { return &CopySnapshot{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateElasticip       = func() *CreateElasticip { return &CreateElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInstance        = func() *CreateInstance { return &CreateInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInternetgateway = func() *CreateInternetgateway {
@@ -126,11 +128,13 @@ var (
 	newCreateSecuritygroup = func() *CreateSecuritygroup {
 		return &CreateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newCreateSnapshot        = func() *CreateSnapshot { return &CreateSnapshot{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateSubnet          = func() *CreateSubnet { return &CreateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateTag             = func() *CreateTag { return &CreateTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateVolume          = func() *CreateVolume { return &CreateVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateVpc             = func() *CreateVpc { return &CreateVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteElasticip       = func() *DeleteElasticip { return &DeleteElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteImage           = func() *DeleteImage { return &DeleteImage{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteInstance        = func() *DeleteInstance { return &DeleteInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteInternetgateway = func() *DeleteInternetgateway {
 		return &DeleteInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
@@ -141,6 +145,7 @@ var (
 	newDeleteSecuritygroup = func() *DeleteSecuritygroup {
 		return &DeleteSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newDeleteSnapshot        = func() *DeleteSnapshot { return &DeleteSnapshot{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteSubnet          = func() *DeleteSubnet { return &DeleteSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteTag             = func() *DeleteTag { return &DeleteTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVolume          = func() *DeleteVolume { return &DeleteVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
@@ -154,6 +159,7 @@ var (
 		return &DetachSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
 	newDetachVolume        = func() *DetachVolume { return &DetachVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newImportImage         = func() *ImportImage { return &ImportImage{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
 		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -442,6 +448,26 @@ func (m *mockEc2) AttachVolume(input *ec2.AttachVolumeInput) (*ec2.VolumeAttachm
 	return nil, nil
 }
 
+func (m *mockEc2) CopyImage(input *ec2.CopyImageInput) (*ec2.CopyImageOutput, error) {
+	if got, want := input, genTestsExpected["copyimage"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["copyimage"]; ok {
+		return outFunc().(*ec2.CopyImageOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) CopySnapshot(input *ec2.CopySnapshotInput) (*ec2.CopySnapshotOutput, error) {
+	if got, want := input, genTestsExpected["copysnapshot"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["copysnapshot"]; ok {
+		return outFunc().(*ec2.CopySnapshotOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) AllocateAddress(input *ec2.AllocateAddressInput) (*ec2.AllocateAddressOutput, error) {
 	if got, want := input, genTestsExpected["createelasticip"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -508,6 +534,16 @@ func (m *mockEc2) CreateSecurityGroup(input *ec2.CreateSecurityGroupInput) (*ec2
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["createsecuritygroup"]; ok {
 		return outFunc().(*ec2.CreateSecurityGroupOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) CreateSnapshot(input *ec2.CreateSnapshotInput) (*ec2.Snapshot, error) {
+	if got, want := input, genTestsExpected["createsnapshot"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createsnapshot"]; ok {
+		return outFunc().(*ec2.Snapshot), nil
 	}
 	return nil, nil
 }
@@ -612,6 +648,16 @@ func (m *mockEc2) DeleteSecurityGroup(input *ec2.DeleteSecurityGroupInput) (*ec2
 	return nil, nil
 }
 
+func (m *mockEc2) DeleteSnapshot(input *ec2.DeleteSnapshotInput) (*ec2.DeleteSnapshotOutput, error) {
+	if got, want := input, genTestsExpected["deletesnapshot"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletesnapshot"]; ok {
+		return outFunc().(*ec2.DeleteSnapshotOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) DeleteSubnet(input *ec2.DeleteSubnetInput) (*ec2.DeleteSubnetOutput, error) {
 	if got, want := input, genTestsExpected["deletesubnet"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -678,6 +724,16 @@ func (m *mockEc2) DetachVolume(input *ec2.DetachVolumeInput) (*ec2.VolumeAttachm
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["detachvolume"]; ok {
 		return outFunc().(*ec2.VolumeAttachment), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) ImportImage(input *ec2.ImportImageInput) (*ec2.ImportImageOutput, error) {
+	if got, want := input, genTestsExpected["importimage"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["importimage"]; ok {
+		return outFunc().(*ec2.ImportImageOutput), nil
 	}
 	return nil, nil
 }

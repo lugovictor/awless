@@ -136,6 +136,18 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "copyimage":
+		return func() interface{} {
+			cmd := awsspec.NewCopyImage(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "copysnapshot":
+		return func() interface{} {
+			cmd := awsspec.NewCopySnapshot(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "createaccesskey":
 		return func() interface{} {
 			cmd := awsspec.NewCreateAccesskey(nil)
@@ -259,6 +271,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "createsecuritygroup":
 		return func() interface{} {
 			cmd := awsspec.NewCreateSecuritygroup(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "createsnapshot":
+		return func() interface{} {
+			cmd := awsspec.NewCreateSnapshot(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
@@ -406,6 +424,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
+	case "deleteimage":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteImage(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "deleteinstance":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteInstance(nil)
@@ -451,6 +475,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "deletesecuritygroup":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteSecuritygroup(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletesnapshot":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteSnapshot(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
@@ -565,6 +595,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "detachvolume":
 		return func() interface{} {
 			cmd := awsspec.NewDetachVolume(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "importimage":
+		return func() interface{} {
+			cmd := awsspec.NewImportImage(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}

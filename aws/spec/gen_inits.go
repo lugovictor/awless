@@ -65,6 +65,10 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCheckSecuritygroup(f.Sess, f.Log) }
 	case "checkvolume":
 		return func() interface{} { return NewCheckVolume(f.Sess, f.Log) }
+	case "copyimage":
+		return func() interface{} { return NewCopyImage(f.Sess, f.Log) }
+	case "copysnapshot":
+		return func() interface{} { return NewCopySnapshot(f.Sess, f.Log) }
 	case "createaccesskey":
 		return func() interface{} { return NewCreateAccesskey(f.Sess, f.Log) }
 	case "createalarm":
@@ -107,6 +111,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateScalingpolicy(f.Sess, f.Log) }
 	case "createsecuritygroup":
 		return func() interface{} { return NewCreateSecuritygroup(f.Sess, f.Log) }
+	case "createsnapshot":
+		return func() interface{} { return NewCreateSnapshot(f.Sess, f.Log) }
 	case "createstack":
 		return func() interface{} { return NewCreateStack(f.Sess, f.Log) }
 	case "createsubnet":
@@ -155,6 +161,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteFunction(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
+	case "deleteimage":
+		return func() interface{} { return NewDeleteImage(f.Sess, f.Log) }
 	case "deleteinstance":
 		return func() interface{} { return NewDeleteInstance(f.Sess, f.Log) }
 	case "deleteinternetgateway":
@@ -171,6 +179,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteScalingpolicy(f.Sess, f.Log) }
 	case "deletesecuritygroup":
 		return func() interface{} { return NewDeleteSecuritygroup(f.Sess, f.Log) }
+	case "deletesnapshot":
+		return func() interface{} { return NewDeleteSnapshot(f.Sess, f.Log) }
 	case "deletestack":
 		return func() interface{} { return NewDeleteStack(f.Sess, f.Log) }
 	case "deletesubnet":
@@ -209,6 +219,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachUser(f.Sess, f.Log) }
 	case "detachvolume":
 		return func() interface{} { return NewDetachVolume(f.Sess, f.Log) }
+	case "importimage":
+		return func() interface{} { return NewImportImage(f.Sess, f.Log) }
 	case "startalarm":
 		return func() interface{} { return NewStartAlarm(f.Sess, f.Log) }
 	case "startcontainertask":
@@ -253,6 +265,8 @@ var (
 	_ command = &CheckInstance{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CheckVolume{}
+	_ command = &CopyImage{}
+	_ command = &CopySnapshot{}
 	_ command = &CreateAccesskey{}
 	_ command = &CreateAlarm{}
 	_ command = &CreateAppscalingpolicy{}
@@ -274,6 +288,7 @@ var (
 	_ command = &CreateRoutetable{}
 	_ command = &CreateScalingpolicy{}
 	_ command = &CreateSecuritygroup{}
+	_ command = &CreateSnapshot{}
 	_ command = &CreateStack{}
 	_ command = &CreateSubnet{}
 	_ command = &CreateSubscription{}
@@ -298,6 +313,7 @@ var (
 	_ command = &DeleteElasticip{}
 	_ command = &DeleteFunction{}
 	_ command = &DeleteGroup{}
+	_ command = &DeleteImage{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
 	_ command = &DeleteKeypair{}
@@ -306,6 +322,7 @@ var (
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteScalingpolicy{}
 	_ command = &DeleteSecuritygroup{}
+	_ command = &DeleteSnapshot{}
 	_ command = &DeleteStack{}
 	_ command = &DeleteSubnet{}
 	_ command = &DeleteSubscription{}
@@ -325,6 +342,7 @@ var (
 	_ command = &DetachSecuritygroup{}
 	_ command = &DetachUser{}
 	_ command = &DetachVolume{}
+	_ command = &ImportImage{}
 	_ command = &StartAlarm{}
 	_ command = &StartContainertask{}
 	_ command = &StopAlarm{}
