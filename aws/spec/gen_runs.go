@@ -36,6 +36,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
+	"github.com/aws/aws-sdk-go/service/elbv2"
+	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/rds"
@@ -2910,6 +2912,80 @@ func (cmd *CreateTag) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateTargetgroup(sess *session.Session, l ...*logger.Logger) *CreateTargetgroup {
+	cmd := new(CreateTargetgroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateTargetgroup) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *CreateTargetgroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.CreateTargetGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.CreateTargetGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateTargetGroup(input)
+	cmd.logger.ExtraVerbosef("elbv2.CreateTargetGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateTargetgroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateTargetgroup) ParamsHelp() string {
+	return generateParamsHelp("createtargetgroup", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateTargetgroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateTopic(sess *session.Session, l ...*logger.Logger) *CreateTopic {
 	cmd := new(CreateTopic)
 	if len(l) > 0 {
@@ -5140,6 +5216,80 @@ func (cmd *DeleteTag) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteTargetgroup(sess *session.Session, l ...*logger.Logger) *DeleteTargetgroup {
+	cmd := new(DeleteTargetgroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteTargetgroup) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteTargetgroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.DeleteTargetGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.DeleteTargetGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteTargetGroup(input)
+	cmd.logger.ExtraVerbosef("elbv2.DeleteTargetGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteTargetgroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteTargetgroup) ParamsHelp() string {
+	return generateParamsHelp("deletetargetgroup", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteTargetgroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteTopic(sess *session.Session, l ...*logger.Logger) *DeleteTopic {
 	cmd := new(DeleteTopic)
 	if len(l) > 0 {
@@ -7009,5 +7159,73 @@ func (cmd *UpdateSubnet) ParamsHelp() string {
 }
 
 func (cmd *UpdateSubnet) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateTargetgroup(sess *session.Session, l ...*logger.Logger) *UpdateTargetgroup {
+	cmd := new(UpdateTargetgroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateTargetgroup) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *UpdateTargetgroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateTargetgroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateTargetgroup) ParamsHelp() string {
+	return generateParamsHelp("updatetargetgroup", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateTargetgroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }

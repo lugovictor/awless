@@ -32,6 +32,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
+	"github.com/aws/aws-sdk-go/service/elbv2"
+	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/rds"
@@ -7569,6 +7571,732 @@ func (m *ecsMock) WaitUntilTasksStoppedWithContext(param0 aws.Context, param1 *e
 	m.addCall("WaitUntilTasksStoppedWithContext")
 	m.verifyInput("WaitUntilTasksStoppedWithContext", param0)
 	return m.WaitUntilTasksStoppedWithContextFunc(param0, param1, param2...)
+}
+
+type elbv2Mock struct {
+	basicMock
+	elbv2iface.ELBV2API
+	AddTagsFunc                                   func(param0 *elbv2.AddTagsInput) (*elbv2.AddTagsOutput, error)
+	AddTagsRequestFunc                            func(param0 *elbv2.AddTagsInput) (*request.Request, *elbv2.AddTagsOutput)
+	AddTagsWithContextFunc                        func(param0 aws.Context, param1 *elbv2.AddTagsInput, param2 ...request.Option) (*elbv2.AddTagsOutput, error)
+	CreateListenerFunc                            func(param0 *elbv2.CreateListenerInput) (*elbv2.CreateListenerOutput, error)
+	CreateListenerRequestFunc                     func(param0 *elbv2.CreateListenerInput) (*request.Request, *elbv2.CreateListenerOutput)
+	CreateListenerWithContextFunc                 func(param0 aws.Context, param1 *elbv2.CreateListenerInput, param2 ...request.Option) (*elbv2.CreateListenerOutput, error)
+	CreateLoadBalancerFunc                        func(param0 *elbv2.CreateLoadBalancerInput) (*elbv2.CreateLoadBalancerOutput, error)
+	CreateLoadBalancerRequestFunc                 func(param0 *elbv2.CreateLoadBalancerInput) (*request.Request, *elbv2.CreateLoadBalancerOutput)
+	CreateLoadBalancerWithContextFunc             func(param0 aws.Context, param1 *elbv2.CreateLoadBalancerInput, param2 ...request.Option) (*elbv2.CreateLoadBalancerOutput, error)
+	CreateRuleFunc                                func(param0 *elbv2.CreateRuleInput) (*elbv2.CreateRuleOutput, error)
+	CreateRuleRequestFunc                         func(param0 *elbv2.CreateRuleInput) (*request.Request, *elbv2.CreateRuleOutput)
+	CreateRuleWithContextFunc                     func(param0 aws.Context, param1 *elbv2.CreateRuleInput, param2 ...request.Option) (*elbv2.CreateRuleOutput, error)
+	CreateTargetGroupFunc                         func(param0 *elbv2.CreateTargetGroupInput) (*elbv2.CreateTargetGroupOutput, error)
+	CreateTargetGroupRequestFunc                  func(param0 *elbv2.CreateTargetGroupInput) (*request.Request, *elbv2.CreateTargetGroupOutput)
+	CreateTargetGroupWithContextFunc              func(param0 aws.Context, param1 *elbv2.CreateTargetGroupInput, param2 ...request.Option) (*elbv2.CreateTargetGroupOutput, error)
+	DeleteListenerFunc                            func(param0 *elbv2.DeleteListenerInput) (*elbv2.DeleteListenerOutput, error)
+	DeleteListenerRequestFunc                     func(param0 *elbv2.DeleteListenerInput) (*request.Request, *elbv2.DeleteListenerOutput)
+	DeleteListenerWithContextFunc                 func(param0 aws.Context, param1 *elbv2.DeleteListenerInput, param2 ...request.Option) (*elbv2.DeleteListenerOutput, error)
+	DeleteLoadBalancerFunc                        func(param0 *elbv2.DeleteLoadBalancerInput) (*elbv2.DeleteLoadBalancerOutput, error)
+	DeleteLoadBalancerRequestFunc                 func(param0 *elbv2.DeleteLoadBalancerInput) (*request.Request, *elbv2.DeleteLoadBalancerOutput)
+	DeleteLoadBalancerWithContextFunc             func(param0 aws.Context, param1 *elbv2.DeleteLoadBalancerInput, param2 ...request.Option) (*elbv2.DeleteLoadBalancerOutput, error)
+	DeleteRuleFunc                                func(param0 *elbv2.DeleteRuleInput) (*elbv2.DeleteRuleOutput, error)
+	DeleteRuleRequestFunc                         func(param0 *elbv2.DeleteRuleInput) (*request.Request, *elbv2.DeleteRuleOutput)
+	DeleteRuleWithContextFunc                     func(param0 aws.Context, param1 *elbv2.DeleteRuleInput, param2 ...request.Option) (*elbv2.DeleteRuleOutput, error)
+	DeleteTargetGroupFunc                         func(param0 *elbv2.DeleteTargetGroupInput) (*elbv2.DeleteTargetGroupOutput, error)
+	DeleteTargetGroupRequestFunc                  func(param0 *elbv2.DeleteTargetGroupInput) (*request.Request, *elbv2.DeleteTargetGroupOutput)
+	DeleteTargetGroupWithContextFunc              func(param0 aws.Context, param1 *elbv2.DeleteTargetGroupInput, param2 ...request.Option) (*elbv2.DeleteTargetGroupOutput, error)
+	DeregisterTargetsFunc                         func(param0 *elbv2.DeregisterTargetsInput) (*elbv2.DeregisterTargetsOutput, error)
+	DeregisterTargetsRequestFunc                  func(param0 *elbv2.DeregisterTargetsInput) (*request.Request, *elbv2.DeregisterTargetsOutput)
+	DeregisterTargetsWithContextFunc              func(param0 aws.Context, param1 *elbv2.DeregisterTargetsInput, param2 ...request.Option) (*elbv2.DeregisterTargetsOutput, error)
+	DescribeAccountLimitsFunc                     func(param0 *elbv2.DescribeAccountLimitsInput) (*elbv2.DescribeAccountLimitsOutput, error)
+	DescribeAccountLimitsRequestFunc              func(param0 *elbv2.DescribeAccountLimitsInput) (*request.Request, *elbv2.DescribeAccountLimitsOutput)
+	DescribeAccountLimitsWithContextFunc          func(param0 aws.Context, param1 *elbv2.DescribeAccountLimitsInput, param2 ...request.Option) (*elbv2.DescribeAccountLimitsOutput, error)
+	DescribeListenersFunc                         func(param0 *elbv2.DescribeListenersInput) (*elbv2.DescribeListenersOutput, error)
+	DescribeListenersRequestFunc                  func(param0 *elbv2.DescribeListenersInput) (*request.Request, *elbv2.DescribeListenersOutput)
+	DescribeListenersWithContextFunc              func(param0 aws.Context, param1 *elbv2.DescribeListenersInput, param2 ...request.Option) (*elbv2.DescribeListenersOutput, error)
+	DescribeLoadBalancerAttributesFunc            func(param0 *elbv2.DescribeLoadBalancerAttributesInput) (*elbv2.DescribeLoadBalancerAttributesOutput, error)
+	DescribeLoadBalancerAttributesRequestFunc     func(param0 *elbv2.DescribeLoadBalancerAttributesInput) (*request.Request, *elbv2.DescribeLoadBalancerAttributesOutput)
+	DescribeLoadBalancerAttributesWithContextFunc func(param0 aws.Context, param1 *elbv2.DescribeLoadBalancerAttributesInput, param2 ...request.Option) (*elbv2.DescribeLoadBalancerAttributesOutput, error)
+	DescribeLoadBalancersFunc                     func(param0 *elbv2.DescribeLoadBalancersInput) (*elbv2.DescribeLoadBalancersOutput, error)
+	DescribeLoadBalancersRequestFunc              func(param0 *elbv2.DescribeLoadBalancersInput) (*request.Request, *elbv2.DescribeLoadBalancersOutput)
+	DescribeLoadBalancersWithContextFunc          func(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.Option) (*elbv2.DescribeLoadBalancersOutput, error)
+	DescribeRulesFunc                             func(param0 *elbv2.DescribeRulesInput) (*elbv2.DescribeRulesOutput, error)
+	DescribeRulesRequestFunc                      func(param0 *elbv2.DescribeRulesInput) (*request.Request, *elbv2.DescribeRulesOutput)
+	DescribeRulesWithContextFunc                  func(param0 aws.Context, param1 *elbv2.DescribeRulesInput, param2 ...request.Option) (*elbv2.DescribeRulesOutput, error)
+	DescribeSSLPoliciesFunc                       func(param0 *elbv2.DescribeSSLPoliciesInput) (*elbv2.DescribeSSLPoliciesOutput, error)
+	DescribeSSLPoliciesRequestFunc                func(param0 *elbv2.DescribeSSLPoliciesInput) (*request.Request, *elbv2.DescribeSSLPoliciesOutput)
+	DescribeSSLPoliciesWithContextFunc            func(param0 aws.Context, param1 *elbv2.DescribeSSLPoliciesInput, param2 ...request.Option) (*elbv2.DescribeSSLPoliciesOutput, error)
+	DescribeTagsFunc                              func(param0 *elbv2.DescribeTagsInput) (*elbv2.DescribeTagsOutput, error)
+	DescribeTagsRequestFunc                       func(param0 *elbv2.DescribeTagsInput) (*request.Request, *elbv2.DescribeTagsOutput)
+	DescribeTagsWithContextFunc                   func(param0 aws.Context, param1 *elbv2.DescribeTagsInput, param2 ...request.Option) (*elbv2.DescribeTagsOutput, error)
+	DescribeTargetGroupAttributesFunc             func(param0 *elbv2.DescribeTargetGroupAttributesInput) (*elbv2.DescribeTargetGroupAttributesOutput, error)
+	DescribeTargetGroupAttributesRequestFunc      func(param0 *elbv2.DescribeTargetGroupAttributesInput) (*request.Request, *elbv2.DescribeTargetGroupAttributesOutput)
+	DescribeTargetGroupAttributesWithContextFunc  func(param0 aws.Context, param1 *elbv2.DescribeTargetGroupAttributesInput, param2 ...request.Option) (*elbv2.DescribeTargetGroupAttributesOutput, error)
+	DescribeTargetGroupsFunc                      func(param0 *elbv2.DescribeTargetGroupsInput) (*elbv2.DescribeTargetGroupsOutput, error)
+	DescribeTargetGroupsRequestFunc               func(param0 *elbv2.DescribeTargetGroupsInput) (*request.Request, *elbv2.DescribeTargetGroupsOutput)
+	DescribeTargetGroupsWithContextFunc           func(param0 aws.Context, param1 *elbv2.DescribeTargetGroupsInput, param2 ...request.Option) (*elbv2.DescribeTargetGroupsOutput, error)
+	DescribeTargetHealthFunc                      func(param0 *elbv2.DescribeTargetHealthInput) (*elbv2.DescribeTargetHealthOutput, error)
+	DescribeTargetHealthRequestFunc               func(param0 *elbv2.DescribeTargetHealthInput) (*request.Request, *elbv2.DescribeTargetHealthOutput)
+	DescribeTargetHealthWithContextFunc           func(param0 aws.Context, param1 *elbv2.DescribeTargetHealthInput, param2 ...request.Option) (*elbv2.DescribeTargetHealthOutput, error)
+	ModifyListenerFunc                            func(param0 *elbv2.ModifyListenerInput) (*elbv2.ModifyListenerOutput, error)
+	ModifyListenerRequestFunc                     func(param0 *elbv2.ModifyListenerInput) (*request.Request, *elbv2.ModifyListenerOutput)
+	ModifyListenerWithContextFunc                 func(param0 aws.Context, param1 *elbv2.ModifyListenerInput, param2 ...request.Option) (*elbv2.ModifyListenerOutput, error)
+	ModifyLoadBalancerAttributesFunc              func(param0 *elbv2.ModifyLoadBalancerAttributesInput) (*elbv2.ModifyLoadBalancerAttributesOutput, error)
+	ModifyLoadBalancerAttributesRequestFunc       func(param0 *elbv2.ModifyLoadBalancerAttributesInput) (*request.Request, *elbv2.ModifyLoadBalancerAttributesOutput)
+	ModifyLoadBalancerAttributesWithContextFunc   func(param0 aws.Context, param1 *elbv2.ModifyLoadBalancerAttributesInput, param2 ...request.Option) (*elbv2.ModifyLoadBalancerAttributesOutput, error)
+	ModifyRuleFunc                                func(param0 *elbv2.ModifyRuleInput) (*elbv2.ModifyRuleOutput, error)
+	ModifyRuleRequestFunc                         func(param0 *elbv2.ModifyRuleInput) (*request.Request, *elbv2.ModifyRuleOutput)
+	ModifyRuleWithContextFunc                     func(param0 aws.Context, param1 *elbv2.ModifyRuleInput, param2 ...request.Option) (*elbv2.ModifyRuleOutput, error)
+	ModifyTargetGroupFunc                         func(param0 *elbv2.ModifyTargetGroupInput) (*elbv2.ModifyTargetGroupOutput, error)
+	ModifyTargetGroupAttributesFunc               func(param0 *elbv2.ModifyTargetGroupAttributesInput) (*elbv2.ModifyTargetGroupAttributesOutput, error)
+	ModifyTargetGroupAttributesRequestFunc        func(param0 *elbv2.ModifyTargetGroupAttributesInput) (*request.Request, *elbv2.ModifyTargetGroupAttributesOutput)
+	ModifyTargetGroupAttributesWithContextFunc    func(param0 aws.Context, param1 *elbv2.ModifyTargetGroupAttributesInput, param2 ...request.Option) (*elbv2.ModifyTargetGroupAttributesOutput, error)
+	ModifyTargetGroupRequestFunc                  func(param0 *elbv2.ModifyTargetGroupInput) (*request.Request, *elbv2.ModifyTargetGroupOutput)
+	ModifyTargetGroupWithContextFunc              func(param0 aws.Context, param1 *elbv2.ModifyTargetGroupInput, param2 ...request.Option) (*elbv2.ModifyTargetGroupOutput, error)
+	RegisterTargetsFunc                           func(param0 *elbv2.RegisterTargetsInput) (*elbv2.RegisterTargetsOutput, error)
+	RegisterTargetsRequestFunc                    func(param0 *elbv2.RegisterTargetsInput) (*request.Request, *elbv2.RegisterTargetsOutput)
+	RegisterTargetsWithContextFunc                func(param0 aws.Context, param1 *elbv2.RegisterTargetsInput, param2 ...request.Option) (*elbv2.RegisterTargetsOutput, error)
+	RemoveTagsFunc                                func(param0 *elbv2.RemoveTagsInput) (*elbv2.RemoveTagsOutput, error)
+	RemoveTagsRequestFunc                         func(param0 *elbv2.RemoveTagsInput) (*request.Request, *elbv2.RemoveTagsOutput)
+	RemoveTagsWithContextFunc                     func(param0 aws.Context, param1 *elbv2.RemoveTagsInput, param2 ...request.Option) (*elbv2.RemoveTagsOutput, error)
+	SetIpAddressTypeFunc                          func(param0 *elbv2.SetIpAddressTypeInput) (*elbv2.SetIpAddressTypeOutput, error)
+	SetIpAddressTypeRequestFunc                   func(param0 *elbv2.SetIpAddressTypeInput) (*request.Request, *elbv2.SetIpAddressTypeOutput)
+	SetIpAddressTypeWithContextFunc               func(param0 aws.Context, param1 *elbv2.SetIpAddressTypeInput, param2 ...request.Option) (*elbv2.SetIpAddressTypeOutput, error)
+	SetRulePrioritiesFunc                         func(param0 *elbv2.SetRulePrioritiesInput) (*elbv2.SetRulePrioritiesOutput, error)
+	SetRulePrioritiesRequestFunc                  func(param0 *elbv2.SetRulePrioritiesInput) (*request.Request, *elbv2.SetRulePrioritiesOutput)
+	SetRulePrioritiesWithContextFunc              func(param0 aws.Context, param1 *elbv2.SetRulePrioritiesInput, param2 ...request.Option) (*elbv2.SetRulePrioritiesOutput, error)
+	SetSecurityGroupsFunc                         func(param0 *elbv2.SetSecurityGroupsInput) (*elbv2.SetSecurityGroupsOutput, error)
+	SetSecurityGroupsRequestFunc                  func(param0 *elbv2.SetSecurityGroupsInput) (*request.Request, *elbv2.SetSecurityGroupsOutput)
+	SetSecurityGroupsWithContextFunc              func(param0 aws.Context, param1 *elbv2.SetSecurityGroupsInput, param2 ...request.Option) (*elbv2.SetSecurityGroupsOutput, error)
+	SetSubnetsFunc                                func(param0 *elbv2.SetSubnetsInput) (*elbv2.SetSubnetsOutput, error)
+	SetSubnetsRequestFunc                         func(param0 *elbv2.SetSubnetsInput) (*request.Request, *elbv2.SetSubnetsOutput)
+	SetSubnetsWithContextFunc                     func(param0 aws.Context, param1 *elbv2.SetSubnetsInput, param2 ...request.Option) (*elbv2.SetSubnetsOutput, error)
+	WaitUntilLoadBalancerAvailableFunc            func(param0 *elbv2.DescribeLoadBalancersInput) error
+	WaitUntilLoadBalancerAvailableWithContextFunc func(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.WaiterOption) error
+	WaitUntilLoadBalancerExistsFunc               func(param0 *elbv2.DescribeLoadBalancersInput) error
+	WaitUntilLoadBalancerExistsWithContextFunc    func(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.WaiterOption) error
+	WaitUntilLoadBalancersDeletedFunc             func(param0 *elbv2.DescribeLoadBalancersInput) error
+	WaitUntilLoadBalancersDeletedWithContextFunc  func(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.WaiterOption) error
+	WaitUntilTargetDeregisteredFunc               func(param0 *elbv2.DescribeTargetHealthInput) error
+	WaitUntilTargetDeregisteredWithContextFunc    func(param0 aws.Context, param1 *elbv2.DescribeTargetHealthInput, param2 ...request.WaiterOption) error
+	WaitUntilTargetInServiceFunc                  func(param0 *elbv2.DescribeTargetHealthInput) error
+	WaitUntilTargetInServiceWithContextFunc       func(param0 aws.Context, param1 *elbv2.DescribeTargetHealthInput, param2 ...request.WaiterOption) error
+}
+
+func (m *elbv2Mock) AddTags(param0 *elbv2.AddTagsInput) (*elbv2.AddTagsOutput, error) {
+	m.addCall("AddTags")
+	m.verifyInput("AddTags", param0)
+	return m.AddTagsFunc(param0)
+}
+
+func (m *elbv2Mock) AddTagsRequest(param0 *elbv2.AddTagsInput) (*request.Request, *elbv2.AddTagsOutput) {
+	m.addCall("AddTagsRequest")
+	m.verifyInput("AddTagsRequest", param0)
+	return m.AddTagsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) AddTagsWithContext(param0 aws.Context, param1 *elbv2.AddTagsInput, param2 ...request.Option) (*elbv2.AddTagsOutput, error) {
+	m.addCall("AddTagsWithContext")
+	m.verifyInput("AddTagsWithContext", param0)
+	return m.AddTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) CreateListener(param0 *elbv2.CreateListenerInput) (*elbv2.CreateListenerOutput, error) {
+	m.addCall("CreateListener")
+	m.verifyInput("CreateListener", param0)
+	return m.CreateListenerFunc(param0)
+}
+
+func (m *elbv2Mock) CreateListenerRequest(param0 *elbv2.CreateListenerInput) (*request.Request, *elbv2.CreateListenerOutput) {
+	m.addCall("CreateListenerRequest")
+	m.verifyInput("CreateListenerRequest", param0)
+	return m.CreateListenerRequestFunc(param0)
+}
+
+func (m *elbv2Mock) CreateListenerWithContext(param0 aws.Context, param1 *elbv2.CreateListenerInput, param2 ...request.Option) (*elbv2.CreateListenerOutput, error) {
+	m.addCall("CreateListenerWithContext")
+	m.verifyInput("CreateListenerWithContext", param0)
+	return m.CreateListenerWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) CreateLoadBalancer(param0 *elbv2.CreateLoadBalancerInput) (*elbv2.CreateLoadBalancerOutput, error) {
+	m.addCall("CreateLoadBalancer")
+	m.verifyInput("CreateLoadBalancer", param0)
+	return m.CreateLoadBalancerFunc(param0)
+}
+
+func (m *elbv2Mock) CreateLoadBalancerRequest(param0 *elbv2.CreateLoadBalancerInput) (*request.Request, *elbv2.CreateLoadBalancerOutput) {
+	m.addCall("CreateLoadBalancerRequest")
+	m.verifyInput("CreateLoadBalancerRequest", param0)
+	return m.CreateLoadBalancerRequestFunc(param0)
+}
+
+func (m *elbv2Mock) CreateLoadBalancerWithContext(param0 aws.Context, param1 *elbv2.CreateLoadBalancerInput, param2 ...request.Option) (*elbv2.CreateLoadBalancerOutput, error) {
+	m.addCall("CreateLoadBalancerWithContext")
+	m.verifyInput("CreateLoadBalancerWithContext", param0)
+	return m.CreateLoadBalancerWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) CreateRule(param0 *elbv2.CreateRuleInput) (*elbv2.CreateRuleOutput, error) {
+	m.addCall("CreateRule")
+	m.verifyInput("CreateRule", param0)
+	return m.CreateRuleFunc(param0)
+}
+
+func (m *elbv2Mock) CreateRuleRequest(param0 *elbv2.CreateRuleInput) (*request.Request, *elbv2.CreateRuleOutput) {
+	m.addCall("CreateRuleRequest")
+	m.verifyInput("CreateRuleRequest", param0)
+	return m.CreateRuleRequestFunc(param0)
+}
+
+func (m *elbv2Mock) CreateRuleWithContext(param0 aws.Context, param1 *elbv2.CreateRuleInput, param2 ...request.Option) (*elbv2.CreateRuleOutput, error) {
+	m.addCall("CreateRuleWithContext")
+	m.verifyInput("CreateRuleWithContext", param0)
+	return m.CreateRuleWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) CreateTargetGroup(param0 *elbv2.CreateTargetGroupInput) (*elbv2.CreateTargetGroupOutput, error) {
+	m.addCall("CreateTargetGroup")
+	m.verifyInput("CreateTargetGroup", param0)
+	return m.CreateTargetGroupFunc(param0)
+}
+
+func (m *elbv2Mock) CreateTargetGroupRequest(param0 *elbv2.CreateTargetGroupInput) (*request.Request, *elbv2.CreateTargetGroupOutput) {
+	m.addCall("CreateTargetGroupRequest")
+	m.verifyInput("CreateTargetGroupRequest", param0)
+	return m.CreateTargetGroupRequestFunc(param0)
+}
+
+func (m *elbv2Mock) CreateTargetGroupWithContext(param0 aws.Context, param1 *elbv2.CreateTargetGroupInput, param2 ...request.Option) (*elbv2.CreateTargetGroupOutput, error) {
+	m.addCall("CreateTargetGroupWithContext")
+	m.verifyInput("CreateTargetGroupWithContext", param0)
+	return m.CreateTargetGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DeleteListener(param0 *elbv2.DeleteListenerInput) (*elbv2.DeleteListenerOutput, error) {
+	m.addCall("DeleteListener")
+	m.verifyInput("DeleteListener", param0)
+	return m.DeleteListenerFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteListenerRequest(param0 *elbv2.DeleteListenerInput) (*request.Request, *elbv2.DeleteListenerOutput) {
+	m.addCall("DeleteListenerRequest")
+	m.verifyInput("DeleteListenerRequest", param0)
+	return m.DeleteListenerRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteListenerWithContext(param0 aws.Context, param1 *elbv2.DeleteListenerInput, param2 ...request.Option) (*elbv2.DeleteListenerOutput, error) {
+	m.addCall("DeleteListenerWithContext")
+	m.verifyInput("DeleteListenerWithContext", param0)
+	return m.DeleteListenerWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DeleteLoadBalancer(param0 *elbv2.DeleteLoadBalancerInput) (*elbv2.DeleteLoadBalancerOutput, error) {
+	m.addCall("DeleteLoadBalancer")
+	m.verifyInput("DeleteLoadBalancer", param0)
+	return m.DeleteLoadBalancerFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteLoadBalancerRequest(param0 *elbv2.DeleteLoadBalancerInput) (*request.Request, *elbv2.DeleteLoadBalancerOutput) {
+	m.addCall("DeleteLoadBalancerRequest")
+	m.verifyInput("DeleteLoadBalancerRequest", param0)
+	return m.DeleteLoadBalancerRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteLoadBalancerWithContext(param0 aws.Context, param1 *elbv2.DeleteLoadBalancerInput, param2 ...request.Option) (*elbv2.DeleteLoadBalancerOutput, error) {
+	m.addCall("DeleteLoadBalancerWithContext")
+	m.verifyInput("DeleteLoadBalancerWithContext", param0)
+	return m.DeleteLoadBalancerWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DeleteRule(param0 *elbv2.DeleteRuleInput) (*elbv2.DeleteRuleOutput, error) {
+	m.addCall("DeleteRule")
+	m.verifyInput("DeleteRule", param0)
+	return m.DeleteRuleFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteRuleRequest(param0 *elbv2.DeleteRuleInput) (*request.Request, *elbv2.DeleteRuleOutput) {
+	m.addCall("DeleteRuleRequest")
+	m.verifyInput("DeleteRuleRequest", param0)
+	return m.DeleteRuleRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteRuleWithContext(param0 aws.Context, param1 *elbv2.DeleteRuleInput, param2 ...request.Option) (*elbv2.DeleteRuleOutput, error) {
+	m.addCall("DeleteRuleWithContext")
+	m.verifyInput("DeleteRuleWithContext", param0)
+	return m.DeleteRuleWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DeleteTargetGroup(param0 *elbv2.DeleteTargetGroupInput) (*elbv2.DeleteTargetGroupOutput, error) {
+	m.addCall("DeleteTargetGroup")
+	m.verifyInput("DeleteTargetGroup", param0)
+	return m.DeleteTargetGroupFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteTargetGroupRequest(param0 *elbv2.DeleteTargetGroupInput) (*request.Request, *elbv2.DeleteTargetGroupOutput) {
+	m.addCall("DeleteTargetGroupRequest")
+	m.verifyInput("DeleteTargetGroupRequest", param0)
+	return m.DeleteTargetGroupRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DeleteTargetGroupWithContext(param0 aws.Context, param1 *elbv2.DeleteTargetGroupInput, param2 ...request.Option) (*elbv2.DeleteTargetGroupOutput, error) {
+	m.addCall("DeleteTargetGroupWithContext")
+	m.verifyInput("DeleteTargetGroupWithContext", param0)
+	return m.DeleteTargetGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DeregisterTargets(param0 *elbv2.DeregisterTargetsInput) (*elbv2.DeregisterTargetsOutput, error) {
+	m.addCall("DeregisterTargets")
+	m.verifyInput("DeregisterTargets", param0)
+	return m.DeregisterTargetsFunc(param0)
+}
+
+func (m *elbv2Mock) DeregisterTargetsRequest(param0 *elbv2.DeregisterTargetsInput) (*request.Request, *elbv2.DeregisterTargetsOutput) {
+	m.addCall("DeregisterTargetsRequest")
+	m.verifyInput("DeregisterTargetsRequest", param0)
+	return m.DeregisterTargetsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DeregisterTargetsWithContext(param0 aws.Context, param1 *elbv2.DeregisterTargetsInput, param2 ...request.Option) (*elbv2.DeregisterTargetsOutput, error) {
+	m.addCall("DeregisterTargetsWithContext")
+	m.verifyInput("DeregisterTargetsWithContext", param0)
+	return m.DeregisterTargetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeAccountLimits(param0 *elbv2.DescribeAccountLimitsInput) (*elbv2.DescribeAccountLimitsOutput, error) {
+	m.addCall("DescribeAccountLimits")
+	m.verifyInput("DescribeAccountLimits", param0)
+	return m.DescribeAccountLimitsFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeAccountLimitsRequest(param0 *elbv2.DescribeAccountLimitsInput) (*request.Request, *elbv2.DescribeAccountLimitsOutput) {
+	m.addCall("DescribeAccountLimitsRequest")
+	m.verifyInput("DescribeAccountLimitsRequest", param0)
+	return m.DescribeAccountLimitsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeAccountLimitsWithContext(param0 aws.Context, param1 *elbv2.DescribeAccountLimitsInput, param2 ...request.Option) (*elbv2.DescribeAccountLimitsOutput, error) {
+	m.addCall("DescribeAccountLimitsWithContext")
+	m.verifyInput("DescribeAccountLimitsWithContext", param0)
+	return m.DescribeAccountLimitsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeListeners(param0 *elbv2.DescribeListenersInput) (*elbv2.DescribeListenersOutput, error) {
+	m.addCall("DescribeListeners")
+	m.verifyInput("DescribeListeners", param0)
+	return m.DescribeListenersFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeListenersRequest(param0 *elbv2.DescribeListenersInput) (*request.Request, *elbv2.DescribeListenersOutput) {
+	m.addCall("DescribeListenersRequest")
+	m.verifyInput("DescribeListenersRequest", param0)
+	return m.DescribeListenersRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeListenersWithContext(param0 aws.Context, param1 *elbv2.DescribeListenersInput, param2 ...request.Option) (*elbv2.DescribeListenersOutput, error) {
+	m.addCall("DescribeListenersWithContext")
+	m.verifyInput("DescribeListenersWithContext", param0)
+	return m.DescribeListenersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeLoadBalancerAttributes(param0 *elbv2.DescribeLoadBalancerAttributesInput) (*elbv2.DescribeLoadBalancerAttributesOutput, error) {
+	m.addCall("DescribeLoadBalancerAttributes")
+	m.verifyInput("DescribeLoadBalancerAttributes", param0)
+	return m.DescribeLoadBalancerAttributesFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeLoadBalancerAttributesRequest(param0 *elbv2.DescribeLoadBalancerAttributesInput) (*request.Request, *elbv2.DescribeLoadBalancerAttributesOutput) {
+	m.addCall("DescribeLoadBalancerAttributesRequest")
+	m.verifyInput("DescribeLoadBalancerAttributesRequest", param0)
+	return m.DescribeLoadBalancerAttributesRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeLoadBalancerAttributesWithContext(param0 aws.Context, param1 *elbv2.DescribeLoadBalancerAttributesInput, param2 ...request.Option) (*elbv2.DescribeLoadBalancerAttributesOutput, error) {
+	m.addCall("DescribeLoadBalancerAttributesWithContext")
+	m.verifyInput("DescribeLoadBalancerAttributesWithContext", param0)
+	return m.DescribeLoadBalancerAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeLoadBalancers(param0 *elbv2.DescribeLoadBalancersInput) (*elbv2.DescribeLoadBalancersOutput, error) {
+	m.addCall("DescribeLoadBalancers")
+	m.verifyInput("DescribeLoadBalancers", param0)
+	return m.DescribeLoadBalancersFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeLoadBalancersRequest(param0 *elbv2.DescribeLoadBalancersInput) (*request.Request, *elbv2.DescribeLoadBalancersOutput) {
+	m.addCall("DescribeLoadBalancersRequest")
+	m.verifyInput("DescribeLoadBalancersRequest", param0)
+	return m.DescribeLoadBalancersRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeLoadBalancersWithContext(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.Option) (*elbv2.DescribeLoadBalancersOutput, error) {
+	m.addCall("DescribeLoadBalancersWithContext")
+	m.verifyInput("DescribeLoadBalancersWithContext", param0)
+	return m.DescribeLoadBalancersWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeRules(param0 *elbv2.DescribeRulesInput) (*elbv2.DescribeRulesOutput, error) {
+	m.addCall("DescribeRules")
+	m.verifyInput("DescribeRules", param0)
+	return m.DescribeRulesFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeRulesRequest(param0 *elbv2.DescribeRulesInput) (*request.Request, *elbv2.DescribeRulesOutput) {
+	m.addCall("DescribeRulesRequest")
+	m.verifyInput("DescribeRulesRequest", param0)
+	return m.DescribeRulesRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeRulesWithContext(param0 aws.Context, param1 *elbv2.DescribeRulesInput, param2 ...request.Option) (*elbv2.DescribeRulesOutput, error) {
+	m.addCall("DescribeRulesWithContext")
+	m.verifyInput("DescribeRulesWithContext", param0)
+	return m.DescribeRulesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeSSLPolicies(param0 *elbv2.DescribeSSLPoliciesInput) (*elbv2.DescribeSSLPoliciesOutput, error) {
+	m.addCall("DescribeSSLPolicies")
+	m.verifyInput("DescribeSSLPolicies", param0)
+	return m.DescribeSSLPoliciesFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeSSLPoliciesRequest(param0 *elbv2.DescribeSSLPoliciesInput) (*request.Request, *elbv2.DescribeSSLPoliciesOutput) {
+	m.addCall("DescribeSSLPoliciesRequest")
+	m.verifyInput("DescribeSSLPoliciesRequest", param0)
+	return m.DescribeSSLPoliciesRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeSSLPoliciesWithContext(param0 aws.Context, param1 *elbv2.DescribeSSLPoliciesInput, param2 ...request.Option) (*elbv2.DescribeSSLPoliciesOutput, error) {
+	m.addCall("DescribeSSLPoliciesWithContext")
+	m.verifyInput("DescribeSSLPoliciesWithContext", param0)
+	return m.DescribeSSLPoliciesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeTags(param0 *elbv2.DescribeTagsInput) (*elbv2.DescribeTagsOutput, error) {
+	m.addCall("DescribeTags")
+	m.verifyInput("DescribeTags", param0)
+	return m.DescribeTagsFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTagsRequest(param0 *elbv2.DescribeTagsInput) (*request.Request, *elbv2.DescribeTagsOutput) {
+	m.addCall("DescribeTagsRequest")
+	m.verifyInput("DescribeTagsRequest", param0)
+	return m.DescribeTagsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTagsWithContext(param0 aws.Context, param1 *elbv2.DescribeTagsInput, param2 ...request.Option) (*elbv2.DescribeTagsOutput, error) {
+	m.addCall("DescribeTagsWithContext")
+	m.verifyInput("DescribeTagsWithContext", param0)
+	return m.DescribeTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeTargetGroupAttributes(param0 *elbv2.DescribeTargetGroupAttributesInput) (*elbv2.DescribeTargetGroupAttributesOutput, error) {
+	m.addCall("DescribeTargetGroupAttributes")
+	m.verifyInput("DescribeTargetGroupAttributes", param0)
+	return m.DescribeTargetGroupAttributesFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTargetGroupAttributesRequest(param0 *elbv2.DescribeTargetGroupAttributesInput) (*request.Request, *elbv2.DescribeTargetGroupAttributesOutput) {
+	m.addCall("DescribeTargetGroupAttributesRequest")
+	m.verifyInput("DescribeTargetGroupAttributesRequest", param0)
+	return m.DescribeTargetGroupAttributesRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTargetGroupAttributesWithContext(param0 aws.Context, param1 *elbv2.DescribeTargetGroupAttributesInput, param2 ...request.Option) (*elbv2.DescribeTargetGroupAttributesOutput, error) {
+	m.addCall("DescribeTargetGroupAttributesWithContext")
+	m.verifyInput("DescribeTargetGroupAttributesWithContext", param0)
+	return m.DescribeTargetGroupAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeTargetGroups(param0 *elbv2.DescribeTargetGroupsInput) (*elbv2.DescribeTargetGroupsOutput, error) {
+	m.addCall("DescribeTargetGroups")
+	m.verifyInput("DescribeTargetGroups", param0)
+	return m.DescribeTargetGroupsFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTargetGroupsRequest(param0 *elbv2.DescribeTargetGroupsInput) (*request.Request, *elbv2.DescribeTargetGroupsOutput) {
+	m.addCall("DescribeTargetGroupsRequest")
+	m.verifyInput("DescribeTargetGroupsRequest", param0)
+	return m.DescribeTargetGroupsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTargetGroupsWithContext(param0 aws.Context, param1 *elbv2.DescribeTargetGroupsInput, param2 ...request.Option) (*elbv2.DescribeTargetGroupsOutput, error) {
+	m.addCall("DescribeTargetGroupsWithContext")
+	m.verifyInput("DescribeTargetGroupsWithContext", param0)
+	return m.DescribeTargetGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) DescribeTargetHealth(param0 *elbv2.DescribeTargetHealthInput) (*elbv2.DescribeTargetHealthOutput, error) {
+	m.addCall("DescribeTargetHealth")
+	m.verifyInput("DescribeTargetHealth", param0)
+	return m.DescribeTargetHealthFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTargetHealthRequest(param0 *elbv2.DescribeTargetHealthInput) (*request.Request, *elbv2.DescribeTargetHealthOutput) {
+	m.addCall("DescribeTargetHealthRequest")
+	m.verifyInput("DescribeTargetHealthRequest", param0)
+	return m.DescribeTargetHealthRequestFunc(param0)
+}
+
+func (m *elbv2Mock) DescribeTargetHealthWithContext(param0 aws.Context, param1 *elbv2.DescribeTargetHealthInput, param2 ...request.Option) (*elbv2.DescribeTargetHealthOutput, error) {
+	m.addCall("DescribeTargetHealthWithContext")
+	m.verifyInput("DescribeTargetHealthWithContext", param0)
+	return m.DescribeTargetHealthWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) ModifyListener(param0 *elbv2.ModifyListenerInput) (*elbv2.ModifyListenerOutput, error) {
+	m.addCall("ModifyListener")
+	m.verifyInput("ModifyListener", param0)
+	return m.ModifyListenerFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyListenerRequest(param0 *elbv2.ModifyListenerInput) (*request.Request, *elbv2.ModifyListenerOutput) {
+	m.addCall("ModifyListenerRequest")
+	m.verifyInput("ModifyListenerRequest", param0)
+	return m.ModifyListenerRequestFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyListenerWithContext(param0 aws.Context, param1 *elbv2.ModifyListenerInput, param2 ...request.Option) (*elbv2.ModifyListenerOutput, error) {
+	m.addCall("ModifyListenerWithContext")
+	m.verifyInput("ModifyListenerWithContext", param0)
+	return m.ModifyListenerWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) ModifyLoadBalancerAttributes(param0 *elbv2.ModifyLoadBalancerAttributesInput) (*elbv2.ModifyLoadBalancerAttributesOutput, error) {
+	m.addCall("ModifyLoadBalancerAttributes")
+	m.verifyInput("ModifyLoadBalancerAttributes", param0)
+	return m.ModifyLoadBalancerAttributesFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyLoadBalancerAttributesRequest(param0 *elbv2.ModifyLoadBalancerAttributesInput) (*request.Request, *elbv2.ModifyLoadBalancerAttributesOutput) {
+	m.addCall("ModifyLoadBalancerAttributesRequest")
+	m.verifyInput("ModifyLoadBalancerAttributesRequest", param0)
+	return m.ModifyLoadBalancerAttributesRequestFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyLoadBalancerAttributesWithContext(param0 aws.Context, param1 *elbv2.ModifyLoadBalancerAttributesInput, param2 ...request.Option) (*elbv2.ModifyLoadBalancerAttributesOutput, error) {
+	m.addCall("ModifyLoadBalancerAttributesWithContext")
+	m.verifyInput("ModifyLoadBalancerAttributesWithContext", param0)
+	return m.ModifyLoadBalancerAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) ModifyRule(param0 *elbv2.ModifyRuleInput) (*elbv2.ModifyRuleOutput, error) {
+	m.addCall("ModifyRule")
+	m.verifyInput("ModifyRule", param0)
+	return m.ModifyRuleFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyRuleRequest(param0 *elbv2.ModifyRuleInput) (*request.Request, *elbv2.ModifyRuleOutput) {
+	m.addCall("ModifyRuleRequest")
+	m.verifyInput("ModifyRuleRequest", param0)
+	return m.ModifyRuleRequestFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyRuleWithContext(param0 aws.Context, param1 *elbv2.ModifyRuleInput, param2 ...request.Option) (*elbv2.ModifyRuleOutput, error) {
+	m.addCall("ModifyRuleWithContext")
+	m.verifyInput("ModifyRuleWithContext", param0)
+	return m.ModifyRuleWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) ModifyTargetGroup(param0 *elbv2.ModifyTargetGroupInput) (*elbv2.ModifyTargetGroupOutput, error) {
+	m.addCall("ModifyTargetGroup")
+	m.verifyInput("ModifyTargetGroup", param0)
+	return m.ModifyTargetGroupFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyTargetGroupAttributes(param0 *elbv2.ModifyTargetGroupAttributesInput) (*elbv2.ModifyTargetGroupAttributesOutput, error) {
+	m.addCall("ModifyTargetGroupAttributes")
+	m.verifyInput("ModifyTargetGroupAttributes", param0)
+	return m.ModifyTargetGroupAttributesFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyTargetGroupAttributesRequest(param0 *elbv2.ModifyTargetGroupAttributesInput) (*request.Request, *elbv2.ModifyTargetGroupAttributesOutput) {
+	m.addCall("ModifyTargetGroupAttributesRequest")
+	m.verifyInput("ModifyTargetGroupAttributesRequest", param0)
+	return m.ModifyTargetGroupAttributesRequestFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyTargetGroupAttributesWithContext(param0 aws.Context, param1 *elbv2.ModifyTargetGroupAttributesInput, param2 ...request.Option) (*elbv2.ModifyTargetGroupAttributesOutput, error) {
+	m.addCall("ModifyTargetGroupAttributesWithContext")
+	m.verifyInput("ModifyTargetGroupAttributesWithContext", param0)
+	return m.ModifyTargetGroupAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) ModifyTargetGroupRequest(param0 *elbv2.ModifyTargetGroupInput) (*request.Request, *elbv2.ModifyTargetGroupOutput) {
+	m.addCall("ModifyTargetGroupRequest")
+	m.verifyInput("ModifyTargetGroupRequest", param0)
+	return m.ModifyTargetGroupRequestFunc(param0)
+}
+
+func (m *elbv2Mock) ModifyTargetGroupWithContext(param0 aws.Context, param1 *elbv2.ModifyTargetGroupInput, param2 ...request.Option) (*elbv2.ModifyTargetGroupOutput, error) {
+	m.addCall("ModifyTargetGroupWithContext")
+	m.verifyInput("ModifyTargetGroupWithContext", param0)
+	return m.ModifyTargetGroupWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) RegisterTargets(param0 *elbv2.RegisterTargetsInput) (*elbv2.RegisterTargetsOutput, error) {
+	m.addCall("RegisterTargets")
+	m.verifyInput("RegisterTargets", param0)
+	return m.RegisterTargetsFunc(param0)
+}
+
+func (m *elbv2Mock) RegisterTargetsRequest(param0 *elbv2.RegisterTargetsInput) (*request.Request, *elbv2.RegisterTargetsOutput) {
+	m.addCall("RegisterTargetsRequest")
+	m.verifyInput("RegisterTargetsRequest", param0)
+	return m.RegisterTargetsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) RegisterTargetsWithContext(param0 aws.Context, param1 *elbv2.RegisterTargetsInput, param2 ...request.Option) (*elbv2.RegisterTargetsOutput, error) {
+	m.addCall("RegisterTargetsWithContext")
+	m.verifyInput("RegisterTargetsWithContext", param0)
+	return m.RegisterTargetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) RemoveTags(param0 *elbv2.RemoveTagsInput) (*elbv2.RemoveTagsOutput, error) {
+	m.addCall("RemoveTags")
+	m.verifyInput("RemoveTags", param0)
+	return m.RemoveTagsFunc(param0)
+}
+
+func (m *elbv2Mock) RemoveTagsRequest(param0 *elbv2.RemoveTagsInput) (*request.Request, *elbv2.RemoveTagsOutput) {
+	m.addCall("RemoveTagsRequest")
+	m.verifyInput("RemoveTagsRequest", param0)
+	return m.RemoveTagsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) RemoveTagsWithContext(param0 aws.Context, param1 *elbv2.RemoveTagsInput, param2 ...request.Option) (*elbv2.RemoveTagsOutput, error) {
+	m.addCall("RemoveTagsWithContext")
+	m.verifyInput("RemoveTagsWithContext", param0)
+	return m.RemoveTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) SetIpAddressType(param0 *elbv2.SetIpAddressTypeInput) (*elbv2.SetIpAddressTypeOutput, error) {
+	m.addCall("SetIpAddressType")
+	m.verifyInput("SetIpAddressType", param0)
+	return m.SetIpAddressTypeFunc(param0)
+}
+
+func (m *elbv2Mock) SetIpAddressTypeRequest(param0 *elbv2.SetIpAddressTypeInput) (*request.Request, *elbv2.SetIpAddressTypeOutput) {
+	m.addCall("SetIpAddressTypeRequest")
+	m.verifyInput("SetIpAddressTypeRequest", param0)
+	return m.SetIpAddressTypeRequestFunc(param0)
+}
+
+func (m *elbv2Mock) SetIpAddressTypeWithContext(param0 aws.Context, param1 *elbv2.SetIpAddressTypeInput, param2 ...request.Option) (*elbv2.SetIpAddressTypeOutput, error) {
+	m.addCall("SetIpAddressTypeWithContext")
+	m.verifyInput("SetIpAddressTypeWithContext", param0)
+	return m.SetIpAddressTypeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) SetRulePriorities(param0 *elbv2.SetRulePrioritiesInput) (*elbv2.SetRulePrioritiesOutput, error) {
+	m.addCall("SetRulePriorities")
+	m.verifyInput("SetRulePriorities", param0)
+	return m.SetRulePrioritiesFunc(param0)
+}
+
+func (m *elbv2Mock) SetRulePrioritiesRequest(param0 *elbv2.SetRulePrioritiesInput) (*request.Request, *elbv2.SetRulePrioritiesOutput) {
+	m.addCall("SetRulePrioritiesRequest")
+	m.verifyInput("SetRulePrioritiesRequest", param0)
+	return m.SetRulePrioritiesRequestFunc(param0)
+}
+
+func (m *elbv2Mock) SetRulePrioritiesWithContext(param0 aws.Context, param1 *elbv2.SetRulePrioritiesInput, param2 ...request.Option) (*elbv2.SetRulePrioritiesOutput, error) {
+	m.addCall("SetRulePrioritiesWithContext")
+	m.verifyInput("SetRulePrioritiesWithContext", param0)
+	return m.SetRulePrioritiesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) SetSecurityGroups(param0 *elbv2.SetSecurityGroupsInput) (*elbv2.SetSecurityGroupsOutput, error) {
+	m.addCall("SetSecurityGroups")
+	m.verifyInput("SetSecurityGroups", param0)
+	return m.SetSecurityGroupsFunc(param0)
+}
+
+func (m *elbv2Mock) SetSecurityGroupsRequest(param0 *elbv2.SetSecurityGroupsInput) (*request.Request, *elbv2.SetSecurityGroupsOutput) {
+	m.addCall("SetSecurityGroupsRequest")
+	m.verifyInput("SetSecurityGroupsRequest", param0)
+	return m.SetSecurityGroupsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) SetSecurityGroupsWithContext(param0 aws.Context, param1 *elbv2.SetSecurityGroupsInput, param2 ...request.Option) (*elbv2.SetSecurityGroupsOutput, error) {
+	m.addCall("SetSecurityGroupsWithContext")
+	m.verifyInput("SetSecurityGroupsWithContext", param0)
+	return m.SetSecurityGroupsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) SetSubnets(param0 *elbv2.SetSubnetsInput) (*elbv2.SetSubnetsOutput, error) {
+	m.addCall("SetSubnets")
+	m.verifyInput("SetSubnets", param0)
+	return m.SetSubnetsFunc(param0)
+}
+
+func (m *elbv2Mock) SetSubnetsRequest(param0 *elbv2.SetSubnetsInput) (*request.Request, *elbv2.SetSubnetsOutput) {
+	m.addCall("SetSubnetsRequest")
+	m.verifyInput("SetSubnetsRequest", param0)
+	return m.SetSubnetsRequestFunc(param0)
+}
+
+func (m *elbv2Mock) SetSubnetsWithContext(param0 aws.Context, param1 *elbv2.SetSubnetsInput, param2 ...request.Option) (*elbv2.SetSubnetsOutput, error) {
+	m.addCall("SetSubnetsWithContext")
+	m.verifyInput("SetSubnetsWithContext", param0)
+	return m.SetSubnetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) WaitUntilLoadBalancerAvailable(param0 *elbv2.DescribeLoadBalancersInput) error {
+	m.addCall("WaitUntilLoadBalancerAvailable")
+	m.verifyInput("WaitUntilLoadBalancerAvailable", param0)
+	return m.WaitUntilLoadBalancerAvailableFunc(param0)
+}
+
+func (m *elbv2Mock) WaitUntilLoadBalancerAvailableWithContext(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilLoadBalancerAvailableWithContext")
+	m.verifyInput("WaitUntilLoadBalancerAvailableWithContext", param0)
+	return m.WaitUntilLoadBalancerAvailableWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) WaitUntilLoadBalancerExists(param0 *elbv2.DescribeLoadBalancersInput) error {
+	m.addCall("WaitUntilLoadBalancerExists")
+	m.verifyInput("WaitUntilLoadBalancerExists", param0)
+	return m.WaitUntilLoadBalancerExistsFunc(param0)
+}
+
+func (m *elbv2Mock) WaitUntilLoadBalancerExistsWithContext(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilLoadBalancerExistsWithContext")
+	m.verifyInput("WaitUntilLoadBalancerExistsWithContext", param0)
+	return m.WaitUntilLoadBalancerExistsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) WaitUntilLoadBalancersDeleted(param0 *elbv2.DescribeLoadBalancersInput) error {
+	m.addCall("WaitUntilLoadBalancersDeleted")
+	m.verifyInput("WaitUntilLoadBalancersDeleted", param0)
+	return m.WaitUntilLoadBalancersDeletedFunc(param0)
+}
+
+func (m *elbv2Mock) WaitUntilLoadBalancersDeletedWithContext(param0 aws.Context, param1 *elbv2.DescribeLoadBalancersInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilLoadBalancersDeletedWithContext")
+	m.verifyInput("WaitUntilLoadBalancersDeletedWithContext", param0)
+	return m.WaitUntilLoadBalancersDeletedWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) WaitUntilTargetDeregistered(param0 *elbv2.DescribeTargetHealthInput) error {
+	m.addCall("WaitUntilTargetDeregistered")
+	m.verifyInput("WaitUntilTargetDeregistered", param0)
+	return m.WaitUntilTargetDeregisteredFunc(param0)
+}
+
+func (m *elbv2Mock) WaitUntilTargetDeregisteredWithContext(param0 aws.Context, param1 *elbv2.DescribeTargetHealthInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilTargetDeregisteredWithContext")
+	m.verifyInput("WaitUntilTargetDeregisteredWithContext", param0)
+	return m.WaitUntilTargetDeregisteredWithContextFunc(param0, param1, param2...)
+}
+
+func (m *elbv2Mock) WaitUntilTargetInService(param0 *elbv2.DescribeTargetHealthInput) error {
+	m.addCall("WaitUntilTargetInService")
+	m.verifyInput("WaitUntilTargetInService", param0)
+	return m.WaitUntilTargetInServiceFunc(param0)
+}
+
+func (m *elbv2Mock) WaitUntilTargetInServiceWithContext(param0 aws.Context, param1 *elbv2.DescribeTargetHealthInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilTargetInServiceWithContext")
+	m.verifyInput("WaitUntilTargetInServiceWithContext", param0)
+	return m.WaitUntilTargetInServiceWithContextFunc(param0, param1, param2...)
 }
 
 type iamMock struct {

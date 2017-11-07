@@ -24,6 +24,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
+	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
@@ -258,6 +259,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createtargetgroup":
+		return func() interface{} {
+			cmd := awsspec.NewCreateTargetgroup(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
 	case "createtopic":
 		return func() interface{} {
 			cmd := awsspec.NewCreateTopic(nil)
@@ -420,6 +427,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "deletetargetgroup":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteTargetgroup(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
 	case "deletetopic":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteTopic(nil)
@@ -562,6 +575,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewUpdateSubnet(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "updatetargetgroup":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateTargetgroup(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
 			return cmd
 		}
 	}

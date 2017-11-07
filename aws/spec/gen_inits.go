@@ -107,6 +107,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateSubnet(f.Sess, f.Log) }
 	case "createtag":
 		return func() interface{} { return NewCreateTag(f.Sess, f.Log) }
+	case "createtargetgroup":
+		return func() interface{} { return NewCreateTargetgroup(f.Sess, f.Log) }
 	case "createtopic":
 		return func() interface{} { return NewCreateTopic(f.Sess, f.Log) }
 	case "createuser":
@@ -161,6 +163,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteSubnet(f.Sess, f.Log) }
 	case "deletetag":
 		return func() interface{} { return NewDeleteTag(f.Sess, f.Log) }
+	case "deletetargetgroup":
+		return func() interface{} { return NewDeleteTargetgroup(f.Sess, f.Log) }
 	case "deletetopic":
 		return func() interface{} { return NewDeleteTopic(f.Sess, f.Log) }
 	case "deleteuser":
@@ -209,6 +213,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewUpdateSecuritygroup(f.Sess, f.Log) }
 	case "updatesubnet":
 		return func() interface{} { return NewUpdateSubnet(f.Sess, f.Log) }
+	case "updatetargetgroup":
+		return func() interface{} { return NewUpdateTargetgroup(f.Sess, f.Log) }
 	}
 	return nil
 }
@@ -250,6 +256,7 @@ var (
 	_ command = &CreateSecuritygroup{}
 	_ command = &CreateSubnet{}
 	_ command = &CreateTag{}
+	_ command = &CreateTargetgroup{}
 	_ command = &CreateTopic{}
 	_ command = &CreateUser{}
 	_ command = &CreateVolume{}
@@ -277,6 +284,7 @@ var (
 	_ command = &DeleteSecuritygroup{}
 	_ command = &DeleteSubnet{}
 	_ command = &DeleteTag{}
+	_ command = &DeleteTargetgroup{}
 	_ command = &DeleteTopic{}
 	_ command = &DeleteUser{}
 	_ command = &DeleteVolume{}
@@ -301,4 +309,5 @@ var (
 	_ command = &UpdatePolicy{}
 	_ command = &UpdateSecuritygroup{}
 	_ command = &UpdateSubnet{}
+	_ command = &UpdateTargetgroup{}
 )

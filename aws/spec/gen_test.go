@@ -32,6 +32,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
+	"github.com/aws/aws-sdk-go/service/elbv2"
+	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	"github.com/aws/aws-sdk-go/service/rds"
@@ -161,6 +163,9 @@ var (
 	newUpdateContainertask = func() *UpdateContainertask {
 		return &UpdateContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
+	newCreateTargetgroup   = func() *CreateTargetgroup { return &CreateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newDeleteTargetgroup   = func() *DeleteTargetgroup { return &DeleteTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newUpdateTargetgroup   = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newAttachPolicy        = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newAttachUser          = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateAccesskey     = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -209,6 +214,9 @@ type mockEc2 struct {
 }
 type mockEcs struct {
 	ecsiface.ECSAPI
+}
+type mockElbv2 struct {
+	elbv2iface.ELBV2API
 }
 type mockIam struct {
 	iamiface.IAMAPI
@@ -632,6 +640,26 @@ func (m *mockEcs) UpdateService(input *ecs.UpdateServiceInput) (*ecs.UpdateServi
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["updatecontainertask"]; ok {
 		return outFunc().(*ecs.UpdateServiceOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockElbv2) CreateTargetGroup(input *elbv2.CreateTargetGroupInput) (*elbv2.CreateTargetGroupOutput, error) {
+	if got, want := input, genTestsExpected["createtargetgroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createtargetgroup"]; ok {
+		return outFunc().(*elbv2.CreateTargetGroupOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockElbv2) DeleteTargetGroup(input *elbv2.DeleteTargetGroupInput) (*elbv2.DeleteTargetGroupOutput, error) {
+	if got, want := input, genTestsExpected["deletetargetgroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletetargetgroup"]; ok {
+		return outFunc().(*elbv2.DeleteTargetGroupOutput), nil
 	}
 	return nil, nil
 }
