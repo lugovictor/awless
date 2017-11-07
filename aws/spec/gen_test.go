@@ -192,13 +192,15 @@ var (
 	newDeleteDbsubnetgroup = func() *DeleteDbsubnetgroup {
 		return &DeleteDbsubnetgroup{api: &mockRds{}, logger: logger.DiscardLogger}
 	}
-	newCreateZone   = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
-	newDeleteZone   = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
-	newCreateBucket = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
-	newDeleteBucket = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
-	newUpdateBucket = func() *UpdateBucket { return &UpdateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
-	newCreateTopic  = func() *CreateTopic { return &CreateTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
-	newDeleteTopic  = func() *DeleteTopic { return &DeleteTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newCreateZone         = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newDeleteZone         = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newCreateBucket       = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newDeleteBucket       = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newUpdateBucket       = func() *UpdateBucket { return &UpdateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newCreateSubscription = func() *CreateSubscription { return &CreateSubscription{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newCreateTopic        = func() *CreateTopic { return &CreateTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newDeleteSubscription = func() *DeleteSubscription { return &DeleteSubscription{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newDeleteTopic        = func() *DeleteTopic { return &DeleteTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
 )
 
 type mockAcm struct {
@@ -881,12 +883,32 @@ func (m *mockS3) DeleteBucket(input *s3.DeleteBucketInput) (*s3.DeleteBucketOutp
 	return nil, nil
 }
 
+func (m *mockSns) Subscribe(input *sns.SubscribeInput) (*sns.SubscribeOutput, error) {
+	if got, want := input, genTestsExpected["createsubscription"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createsubscription"]; ok {
+		return outFunc().(*sns.SubscribeOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockSns) CreateTopic(input *sns.CreateTopicInput) (*sns.CreateTopicOutput, error) {
 	if got, want := input, genTestsExpected["createtopic"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["createtopic"]; ok {
 		return outFunc().(*sns.CreateTopicOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockSns) Unsubscribe(input *sns.UnsubscribeInput) (*sns.UnsubscribeOutput, error) {
+	if got, want := input, genTestsExpected["deletesubscription"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletesubscription"]; ok {
+		return outFunc().(*sns.UnsubscribeOutput), nil
 	}
 	return nil, nil
 }

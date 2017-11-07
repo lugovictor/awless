@@ -2920,6 +2920,80 @@ func (cmd *CreateSubnet) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateSubscription(sess *session.Session, l ...*logger.Logger) *CreateSubscription {
+	cmd := new(CreateSubscription)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = sns.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateSubscription) SetApi(api snsiface.SNSAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateSubscription) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &sns.SubscribeInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in sns.SubscribeInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.Subscribe(input)
+	cmd.logger.ExtraVerbosef("sns.Subscribe call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateSubscription) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateSubscription) ParamsHelp() string {
+	return generateParamsHelp("createsubscription", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateSubscription) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateTag(sess *session.Session, l ...*logger.Logger) *CreateTag {
 	cmd := new(CreateTag)
 	if len(l) > 0 {
@@ -5295,6 +5369,80 @@ func (cmd *DeleteSubnet) ParamsHelp() string {
 }
 
 func (cmd *DeleteSubnet) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteSubscription(sess *session.Session, l ...*logger.Logger) *DeleteSubscription {
+	cmd := new(DeleteSubscription)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = sns.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteSubscription) SetApi(api snsiface.SNSAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteSubscription) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &sns.UnsubscribeInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in sns.UnsubscribeInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.Unsubscribe(input)
+	cmd.logger.ExtraVerbosef("sns.Unsubscribe call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteSubscription) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteSubscription) ParamsHelp() string {
+	return generateParamsHelp("deletesubscription", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteSubscription) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

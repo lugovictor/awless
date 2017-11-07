@@ -107,6 +107,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateSecuritygroup(f.Sess, f.Log) }
 	case "createsubnet":
 		return func() interface{} { return NewCreateSubnet(f.Sess, f.Log) }
+	case "createsubscription":
+		return func() interface{} { return NewCreateSubscription(f.Sess, f.Log) }
 	case "createtag":
 		return func() interface{} { return NewCreateTag(f.Sess, f.Log) }
 	case "createtargetgroup":
@@ -165,6 +167,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteSecuritygroup(f.Sess, f.Log) }
 	case "deletesubnet":
 		return func() interface{} { return NewDeleteSubnet(f.Sess, f.Log) }
+	case "deletesubscription":
+		return func() interface{} { return NewDeleteSubscription(f.Sess, f.Log) }
 	case "deletetag":
 		return func() interface{} { return NewDeleteTag(f.Sess, f.Log) }
 	case "deletetargetgroup":
@@ -260,6 +264,7 @@ var (
 	_ command = &CreateRoutetable{}
 	_ command = &CreateSecuritygroup{}
 	_ command = &CreateSubnet{}
+	_ command = &CreateSubscription{}
 	_ command = &CreateTag{}
 	_ command = &CreateTargetgroup{}
 	_ command = &CreateTopic{}
@@ -289,6 +294,7 @@ var (
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteSecuritygroup{}
 	_ command = &DeleteSubnet{}
+	_ command = &DeleteSubscription{}
 	_ command = &DeleteTag{}
 	_ command = &DeleteTargetgroup{}
 	_ command = &DeleteTopic{}

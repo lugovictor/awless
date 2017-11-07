@@ -260,6 +260,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createsubscription":
+		return func() interface{} {
+			cmd := awsspec.NewCreateSubscription(nil)
+			cmd.SetApi(f.Mock.(snsiface.SNSAPI))
+			return cmd
+		}
 	case "createtag":
 		return func() interface{} {
 			cmd := awsspec.NewCreateTag(nil)
@@ -432,6 +438,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteSubnet(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletesubscription":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteSubscription(nil)
+			cmd.SetApi(f.Mock.(snsiface.SNSAPI))
 			return cmd
 		}
 	case "deletetag":
