@@ -54,6 +54,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
 			return cmd
 		}
+	case "attachelasticip":
+		return func() interface{} {
+			cmd := awsspec.NewAttachElasticip(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "attachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewAttachInternetgateway(nil)
@@ -184,6 +190,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateDistribution(nil)
 			cmd.SetApi(f.Mock.(cloudfrontiface.CloudFrontAPI))
+			return cmd
+		}
+	case "createelasticip":
+		return func() interface{} {
+			cmd := awsspec.NewCreateElasticip(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "creategroup":
@@ -342,6 +354,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(cloudfrontiface.CloudFrontAPI))
 			return cmd
 		}
+	case "deleteelasticip":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteElasticip(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "deletegroup":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteGroup(nil)
@@ -442,6 +460,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDetachContainertask(nil)
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
+	case "detachelasticip":
+		return func() interface{} {
+			cmd := awsspec.NewDetachElasticip(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "detachinternetgateway":

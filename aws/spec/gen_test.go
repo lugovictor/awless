@@ -86,6 +86,7 @@ var (
 	newDetachAlarm           = func() *DetachAlarm { return &DetachAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newStartAlarm            = func() *StartAlarm { return &StartAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newStopAlarm             = func() *StopAlarm { return &StopAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
+	newAttachElasticip       = func() *AttachElasticip { return &AttachElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newAttachInternetgateway = func() *AttachInternetgateway {
 		return &AttachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -97,6 +98,7 @@ var (
 	newCheckInstance         = func() *CheckInstance { return &CheckInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckSecuritygroup    = func() *CheckSecuritygroup { return &CheckSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckVolume           = func() *CheckVolume { return &CheckVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateElasticip       = func() *CreateElasticip { return &CreateElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInstance        = func() *CreateInstance { return &CreateInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateInternetgateway = func() *CreateInternetgateway {
 		return &CreateInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
@@ -111,6 +113,7 @@ var (
 	newCreateTag             = func() *CreateTag { return &CreateTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateVolume          = func() *CreateVolume { return &CreateVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateVpc             = func() *CreateVpc { return &CreateVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteElasticip       = func() *DeleteElasticip { return &DeleteElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteInstance        = func() *DeleteInstance { return &DeleteInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteInternetgateway = func() *DeleteInternetgateway {
 		return &DeleteInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
@@ -125,6 +128,7 @@ var (
 	newDeleteTag             = func() *DeleteTag { return &DeleteTag{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVolume          = func() *DeleteVolume { return &DeleteVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVpc             = func() *DeleteVpc { return &DeleteVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDetachElasticip       = func() *DetachElasticip { return &DetachElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDetachInternetgateway = func() *DetachInternetgateway {
 		return &DetachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -312,6 +316,16 @@ func (m *mockCloudwatch) DisableAlarmActions(input *cloudwatch.DisableAlarmActio
 	return nil, nil
 }
 
+func (m *mockEc2) AssociateAddress(input *ec2.AssociateAddressInput) (*ec2.AssociateAddressOutput, error) {
+	if got, want := input, genTestsExpected["attachelasticip"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["attachelasticip"]; ok {
+		return outFunc().(*ec2.AssociateAddressOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) AttachInternetGateway(input *ec2.AttachInternetGatewayInput) (*ec2.AttachInternetGatewayOutput, error) {
 	if got, want := input, genTestsExpected["attachinternetgateway"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -338,6 +352,16 @@ func (m *mockEc2) AttachVolume(input *ec2.AttachVolumeInput) (*ec2.VolumeAttachm
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["attachvolume"]; ok {
 		return outFunc().(*ec2.VolumeAttachment), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) AllocateAddress(input *ec2.AllocateAddressInput) (*ec2.AllocateAddressOutput, error) {
+	if got, want := input, genTestsExpected["createelasticip"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createelasticip"]; ok {
+		return outFunc().(*ec2.AllocateAddressOutput), nil
 	}
 	return nil, nil
 }
@@ -432,6 +456,16 @@ func (m *mockEc2) CreateVpc(input *ec2.CreateVpcInput) (*ec2.CreateVpcOutput, er
 	return nil, nil
 }
 
+func (m *mockEc2) ReleaseAddress(input *ec2.ReleaseAddressInput) (*ec2.ReleaseAddressOutput, error) {
+	if got, want := input, genTestsExpected["deleteelasticip"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteelasticip"]; ok {
+		return outFunc().(*ec2.ReleaseAddressOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) TerminateInstances(input *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) {
 	if got, want := input, genTestsExpected["deleteinstance"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -518,6 +552,16 @@ func (m *mockEc2) DeleteVpc(input *ec2.DeleteVpcInput) (*ec2.DeleteVpcOutput, er
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletevpc"]; ok {
 		return outFunc().(*ec2.DeleteVpcOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DisassociateAddress(input *ec2.DisassociateAddressInput) (*ec2.DisassociateAddressOutput, error) {
+	if got, want := input, genTestsExpected["detachelasticip"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["detachelasticip"]; ok {
+		return outFunc().(*ec2.DisassociateAddressOutput), nil
 	}
 	return nil, nil
 }

@@ -185,6 +185,105 @@ func (cmd *AttachContainertask) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewAttachElasticip(sess *session.Session, l ...*logger.Logger) *AttachElasticip {
+	cmd := new(AttachElasticip)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachElasticip) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *AttachElasticip) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.AssociateAddressInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.AssociateAddressInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.AssociateAddress(input)
+	cmd.logger.ExtraVerbosef("ec2.AssociateAddress call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachElasticip) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachElasticip) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.AssociateAddressInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.AssociateAddressInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.AssociateAddress(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.AssociateAddress call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: attach elasticip ok")
+			return fakeDryRunId("elasticip"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *AttachElasticip) ParamsHelp() string {
+	return generateParamsHelp("attachelasticip", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachElasticip) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewAttachInternetgateway(sess *session.Session, l ...*logger.Logger) *AttachInternetgateway {
 	cmd := new(AttachInternetgateway)
 	if len(l) > 0 {
@@ -1825,6 +1924,105 @@ func (cmd *CreateDistribution) ParamsHelp() string {
 }
 
 func (cmd *CreateDistribution) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateElasticip(sess *session.Session, l ...*logger.Logger) *CreateElasticip {
+	cmd := new(CreateElasticip)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateElasticip) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *CreateElasticip) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.AllocateAddressInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.AllocateAddressInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.AllocateAddress(input)
+	cmd.logger.ExtraVerbosef("ec2.AllocateAddress call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateElasticip) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateElasticip) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.AllocateAddressInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.AllocateAddressInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.AllocateAddress(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.AllocateAddress call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: create elasticip ok")
+			return fakeDryRunId("elasticip"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *CreateElasticip) ParamsHelp() string {
+	return generateParamsHelp("createelasticip", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateElasticip) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -3934,6 +4132,105 @@ func (cmd *DeleteDistribution) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteElasticip(sess *session.Session, l ...*logger.Logger) *DeleteElasticip {
+	cmd := new(DeleteElasticip)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteElasticip) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteElasticip) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.ReleaseAddressInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.ReleaseAddressInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.ReleaseAddress(input)
+	cmd.logger.ExtraVerbosef("ec2.ReleaseAddress call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteElasticip) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteElasticip) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.ReleaseAddressInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.ReleaseAddressInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.ReleaseAddress(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.ReleaseAddress call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: delete elasticip ok")
+			return fakeDryRunId("elasticip"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DeleteElasticip) ParamsHelp() string {
+	return generateParamsHelp("deleteelasticip", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteElasticip) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteGroup(sess *session.Session, l ...*logger.Logger) *DeleteGroup {
 	cmd := new(DeleteGroup)
 	if len(l) > 0 {
@@ -5396,6 +5693,105 @@ func (cmd *DetachContainertask) ParamsHelp() string {
 }
 
 func (cmd *DetachContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDetachElasticip(sess *session.Session, l ...*logger.Logger) *DetachElasticip {
+	cmd := new(DetachElasticip)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachElasticip) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *DetachElasticip) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.DisassociateAddressInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DisassociateAddressInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DisassociateAddress(input)
+	cmd.logger.ExtraVerbosef("ec2.DisassociateAddress call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachElasticip) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachElasticip) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DisassociateAddressInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.DisassociateAddressInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.DisassociateAddress(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.DisassociateAddress call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: detach elasticip ok")
+			return fakeDryRunId("elasticip"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DetachElasticip) ParamsHelp() string {
+	return generateParamsHelp("detachelasticip", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachElasticip) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

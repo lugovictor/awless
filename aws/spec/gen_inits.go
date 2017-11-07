@@ -39,6 +39,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachAlarm(f.Sess, f.Log) }
 	case "attachcontainertask":
 		return func() interface{} { return NewAttachContainertask(f.Sess, f.Log) }
+	case "attachelasticip":
+		return func() interface{} { return NewAttachElasticip(f.Sess, f.Log) }
 	case "attachinternetgateway":
 		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
 	case "attachpolicy":
@@ -83,6 +85,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateDbsubnetgroup(f.Sess, f.Log) }
 	case "createdistribution":
 		return func() interface{} { return NewCreateDistribution(f.Sess, f.Log) }
+	case "createelasticip":
+		return func() interface{} { return NewCreateElasticip(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -135,6 +139,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteDbsubnetgroup(f.Sess, f.Log) }
 	case "deletedistribution":
 		return func() interface{} { return NewDeleteDistribution(f.Sess, f.Log) }
+	case "deleteelasticip":
+		return func() interface{} { return NewDeleteElasticip(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -169,6 +175,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachAlarm(f.Sess, f.Log) }
 	case "detachcontainertask":
 		return func() interface{} { return NewDetachContainertask(f.Sess, f.Log) }
+	case "detachelasticip":
+		return func() interface{} { return NewDetachElasticip(f.Sess, f.Log) }
 	case "detachinternetgateway":
 		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
 	case "detachpolicy":
@@ -208,6 +216,7 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 var (
 	_ command = &AttachAlarm{}
 	_ command = &AttachContainertask{}
+	_ command = &AttachElasticip{}
 	_ command = &AttachInternetgateway{}
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
@@ -230,6 +239,7 @@ var (
 	_ command = &CreateDatabase{}
 	_ command = &CreateDbsubnetgroup{}
 	_ command = &CreateDistribution{}
+	_ command = &CreateElasticip{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -256,6 +266,7 @@ var (
 	_ command = &DeleteDatabase{}
 	_ command = &DeleteDbsubnetgroup{}
 	_ command = &DeleteDistribution{}
+	_ command = &DeleteElasticip{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}
@@ -273,6 +284,7 @@ var (
 	_ command = &DeleteZone{}
 	_ command = &DetachAlarm{}
 	_ command = &DetachContainertask{}
+	_ command = &DetachElasticip{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachPolicy{}
 	_ command = &DetachRoutetable{}
