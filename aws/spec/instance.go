@@ -19,9 +19,11 @@ import (
 	"fmt"
 	"time"
 
+	awssdk "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -54,6 +56,19 @@ func (cmd *CreateInstance) AfterRun(ctx map[string]interface{}, output interface
 	return createNameTag(String(cmd.ExtractResult(output)), cmd.Name, ctx)
 }
 
+type UpdateInstance struct {
+	_      string `action:"update" entity:"instance" awsAPI:"ec2" awsCall:"ModifyInstanceAttribute" awsInput:"ec2.ModifyInstanceAttributeInput" awsOutput:"ec2.ModifyInstanceAttributeOutput" awsDryRun:""`
+	logger *logger.Logger
+	api    ec2iface.EC2API
+	Id     *string `awsName:"InstanceId" awsType:"awsstr" templateName:"id" required:""`
+	Type   *string `awsName:"InstanceType.Value" awsType:"awsstr" templateName:"type"`
+	Lock   *bool   `awsName:"DisableApiTermination" awsType:"awsboolattribute" templateName:"lock"`
+}
+
+func (cmd *UpdateInstance) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
 type DeleteInstance struct {
 	_      string `action:"delete" entity:"instance" awsAPI:"ec2" awsCall:"TerminateInstances" awsInput:"ec2.TerminateInstancesInput" awsOutput:"ec2.TerminateInstancesOutput" awsDryRun:""`
 	logger *logger.Logger
@@ -74,6 +89,36 @@ func (cmd *DeleteInstance) ConvertParams() ([]string, func(values map[string]int
 
 func (cmd *DeleteInstance) ValidateParams(params []string) ([]string, error) {
 	return paramRule{tree: oneOf(node("ids"), node("id"))}.verify(params)
+}
+
+type StartInstance struct {
+	_      string `action:"start" entity:"instance" awsAPI:"ec2" awsCall:"StartInstances" awsInput:"ec2.StartInstancesInput" awsOutput:"ec2.StartInstancesOutput" awsDryRun:""`
+	logger *logger.Logger
+	api    ec2iface.EC2API
+	Id     []*string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
+}
+
+func (cmd *StartInstance) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *StartInstance) ExtractResult(i interface{}) string {
+	return awssdk.StringValue(i.(*ec2.StartInstancesOutput).StartingInstances[0].InstanceId)
+}
+
+type StopInstance struct {
+	_      string `action:"stop" entity:"instance" awsAPI:"ec2" awsCall:"StopInstances" awsInput:"ec2.StopInstancesInput" awsOutput:"ec2.StopInstancesOutput" awsDryRun:""`
+	logger *logger.Logger
+	api    ec2iface.EC2API
+	Id     []*string `awsName:"InstanceIds" awsType:"awsstringslice" templateName:"id" required:""`
+}
+
+func (cmd *StopInstance) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+func (cmd *StopInstance) ExtractResult(i interface{}) string {
+	return StringValue(i.(*ec2.StopInstancesOutput).StoppingInstances[0].InstanceId)
 }
 
 const (
@@ -133,4 +178,29 @@ func (cmd *CheckInstance) ManualRun(ctx map[string]interface{}) (interface{}, er
 		logger: cmd.logger,
 	}
 	return nil, c.check()
+}
+
+type AttachInstance struct {
+	_           string `action:"attach" entity:"instance" awsAPI:"elbv2" awsCall:"RegisterTargets" awsInput:"elbv2.RegisterTargetsInput" awsOutput:"elbv2.RegisterTargetsOutput"`
+	logger      *logger.Logger
+	api         elbv2iface.ELBV2API
+	Targetgroup *string `awsName:"TargetGroupArn" awsType:"awsstr" templateName:"targetgroup" required:""`
+	Id          *string `awsName:"Targets[0]Id" awsType:"awsslicestruct" templateName:"id" required:""`
+	Port        *int64  `awsName:"Targets[0]Port" awsType:"awsslicestructint64" templateName:"port"`
+}
+
+func (cmd *AttachInstance) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
+}
+
+type DetachInstance struct {
+	_           string `action:"detach" entity:"instance" awsAPI:"elbv2" awsCall:"DeregisterTargets" awsInput:"elbv2.DeregisterTargetsInput" awsOutput:"elbv2.DeregisterTargetsOutput"`
+	logger      *logger.Logger
+	api         elbv2iface.ELBV2API
+	Targetgroup *string `awsName:"TargetGroupArn" awsType:"awsstr" templateName:"targetgroup" required:""`
+	Id          *string `awsName:"Targets[0]Id" awsType:"awsslicestruct" templateName:"id" required:""`
+}
+
+func (cmd *DetachInstance) ValidateParams(params []string) ([]string, error) {
+	return validateParams(cmd, params)
 }

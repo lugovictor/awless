@@ -160,6 +160,9 @@ var (
 	}
 	newDetachVolume        = func() *DetachVolume { return &DetachVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newImportImage         = func() *ImportImage { return &ImportImage{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newStartInstance       = func() *StartInstance { return &StartInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newStopInstance        = func() *StopInstance { return &StopInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newUpdateInstance      = func() *UpdateInstance { return &UpdateInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
 		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -184,8 +187,10 @@ var (
 	newUpdateContainertask = func() *UpdateContainertask {
 		return &UpdateContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
+	newAttachInstance      = func() *AttachInstance { return &AttachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newCreateTargetgroup   = func() *CreateTargetgroup { return &CreateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newDeleteTargetgroup   = func() *DeleteTargetgroup { return &DeleteTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newDetachInstance      = func() *DetachInstance { return &DetachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newUpdateTargetgroup   = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newAttachPolicy        = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newAttachUser          = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -738,6 +743,36 @@ func (m *mockEc2) ImportImage(input *ec2.ImportImageInput) (*ec2.ImportImageOutp
 	return nil, nil
 }
 
+func (m *mockEc2) StartInstances(input *ec2.StartInstancesInput) (*ec2.StartInstancesOutput, error) {
+	if got, want := input, genTestsExpected["startinstance"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["startinstance"]; ok {
+		return outFunc().(*ec2.StartInstancesOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) StopInstances(input *ec2.StopInstancesInput) (*ec2.StopInstancesOutput, error) {
+	if got, want := input, genTestsExpected["stopinstance"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["stopinstance"]; ok {
+		return outFunc().(*ec2.StopInstancesOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) ModifyInstanceAttribute(input *ec2.ModifyInstanceAttributeInput) (*ec2.ModifyInstanceAttributeOutput, error) {
+	if got, want := input, genTestsExpected["updateinstance"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["updateinstance"]; ok {
+		return outFunc().(*ec2.ModifyInstanceAttributeOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) ModifySubnetAttribute(input *ec2.ModifySubnetAttributeInput) (*ec2.ModifySubnetAttributeOutput, error) {
 	if got, want := input, genTestsExpected["updatesubnet"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -778,6 +813,16 @@ func (m *mockEcs) UpdateService(input *ecs.UpdateServiceInput) (*ecs.UpdateServi
 	return nil, nil
 }
 
+func (m *mockElbv2) RegisterTargets(input *elbv2.RegisterTargetsInput) (*elbv2.RegisterTargetsOutput, error) {
+	if got, want := input, genTestsExpected["attachinstance"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["attachinstance"]; ok {
+		return outFunc().(*elbv2.RegisterTargetsOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockElbv2) CreateTargetGroup(input *elbv2.CreateTargetGroupInput) (*elbv2.CreateTargetGroupOutput, error) {
 	if got, want := input, genTestsExpected["createtargetgroup"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -794,6 +839,16 @@ func (m *mockElbv2) DeleteTargetGroup(input *elbv2.DeleteTargetGroupInput) (*elb
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletetargetgroup"]; ok {
 		return outFunc().(*elbv2.DeleteTargetGroupOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockElbv2) DeregisterTargets(input *elbv2.DeregisterTargetsInput) (*elbv2.DeregisterTargetsOutput, error) {
+	if got, want := input, genTestsExpected["detachinstance"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["detachinstance"]; ok {
+		return outFunc().(*elbv2.DeregisterTargetsOutput), nil
 	}
 	return nil, nil
 }

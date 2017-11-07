@@ -16,7 +16,6 @@ limitations under the License.
 package awsspec
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 
@@ -132,38 +131,4 @@ func TestBuildIpPermissionsFromParams(t *testing.T) {
 			t.Fatalf("%d: got %+v, want %+v", i+1, got, want)
 		}
 	}
-}
-
-func (m *mockEc2) AuthorizeSecurityGroupIngress(input *ec2.AuthorizeSecurityGroupIngressInput) (*ec2.AuthorizeSecurityGroupIngressOutput, error) {
-	if got, want := input, genTestsExpected["updatesecuritygroup"]; !reflect.DeepEqual(got, want) {
-		return nil, fmt.Errorf("got %#v, want %#v", got, want)
-	}
-	return nil, nil
-}
-
-func (m *mockEc2) ModifyInstanceAttribute(input *ec2.ModifyInstanceAttributeInput) (*ec2.ModifyInstanceAttributeOutput, error) {
-	if expectedAttach, expectedDetach := genTestsExpected["attachsecuritygroup"], genTestsExpected["detachsecuritygroup"]; !reflect.DeepEqual(input, expectedAttach) && !reflect.DeepEqual(input, expectedDetach) {
-		return nil, fmt.Errorf("got %#v, want either %#v or %#v", input, expectedAttach, expectedDetach)
-	}
-	return nil, nil
-}
-
-func (m *mockEc2) DescribeInstanceAttribute(input *ec2.DescribeInstanceAttributeInput) (*ec2.DescribeInstanceAttributeOutput, error) {
-	if StringValue(input.Attribute) == "groupSet" && StringValue(input.InstanceId) == "attach/detachsecgroup-instance-id" {
-		return &ec2.DescribeInstanceAttributeOutput{Groups: []*ec2.GroupIdentifier{{GroupId: String("secgroup-1")}, {GroupId: String("secgroup-2")}}}, nil
-	}
-	return nil, fmt.Errorf("DescribeInstanceAttribute mock: invalid value for 'Attribute' or 'InstanceId'")
-}
-
-func (m *mockEc2) DescribeNetworkInterfaces(input *ec2.DescribeNetworkInterfacesInput) (*ec2.DescribeNetworkInterfacesOutput, error) {
-	exp := &ec2.DescribeNetworkInterfacesInput{
-		Filters: []*ec2.Filter{
-			{Name: String("group-id"), Values: []*string{String("my-check-secgroup")}},
-		},
-	}
-
-	if reflect.DeepEqual(input, exp) {
-		return &ec2.DescribeNetworkInterfacesOutput{}, nil
-	}
-	return nil, fmt.Errorf("DescribeNetworkInterfaces mock: invalid value for 'Filters'")
 }

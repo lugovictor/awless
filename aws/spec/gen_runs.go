@@ -292,6 +292,80 @@ func (cmd *AttachElasticip) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewAttachInstance(sess *session.Session, l ...*logger.Logger) *AttachInstance {
+	cmd := new(AttachInstance)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachInstance) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *AttachInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.RegisterTargetsInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.RegisterTargetsInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.RegisterTargets(input)
+	cmd.logger.ExtraVerbosef("elbv2.RegisterTargets call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachInstance) ParamsHelp() string {
+	return generateParamsHelp("attachinstance", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachInstance) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewAttachInternetgateway(sess *session.Session, l ...*logger.Logger) *AttachInternetgateway {
 	cmd := new(AttachInternetgateway)
 	if len(l) > 0 {
@@ -7007,6 +7081,80 @@ func (cmd *DetachElasticip) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDetachInstance(sess *session.Session, l ...*logger.Logger) *DetachInstance {
+	cmd := new(DetachInstance)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachInstance) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *DetachInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.DeregisterTargetsInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.DeregisterTargetsInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeregisterTargets(input)
+	cmd.logger.ExtraVerbosef("elbv2.DeregisterTargets call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachInstance) ParamsHelp() string {
+	return generateParamsHelp("detachinstance", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachInstance) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDetachInternetgateway(sess *session.Session, l ...*logger.Logger) *DetachInternetgateway {
 	cmd := new(DetachInternetgateway)
 	if len(l) > 0 {
@@ -7755,6 +7903,105 @@ func (cmd *StartContainertask) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewStartInstance(sess *session.Session, l ...*logger.Logger) *StartInstance {
+	cmd := new(StartInstance)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *StartInstance) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *StartInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.StartInstancesInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.StartInstancesInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.StartInstances(input)
+	cmd.logger.ExtraVerbosef("ec2.StartInstances call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *StartInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *StartInstance) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.StartInstancesInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.StartInstancesInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.StartInstances(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.StartInstances call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: start instance ok")
+			return fakeDryRunId("instance"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *StartInstance) ParamsHelp() string {
+	return generateParamsHelp("startinstance", structListParamsKeys(cmd))
+}
+
+func (cmd *StartInstance) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewStopAlarm(sess *session.Session, l ...*logger.Logger) *StopAlarm {
 	cmd := new(StopAlarm)
 	if len(l) > 0 {
@@ -7894,6 +8141,105 @@ func (cmd *StopContainertask) ParamsHelp() string {
 }
 
 func (cmd *StopContainertask) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewStopInstance(sess *session.Session, l ...*logger.Logger) *StopInstance {
+	cmd := new(StopInstance)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *StopInstance) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *StopInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.StopInstancesInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.StopInstancesInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.StopInstances(input)
+	cmd.logger.ExtraVerbosef("ec2.StopInstances call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *StopInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *StopInstance) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.StopInstancesInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.StopInstancesInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.StopInstances(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.StopInstances call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: stop instance ok")
+			return fakeDryRunId("instance"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *StopInstance) ParamsHelp() string {
+	return generateParamsHelp("stopinstance", structListParamsKeys(cmd))
+}
+
+func (cmd *StopInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -8104,6 +8450,105 @@ func (cmd *UpdateDistribution) ParamsHelp() string {
 }
 
 func (cmd *UpdateDistribution) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateInstance(sess *session.Session, l ...*logger.Logger) *UpdateInstance {
+	cmd := new(UpdateInstance)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateInstance) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *UpdateInstance) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.ModifyInstanceAttributeInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.ModifyInstanceAttributeInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.ModifyInstanceAttribute(input)
+	cmd.logger.ExtraVerbosef("ec2.ModifyInstanceAttribute call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateInstance) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateInstance) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.ModifyInstanceAttributeInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.ModifyInstanceAttributeInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.ModifyInstanceAttribute(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.ModifyInstanceAttribute call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: update instance ok")
+			return fakeDryRunId("instance"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *UpdateInstance) ParamsHelp() string {
+	return generateParamsHelp("updateinstance", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

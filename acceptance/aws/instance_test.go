@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/client/metadata"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/elbv2"
 )
 
 func TestInstance(t *testing.T) {
@@ -50,15 +51,77 @@ func TestInstance(t *testing.T) {
 		}).ExpectCommandResult("new-instance-id").ExpectCalls("RunInstances", "CreateTagsRequest").Run(t)
 	})
 
+	t.Run("update", func(t *testing.T) {
+		Template("update instance id=id-1234 type=t2.micro lock=true").Mock(&ec2Mock{
+			ModifyInstanceAttributeFunc: func(param0 *ec2.ModifyInstanceAttributeInput) (*ec2.ModifyInstanceAttributeOutput, error) {
+				return nil, nil
+			},
+		}).ExpectInput("ModifyInstanceAttribute", &ec2.ModifyInstanceAttributeInput{
+			InstanceId:            String("id-1234"),
+			InstanceType:          &ec2.AttributeValue{Value: String("t2.micro")},
+			DisableApiTermination: &ec2.AttributeBooleanValue{Value: Bool(true)},
+		}).
+			ExpectCalls("ModifyInstanceAttribute").Run(t)
+	})
+
 	t.Run("delete", func(t *testing.T) {
-		Template("delete instance id=id-1234").Mock(&ec2Mock{
-			TerminateInstancesFunc: func(param0 *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) { return nil, nil },
-		}).ExpectInput("TerminateInstances", &ec2.TerminateInstancesInput{InstanceIds: []*string{String("id-1234")}}).
-			ExpectCalls("TerminateInstances").Run(t)
-		Template("delete instance ids=id-1234,id-2345").Mock(&ec2Mock{
-			TerminateInstancesFunc: func(param0 *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) { return nil, nil },
-		}).ExpectInput("TerminateInstances", &ec2.TerminateInstancesInput{InstanceIds: []*string{String("id-1234"), String("id-2345")}}).
-			ExpectCalls("TerminateInstances").Run(t)
+		t.Run("one id", func(t *testing.T) {
+			Template("delete instance id=id-1234").Mock(&ec2Mock{
+				TerminateInstancesFunc: func(param0 *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) { return nil, nil },
+			}).ExpectInput("TerminateInstances", &ec2.TerminateInstancesInput{InstanceIds: []*string{String("id-1234")}}).
+				ExpectCalls("TerminateInstances").Run(t)
+		})
+
+		t.Run("multiple ids", func(t *testing.T) {
+			Template("delete instance ids=id-1234,id-2345").Mock(&ec2Mock{
+				TerminateInstancesFunc: func(param0 *ec2.TerminateInstancesInput) (*ec2.TerminateInstancesOutput, error) { return nil, nil },
+			}).ExpectInput("TerminateInstances", &ec2.TerminateInstancesInput{InstanceIds: []*string{String("id-1234"), String("id-2345")}}).
+				ExpectCalls("TerminateInstances").Run(t)
+		})
+	})
+
+	t.Run("start", func(t *testing.T) {
+		t.Run("one id", func(t *testing.T) {
+			Template("start instance id=id-1234").Mock(&ec2Mock{
+				StartInstancesFunc: func(param0 *ec2.StartInstancesInput) (*ec2.StartInstancesOutput, error) {
+					return &ec2.StartInstancesOutput{
+						StartingInstances: []*ec2.InstanceStateChange{{InstanceId: String("id-1234")}}}, nil
+				},
+			}).ExpectInput("StartInstances", &ec2.StartInstancesInput{InstanceIds: []*string{String("id-1234")}}).
+				ExpectCalls("StartInstances").Run(t)
+		})
+
+		t.Run("multiple ids", func(t *testing.T) {
+			Template("start instance id=id-1234,id-2345").Mock(&ec2Mock{
+				StartInstancesFunc: func(param0 *ec2.StartInstancesInput) (*ec2.StartInstancesOutput, error) {
+					return &ec2.StartInstancesOutput{
+						StartingInstances: []*ec2.InstanceStateChange{{InstanceId: String("id-1234")}, {InstanceId: String("id-2345")}}}, nil
+				},
+			}).ExpectInput("StartInstances", &ec2.StartInstancesInput{InstanceIds: []*string{String("id-1234"), String("id-2345")}}).
+				ExpectCalls("StartInstances").Run(t)
+		})
+	})
+
+	t.Run("stop", func(t *testing.T) {
+		t.Run("one id", func(t *testing.T) {
+			Template("stop instance id=id-1234").Mock(&ec2Mock{
+				StopInstancesFunc: func(param0 *ec2.StopInstancesInput) (*ec2.StopInstancesOutput, error) {
+					return &ec2.StopInstancesOutput{
+						StoppingInstances: []*ec2.InstanceStateChange{{InstanceId: String("id-1234")}}}, nil
+				},
+			}).ExpectInput("StopInstances", &ec2.StopInstancesInput{InstanceIds: []*string{String("id-1234")}}).
+				ExpectCalls("StopInstances").Run(t)
+		})
+
+		t.Run("multiple ids", func(t *testing.T) {
+			Template("stop instance id=id-1234,id-2345").Mock(&ec2Mock{
+				StopInstancesFunc: func(param0 *ec2.StopInstancesInput) (*ec2.StopInstancesOutput, error) {
+					return &ec2.StopInstancesOutput{
+						StoppingInstances: []*ec2.InstanceStateChange{{InstanceId: String("id-1234")}, {InstanceId: String("id-2345")}}}, nil
+				},
+			}).ExpectInput("StopInstances", &ec2.StopInstancesInput{InstanceIds: []*string{String("id-1234"), String("id-2345")}}).
+				ExpectCalls("StopInstances").Run(t)
+		})
 	})
 
 	t.Run("check", func(t *testing.T) {
@@ -69,6 +132,34 @@ func TestInstance(t *testing.T) {
 				}}, nil
 			}}).ExpectInput("DescribeInstances", &ec2.DescribeInstancesInput{InstanceIds: []*string{String("id-1234")}}).
 			ExpectCalls("DescribeInstances").Run(t)
+	})
+
+	t.Run("attach", func(t *testing.T) {
+		Template("attach instance id=id-1234 targetgroup=arn:of:target:group port=8080").Mock(&elbv2Mock{
+			RegisterTargetsFunc: func(param0 *elbv2.RegisterTargetsInput) (*elbv2.RegisterTargetsOutput, error) {
+				return nil, nil
+			},
+		}).ExpectInput("RegisterTargets", &elbv2.RegisterTargetsInput{
+			TargetGroupArn: String("arn:of:target:group"),
+			Targets: []*elbv2.TargetDescription{
+				{Id: String("id-1234"), Port: Int64(8080)},
+			},
+		}).
+			ExpectCalls("RegisterTargets").Run(t)
+	})
+
+	t.Run("detach", func(t *testing.T) {
+		Template("detach instance id=id-1234 targetgroup=arn:of:target:group").Mock(&elbv2Mock{
+			DeregisterTargetsFunc: func(param0 *elbv2.DeregisterTargetsInput) (*elbv2.DeregisterTargetsOutput, error) {
+				return nil, nil
+			},
+		}).ExpectInput("DeregisterTargets", &elbv2.DeregisterTargetsInput{
+			TargetGroupArn: String("arn:of:target:group"),
+			Targets: []*elbv2.TargetDescription{
+				{Id: String("id-1234")},
+			},
+		}).
+			ExpectCalls("DeregisterTargets").Run(t)
 	})
 }
 

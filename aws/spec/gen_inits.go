@@ -41,6 +41,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachContainertask(f.Sess, f.Log) }
 	case "attachelasticip":
 		return func() interface{} { return NewAttachElasticip(f.Sess, f.Log) }
+	case "attachinstance":
+		return func() interface{} { return NewAttachInstance(f.Sess, f.Log) }
 	case "attachinternetgateway":
 		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
 	case "attachpolicy":
@@ -207,6 +209,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachContainertask(f.Sess, f.Log) }
 	case "detachelasticip":
 		return func() interface{} { return NewDetachElasticip(f.Sess, f.Log) }
+	case "detachinstance":
+		return func() interface{} { return NewDetachInstance(f.Sess, f.Log) }
 	case "detachinternetgateway":
 		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
 	case "detachpolicy":
@@ -225,16 +229,22 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewStartAlarm(f.Sess, f.Log) }
 	case "startcontainertask":
 		return func() interface{} { return NewStartContainertask(f.Sess, f.Log) }
+	case "startinstance":
+		return func() interface{} { return NewStartInstance(f.Sess, f.Log) }
 	case "stopalarm":
 		return func() interface{} { return NewStopAlarm(f.Sess, f.Log) }
 	case "stopcontainertask":
 		return func() interface{} { return NewStopContainertask(f.Sess, f.Log) }
+	case "stopinstance":
+		return func() interface{} { return NewStopInstance(f.Sess, f.Log) }
 	case "updatebucket":
 		return func() interface{} { return NewUpdateBucket(f.Sess, f.Log) }
 	case "updatecontainertask":
 		return func() interface{} { return NewUpdateContainertask(f.Sess, f.Log) }
 	case "updatedistribution":
 		return func() interface{} { return NewUpdateDistribution(f.Sess, f.Log) }
+	case "updateinstance":
+		return func() interface{} { return NewUpdateInstance(f.Sess, f.Log) }
 	case "updatepolicy":
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
 	case "updatesecuritygroup":
@@ -253,6 +263,7 @@ var (
 	_ command = &AttachAlarm{}
 	_ command = &AttachContainertask{}
 	_ command = &AttachElasticip{}
+	_ command = &AttachInstance{}
 	_ command = &AttachInternetgateway{}
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
@@ -336,6 +347,7 @@ var (
 	_ command = &DetachAlarm{}
 	_ command = &DetachContainertask{}
 	_ command = &DetachElasticip{}
+	_ command = &DetachInstance{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachPolicy{}
 	_ command = &DetachRoutetable{}
@@ -345,11 +357,14 @@ var (
 	_ command = &ImportImage{}
 	_ command = &StartAlarm{}
 	_ command = &StartContainertask{}
+	_ command = &StartInstance{}
 	_ command = &StopAlarm{}
 	_ command = &StopContainertask{}
+	_ command = &StopInstance{}
 	_ command = &UpdateBucket{}
 	_ command = &UpdateContainertask{}
 	_ command = &UpdateDistribution{}
+	_ command = &UpdateInstance{}
 	_ command = &UpdatePolicy{}
 	_ command = &UpdateSecuritygroup{}
 	_ command = &UpdateStack{}

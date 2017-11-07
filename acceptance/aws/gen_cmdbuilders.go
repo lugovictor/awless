@@ -64,6 +64,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "attachinstance":
+		return func() interface{} {
+			cmd := awsspec.NewAttachInstance(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
 	case "attachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewAttachInternetgateway(nil)
@@ -562,6 +568,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "detachinstance":
+		return func() interface{} {
+			cmd := awsspec.NewDetachInstance(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
 	case "detachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewDetachInternetgateway(nil)
@@ -616,6 +628,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
 			return cmd
 		}
+	case "startinstance":
+		return func() interface{} {
+			cmd := awsspec.NewStartInstance(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "stopalarm":
 		return func() interface{} {
 			cmd := awsspec.NewStopAlarm(nil)
@@ -626,6 +644,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewStopContainertask(nil)
 			cmd.SetApi(f.Mock.(ecsiface.ECSAPI))
+			return cmd
+		}
+	case "stopinstance":
+		return func() interface{} {
+			cmd := awsspec.NewStopInstance(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "updatebucket":
@@ -644,6 +668,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewUpdateDistribution(nil)
 			cmd.SetApi(f.Mock.(cloudfrontiface.CloudFrontAPI))
+			return cmd
+		}
+	case "updateinstance":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateInstance(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "updatepolicy":
