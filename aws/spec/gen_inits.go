@@ -105,6 +105,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateRoutetable(f.Sess, f.Log) }
 	case "createsecuritygroup":
 		return func() interface{} { return NewCreateSecuritygroup(f.Sess, f.Log) }
+	case "createstack":
+		return func() interface{} { return NewCreateStack(f.Sess, f.Log) }
 	case "createsubnet":
 		return func() interface{} { return NewCreateSubnet(f.Sess, f.Log) }
 	case "createsubscription":
@@ -165,6 +167,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteRoutetable(f.Sess, f.Log) }
 	case "deletesecuritygroup":
 		return func() interface{} { return NewDeleteSecuritygroup(f.Sess, f.Log) }
+	case "deletestack":
+		return func() interface{} { return NewDeleteStack(f.Sess, f.Log) }
 	case "deletesubnet":
 		return func() interface{} { return NewDeleteSubnet(f.Sess, f.Log) }
 	case "deletesubscription":
@@ -219,6 +223,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
 	case "updatesecuritygroup":
 		return func() interface{} { return NewUpdateSecuritygroup(f.Sess, f.Log) }
+	case "updatestack":
+		return func() interface{} { return NewUpdateStack(f.Sess, f.Log) }
 	case "updatesubnet":
 		return func() interface{} { return NewUpdateSubnet(f.Sess, f.Log) }
 	case "updatetargetgroup":
@@ -263,6 +269,7 @@ var (
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
 	_ command = &CreateSecuritygroup{}
+	_ command = &CreateStack{}
 	_ command = &CreateSubnet{}
 	_ command = &CreateSubscription{}
 	_ command = &CreateTag{}
@@ -293,6 +300,7 @@ var (
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteSecuritygroup{}
+	_ command = &DeleteStack{}
 	_ command = &DeleteSubnet{}
 	_ command = &DeleteSubscription{}
 	_ command = &DeleteTag{}
@@ -320,6 +328,7 @@ var (
 	_ command = &UpdateDistribution{}
 	_ command = &UpdatePolicy{}
 	_ command = &UpdateSecuritygroup{}
+	_ command = &UpdateStack{}
 	_ command = &UpdateSubnet{}
 	_ command = &UpdateTargetgroup{}
 )

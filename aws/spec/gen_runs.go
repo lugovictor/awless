@@ -28,6 +28,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudformation"
+	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront"
 	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -2821,6 +2823,80 @@ func (cmd *CreateSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateStack(sess *session.Session, l ...*logger.Logger) *CreateStack {
+	cmd := new(CreateStack)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudformation.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateStack) SetApi(api cloudformationiface.CloudFormationAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateStack) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &cloudformation.CreateStackInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in cloudformation.CreateStackInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateStack(input)
+	cmd.logger.ExtraVerbosef("cloudformation.CreateStack call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateStack) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateStack) ParamsHelp() string {
+	return generateParamsHelp("createstack", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateStack) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateSubnet(sess *session.Session, l ...*logger.Logger) *CreateSubnet {
 	cmd := new(CreateSubnet)
 	if len(l) > 0 {
@@ -5273,6 +5349,80 @@ func (cmd *DeleteSecuritygroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteStack(sess *session.Session, l ...*logger.Logger) *DeleteStack {
+	cmd := new(DeleteStack)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudformation.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteStack) SetApi(api cloudformationiface.CloudFormationAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteStack) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &cloudformation.DeleteStackInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in cloudformation.DeleteStackInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteStack(input)
+	cmd.logger.ExtraVerbosef("cloudformation.DeleteStack call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteStack) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteStack) ParamsHelp() string {
+	return generateParamsHelp("deletestack", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteStack) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteSubnet(sess *session.Session, l ...*logger.Logger) *DeleteSubnet {
 	cmd := new(DeleteSubnet)
 	if len(l) > 0 {
@@ -7383,6 +7533,80 @@ func (cmd *UpdateSecuritygroup) ParamsHelp() string {
 }
 
 func (cmd *UpdateSecuritygroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateStack(sess *session.Session, l ...*logger.Logger) *UpdateStack {
+	cmd := new(UpdateStack)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = cloudformation.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateStack) SetApi(api cloudformationiface.CloudFormationAPI) {
+	cmd.api = api
+}
+
+func (cmd *UpdateStack) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &cloudformation.UpdateStackInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in cloudformation.UpdateStackInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.UpdateStack(input)
+	cmd.logger.ExtraVerbosef("cloudformation.UpdateStack call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateStack) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateStack) ParamsHelp() string {
+	return generateParamsHelp("updatestack", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateStack) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

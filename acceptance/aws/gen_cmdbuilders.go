@@ -20,6 +20,7 @@ package awsat
 import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
@@ -254,6 +255,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createstack":
+		return func() interface{} {
+			cmd := awsspec.NewCreateStack(nil)
+			cmd.SetApi(f.Mock.(cloudformationiface.CloudFormationAPI))
+			return cmd
+		}
 	case "createsubnet":
 		return func() interface{} {
 			cmd := awsspec.NewCreateSubnet(nil)
@@ -434,6 +441,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "deletestack":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteStack(nil)
+			cmd.SetApi(f.Mock.(cloudformationiface.CloudFormationAPI))
+			return cmd
+		}
 	case "deletesubnet":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteSubnet(nil)
@@ -594,6 +607,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewUpdateSecuritygroup(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "updatestack":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateStack(nil)
+			cmd.SetApi(f.Mock.(cloudformationiface.CloudFormationAPI))
 			return cmd
 		}
 	case "updatesubnet":

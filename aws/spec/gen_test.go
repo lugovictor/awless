@@ -25,6 +25,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudformation"
+	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
@@ -72,6 +74,9 @@ var (
 	newDeleteAppscalingtarget = func() *DeleteAppscalingtarget {
 		return &DeleteAppscalingtarget{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
 	}
+	newCreateStack       = func() *CreateStack { return &CreateStack{api: &mockCloudformation{}, logger: logger.DiscardLogger} }
+	newDeleteStack       = func() *DeleteStack { return &DeleteStack{api: &mockCloudformation{}, logger: logger.DiscardLogger} }
+	newUpdateStack       = func() *UpdateStack { return &UpdateStack{api: &mockCloudformation{}, logger: logger.DiscardLogger} }
 	newCheckDistribution = func() *CheckDistribution {
 		return &CheckDistribution{api: &mockCloudfront{}, logger: logger.DiscardLogger}
 	}
@@ -209,6 +214,9 @@ type mockAcm struct {
 type mockApplicationautoscaling struct {
 	applicationautoscalingiface.ApplicationAutoScalingAPI
 }
+type mockCloudformation struct {
+	cloudformationiface.CloudFormationAPI
+}
 type mockCloudfront struct {
 	cloudfrontiface.CloudFrontAPI
 }
@@ -289,6 +297,36 @@ func (m *mockApplicationautoscaling) DeregisterScalableTarget(input *application
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteappscalingtarget"]; ok {
 		return outFunc().(*applicationautoscaling.DeregisterScalableTargetOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockCloudformation) CreateStack(input *cloudformation.CreateStackInput) (*cloudformation.CreateStackOutput, error) {
+	if got, want := input, genTestsExpected["createstack"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createstack"]; ok {
+		return outFunc().(*cloudformation.CreateStackOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockCloudformation) DeleteStack(input *cloudformation.DeleteStackInput) (*cloudformation.DeleteStackOutput, error) {
+	if got, want := input, genTestsExpected["deletestack"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletestack"]; ok {
+		return outFunc().(*cloudformation.DeleteStackOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockCloudformation) UpdateStack(input *cloudformation.UpdateStackInput) (*cloudformation.UpdateStackOutput, error) {
+	if got, want := input, genTestsExpected["updatestack"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["updatestack"]; ok {
+		return outFunc().(*cloudformation.UpdateStackOutput), nil
 	}
 	return nil, nil
 }

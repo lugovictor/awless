@@ -24,6 +24,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/acm/acmiface"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling"
 	"github.com/aws/aws-sdk-go/service/applicationautoscaling/applicationautoscalingiface"
+	"github.com/aws/aws-sdk-go/service/cloudformation"
+	"github.com/aws/aws-sdk-go/service/cloudformation/cloudformationiface"
 	"github.com/aws/aws-sdk-go/service/cloudfront"
 	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch"
@@ -413,6 +415,900 @@ func (m *applicationautoscalingMock) RegisterScalableTargetWithContext(param0 aw
 	m.addCall("RegisterScalableTargetWithContext")
 	m.verifyInput("RegisterScalableTargetWithContext", param0)
 	return m.RegisterScalableTargetWithContextFunc(param0, param1, param2...)
+}
+
+type cloudformationMock struct {
+	basicMock
+	cloudformationiface.CloudFormationAPI
+	CancelUpdateStackFunc                           func(param0 *cloudformation.CancelUpdateStackInput) (*cloudformation.CancelUpdateStackOutput, error)
+	CancelUpdateStackRequestFunc                    func(param0 *cloudformation.CancelUpdateStackInput) (*request.Request, *cloudformation.CancelUpdateStackOutput)
+	CancelUpdateStackWithContextFunc                func(param0 aws.Context, param1 *cloudformation.CancelUpdateStackInput, param2 ...request.Option) (*cloudformation.CancelUpdateStackOutput, error)
+	ContinueUpdateRollbackFunc                      func(param0 *cloudformation.ContinueUpdateRollbackInput) (*cloudformation.ContinueUpdateRollbackOutput, error)
+	ContinueUpdateRollbackRequestFunc               func(param0 *cloudformation.ContinueUpdateRollbackInput) (*request.Request, *cloudformation.ContinueUpdateRollbackOutput)
+	ContinueUpdateRollbackWithContextFunc           func(param0 aws.Context, param1 *cloudformation.ContinueUpdateRollbackInput, param2 ...request.Option) (*cloudformation.ContinueUpdateRollbackOutput, error)
+	CreateChangeSetFunc                             func(param0 *cloudformation.CreateChangeSetInput) (*cloudformation.CreateChangeSetOutput, error)
+	CreateChangeSetRequestFunc                      func(param0 *cloudformation.CreateChangeSetInput) (*request.Request, *cloudformation.CreateChangeSetOutput)
+	CreateChangeSetWithContextFunc                  func(param0 aws.Context, param1 *cloudformation.CreateChangeSetInput, param2 ...request.Option) (*cloudformation.CreateChangeSetOutput, error)
+	CreateStackFunc                                 func(param0 *cloudformation.CreateStackInput) (*cloudformation.CreateStackOutput, error)
+	CreateStackInstancesFunc                        func(param0 *cloudformation.CreateStackInstancesInput) (*cloudformation.CreateStackInstancesOutput, error)
+	CreateStackInstancesRequestFunc                 func(param0 *cloudformation.CreateStackInstancesInput) (*request.Request, *cloudformation.CreateStackInstancesOutput)
+	CreateStackInstancesWithContextFunc             func(param0 aws.Context, param1 *cloudformation.CreateStackInstancesInput, param2 ...request.Option) (*cloudformation.CreateStackInstancesOutput, error)
+	CreateStackRequestFunc                          func(param0 *cloudformation.CreateStackInput) (*request.Request, *cloudformation.CreateStackOutput)
+	CreateStackSetFunc                              func(param0 *cloudformation.CreateStackSetInput) (*cloudformation.CreateStackSetOutput, error)
+	CreateStackSetRequestFunc                       func(param0 *cloudformation.CreateStackSetInput) (*request.Request, *cloudformation.CreateStackSetOutput)
+	CreateStackSetWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.CreateStackSetInput, param2 ...request.Option) (*cloudformation.CreateStackSetOutput, error)
+	CreateStackWithContextFunc                      func(param0 aws.Context, param1 *cloudformation.CreateStackInput, param2 ...request.Option) (*cloudformation.CreateStackOutput, error)
+	DeleteChangeSetFunc                             func(param0 *cloudformation.DeleteChangeSetInput) (*cloudformation.DeleteChangeSetOutput, error)
+	DeleteChangeSetRequestFunc                      func(param0 *cloudformation.DeleteChangeSetInput) (*request.Request, *cloudformation.DeleteChangeSetOutput)
+	DeleteChangeSetWithContextFunc                  func(param0 aws.Context, param1 *cloudformation.DeleteChangeSetInput, param2 ...request.Option) (*cloudformation.DeleteChangeSetOutput, error)
+	DeleteStackFunc                                 func(param0 *cloudformation.DeleteStackInput) (*cloudformation.DeleteStackOutput, error)
+	DeleteStackInstancesFunc                        func(param0 *cloudformation.DeleteStackInstancesInput) (*cloudformation.DeleteStackInstancesOutput, error)
+	DeleteStackInstancesRequestFunc                 func(param0 *cloudformation.DeleteStackInstancesInput) (*request.Request, *cloudformation.DeleteStackInstancesOutput)
+	DeleteStackInstancesWithContextFunc             func(param0 aws.Context, param1 *cloudformation.DeleteStackInstancesInput, param2 ...request.Option) (*cloudformation.DeleteStackInstancesOutput, error)
+	DeleteStackRequestFunc                          func(param0 *cloudformation.DeleteStackInput) (*request.Request, *cloudformation.DeleteStackOutput)
+	DeleteStackSetFunc                              func(param0 *cloudformation.DeleteStackSetInput) (*cloudformation.DeleteStackSetOutput, error)
+	DeleteStackSetRequestFunc                       func(param0 *cloudformation.DeleteStackSetInput) (*request.Request, *cloudformation.DeleteStackSetOutput)
+	DeleteStackSetWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.DeleteStackSetInput, param2 ...request.Option) (*cloudformation.DeleteStackSetOutput, error)
+	DeleteStackWithContextFunc                      func(param0 aws.Context, param1 *cloudformation.DeleteStackInput, param2 ...request.Option) (*cloudformation.DeleteStackOutput, error)
+	DescribeAccountLimitsFunc                       func(param0 *cloudformation.DescribeAccountLimitsInput) (*cloudformation.DescribeAccountLimitsOutput, error)
+	DescribeAccountLimitsRequestFunc                func(param0 *cloudformation.DescribeAccountLimitsInput) (*request.Request, *cloudformation.DescribeAccountLimitsOutput)
+	DescribeAccountLimitsWithContextFunc            func(param0 aws.Context, param1 *cloudformation.DescribeAccountLimitsInput, param2 ...request.Option) (*cloudformation.DescribeAccountLimitsOutput, error)
+	DescribeChangeSetFunc                           func(param0 *cloudformation.DescribeChangeSetInput) (*cloudformation.DescribeChangeSetOutput, error)
+	DescribeChangeSetRequestFunc                    func(param0 *cloudformation.DescribeChangeSetInput) (*request.Request, *cloudformation.DescribeChangeSetOutput)
+	DescribeChangeSetWithContextFunc                func(param0 aws.Context, param1 *cloudformation.DescribeChangeSetInput, param2 ...request.Option) (*cloudformation.DescribeChangeSetOutput, error)
+	DescribeStackEventsFunc                         func(param0 *cloudformation.DescribeStackEventsInput) (*cloudformation.DescribeStackEventsOutput, error)
+	DescribeStackEventsRequestFunc                  func(param0 *cloudformation.DescribeStackEventsInput) (*request.Request, *cloudformation.DescribeStackEventsOutput)
+	DescribeStackEventsWithContextFunc              func(param0 aws.Context, param1 *cloudformation.DescribeStackEventsInput, param2 ...request.Option) (*cloudformation.DescribeStackEventsOutput, error)
+	DescribeStackInstanceFunc                       func(param0 *cloudformation.DescribeStackInstanceInput) (*cloudformation.DescribeStackInstanceOutput, error)
+	DescribeStackInstanceRequestFunc                func(param0 *cloudformation.DescribeStackInstanceInput) (*request.Request, *cloudformation.DescribeStackInstanceOutput)
+	DescribeStackInstanceWithContextFunc            func(param0 aws.Context, param1 *cloudformation.DescribeStackInstanceInput, param2 ...request.Option) (*cloudformation.DescribeStackInstanceOutput, error)
+	DescribeStackResourceFunc                       func(param0 *cloudformation.DescribeStackResourceInput) (*cloudformation.DescribeStackResourceOutput, error)
+	DescribeStackResourceRequestFunc                func(param0 *cloudformation.DescribeStackResourceInput) (*request.Request, *cloudformation.DescribeStackResourceOutput)
+	DescribeStackResourceWithContextFunc            func(param0 aws.Context, param1 *cloudformation.DescribeStackResourceInput, param2 ...request.Option) (*cloudformation.DescribeStackResourceOutput, error)
+	DescribeStackResourcesFunc                      func(param0 *cloudformation.DescribeStackResourcesInput) (*cloudformation.DescribeStackResourcesOutput, error)
+	DescribeStackResourcesRequestFunc               func(param0 *cloudformation.DescribeStackResourcesInput) (*request.Request, *cloudformation.DescribeStackResourcesOutput)
+	DescribeStackResourcesWithContextFunc           func(param0 aws.Context, param1 *cloudformation.DescribeStackResourcesInput, param2 ...request.Option) (*cloudformation.DescribeStackResourcesOutput, error)
+	DescribeStackSetFunc                            func(param0 *cloudformation.DescribeStackSetInput) (*cloudformation.DescribeStackSetOutput, error)
+	DescribeStackSetOperationFunc                   func(param0 *cloudformation.DescribeStackSetOperationInput) (*cloudformation.DescribeStackSetOperationOutput, error)
+	DescribeStackSetOperationRequestFunc            func(param0 *cloudformation.DescribeStackSetOperationInput) (*request.Request, *cloudformation.DescribeStackSetOperationOutput)
+	DescribeStackSetOperationWithContextFunc        func(param0 aws.Context, param1 *cloudformation.DescribeStackSetOperationInput, param2 ...request.Option) (*cloudformation.DescribeStackSetOperationOutput, error)
+	DescribeStackSetRequestFunc                     func(param0 *cloudformation.DescribeStackSetInput) (*request.Request, *cloudformation.DescribeStackSetOutput)
+	DescribeStackSetWithContextFunc                 func(param0 aws.Context, param1 *cloudformation.DescribeStackSetInput, param2 ...request.Option) (*cloudformation.DescribeStackSetOutput, error)
+	DescribeStacksFunc                              func(param0 *cloudformation.DescribeStacksInput) (*cloudformation.DescribeStacksOutput, error)
+	DescribeStacksRequestFunc                       func(param0 *cloudformation.DescribeStacksInput) (*request.Request, *cloudformation.DescribeStacksOutput)
+	DescribeStacksWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.Option) (*cloudformation.DescribeStacksOutput, error)
+	EstimateTemplateCostFunc                        func(param0 *cloudformation.EstimateTemplateCostInput) (*cloudformation.EstimateTemplateCostOutput, error)
+	EstimateTemplateCostRequestFunc                 func(param0 *cloudformation.EstimateTemplateCostInput) (*request.Request, *cloudformation.EstimateTemplateCostOutput)
+	EstimateTemplateCostWithContextFunc             func(param0 aws.Context, param1 *cloudformation.EstimateTemplateCostInput, param2 ...request.Option) (*cloudformation.EstimateTemplateCostOutput, error)
+	ExecuteChangeSetFunc                            func(param0 *cloudformation.ExecuteChangeSetInput) (*cloudformation.ExecuteChangeSetOutput, error)
+	ExecuteChangeSetRequestFunc                     func(param0 *cloudformation.ExecuteChangeSetInput) (*request.Request, *cloudformation.ExecuteChangeSetOutput)
+	ExecuteChangeSetWithContextFunc                 func(param0 aws.Context, param1 *cloudformation.ExecuteChangeSetInput, param2 ...request.Option) (*cloudformation.ExecuteChangeSetOutput, error)
+	GetStackPolicyFunc                              func(param0 *cloudformation.GetStackPolicyInput) (*cloudformation.GetStackPolicyOutput, error)
+	GetStackPolicyRequestFunc                       func(param0 *cloudformation.GetStackPolicyInput) (*request.Request, *cloudformation.GetStackPolicyOutput)
+	GetStackPolicyWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.GetStackPolicyInput, param2 ...request.Option) (*cloudformation.GetStackPolicyOutput, error)
+	GetTemplateFunc                                 func(param0 *cloudformation.GetTemplateInput) (*cloudformation.GetTemplateOutput, error)
+	GetTemplateRequestFunc                          func(param0 *cloudformation.GetTemplateInput) (*request.Request, *cloudformation.GetTemplateOutput)
+	GetTemplateSummaryFunc                          func(param0 *cloudformation.GetTemplateSummaryInput) (*cloudformation.GetTemplateSummaryOutput, error)
+	GetTemplateSummaryRequestFunc                   func(param0 *cloudformation.GetTemplateSummaryInput) (*request.Request, *cloudformation.GetTemplateSummaryOutput)
+	GetTemplateSummaryWithContextFunc               func(param0 aws.Context, param1 *cloudformation.GetTemplateSummaryInput, param2 ...request.Option) (*cloudformation.GetTemplateSummaryOutput, error)
+	GetTemplateWithContextFunc                      func(param0 aws.Context, param1 *cloudformation.GetTemplateInput, param2 ...request.Option) (*cloudformation.GetTemplateOutput, error)
+	ListChangeSetsFunc                              func(param0 *cloudformation.ListChangeSetsInput) (*cloudformation.ListChangeSetsOutput, error)
+	ListChangeSetsRequestFunc                       func(param0 *cloudformation.ListChangeSetsInput) (*request.Request, *cloudformation.ListChangeSetsOutput)
+	ListChangeSetsWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.ListChangeSetsInput, param2 ...request.Option) (*cloudformation.ListChangeSetsOutput, error)
+	ListExportsFunc                                 func(param0 *cloudformation.ListExportsInput) (*cloudformation.ListExportsOutput, error)
+	ListExportsRequestFunc                          func(param0 *cloudformation.ListExportsInput) (*request.Request, *cloudformation.ListExportsOutput)
+	ListExportsWithContextFunc                      func(param0 aws.Context, param1 *cloudformation.ListExportsInput, param2 ...request.Option) (*cloudformation.ListExportsOutput, error)
+	ListImportsFunc                                 func(param0 *cloudformation.ListImportsInput) (*cloudformation.ListImportsOutput, error)
+	ListImportsRequestFunc                          func(param0 *cloudformation.ListImportsInput) (*request.Request, *cloudformation.ListImportsOutput)
+	ListImportsWithContextFunc                      func(param0 aws.Context, param1 *cloudformation.ListImportsInput, param2 ...request.Option) (*cloudformation.ListImportsOutput, error)
+	ListStackInstancesFunc                          func(param0 *cloudformation.ListStackInstancesInput) (*cloudformation.ListStackInstancesOutput, error)
+	ListStackInstancesRequestFunc                   func(param0 *cloudformation.ListStackInstancesInput) (*request.Request, *cloudformation.ListStackInstancesOutput)
+	ListStackInstancesWithContextFunc               func(param0 aws.Context, param1 *cloudformation.ListStackInstancesInput, param2 ...request.Option) (*cloudformation.ListStackInstancesOutput, error)
+	ListStackResourcesFunc                          func(param0 *cloudformation.ListStackResourcesInput) (*cloudformation.ListStackResourcesOutput, error)
+	ListStackResourcesRequestFunc                   func(param0 *cloudformation.ListStackResourcesInput) (*request.Request, *cloudformation.ListStackResourcesOutput)
+	ListStackResourcesWithContextFunc               func(param0 aws.Context, param1 *cloudformation.ListStackResourcesInput, param2 ...request.Option) (*cloudformation.ListStackResourcesOutput, error)
+	ListStackSetOperationResultsFunc                func(param0 *cloudformation.ListStackSetOperationResultsInput) (*cloudformation.ListStackSetOperationResultsOutput, error)
+	ListStackSetOperationResultsRequestFunc         func(param0 *cloudformation.ListStackSetOperationResultsInput) (*request.Request, *cloudformation.ListStackSetOperationResultsOutput)
+	ListStackSetOperationResultsWithContextFunc     func(param0 aws.Context, param1 *cloudformation.ListStackSetOperationResultsInput, param2 ...request.Option) (*cloudformation.ListStackSetOperationResultsOutput, error)
+	ListStackSetOperationsFunc                      func(param0 *cloudformation.ListStackSetOperationsInput) (*cloudformation.ListStackSetOperationsOutput, error)
+	ListStackSetOperationsRequestFunc               func(param0 *cloudformation.ListStackSetOperationsInput) (*request.Request, *cloudformation.ListStackSetOperationsOutput)
+	ListStackSetOperationsWithContextFunc           func(param0 aws.Context, param1 *cloudformation.ListStackSetOperationsInput, param2 ...request.Option) (*cloudformation.ListStackSetOperationsOutput, error)
+	ListStackSetsFunc                               func(param0 *cloudformation.ListStackSetsInput) (*cloudformation.ListStackSetsOutput, error)
+	ListStackSetsRequestFunc                        func(param0 *cloudformation.ListStackSetsInput) (*request.Request, *cloudformation.ListStackSetsOutput)
+	ListStackSetsWithContextFunc                    func(param0 aws.Context, param1 *cloudformation.ListStackSetsInput, param2 ...request.Option) (*cloudformation.ListStackSetsOutput, error)
+	ListStacksFunc                                  func(param0 *cloudformation.ListStacksInput) (*cloudformation.ListStacksOutput, error)
+	ListStacksRequestFunc                           func(param0 *cloudformation.ListStacksInput) (*request.Request, *cloudformation.ListStacksOutput)
+	ListStacksWithContextFunc                       func(param0 aws.Context, param1 *cloudformation.ListStacksInput, param2 ...request.Option) (*cloudformation.ListStacksOutput, error)
+	SetStackPolicyFunc                              func(param0 *cloudformation.SetStackPolicyInput) (*cloudformation.SetStackPolicyOutput, error)
+	SetStackPolicyRequestFunc                       func(param0 *cloudformation.SetStackPolicyInput) (*request.Request, *cloudformation.SetStackPolicyOutput)
+	SetStackPolicyWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.SetStackPolicyInput, param2 ...request.Option) (*cloudformation.SetStackPolicyOutput, error)
+	SignalResourceFunc                              func(param0 *cloudformation.SignalResourceInput) (*cloudformation.SignalResourceOutput, error)
+	SignalResourceRequestFunc                       func(param0 *cloudformation.SignalResourceInput) (*request.Request, *cloudformation.SignalResourceOutput)
+	SignalResourceWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.SignalResourceInput, param2 ...request.Option) (*cloudformation.SignalResourceOutput, error)
+	StopStackSetOperationFunc                       func(param0 *cloudformation.StopStackSetOperationInput) (*cloudformation.StopStackSetOperationOutput, error)
+	StopStackSetOperationRequestFunc                func(param0 *cloudformation.StopStackSetOperationInput) (*request.Request, *cloudformation.StopStackSetOperationOutput)
+	StopStackSetOperationWithContextFunc            func(param0 aws.Context, param1 *cloudformation.StopStackSetOperationInput, param2 ...request.Option) (*cloudformation.StopStackSetOperationOutput, error)
+	UpdateStackFunc                                 func(param0 *cloudformation.UpdateStackInput) (*cloudformation.UpdateStackOutput, error)
+	UpdateStackRequestFunc                          func(param0 *cloudformation.UpdateStackInput) (*request.Request, *cloudformation.UpdateStackOutput)
+	UpdateStackSetFunc                              func(param0 *cloudformation.UpdateStackSetInput) (*cloudformation.UpdateStackSetOutput, error)
+	UpdateStackSetRequestFunc                       func(param0 *cloudformation.UpdateStackSetInput) (*request.Request, *cloudformation.UpdateStackSetOutput)
+	UpdateStackSetWithContextFunc                   func(param0 aws.Context, param1 *cloudformation.UpdateStackSetInput, param2 ...request.Option) (*cloudformation.UpdateStackSetOutput, error)
+	UpdateStackWithContextFunc                      func(param0 aws.Context, param1 *cloudformation.UpdateStackInput, param2 ...request.Option) (*cloudformation.UpdateStackOutput, error)
+	ValidateTemplateFunc                            func(param0 *cloudformation.ValidateTemplateInput) (*cloudformation.ValidateTemplateOutput, error)
+	ValidateTemplateRequestFunc                     func(param0 *cloudformation.ValidateTemplateInput) (*request.Request, *cloudformation.ValidateTemplateOutput)
+	ValidateTemplateWithContextFunc                 func(param0 aws.Context, param1 *cloudformation.ValidateTemplateInput, param2 ...request.Option) (*cloudformation.ValidateTemplateOutput, error)
+	WaitUntilChangeSetCreateCompleteFunc            func(param0 *cloudformation.DescribeChangeSetInput) error
+	WaitUntilChangeSetCreateCompleteWithContextFunc func(param0 aws.Context, param1 *cloudformation.DescribeChangeSetInput, param2 ...request.WaiterOption) error
+	WaitUntilStackCreateCompleteFunc                func(param0 *cloudformation.DescribeStacksInput) error
+	WaitUntilStackCreateCompleteWithContextFunc     func(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error
+	WaitUntilStackDeleteCompleteFunc                func(param0 *cloudformation.DescribeStacksInput) error
+	WaitUntilStackDeleteCompleteWithContextFunc     func(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error
+	WaitUntilStackExistsFunc                        func(param0 *cloudformation.DescribeStacksInput) error
+	WaitUntilStackExistsWithContextFunc             func(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error
+	WaitUntilStackUpdateCompleteFunc                func(param0 *cloudformation.DescribeStacksInput) error
+	WaitUntilStackUpdateCompleteWithContextFunc     func(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error
+}
+
+func (m *cloudformationMock) CancelUpdateStack(param0 *cloudformation.CancelUpdateStackInput) (*cloudformation.CancelUpdateStackOutput, error) {
+	m.addCall("CancelUpdateStack")
+	m.verifyInput("CancelUpdateStack", param0)
+	return m.CancelUpdateStackFunc(param0)
+}
+
+func (m *cloudformationMock) CancelUpdateStackRequest(param0 *cloudformation.CancelUpdateStackInput) (*request.Request, *cloudformation.CancelUpdateStackOutput) {
+	m.addCall("CancelUpdateStackRequest")
+	m.verifyInput("CancelUpdateStackRequest", param0)
+	return m.CancelUpdateStackRequestFunc(param0)
+}
+
+func (m *cloudformationMock) CancelUpdateStackWithContext(param0 aws.Context, param1 *cloudformation.CancelUpdateStackInput, param2 ...request.Option) (*cloudformation.CancelUpdateStackOutput, error) {
+	m.addCall("CancelUpdateStackWithContext")
+	m.verifyInput("CancelUpdateStackWithContext", param0)
+	return m.CancelUpdateStackWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ContinueUpdateRollback(param0 *cloudformation.ContinueUpdateRollbackInput) (*cloudformation.ContinueUpdateRollbackOutput, error) {
+	m.addCall("ContinueUpdateRollback")
+	m.verifyInput("ContinueUpdateRollback", param0)
+	return m.ContinueUpdateRollbackFunc(param0)
+}
+
+func (m *cloudformationMock) ContinueUpdateRollbackRequest(param0 *cloudformation.ContinueUpdateRollbackInput) (*request.Request, *cloudformation.ContinueUpdateRollbackOutput) {
+	m.addCall("ContinueUpdateRollbackRequest")
+	m.verifyInput("ContinueUpdateRollbackRequest", param0)
+	return m.ContinueUpdateRollbackRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ContinueUpdateRollbackWithContext(param0 aws.Context, param1 *cloudformation.ContinueUpdateRollbackInput, param2 ...request.Option) (*cloudformation.ContinueUpdateRollbackOutput, error) {
+	m.addCall("ContinueUpdateRollbackWithContext")
+	m.verifyInput("ContinueUpdateRollbackWithContext", param0)
+	return m.ContinueUpdateRollbackWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) CreateChangeSet(param0 *cloudformation.CreateChangeSetInput) (*cloudformation.CreateChangeSetOutput, error) {
+	m.addCall("CreateChangeSet")
+	m.verifyInput("CreateChangeSet", param0)
+	return m.CreateChangeSetFunc(param0)
+}
+
+func (m *cloudformationMock) CreateChangeSetRequest(param0 *cloudformation.CreateChangeSetInput) (*request.Request, *cloudformation.CreateChangeSetOutput) {
+	m.addCall("CreateChangeSetRequest")
+	m.verifyInput("CreateChangeSetRequest", param0)
+	return m.CreateChangeSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) CreateChangeSetWithContext(param0 aws.Context, param1 *cloudformation.CreateChangeSetInput, param2 ...request.Option) (*cloudformation.CreateChangeSetOutput, error) {
+	m.addCall("CreateChangeSetWithContext")
+	m.verifyInput("CreateChangeSetWithContext", param0)
+	return m.CreateChangeSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) CreateStack(param0 *cloudformation.CreateStackInput) (*cloudformation.CreateStackOutput, error) {
+	m.addCall("CreateStack")
+	m.verifyInput("CreateStack", param0)
+	return m.CreateStackFunc(param0)
+}
+
+func (m *cloudformationMock) CreateStackInstances(param0 *cloudformation.CreateStackInstancesInput) (*cloudformation.CreateStackInstancesOutput, error) {
+	m.addCall("CreateStackInstances")
+	m.verifyInput("CreateStackInstances", param0)
+	return m.CreateStackInstancesFunc(param0)
+}
+
+func (m *cloudformationMock) CreateStackInstancesRequest(param0 *cloudformation.CreateStackInstancesInput) (*request.Request, *cloudformation.CreateStackInstancesOutput) {
+	m.addCall("CreateStackInstancesRequest")
+	m.verifyInput("CreateStackInstancesRequest", param0)
+	return m.CreateStackInstancesRequestFunc(param0)
+}
+
+func (m *cloudformationMock) CreateStackInstancesWithContext(param0 aws.Context, param1 *cloudformation.CreateStackInstancesInput, param2 ...request.Option) (*cloudformation.CreateStackInstancesOutput, error) {
+	m.addCall("CreateStackInstancesWithContext")
+	m.verifyInput("CreateStackInstancesWithContext", param0)
+	return m.CreateStackInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) CreateStackRequest(param0 *cloudformation.CreateStackInput) (*request.Request, *cloudformation.CreateStackOutput) {
+	m.addCall("CreateStackRequest")
+	m.verifyInput("CreateStackRequest", param0)
+	return m.CreateStackRequestFunc(param0)
+}
+
+func (m *cloudformationMock) CreateStackSet(param0 *cloudformation.CreateStackSetInput) (*cloudformation.CreateStackSetOutput, error) {
+	m.addCall("CreateStackSet")
+	m.verifyInput("CreateStackSet", param0)
+	return m.CreateStackSetFunc(param0)
+}
+
+func (m *cloudformationMock) CreateStackSetRequest(param0 *cloudformation.CreateStackSetInput) (*request.Request, *cloudformation.CreateStackSetOutput) {
+	m.addCall("CreateStackSetRequest")
+	m.verifyInput("CreateStackSetRequest", param0)
+	return m.CreateStackSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) CreateStackSetWithContext(param0 aws.Context, param1 *cloudformation.CreateStackSetInput, param2 ...request.Option) (*cloudformation.CreateStackSetOutput, error) {
+	m.addCall("CreateStackSetWithContext")
+	m.verifyInput("CreateStackSetWithContext", param0)
+	return m.CreateStackSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) CreateStackWithContext(param0 aws.Context, param1 *cloudformation.CreateStackInput, param2 ...request.Option) (*cloudformation.CreateStackOutput, error) {
+	m.addCall("CreateStackWithContext")
+	m.verifyInput("CreateStackWithContext", param0)
+	return m.CreateStackWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DeleteChangeSet(param0 *cloudformation.DeleteChangeSetInput) (*cloudformation.DeleteChangeSetOutput, error) {
+	m.addCall("DeleteChangeSet")
+	m.verifyInput("DeleteChangeSet", param0)
+	return m.DeleteChangeSetFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteChangeSetRequest(param0 *cloudformation.DeleteChangeSetInput) (*request.Request, *cloudformation.DeleteChangeSetOutput) {
+	m.addCall("DeleteChangeSetRequest")
+	m.verifyInput("DeleteChangeSetRequest", param0)
+	return m.DeleteChangeSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteChangeSetWithContext(param0 aws.Context, param1 *cloudformation.DeleteChangeSetInput, param2 ...request.Option) (*cloudformation.DeleteChangeSetOutput, error) {
+	m.addCall("DeleteChangeSetWithContext")
+	m.verifyInput("DeleteChangeSetWithContext", param0)
+	return m.DeleteChangeSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DeleteStack(param0 *cloudformation.DeleteStackInput) (*cloudformation.DeleteStackOutput, error) {
+	m.addCall("DeleteStack")
+	m.verifyInput("DeleteStack", param0)
+	return m.DeleteStackFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteStackInstances(param0 *cloudformation.DeleteStackInstancesInput) (*cloudformation.DeleteStackInstancesOutput, error) {
+	m.addCall("DeleteStackInstances")
+	m.verifyInput("DeleteStackInstances", param0)
+	return m.DeleteStackInstancesFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteStackInstancesRequest(param0 *cloudformation.DeleteStackInstancesInput) (*request.Request, *cloudformation.DeleteStackInstancesOutput) {
+	m.addCall("DeleteStackInstancesRequest")
+	m.verifyInput("DeleteStackInstancesRequest", param0)
+	return m.DeleteStackInstancesRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteStackInstancesWithContext(param0 aws.Context, param1 *cloudformation.DeleteStackInstancesInput, param2 ...request.Option) (*cloudformation.DeleteStackInstancesOutput, error) {
+	m.addCall("DeleteStackInstancesWithContext")
+	m.verifyInput("DeleteStackInstancesWithContext", param0)
+	return m.DeleteStackInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DeleteStackRequest(param0 *cloudformation.DeleteStackInput) (*request.Request, *cloudformation.DeleteStackOutput) {
+	m.addCall("DeleteStackRequest")
+	m.verifyInput("DeleteStackRequest", param0)
+	return m.DeleteStackRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteStackSet(param0 *cloudformation.DeleteStackSetInput) (*cloudformation.DeleteStackSetOutput, error) {
+	m.addCall("DeleteStackSet")
+	m.verifyInput("DeleteStackSet", param0)
+	return m.DeleteStackSetFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteStackSetRequest(param0 *cloudformation.DeleteStackSetInput) (*request.Request, *cloudformation.DeleteStackSetOutput) {
+	m.addCall("DeleteStackSetRequest")
+	m.verifyInput("DeleteStackSetRequest", param0)
+	return m.DeleteStackSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DeleteStackSetWithContext(param0 aws.Context, param1 *cloudformation.DeleteStackSetInput, param2 ...request.Option) (*cloudformation.DeleteStackSetOutput, error) {
+	m.addCall("DeleteStackSetWithContext")
+	m.verifyInput("DeleteStackSetWithContext", param0)
+	return m.DeleteStackSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DeleteStackWithContext(param0 aws.Context, param1 *cloudformation.DeleteStackInput, param2 ...request.Option) (*cloudformation.DeleteStackOutput, error) {
+	m.addCall("DeleteStackWithContext")
+	m.verifyInput("DeleteStackWithContext", param0)
+	return m.DeleteStackWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeAccountLimits(param0 *cloudformation.DescribeAccountLimitsInput) (*cloudformation.DescribeAccountLimitsOutput, error) {
+	m.addCall("DescribeAccountLimits")
+	m.verifyInput("DescribeAccountLimits", param0)
+	return m.DescribeAccountLimitsFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeAccountLimitsRequest(param0 *cloudformation.DescribeAccountLimitsInput) (*request.Request, *cloudformation.DescribeAccountLimitsOutput) {
+	m.addCall("DescribeAccountLimitsRequest")
+	m.verifyInput("DescribeAccountLimitsRequest", param0)
+	return m.DescribeAccountLimitsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeAccountLimitsWithContext(param0 aws.Context, param1 *cloudformation.DescribeAccountLimitsInput, param2 ...request.Option) (*cloudformation.DescribeAccountLimitsOutput, error) {
+	m.addCall("DescribeAccountLimitsWithContext")
+	m.verifyInput("DescribeAccountLimitsWithContext", param0)
+	return m.DescribeAccountLimitsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeChangeSet(param0 *cloudformation.DescribeChangeSetInput) (*cloudformation.DescribeChangeSetOutput, error) {
+	m.addCall("DescribeChangeSet")
+	m.verifyInput("DescribeChangeSet", param0)
+	return m.DescribeChangeSetFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeChangeSetRequest(param0 *cloudformation.DescribeChangeSetInput) (*request.Request, *cloudformation.DescribeChangeSetOutput) {
+	m.addCall("DescribeChangeSetRequest")
+	m.verifyInput("DescribeChangeSetRequest", param0)
+	return m.DescribeChangeSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeChangeSetWithContext(param0 aws.Context, param1 *cloudformation.DescribeChangeSetInput, param2 ...request.Option) (*cloudformation.DescribeChangeSetOutput, error) {
+	m.addCall("DescribeChangeSetWithContext")
+	m.verifyInput("DescribeChangeSetWithContext", param0)
+	return m.DescribeChangeSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeStackEvents(param0 *cloudformation.DescribeStackEventsInput) (*cloudformation.DescribeStackEventsOutput, error) {
+	m.addCall("DescribeStackEvents")
+	m.verifyInput("DescribeStackEvents", param0)
+	return m.DescribeStackEventsFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackEventsRequest(param0 *cloudformation.DescribeStackEventsInput) (*request.Request, *cloudformation.DescribeStackEventsOutput) {
+	m.addCall("DescribeStackEventsRequest")
+	m.verifyInput("DescribeStackEventsRequest", param0)
+	return m.DescribeStackEventsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackEventsWithContext(param0 aws.Context, param1 *cloudformation.DescribeStackEventsInput, param2 ...request.Option) (*cloudformation.DescribeStackEventsOutput, error) {
+	m.addCall("DescribeStackEventsWithContext")
+	m.verifyInput("DescribeStackEventsWithContext", param0)
+	return m.DescribeStackEventsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeStackInstance(param0 *cloudformation.DescribeStackInstanceInput) (*cloudformation.DescribeStackInstanceOutput, error) {
+	m.addCall("DescribeStackInstance")
+	m.verifyInput("DescribeStackInstance", param0)
+	return m.DescribeStackInstanceFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackInstanceRequest(param0 *cloudformation.DescribeStackInstanceInput) (*request.Request, *cloudformation.DescribeStackInstanceOutput) {
+	m.addCall("DescribeStackInstanceRequest")
+	m.verifyInput("DescribeStackInstanceRequest", param0)
+	return m.DescribeStackInstanceRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackInstanceWithContext(param0 aws.Context, param1 *cloudformation.DescribeStackInstanceInput, param2 ...request.Option) (*cloudformation.DescribeStackInstanceOutput, error) {
+	m.addCall("DescribeStackInstanceWithContext")
+	m.verifyInput("DescribeStackInstanceWithContext", param0)
+	return m.DescribeStackInstanceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeStackResource(param0 *cloudformation.DescribeStackResourceInput) (*cloudformation.DescribeStackResourceOutput, error) {
+	m.addCall("DescribeStackResource")
+	m.verifyInput("DescribeStackResource", param0)
+	return m.DescribeStackResourceFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackResourceRequest(param0 *cloudformation.DescribeStackResourceInput) (*request.Request, *cloudformation.DescribeStackResourceOutput) {
+	m.addCall("DescribeStackResourceRequest")
+	m.verifyInput("DescribeStackResourceRequest", param0)
+	return m.DescribeStackResourceRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackResourceWithContext(param0 aws.Context, param1 *cloudformation.DescribeStackResourceInput, param2 ...request.Option) (*cloudformation.DescribeStackResourceOutput, error) {
+	m.addCall("DescribeStackResourceWithContext")
+	m.verifyInput("DescribeStackResourceWithContext", param0)
+	return m.DescribeStackResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeStackResources(param0 *cloudformation.DescribeStackResourcesInput) (*cloudformation.DescribeStackResourcesOutput, error) {
+	m.addCall("DescribeStackResources")
+	m.verifyInput("DescribeStackResources", param0)
+	return m.DescribeStackResourcesFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackResourcesRequest(param0 *cloudformation.DescribeStackResourcesInput) (*request.Request, *cloudformation.DescribeStackResourcesOutput) {
+	m.addCall("DescribeStackResourcesRequest")
+	m.verifyInput("DescribeStackResourcesRequest", param0)
+	return m.DescribeStackResourcesRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackResourcesWithContext(param0 aws.Context, param1 *cloudformation.DescribeStackResourcesInput, param2 ...request.Option) (*cloudformation.DescribeStackResourcesOutput, error) {
+	m.addCall("DescribeStackResourcesWithContext")
+	m.verifyInput("DescribeStackResourcesWithContext", param0)
+	return m.DescribeStackResourcesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeStackSet(param0 *cloudformation.DescribeStackSetInput) (*cloudformation.DescribeStackSetOutput, error) {
+	m.addCall("DescribeStackSet")
+	m.verifyInput("DescribeStackSet", param0)
+	return m.DescribeStackSetFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackSetOperation(param0 *cloudformation.DescribeStackSetOperationInput) (*cloudformation.DescribeStackSetOperationOutput, error) {
+	m.addCall("DescribeStackSetOperation")
+	m.verifyInput("DescribeStackSetOperation", param0)
+	return m.DescribeStackSetOperationFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackSetOperationRequest(param0 *cloudformation.DescribeStackSetOperationInput) (*request.Request, *cloudformation.DescribeStackSetOperationOutput) {
+	m.addCall("DescribeStackSetOperationRequest")
+	m.verifyInput("DescribeStackSetOperationRequest", param0)
+	return m.DescribeStackSetOperationRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackSetOperationWithContext(param0 aws.Context, param1 *cloudformation.DescribeStackSetOperationInput, param2 ...request.Option) (*cloudformation.DescribeStackSetOperationOutput, error) {
+	m.addCall("DescribeStackSetOperationWithContext")
+	m.verifyInput("DescribeStackSetOperationWithContext", param0)
+	return m.DescribeStackSetOperationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeStackSetRequest(param0 *cloudformation.DescribeStackSetInput) (*request.Request, *cloudformation.DescribeStackSetOutput) {
+	m.addCall("DescribeStackSetRequest")
+	m.verifyInput("DescribeStackSetRequest", param0)
+	return m.DescribeStackSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStackSetWithContext(param0 aws.Context, param1 *cloudformation.DescribeStackSetInput, param2 ...request.Option) (*cloudformation.DescribeStackSetOutput, error) {
+	m.addCall("DescribeStackSetWithContext")
+	m.verifyInput("DescribeStackSetWithContext", param0)
+	return m.DescribeStackSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) DescribeStacks(param0 *cloudformation.DescribeStacksInput) (*cloudformation.DescribeStacksOutput, error) {
+	m.addCall("DescribeStacks")
+	m.verifyInput("DescribeStacks", param0)
+	return m.DescribeStacksFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStacksRequest(param0 *cloudformation.DescribeStacksInput) (*request.Request, *cloudformation.DescribeStacksOutput) {
+	m.addCall("DescribeStacksRequest")
+	m.verifyInput("DescribeStacksRequest", param0)
+	return m.DescribeStacksRequestFunc(param0)
+}
+
+func (m *cloudformationMock) DescribeStacksWithContext(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.Option) (*cloudformation.DescribeStacksOutput, error) {
+	m.addCall("DescribeStacksWithContext")
+	m.verifyInput("DescribeStacksWithContext", param0)
+	return m.DescribeStacksWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) EstimateTemplateCost(param0 *cloudformation.EstimateTemplateCostInput) (*cloudformation.EstimateTemplateCostOutput, error) {
+	m.addCall("EstimateTemplateCost")
+	m.verifyInput("EstimateTemplateCost", param0)
+	return m.EstimateTemplateCostFunc(param0)
+}
+
+func (m *cloudformationMock) EstimateTemplateCostRequest(param0 *cloudformation.EstimateTemplateCostInput) (*request.Request, *cloudformation.EstimateTemplateCostOutput) {
+	m.addCall("EstimateTemplateCostRequest")
+	m.verifyInput("EstimateTemplateCostRequest", param0)
+	return m.EstimateTemplateCostRequestFunc(param0)
+}
+
+func (m *cloudformationMock) EstimateTemplateCostWithContext(param0 aws.Context, param1 *cloudformation.EstimateTemplateCostInput, param2 ...request.Option) (*cloudformation.EstimateTemplateCostOutput, error) {
+	m.addCall("EstimateTemplateCostWithContext")
+	m.verifyInput("EstimateTemplateCostWithContext", param0)
+	return m.EstimateTemplateCostWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ExecuteChangeSet(param0 *cloudformation.ExecuteChangeSetInput) (*cloudformation.ExecuteChangeSetOutput, error) {
+	m.addCall("ExecuteChangeSet")
+	m.verifyInput("ExecuteChangeSet", param0)
+	return m.ExecuteChangeSetFunc(param0)
+}
+
+func (m *cloudformationMock) ExecuteChangeSetRequest(param0 *cloudformation.ExecuteChangeSetInput) (*request.Request, *cloudformation.ExecuteChangeSetOutput) {
+	m.addCall("ExecuteChangeSetRequest")
+	m.verifyInput("ExecuteChangeSetRequest", param0)
+	return m.ExecuteChangeSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ExecuteChangeSetWithContext(param0 aws.Context, param1 *cloudformation.ExecuteChangeSetInput, param2 ...request.Option) (*cloudformation.ExecuteChangeSetOutput, error) {
+	m.addCall("ExecuteChangeSetWithContext")
+	m.verifyInput("ExecuteChangeSetWithContext", param0)
+	return m.ExecuteChangeSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) GetStackPolicy(param0 *cloudformation.GetStackPolicyInput) (*cloudformation.GetStackPolicyOutput, error) {
+	m.addCall("GetStackPolicy")
+	m.verifyInput("GetStackPolicy", param0)
+	return m.GetStackPolicyFunc(param0)
+}
+
+func (m *cloudformationMock) GetStackPolicyRequest(param0 *cloudformation.GetStackPolicyInput) (*request.Request, *cloudformation.GetStackPolicyOutput) {
+	m.addCall("GetStackPolicyRequest")
+	m.verifyInput("GetStackPolicyRequest", param0)
+	return m.GetStackPolicyRequestFunc(param0)
+}
+
+func (m *cloudformationMock) GetStackPolicyWithContext(param0 aws.Context, param1 *cloudformation.GetStackPolicyInput, param2 ...request.Option) (*cloudformation.GetStackPolicyOutput, error) {
+	m.addCall("GetStackPolicyWithContext")
+	m.verifyInput("GetStackPolicyWithContext", param0)
+	return m.GetStackPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) GetTemplate(param0 *cloudformation.GetTemplateInput) (*cloudformation.GetTemplateOutput, error) {
+	m.addCall("GetTemplate")
+	m.verifyInput("GetTemplate", param0)
+	return m.GetTemplateFunc(param0)
+}
+
+func (m *cloudformationMock) GetTemplateRequest(param0 *cloudformation.GetTemplateInput) (*request.Request, *cloudformation.GetTemplateOutput) {
+	m.addCall("GetTemplateRequest")
+	m.verifyInput("GetTemplateRequest", param0)
+	return m.GetTemplateRequestFunc(param0)
+}
+
+func (m *cloudformationMock) GetTemplateSummary(param0 *cloudformation.GetTemplateSummaryInput) (*cloudformation.GetTemplateSummaryOutput, error) {
+	m.addCall("GetTemplateSummary")
+	m.verifyInput("GetTemplateSummary", param0)
+	return m.GetTemplateSummaryFunc(param0)
+}
+
+func (m *cloudformationMock) GetTemplateSummaryRequest(param0 *cloudformation.GetTemplateSummaryInput) (*request.Request, *cloudformation.GetTemplateSummaryOutput) {
+	m.addCall("GetTemplateSummaryRequest")
+	m.verifyInput("GetTemplateSummaryRequest", param0)
+	return m.GetTemplateSummaryRequestFunc(param0)
+}
+
+func (m *cloudformationMock) GetTemplateSummaryWithContext(param0 aws.Context, param1 *cloudformation.GetTemplateSummaryInput, param2 ...request.Option) (*cloudformation.GetTemplateSummaryOutput, error) {
+	m.addCall("GetTemplateSummaryWithContext")
+	m.verifyInput("GetTemplateSummaryWithContext", param0)
+	return m.GetTemplateSummaryWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) GetTemplateWithContext(param0 aws.Context, param1 *cloudformation.GetTemplateInput, param2 ...request.Option) (*cloudformation.GetTemplateOutput, error) {
+	m.addCall("GetTemplateWithContext")
+	m.verifyInput("GetTemplateWithContext", param0)
+	return m.GetTemplateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListChangeSets(param0 *cloudformation.ListChangeSetsInput) (*cloudformation.ListChangeSetsOutput, error) {
+	m.addCall("ListChangeSets")
+	m.verifyInput("ListChangeSets", param0)
+	return m.ListChangeSetsFunc(param0)
+}
+
+func (m *cloudformationMock) ListChangeSetsRequest(param0 *cloudformation.ListChangeSetsInput) (*request.Request, *cloudformation.ListChangeSetsOutput) {
+	m.addCall("ListChangeSetsRequest")
+	m.verifyInput("ListChangeSetsRequest", param0)
+	return m.ListChangeSetsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListChangeSetsWithContext(param0 aws.Context, param1 *cloudformation.ListChangeSetsInput, param2 ...request.Option) (*cloudformation.ListChangeSetsOutput, error) {
+	m.addCall("ListChangeSetsWithContext")
+	m.verifyInput("ListChangeSetsWithContext", param0)
+	return m.ListChangeSetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListExports(param0 *cloudformation.ListExportsInput) (*cloudformation.ListExportsOutput, error) {
+	m.addCall("ListExports")
+	m.verifyInput("ListExports", param0)
+	return m.ListExportsFunc(param0)
+}
+
+func (m *cloudformationMock) ListExportsRequest(param0 *cloudformation.ListExportsInput) (*request.Request, *cloudformation.ListExportsOutput) {
+	m.addCall("ListExportsRequest")
+	m.verifyInput("ListExportsRequest", param0)
+	return m.ListExportsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListExportsWithContext(param0 aws.Context, param1 *cloudformation.ListExportsInput, param2 ...request.Option) (*cloudformation.ListExportsOutput, error) {
+	m.addCall("ListExportsWithContext")
+	m.verifyInput("ListExportsWithContext", param0)
+	return m.ListExportsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListImports(param0 *cloudformation.ListImportsInput) (*cloudformation.ListImportsOutput, error) {
+	m.addCall("ListImports")
+	m.verifyInput("ListImports", param0)
+	return m.ListImportsFunc(param0)
+}
+
+func (m *cloudformationMock) ListImportsRequest(param0 *cloudformation.ListImportsInput) (*request.Request, *cloudformation.ListImportsOutput) {
+	m.addCall("ListImportsRequest")
+	m.verifyInput("ListImportsRequest", param0)
+	return m.ListImportsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListImportsWithContext(param0 aws.Context, param1 *cloudformation.ListImportsInput, param2 ...request.Option) (*cloudformation.ListImportsOutput, error) {
+	m.addCall("ListImportsWithContext")
+	m.verifyInput("ListImportsWithContext", param0)
+	return m.ListImportsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListStackInstances(param0 *cloudformation.ListStackInstancesInput) (*cloudformation.ListStackInstancesOutput, error) {
+	m.addCall("ListStackInstances")
+	m.verifyInput("ListStackInstances", param0)
+	return m.ListStackInstancesFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackInstancesRequest(param0 *cloudformation.ListStackInstancesInput) (*request.Request, *cloudformation.ListStackInstancesOutput) {
+	m.addCall("ListStackInstancesRequest")
+	m.verifyInput("ListStackInstancesRequest", param0)
+	return m.ListStackInstancesRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackInstancesWithContext(param0 aws.Context, param1 *cloudformation.ListStackInstancesInput, param2 ...request.Option) (*cloudformation.ListStackInstancesOutput, error) {
+	m.addCall("ListStackInstancesWithContext")
+	m.verifyInput("ListStackInstancesWithContext", param0)
+	return m.ListStackInstancesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListStackResources(param0 *cloudformation.ListStackResourcesInput) (*cloudformation.ListStackResourcesOutput, error) {
+	m.addCall("ListStackResources")
+	m.verifyInput("ListStackResources", param0)
+	return m.ListStackResourcesFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackResourcesRequest(param0 *cloudformation.ListStackResourcesInput) (*request.Request, *cloudformation.ListStackResourcesOutput) {
+	m.addCall("ListStackResourcesRequest")
+	m.verifyInput("ListStackResourcesRequest", param0)
+	return m.ListStackResourcesRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackResourcesWithContext(param0 aws.Context, param1 *cloudformation.ListStackResourcesInput, param2 ...request.Option) (*cloudformation.ListStackResourcesOutput, error) {
+	m.addCall("ListStackResourcesWithContext")
+	m.verifyInput("ListStackResourcesWithContext", param0)
+	return m.ListStackResourcesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListStackSetOperationResults(param0 *cloudformation.ListStackSetOperationResultsInput) (*cloudformation.ListStackSetOperationResultsOutput, error) {
+	m.addCall("ListStackSetOperationResults")
+	m.verifyInput("ListStackSetOperationResults", param0)
+	return m.ListStackSetOperationResultsFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackSetOperationResultsRequest(param0 *cloudformation.ListStackSetOperationResultsInput) (*request.Request, *cloudformation.ListStackSetOperationResultsOutput) {
+	m.addCall("ListStackSetOperationResultsRequest")
+	m.verifyInput("ListStackSetOperationResultsRequest", param0)
+	return m.ListStackSetOperationResultsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackSetOperationResultsWithContext(param0 aws.Context, param1 *cloudformation.ListStackSetOperationResultsInput, param2 ...request.Option) (*cloudformation.ListStackSetOperationResultsOutput, error) {
+	m.addCall("ListStackSetOperationResultsWithContext")
+	m.verifyInput("ListStackSetOperationResultsWithContext", param0)
+	return m.ListStackSetOperationResultsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListStackSetOperations(param0 *cloudformation.ListStackSetOperationsInput) (*cloudformation.ListStackSetOperationsOutput, error) {
+	m.addCall("ListStackSetOperations")
+	m.verifyInput("ListStackSetOperations", param0)
+	return m.ListStackSetOperationsFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackSetOperationsRequest(param0 *cloudformation.ListStackSetOperationsInput) (*request.Request, *cloudformation.ListStackSetOperationsOutput) {
+	m.addCall("ListStackSetOperationsRequest")
+	m.verifyInput("ListStackSetOperationsRequest", param0)
+	return m.ListStackSetOperationsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackSetOperationsWithContext(param0 aws.Context, param1 *cloudformation.ListStackSetOperationsInput, param2 ...request.Option) (*cloudformation.ListStackSetOperationsOutput, error) {
+	m.addCall("ListStackSetOperationsWithContext")
+	m.verifyInput("ListStackSetOperationsWithContext", param0)
+	return m.ListStackSetOperationsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListStackSets(param0 *cloudformation.ListStackSetsInput) (*cloudformation.ListStackSetsOutput, error) {
+	m.addCall("ListStackSets")
+	m.verifyInput("ListStackSets", param0)
+	return m.ListStackSetsFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackSetsRequest(param0 *cloudformation.ListStackSetsInput) (*request.Request, *cloudformation.ListStackSetsOutput) {
+	m.addCall("ListStackSetsRequest")
+	m.verifyInput("ListStackSetsRequest", param0)
+	return m.ListStackSetsRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListStackSetsWithContext(param0 aws.Context, param1 *cloudformation.ListStackSetsInput, param2 ...request.Option) (*cloudformation.ListStackSetsOutput, error) {
+	m.addCall("ListStackSetsWithContext")
+	m.verifyInput("ListStackSetsWithContext", param0)
+	return m.ListStackSetsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ListStacks(param0 *cloudformation.ListStacksInput) (*cloudformation.ListStacksOutput, error) {
+	m.addCall("ListStacks")
+	m.verifyInput("ListStacks", param0)
+	return m.ListStacksFunc(param0)
+}
+
+func (m *cloudformationMock) ListStacksRequest(param0 *cloudformation.ListStacksInput) (*request.Request, *cloudformation.ListStacksOutput) {
+	m.addCall("ListStacksRequest")
+	m.verifyInput("ListStacksRequest", param0)
+	return m.ListStacksRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ListStacksWithContext(param0 aws.Context, param1 *cloudformation.ListStacksInput, param2 ...request.Option) (*cloudformation.ListStacksOutput, error) {
+	m.addCall("ListStacksWithContext")
+	m.verifyInput("ListStacksWithContext", param0)
+	return m.ListStacksWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) SetStackPolicy(param0 *cloudformation.SetStackPolicyInput) (*cloudformation.SetStackPolicyOutput, error) {
+	m.addCall("SetStackPolicy")
+	m.verifyInput("SetStackPolicy", param0)
+	return m.SetStackPolicyFunc(param0)
+}
+
+func (m *cloudformationMock) SetStackPolicyRequest(param0 *cloudformation.SetStackPolicyInput) (*request.Request, *cloudformation.SetStackPolicyOutput) {
+	m.addCall("SetStackPolicyRequest")
+	m.verifyInput("SetStackPolicyRequest", param0)
+	return m.SetStackPolicyRequestFunc(param0)
+}
+
+func (m *cloudformationMock) SetStackPolicyWithContext(param0 aws.Context, param1 *cloudformation.SetStackPolicyInput, param2 ...request.Option) (*cloudformation.SetStackPolicyOutput, error) {
+	m.addCall("SetStackPolicyWithContext")
+	m.verifyInput("SetStackPolicyWithContext", param0)
+	return m.SetStackPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) SignalResource(param0 *cloudformation.SignalResourceInput) (*cloudformation.SignalResourceOutput, error) {
+	m.addCall("SignalResource")
+	m.verifyInput("SignalResource", param0)
+	return m.SignalResourceFunc(param0)
+}
+
+func (m *cloudformationMock) SignalResourceRequest(param0 *cloudformation.SignalResourceInput) (*request.Request, *cloudformation.SignalResourceOutput) {
+	m.addCall("SignalResourceRequest")
+	m.verifyInput("SignalResourceRequest", param0)
+	return m.SignalResourceRequestFunc(param0)
+}
+
+func (m *cloudformationMock) SignalResourceWithContext(param0 aws.Context, param1 *cloudformation.SignalResourceInput, param2 ...request.Option) (*cloudformation.SignalResourceOutput, error) {
+	m.addCall("SignalResourceWithContext")
+	m.verifyInput("SignalResourceWithContext", param0)
+	return m.SignalResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) StopStackSetOperation(param0 *cloudformation.StopStackSetOperationInput) (*cloudformation.StopStackSetOperationOutput, error) {
+	m.addCall("StopStackSetOperation")
+	m.verifyInput("StopStackSetOperation", param0)
+	return m.StopStackSetOperationFunc(param0)
+}
+
+func (m *cloudformationMock) StopStackSetOperationRequest(param0 *cloudformation.StopStackSetOperationInput) (*request.Request, *cloudformation.StopStackSetOperationOutput) {
+	m.addCall("StopStackSetOperationRequest")
+	m.verifyInput("StopStackSetOperationRequest", param0)
+	return m.StopStackSetOperationRequestFunc(param0)
+}
+
+func (m *cloudformationMock) StopStackSetOperationWithContext(param0 aws.Context, param1 *cloudformation.StopStackSetOperationInput, param2 ...request.Option) (*cloudformation.StopStackSetOperationOutput, error) {
+	m.addCall("StopStackSetOperationWithContext")
+	m.verifyInput("StopStackSetOperationWithContext", param0)
+	return m.StopStackSetOperationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) UpdateStack(param0 *cloudformation.UpdateStackInput) (*cloudformation.UpdateStackOutput, error) {
+	m.addCall("UpdateStack")
+	m.verifyInput("UpdateStack", param0)
+	return m.UpdateStackFunc(param0)
+}
+
+func (m *cloudformationMock) UpdateStackRequest(param0 *cloudformation.UpdateStackInput) (*request.Request, *cloudformation.UpdateStackOutput) {
+	m.addCall("UpdateStackRequest")
+	m.verifyInput("UpdateStackRequest", param0)
+	return m.UpdateStackRequestFunc(param0)
+}
+
+func (m *cloudformationMock) UpdateStackSet(param0 *cloudformation.UpdateStackSetInput) (*cloudformation.UpdateStackSetOutput, error) {
+	m.addCall("UpdateStackSet")
+	m.verifyInput("UpdateStackSet", param0)
+	return m.UpdateStackSetFunc(param0)
+}
+
+func (m *cloudformationMock) UpdateStackSetRequest(param0 *cloudformation.UpdateStackSetInput) (*request.Request, *cloudformation.UpdateStackSetOutput) {
+	m.addCall("UpdateStackSetRequest")
+	m.verifyInput("UpdateStackSetRequest", param0)
+	return m.UpdateStackSetRequestFunc(param0)
+}
+
+func (m *cloudformationMock) UpdateStackSetWithContext(param0 aws.Context, param1 *cloudformation.UpdateStackSetInput, param2 ...request.Option) (*cloudformation.UpdateStackSetOutput, error) {
+	m.addCall("UpdateStackSetWithContext")
+	m.verifyInput("UpdateStackSetWithContext", param0)
+	return m.UpdateStackSetWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) UpdateStackWithContext(param0 aws.Context, param1 *cloudformation.UpdateStackInput, param2 ...request.Option) (*cloudformation.UpdateStackOutput, error) {
+	m.addCall("UpdateStackWithContext")
+	m.verifyInput("UpdateStackWithContext", param0)
+	return m.UpdateStackWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) ValidateTemplate(param0 *cloudformation.ValidateTemplateInput) (*cloudformation.ValidateTemplateOutput, error) {
+	m.addCall("ValidateTemplate")
+	m.verifyInput("ValidateTemplate", param0)
+	return m.ValidateTemplateFunc(param0)
+}
+
+func (m *cloudformationMock) ValidateTemplateRequest(param0 *cloudformation.ValidateTemplateInput) (*request.Request, *cloudformation.ValidateTemplateOutput) {
+	m.addCall("ValidateTemplateRequest")
+	m.verifyInput("ValidateTemplateRequest", param0)
+	return m.ValidateTemplateRequestFunc(param0)
+}
+
+func (m *cloudformationMock) ValidateTemplateWithContext(param0 aws.Context, param1 *cloudformation.ValidateTemplateInput, param2 ...request.Option) (*cloudformation.ValidateTemplateOutput, error) {
+	m.addCall("ValidateTemplateWithContext")
+	m.verifyInput("ValidateTemplateWithContext", param0)
+	return m.ValidateTemplateWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) WaitUntilChangeSetCreateComplete(param0 *cloudformation.DescribeChangeSetInput) error {
+	m.addCall("WaitUntilChangeSetCreateComplete")
+	m.verifyInput("WaitUntilChangeSetCreateComplete", param0)
+	return m.WaitUntilChangeSetCreateCompleteFunc(param0)
+}
+
+func (m *cloudformationMock) WaitUntilChangeSetCreateCompleteWithContext(param0 aws.Context, param1 *cloudformation.DescribeChangeSetInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilChangeSetCreateCompleteWithContext")
+	m.verifyInput("WaitUntilChangeSetCreateCompleteWithContext", param0)
+	return m.WaitUntilChangeSetCreateCompleteWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) WaitUntilStackCreateComplete(param0 *cloudformation.DescribeStacksInput) error {
+	m.addCall("WaitUntilStackCreateComplete")
+	m.verifyInput("WaitUntilStackCreateComplete", param0)
+	return m.WaitUntilStackCreateCompleteFunc(param0)
+}
+
+func (m *cloudformationMock) WaitUntilStackCreateCompleteWithContext(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilStackCreateCompleteWithContext")
+	m.verifyInput("WaitUntilStackCreateCompleteWithContext", param0)
+	return m.WaitUntilStackCreateCompleteWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) WaitUntilStackDeleteComplete(param0 *cloudformation.DescribeStacksInput) error {
+	m.addCall("WaitUntilStackDeleteComplete")
+	m.verifyInput("WaitUntilStackDeleteComplete", param0)
+	return m.WaitUntilStackDeleteCompleteFunc(param0)
+}
+
+func (m *cloudformationMock) WaitUntilStackDeleteCompleteWithContext(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilStackDeleteCompleteWithContext")
+	m.verifyInput("WaitUntilStackDeleteCompleteWithContext", param0)
+	return m.WaitUntilStackDeleteCompleteWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) WaitUntilStackExists(param0 *cloudformation.DescribeStacksInput) error {
+	m.addCall("WaitUntilStackExists")
+	m.verifyInput("WaitUntilStackExists", param0)
+	return m.WaitUntilStackExistsFunc(param0)
+}
+
+func (m *cloudformationMock) WaitUntilStackExistsWithContext(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilStackExistsWithContext")
+	m.verifyInput("WaitUntilStackExistsWithContext", param0)
+	return m.WaitUntilStackExistsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *cloudformationMock) WaitUntilStackUpdateComplete(param0 *cloudformation.DescribeStacksInput) error {
+	m.addCall("WaitUntilStackUpdateComplete")
+	m.verifyInput("WaitUntilStackUpdateComplete", param0)
+	return m.WaitUntilStackUpdateCompleteFunc(param0)
+}
+
+func (m *cloudformationMock) WaitUntilStackUpdateCompleteWithContext(param0 aws.Context, param1 *cloudformation.DescribeStacksInput, param2 ...request.WaiterOption) error {
+	m.addCall("WaitUntilStackUpdateCompleteWithContext")
+	m.verifyInput("WaitUntilStackUpdateCompleteWithContext", param0)
+	return m.WaitUntilStackUpdateCompleteWithContextFunc(param0, param1, param2...)
 }
 
 type cloudfrontMock struct {
