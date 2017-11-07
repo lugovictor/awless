@@ -40,6 +40,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/lambda"
+	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
 	"github.com/aws/aws-sdk-go/service/rds"
 	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53"
@@ -2025,6 +2027,80 @@ func (cmd *CreateElasticip) ParamsHelp() string {
 }
 
 func (cmd *CreateElasticip) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateFunction(sess *session.Session, l ...*logger.Logger) *CreateFunction {
+	cmd := new(CreateFunction)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = lambda.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateFunction) SetApi(api lambdaiface.LambdaAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateFunction) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &lambda.CreateFunctionInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in lambda.CreateFunctionInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateFunction(input)
+	cmd.logger.ExtraVerbosef("lambda.CreateFunction call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateFunction) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateFunction) ParamsHelp() string {
+	return generateParamsHelp("createfunction", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateFunction) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -4304,6 +4380,80 @@ func (cmd *DeleteElasticip) ParamsHelp() string {
 }
 
 func (cmd *DeleteElasticip) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteFunction(sess *session.Session, l ...*logger.Logger) *DeleteFunction {
+	cmd := new(DeleteFunction)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = lambda.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteFunction) SetApi(api lambdaiface.LambdaAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteFunction) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &lambda.DeleteFunctionInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in lambda.DeleteFunctionInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteFunction(input)
+	cmd.logger.ExtraVerbosef("lambda.DeleteFunction call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteFunction) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteFunction) ParamsHelp() string {
+	return generateParamsHelp("deletefunction", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteFunction) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

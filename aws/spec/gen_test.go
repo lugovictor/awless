@@ -36,6 +36,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/lambda"
+	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
 	"github.com/aws/aws-sdk-go/service/rds"
 	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53"
@@ -179,6 +181,8 @@ var (
 	newDetachPolicy        = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachUser          = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdatePolicy        = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateFunction      = func() *CreateFunction { return &CreateFunction{api: &mockLambda{}, logger: logger.DiscardLogger} }
+	newDeleteFunction      = func() *DeleteFunction { return &DeleteFunction{api: &mockLambda{}, logger: logger.DiscardLogger} }
 	newCheckDatabase       = func() *CheckDatabase { return &CheckDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
 	newCreateDatabase      = func() *CreateDatabase { return &CreateDatabase{api: &mockRds{}, logger: logger.DiscardLogger} }
 	newCreateDbsubnetgroup = func() *CreateDbsubnetgroup {
@@ -220,6 +224,9 @@ type mockElbv2 struct {
 }
 type mockIam struct {
 	iamiface.IAMAPI
+}
+type mockLambda struct {
+	lambdaiface.LambdaAPI
 }
 type mockRds struct {
 	rdsiface.RDSAPI
@@ -770,6 +777,26 @@ func (m *mockIam) CreatePolicyVersion(input *iam.CreatePolicyVersionInput) (*iam
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["updatepolicy"]; ok {
 		return outFunc().(*iam.CreatePolicyVersionOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockLambda) CreateFunction(input *lambda.CreateFunctionInput) (*lambda.FunctionConfiguration, error) {
+	if got, want := input, genTestsExpected["createfunction"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createfunction"]; ok {
+		return outFunc().(*lambda.FunctionConfiguration), nil
+	}
+	return nil, nil
+}
+
+func (m *mockLambda) DeleteFunction(input *lambda.DeleteFunctionInput) (*lambda.DeleteFunctionOutput, error) {
+	if got, want := input, genTestsExpected["deletefunction"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletefunction"]; ok {
+		return outFunc().(*lambda.DeleteFunctionOutput), nil
 	}
 	return nil, nil
 }

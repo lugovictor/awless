@@ -87,6 +87,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateDistribution(f.Sess, f.Log) }
 	case "createelasticip":
 		return func() interface{} { return NewCreateElasticip(f.Sess, f.Log) }
+	case "createfunction":
+		return func() interface{} { return NewCreateFunction(f.Sess, f.Log) }
 	case "creategroup":
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
@@ -143,6 +145,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteDistribution(f.Sess, f.Log) }
 	case "deleteelasticip":
 		return func() interface{} { return NewDeleteElasticip(f.Sess, f.Log) }
+	case "deletefunction":
+		return func() interface{} { return NewDeleteFunction(f.Sess, f.Log) }
 	case "deletegroup":
 		return func() interface{} { return NewDeleteGroup(f.Sess, f.Log) }
 	case "deleteinstance":
@@ -246,6 +250,7 @@ var (
 	_ command = &CreateDbsubnetgroup{}
 	_ command = &CreateDistribution{}
 	_ command = &CreateElasticip{}
+	_ command = &CreateFunction{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
 	_ command = &CreateInternetgateway{}
@@ -274,6 +279,7 @@ var (
 	_ command = &DeleteDbsubnetgroup{}
 	_ command = &DeleteDistribution{}
 	_ command = &DeleteElasticip{}
+	_ command = &DeleteFunction{}
 	_ command = &DeleteGroup{}
 	_ command = &DeleteInstance{}
 	_ command = &DeleteInternetgateway{}

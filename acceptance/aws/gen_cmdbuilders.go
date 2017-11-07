@@ -26,6 +26,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
 	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
@@ -199,6 +200,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createfunction":
+		return func() interface{} {
+			cmd := awsspec.NewCreateFunction(nil)
+			cmd.SetApi(f.Mock.(lambdaiface.LambdaAPI))
+			return cmd
+		}
 	case "creategroup":
 		return func() interface{} {
 			cmd := awsspec.NewCreateGroup(nil)
@@ -365,6 +372,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteElasticip(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletefunction":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteFunction(nil)
+			cmd.SetApi(f.Mock.(lambdaiface.LambdaAPI))
 			return cmd
 		}
 	case "deletegroup":

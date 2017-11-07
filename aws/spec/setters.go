@@ -261,13 +261,13 @@ func setFieldWithType(v, i interface{}, fieldPath string, destType string, inter
 			return err
 		}
 	case awsfiletobyteslice:
-		v, err = ioutil.ReadFile(fmt.Sprint(v))
+		v, err = ioutil.ReadFile(castString(v))
 		if err != nil {
 			return err
 		}
 	case awsfiletostring:
 		var b []byte
-		b, err = ioutil.ReadFile(fmt.Sprint(v))
+		b, err = ioutil.ReadFile(castString(v))
 		if err != nil {
 			return err
 		}

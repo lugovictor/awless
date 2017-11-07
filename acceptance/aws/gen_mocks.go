@@ -36,6 +36,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
+	"github.com/aws/aws-sdk-go/service/lambda"
+	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
 	"github.com/aws/aws-sdk-go/service/rds"
 	"github.com/aws/aws-sdk-go/service/rds/rdsiface"
 	"github.com/aws/aws-sdk-go/service/route53"
@@ -10892,6 +10894,599 @@ func (m *iamMock) WaitUntilUserExistsWithContext(param0 aws.Context, param1 *iam
 	m.addCall("WaitUntilUserExistsWithContext")
 	m.verifyInput("WaitUntilUserExistsWithContext", param0)
 	return m.WaitUntilUserExistsWithContextFunc(param0, param1, param2...)
+}
+
+type lambdaMock struct {
+	basicMock
+	lambdaiface.LambdaAPI
+	AddPermissionFunc                          func(param0 *lambda.AddPermissionInput) (*lambda.AddPermissionOutput, error)
+	AddPermissionRequestFunc                   func(param0 *lambda.AddPermissionInput) (*request.Request, *lambda.AddPermissionOutput)
+	AddPermissionWithContextFunc               func(param0 aws.Context, param1 *lambda.AddPermissionInput, param2 ...request.Option) (*lambda.AddPermissionOutput, error)
+	CreateAliasFunc                            func(param0 *lambda.CreateAliasInput) (*lambda.AliasConfiguration, error)
+	CreateAliasRequestFunc                     func(param0 *lambda.CreateAliasInput) (*request.Request, *lambda.AliasConfiguration)
+	CreateAliasWithContextFunc                 func(param0 aws.Context, param1 *lambda.CreateAliasInput, param2 ...request.Option) (*lambda.AliasConfiguration, error)
+	CreateEventSourceMappingFunc               func(param0 *lambda.CreateEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error)
+	CreateEventSourceMappingRequestFunc        func(param0 *lambda.CreateEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration)
+	CreateEventSourceMappingWithContextFunc    func(param0 aws.Context, param1 *lambda.CreateEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error)
+	CreateFunctionFunc                         func(param0 *lambda.CreateFunctionInput) (*lambda.FunctionConfiguration, error)
+	CreateFunctionRequestFunc                  func(param0 *lambda.CreateFunctionInput) (*request.Request, *lambda.FunctionConfiguration)
+	CreateFunctionWithContextFunc              func(param0 aws.Context, param1 *lambda.CreateFunctionInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error)
+	DeleteAliasFunc                            func(param0 *lambda.DeleteAliasInput) (*lambda.DeleteAliasOutput, error)
+	DeleteAliasRequestFunc                     func(param0 *lambda.DeleteAliasInput) (*request.Request, *lambda.DeleteAliasOutput)
+	DeleteAliasWithContextFunc                 func(param0 aws.Context, param1 *lambda.DeleteAliasInput, param2 ...request.Option) (*lambda.DeleteAliasOutput, error)
+	DeleteEventSourceMappingFunc               func(param0 *lambda.DeleteEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error)
+	DeleteEventSourceMappingRequestFunc        func(param0 *lambda.DeleteEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration)
+	DeleteEventSourceMappingWithContextFunc    func(param0 aws.Context, param1 *lambda.DeleteEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error)
+	DeleteFunctionFunc                         func(param0 *lambda.DeleteFunctionInput) (*lambda.DeleteFunctionOutput, error)
+	DeleteFunctionRequestFunc                  func(param0 *lambda.DeleteFunctionInput) (*request.Request, *lambda.DeleteFunctionOutput)
+	DeleteFunctionWithContextFunc              func(param0 aws.Context, param1 *lambda.DeleteFunctionInput, param2 ...request.Option) (*lambda.DeleteFunctionOutput, error)
+	GetAccountSettingsFunc                     func(param0 *lambda.GetAccountSettingsInput) (*lambda.GetAccountSettingsOutput, error)
+	GetAccountSettingsRequestFunc              func(param0 *lambda.GetAccountSettingsInput) (*request.Request, *lambda.GetAccountSettingsOutput)
+	GetAccountSettingsWithContextFunc          func(param0 aws.Context, param1 *lambda.GetAccountSettingsInput, param2 ...request.Option) (*lambda.GetAccountSettingsOutput, error)
+	GetAliasFunc                               func(param0 *lambda.GetAliasInput) (*lambda.AliasConfiguration, error)
+	GetAliasRequestFunc                        func(param0 *lambda.GetAliasInput) (*request.Request, *lambda.AliasConfiguration)
+	GetAliasWithContextFunc                    func(param0 aws.Context, param1 *lambda.GetAliasInput, param2 ...request.Option) (*lambda.AliasConfiguration, error)
+	GetEventSourceMappingFunc                  func(param0 *lambda.GetEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error)
+	GetEventSourceMappingRequestFunc           func(param0 *lambda.GetEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration)
+	GetEventSourceMappingWithContextFunc       func(param0 aws.Context, param1 *lambda.GetEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error)
+	GetFunctionFunc                            func(param0 *lambda.GetFunctionInput) (*lambda.GetFunctionOutput, error)
+	GetFunctionConfigurationFunc               func(param0 *lambda.GetFunctionConfigurationInput) (*lambda.FunctionConfiguration, error)
+	GetFunctionConfigurationRequestFunc        func(param0 *lambda.GetFunctionConfigurationInput) (*request.Request, *lambda.FunctionConfiguration)
+	GetFunctionConfigurationWithContextFunc    func(param0 aws.Context, param1 *lambda.GetFunctionConfigurationInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error)
+	GetFunctionRequestFunc                     func(param0 *lambda.GetFunctionInput) (*request.Request, *lambda.GetFunctionOutput)
+	GetFunctionWithContextFunc                 func(param0 aws.Context, param1 *lambda.GetFunctionInput, param2 ...request.Option) (*lambda.GetFunctionOutput, error)
+	GetPolicyFunc                              func(param0 *lambda.GetPolicyInput) (*lambda.GetPolicyOutput, error)
+	GetPolicyRequestFunc                       func(param0 *lambda.GetPolicyInput) (*request.Request, *lambda.GetPolicyOutput)
+	GetPolicyWithContextFunc                   func(param0 aws.Context, param1 *lambda.GetPolicyInput, param2 ...request.Option) (*lambda.GetPolicyOutput, error)
+	InvokeFunc                                 func(param0 *lambda.InvokeInput) (*lambda.InvokeOutput, error)
+	InvokeAsyncFunc                            func(param0 *lambda.InvokeAsyncInput) (*lambda.InvokeAsyncOutput, error)
+	InvokeAsyncRequestFunc                     func(param0 *lambda.InvokeAsyncInput) (*request.Request, *lambda.InvokeAsyncOutput)
+	InvokeAsyncWithContextFunc                 func(param0 aws.Context, param1 *lambda.InvokeAsyncInput, param2 ...request.Option) (*lambda.InvokeAsyncOutput, error)
+	InvokeRequestFunc                          func(param0 *lambda.InvokeInput) (*request.Request, *lambda.InvokeOutput)
+	InvokeWithContextFunc                      func(param0 aws.Context, param1 *lambda.InvokeInput, param2 ...request.Option) (*lambda.InvokeOutput, error)
+	ListAliasesFunc                            func(param0 *lambda.ListAliasesInput) (*lambda.ListAliasesOutput, error)
+	ListAliasesRequestFunc                     func(param0 *lambda.ListAliasesInput) (*request.Request, *lambda.ListAliasesOutput)
+	ListAliasesWithContextFunc                 func(param0 aws.Context, param1 *lambda.ListAliasesInput, param2 ...request.Option) (*lambda.ListAliasesOutput, error)
+	ListEventSourceMappingsFunc                func(param0 *lambda.ListEventSourceMappingsInput) (*lambda.ListEventSourceMappingsOutput, error)
+	ListEventSourceMappingsRequestFunc         func(param0 *lambda.ListEventSourceMappingsInput) (*request.Request, *lambda.ListEventSourceMappingsOutput)
+	ListEventSourceMappingsWithContextFunc     func(param0 aws.Context, param1 *lambda.ListEventSourceMappingsInput, param2 ...request.Option) (*lambda.ListEventSourceMappingsOutput, error)
+	ListFunctionsFunc                          func(param0 *lambda.ListFunctionsInput) (*lambda.ListFunctionsOutput, error)
+	ListFunctionsRequestFunc                   func(param0 *lambda.ListFunctionsInput) (*request.Request, *lambda.ListFunctionsOutput)
+	ListFunctionsWithContextFunc               func(param0 aws.Context, param1 *lambda.ListFunctionsInput, param2 ...request.Option) (*lambda.ListFunctionsOutput, error)
+	ListTagsFunc                               func(param0 *lambda.ListTagsInput) (*lambda.ListTagsOutput, error)
+	ListTagsRequestFunc                        func(param0 *lambda.ListTagsInput) (*request.Request, *lambda.ListTagsOutput)
+	ListTagsWithContextFunc                    func(param0 aws.Context, param1 *lambda.ListTagsInput, param2 ...request.Option) (*lambda.ListTagsOutput, error)
+	ListVersionsByFunctionFunc                 func(param0 *lambda.ListVersionsByFunctionInput) (*lambda.ListVersionsByFunctionOutput, error)
+	ListVersionsByFunctionRequestFunc          func(param0 *lambda.ListVersionsByFunctionInput) (*request.Request, *lambda.ListVersionsByFunctionOutput)
+	ListVersionsByFunctionWithContextFunc      func(param0 aws.Context, param1 *lambda.ListVersionsByFunctionInput, param2 ...request.Option) (*lambda.ListVersionsByFunctionOutput, error)
+	PublishVersionFunc                         func(param0 *lambda.PublishVersionInput) (*lambda.FunctionConfiguration, error)
+	PublishVersionRequestFunc                  func(param0 *lambda.PublishVersionInput) (*request.Request, *lambda.FunctionConfiguration)
+	PublishVersionWithContextFunc              func(param0 aws.Context, param1 *lambda.PublishVersionInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error)
+	RemovePermissionFunc                       func(param0 *lambda.RemovePermissionInput) (*lambda.RemovePermissionOutput, error)
+	RemovePermissionRequestFunc                func(param0 *lambda.RemovePermissionInput) (*request.Request, *lambda.RemovePermissionOutput)
+	RemovePermissionWithContextFunc            func(param0 aws.Context, param1 *lambda.RemovePermissionInput, param2 ...request.Option) (*lambda.RemovePermissionOutput, error)
+	TagResourceFunc                            func(param0 *lambda.TagResourceInput) (*lambda.TagResourceOutput, error)
+	TagResourceRequestFunc                     func(param0 *lambda.TagResourceInput) (*request.Request, *lambda.TagResourceOutput)
+	TagResourceWithContextFunc                 func(param0 aws.Context, param1 *lambda.TagResourceInput, param2 ...request.Option) (*lambda.TagResourceOutput, error)
+	UntagResourceFunc                          func(param0 *lambda.UntagResourceInput) (*lambda.UntagResourceOutput, error)
+	UntagResourceRequestFunc                   func(param0 *lambda.UntagResourceInput) (*request.Request, *lambda.UntagResourceOutput)
+	UntagResourceWithContextFunc               func(param0 aws.Context, param1 *lambda.UntagResourceInput, param2 ...request.Option) (*lambda.UntagResourceOutput, error)
+	UpdateAliasFunc                            func(param0 *lambda.UpdateAliasInput) (*lambda.AliasConfiguration, error)
+	UpdateAliasRequestFunc                     func(param0 *lambda.UpdateAliasInput) (*request.Request, *lambda.AliasConfiguration)
+	UpdateAliasWithContextFunc                 func(param0 aws.Context, param1 *lambda.UpdateAliasInput, param2 ...request.Option) (*lambda.AliasConfiguration, error)
+	UpdateEventSourceMappingFunc               func(param0 *lambda.UpdateEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error)
+	UpdateEventSourceMappingRequestFunc        func(param0 *lambda.UpdateEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration)
+	UpdateEventSourceMappingWithContextFunc    func(param0 aws.Context, param1 *lambda.UpdateEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error)
+	UpdateFunctionCodeFunc                     func(param0 *lambda.UpdateFunctionCodeInput) (*lambda.FunctionConfiguration, error)
+	UpdateFunctionCodeRequestFunc              func(param0 *lambda.UpdateFunctionCodeInput) (*request.Request, *lambda.FunctionConfiguration)
+	UpdateFunctionCodeWithContextFunc          func(param0 aws.Context, param1 *lambda.UpdateFunctionCodeInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error)
+	UpdateFunctionConfigurationFunc            func(param0 *lambda.UpdateFunctionConfigurationInput) (*lambda.FunctionConfiguration, error)
+	UpdateFunctionConfigurationRequestFunc     func(param0 *lambda.UpdateFunctionConfigurationInput) (*request.Request, *lambda.FunctionConfiguration)
+	UpdateFunctionConfigurationWithContextFunc func(param0 aws.Context, param1 *lambda.UpdateFunctionConfigurationInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error)
+}
+
+func (m *lambdaMock) AddPermission(param0 *lambda.AddPermissionInput) (*lambda.AddPermissionOutput, error) {
+	m.addCall("AddPermission")
+	m.verifyInput("AddPermission", param0)
+	return m.AddPermissionFunc(param0)
+}
+
+func (m *lambdaMock) AddPermissionRequest(param0 *lambda.AddPermissionInput) (*request.Request, *lambda.AddPermissionOutput) {
+	m.addCall("AddPermissionRequest")
+	m.verifyInput("AddPermissionRequest", param0)
+	return m.AddPermissionRequestFunc(param0)
+}
+
+func (m *lambdaMock) AddPermissionWithContext(param0 aws.Context, param1 *lambda.AddPermissionInput, param2 ...request.Option) (*lambda.AddPermissionOutput, error) {
+	m.addCall("AddPermissionWithContext")
+	m.verifyInput("AddPermissionWithContext", param0)
+	return m.AddPermissionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) CreateAlias(param0 *lambda.CreateAliasInput) (*lambda.AliasConfiguration, error) {
+	m.addCall("CreateAlias")
+	m.verifyInput("CreateAlias", param0)
+	return m.CreateAliasFunc(param0)
+}
+
+func (m *lambdaMock) CreateAliasRequest(param0 *lambda.CreateAliasInput) (*request.Request, *lambda.AliasConfiguration) {
+	m.addCall("CreateAliasRequest")
+	m.verifyInput("CreateAliasRequest", param0)
+	return m.CreateAliasRequestFunc(param0)
+}
+
+func (m *lambdaMock) CreateAliasWithContext(param0 aws.Context, param1 *lambda.CreateAliasInput, param2 ...request.Option) (*lambda.AliasConfiguration, error) {
+	m.addCall("CreateAliasWithContext")
+	m.verifyInput("CreateAliasWithContext", param0)
+	return m.CreateAliasWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) CreateEventSourceMapping(param0 *lambda.CreateEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("CreateEventSourceMapping")
+	m.verifyInput("CreateEventSourceMapping", param0)
+	return m.CreateEventSourceMappingFunc(param0)
+}
+
+func (m *lambdaMock) CreateEventSourceMappingRequest(param0 *lambda.CreateEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration) {
+	m.addCall("CreateEventSourceMappingRequest")
+	m.verifyInput("CreateEventSourceMappingRequest", param0)
+	return m.CreateEventSourceMappingRequestFunc(param0)
+}
+
+func (m *lambdaMock) CreateEventSourceMappingWithContext(param0 aws.Context, param1 *lambda.CreateEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("CreateEventSourceMappingWithContext")
+	m.verifyInput("CreateEventSourceMappingWithContext", param0)
+	return m.CreateEventSourceMappingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) CreateFunction(param0 *lambda.CreateFunctionInput) (*lambda.FunctionConfiguration, error) {
+	m.addCall("CreateFunction")
+	m.verifyInput("CreateFunction", param0)
+	return m.CreateFunctionFunc(param0)
+}
+
+func (m *lambdaMock) CreateFunctionRequest(param0 *lambda.CreateFunctionInput) (*request.Request, *lambda.FunctionConfiguration) {
+	m.addCall("CreateFunctionRequest")
+	m.verifyInput("CreateFunctionRequest", param0)
+	return m.CreateFunctionRequestFunc(param0)
+}
+
+func (m *lambdaMock) CreateFunctionWithContext(param0 aws.Context, param1 *lambda.CreateFunctionInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error) {
+	m.addCall("CreateFunctionWithContext")
+	m.verifyInput("CreateFunctionWithContext", param0)
+	return m.CreateFunctionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) DeleteAlias(param0 *lambda.DeleteAliasInput) (*lambda.DeleteAliasOutput, error) {
+	m.addCall("DeleteAlias")
+	m.verifyInput("DeleteAlias", param0)
+	return m.DeleteAliasFunc(param0)
+}
+
+func (m *lambdaMock) DeleteAliasRequest(param0 *lambda.DeleteAliasInput) (*request.Request, *lambda.DeleteAliasOutput) {
+	m.addCall("DeleteAliasRequest")
+	m.verifyInput("DeleteAliasRequest", param0)
+	return m.DeleteAliasRequestFunc(param0)
+}
+
+func (m *lambdaMock) DeleteAliasWithContext(param0 aws.Context, param1 *lambda.DeleteAliasInput, param2 ...request.Option) (*lambda.DeleteAliasOutput, error) {
+	m.addCall("DeleteAliasWithContext")
+	m.verifyInput("DeleteAliasWithContext", param0)
+	return m.DeleteAliasWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) DeleteEventSourceMapping(param0 *lambda.DeleteEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("DeleteEventSourceMapping")
+	m.verifyInput("DeleteEventSourceMapping", param0)
+	return m.DeleteEventSourceMappingFunc(param0)
+}
+
+func (m *lambdaMock) DeleteEventSourceMappingRequest(param0 *lambda.DeleteEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration) {
+	m.addCall("DeleteEventSourceMappingRequest")
+	m.verifyInput("DeleteEventSourceMappingRequest", param0)
+	return m.DeleteEventSourceMappingRequestFunc(param0)
+}
+
+func (m *lambdaMock) DeleteEventSourceMappingWithContext(param0 aws.Context, param1 *lambda.DeleteEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("DeleteEventSourceMappingWithContext")
+	m.verifyInput("DeleteEventSourceMappingWithContext", param0)
+	return m.DeleteEventSourceMappingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) DeleteFunction(param0 *lambda.DeleteFunctionInput) (*lambda.DeleteFunctionOutput, error) {
+	m.addCall("DeleteFunction")
+	m.verifyInput("DeleteFunction", param0)
+	return m.DeleteFunctionFunc(param0)
+}
+
+func (m *lambdaMock) DeleteFunctionRequest(param0 *lambda.DeleteFunctionInput) (*request.Request, *lambda.DeleteFunctionOutput) {
+	m.addCall("DeleteFunctionRequest")
+	m.verifyInput("DeleteFunctionRequest", param0)
+	return m.DeleteFunctionRequestFunc(param0)
+}
+
+func (m *lambdaMock) DeleteFunctionWithContext(param0 aws.Context, param1 *lambda.DeleteFunctionInput, param2 ...request.Option) (*lambda.DeleteFunctionOutput, error) {
+	m.addCall("DeleteFunctionWithContext")
+	m.verifyInput("DeleteFunctionWithContext", param0)
+	return m.DeleteFunctionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) GetAccountSettings(param0 *lambda.GetAccountSettingsInput) (*lambda.GetAccountSettingsOutput, error) {
+	m.addCall("GetAccountSettings")
+	m.verifyInput("GetAccountSettings", param0)
+	return m.GetAccountSettingsFunc(param0)
+}
+
+func (m *lambdaMock) GetAccountSettingsRequest(param0 *lambda.GetAccountSettingsInput) (*request.Request, *lambda.GetAccountSettingsOutput) {
+	m.addCall("GetAccountSettingsRequest")
+	m.verifyInput("GetAccountSettingsRequest", param0)
+	return m.GetAccountSettingsRequestFunc(param0)
+}
+
+func (m *lambdaMock) GetAccountSettingsWithContext(param0 aws.Context, param1 *lambda.GetAccountSettingsInput, param2 ...request.Option) (*lambda.GetAccountSettingsOutput, error) {
+	m.addCall("GetAccountSettingsWithContext")
+	m.verifyInput("GetAccountSettingsWithContext", param0)
+	return m.GetAccountSettingsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) GetAlias(param0 *lambda.GetAliasInput) (*lambda.AliasConfiguration, error) {
+	m.addCall("GetAlias")
+	m.verifyInput("GetAlias", param0)
+	return m.GetAliasFunc(param0)
+}
+
+func (m *lambdaMock) GetAliasRequest(param0 *lambda.GetAliasInput) (*request.Request, *lambda.AliasConfiguration) {
+	m.addCall("GetAliasRequest")
+	m.verifyInput("GetAliasRequest", param0)
+	return m.GetAliasRequestFunc(param0)
+}
+
+func (m *lambdaMock) GetAliasWithContext(param0 aws.Context, param1 *lambda.GetAliasInput, param2 ...request.Option) (*lambda.AliasConfiguration, error) {
+	m.addCall("GetAliasWithContext")
+	m.verifyInput("GetAliasWithContext", param0)
+	return m.GetAliasWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) GetEventSourceMapping(param0 *lambda.GetEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("GetEventSourceMapping")
+	m.verifyInput("GetEventSourceMapping", param0)
+	return m.GetEventSourceMappingFunc(param0)
+}
+
+func (m *lambdaMock) GetEventSourceMappingRequest(param0 *lambda.GetEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration) {
+	m.addCall("GetEventSourceMappingRequest")
+	m.verifyInput("GetEventSourceMappingRequest", param0)
+	return m.GetEventSourceMappingRequestFunc(param0)
+}
+
+func (m *lambdaMock) GetEventSourceMappingWithContext(param0 aws.Context, param1 *lambda.GetEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("GetEventSourceMappingWithContext")
+	m.verifyInput("GetEventSourceMappingWithContext", param0)
+	return m.GetEventSourceMappingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) GetFunction(param0 *lambda.GetFunctionInput) (*lambda.GetFunctionOutput, error) {
+	m.addCall("GetFunction")
+	m.verifyInput("GetFunction", param0)
+	return m.GetFunctionFunc(param0)
+}
+
+func (m *lambdaMock) GetFunctionConfiguration(param0 *lambda.GetFunctionConfigurationInput) (*lambda.FunctionConfiguration, error) {
+	m.addCall("GetFunctionConfiguration")
+	m.verifyInput("GetFunctionConfiguration", param0)
+	return m.GetFunctionConfigurationFunc(param0)
+}
+
+func (m *lambdaMock) GetFunctionConfigurationRequest(param0 *lambda.GetFunctionConfigurationInput) (*request.Request, *lambda.FunctionConfiguration) {
+	m.addCall("GetFunctionConfigurationRequest")
+	m.verifyInput("GetFunctionConfigurationRequest", param0)
+	return m.GetFunctionConfigurationRequestFunc(param0)
+}
+
+func (m *lambdaMock) GetFunctionConfigurationWithContext(param0 aws.Context, param1 *lambda.GetFunctionConfigurationInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error) {
+	m.addCall("GetFunctionConfigurationWithContext")
+	m.verifyInput("GetFunctionConfigurationWithContext", param0)
+	return m.GetFunctionConfigurationWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) GetFunctionRequest(param0 *lambda.GetFunctionInput) (*request.Request, *lambda.GetFunctionOutput) {
+	m.addCall("GetFunctionRequest")
+	m.verifyInput("GetFunctionRequest", param0)
+	return m.GetFunctionRequestFunc(param0)
+}
+
+func (m *lambdaMock) GetFunctionWithContext(param0 aws.Context, param1 *lambda.GetFunctionInput, param2 ...request.Option) (*lambda.GetFunctionOutput, error) {
+	m.addCall("GetFunctionWithContext")
+	m.verifyInput("GetFunctionWithContext", param0)
+	return m.GetFunctionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) GetPolicy(param0 *lambda.GetPolicyInput) (*lambda.GetPolicyOutput, error) {
+	m.addCall("GetPolicy")
+	m.verifyInput("GetPolicy", param0)
+	return m.GetPolicyFunc(param0)
+}
+
+func (m *lambdaMock) GetPolicyRequest(param0 *lambda.GetPolicyInput) (*request.Request, *lambda.GetPolicyOutput) {
+	m.addCall("GetPolicyRequest")
+	m.verifyInput("GetPolicyRequest", param0)
+	return m.GetPolicyRequestFunc(param0)
+}
+
+func (m *lambdaMock) GetPolicyWithContext(param0 aws.Context, param1 *lambda.GetPolicyInput, param2 ...request.Option) (*lambda.GetPolicyOutput, error) {
+	m.addCall("GetPolicyWithContext")
+	m.verifyInput("GetPolicyWithContext", param0)
+	return m.GetPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) Invoke(param0 *lambda.InvokeInput) (*lambda.InvokeOutput, error) {
+	m.addCall("Invoke")
+	m.verifyInput("Invoke", param0)
+	return m.InvokeFunc(param0)
+}
+
+func (m *lambdaMock) InvokeAsync(param0 *lambda.InvokeAsyncInput) (*lambda.InvokeAsyncOutput, error) {
+	m.addCall("InvokeAsync")
+	m.verifyInput("InvokeAsync", param0)
+	return m.InvokeAsyncFunc(param0)
+}
+
+func (m *lambdaMock) InvokeAsyncRequest(param0 *lambda.InvokeAsyncInput) (*request.Request, *lambda.InvokeAsyncOutput) {
+	m.addCall("InvokeAsyncRequest")
+	m.verifyInput("InvokeAsyncRequest", param0)
+	return m.InvokeAsyncRequestFunc(param0)
+}
+
+func (m *lambdaMock) InvokeAsyncWithContext(param0 aws.Context, param1 *lambda.InvokeAsyncInput, param2 ...request.Option) (*lambda.InvokeAsyncOutput, error) {
+	m.addCall("InvokeAsyncWithContext")
+	m.verifyInput("InvokeAsyncWithContext", param0)
+	return m.InvokeAsyncWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) InvokeRequest(param0 *lambda.InvokeInput) (*request.Request, *lambda.InvokeOutput) {
+	m.addCall("InvokeRequest")
+	m.verifyInput("InvokeRequest", param0)
+	return m.InvokeRequestFunc(param0)
+}
+
+func (m *lambdaMock) InvokeWithContext(param0 aws.Context, param1 *lambda.InvokeInput, param2 ...request.Option) (*lambda.InvokeOutput, error) {
+	m.addCall("InvokeWithContext")
+	m.verifyInput("InvokeWithContext", param0)
+	return m.InvokeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) ListAliases(param0 *lambda.ListAliasesInput) (*lambda.ListAliasesOutput, error) {
+	m.addCall("ListAliases")
+	m.verifyInput("ListAliases", param0)
+	return m.ListAliasesFunc(param0)
+}
+
+func (m *lambdaMock) ListAliasesRequest(param0 *lambda.ListAliasesInput) (*request.Request, *lambda.ListAliasesOutput) {
+	m.addCall("ListAliasesRequest")
+	m.verifyInput("ListAliasesRequest", param0)
+	return m.ListAliasesRequestFunc(param0)
+}
+
+func (m *lambdaMock) ListAliasesWithContext(param0 aws.Context, param1 *lambda.ListAliasesInput, param2 ...request.Option) (*lambda.ListAliasesOutput, error) {
+	m.addCall("ListAliasesWithContext")
+	m.verifyInput("ListAliasesWithContext", param0)
+	return m.ListAliasesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) ListEventSourceMappings(param0 *lambda.ListEventSourceMappingsInput) (*lambda.ListEventSourceMappingsOutput, error) {
+	m.addCall("ListEventSourceMappings")
+	m.verifyInput("ListEventSourceMappings", param0)
+	return m.ListEventSourceMappingsFunc(param0)
+}
+
+func (m *lambdaMock) ListEventSourceMappingsRequest(param0 *lambda.ListEventSourceMappingsInput) (*request.Request, *lambda.ListEventSourceMappingsOutput) {
+	m.addCall("ListEventSourceMappingsRequest")
+	m.verifyInput("ListEventSourceMappingsRequest", param0)
+	return m.ListEventSourceMappingsRequestFunc(param0)
+}
+
+func (m *lambdaMock) ListEventSourceMappingsWithContext(param0 aws.Context, param1 *lambda.ListEventSourceMappingsInput, param2 ...request.Option) (*lambda.ListEventSourceMappingsOutput, error) {
+	m.addCall("ListEventSourceMappingsWithContext")
+	m.verifyInput("ListEventSourceMappingsWithContext", param0)
+	return m.ListEventSourceMappingsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) ListFunctions(param0 *lambda.ListFunctionsInput) (*lambda.ListFunctionsOutput, error) {
+	m.addCall("ListFunctions")
+	m.verifyInput("ListFunctions", param0)
+	return m.ListFunctionsFunc(param0)
+}
+
+func (m *lambdaMock) ListFunctionsRequest(param0 *lambda.ListFunctionsInput) (*request.Request, *lambda.ListFunctionsOutput) {
+	m.addCall("ListFunctionsRequest")
+	m.verifyInput("ListFunctionsRequest", param0)
+	return m.ListFunctionsRequestFunc(param0)
+}
+
+func (m *lambdaMock) ListFunctionsWithContext(param0 aws.Context, param1 *lambda.ListFunctionsInput, param2 ...request.Option) (*lambda.ListFunctionsOutput, error) {
+	m.addCall("ListFunctionsWithContext")
+	m.verifyInput("ListFunctionsWithContext", param0)
+	return m.ListFunctionsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) ListTags(param0 *lambda.ListTagsInput) (*lambda.ListTagsOutput, error) {
+	m.addCall("ListTags")
+	m.verifyInput("ListTags", param0)
+	return m.ListTagsFunc(param0)
+}
+
+func (m *lambdaMock) ListTagsRequest(param0 *lambda.ListTagsInput) (*request.Request, *lambda.ListTagsOutput) {
+	m.addCall("ListTagsRequest")
+	m.verifyInput("ListTagsRequest", param0)
+	return m.ListTagsRequestFunc(param0)
+}
+
+func (m *lambdaMock) ListTagsWithContext(param0 aws.Context, param1 *lambda.ListTagsInput, param2 ...request.Option) (*lambda.ListTagsOutput, error) {
+	m.addCall("ListTagsWithContext")
+	m.verifyInput("ListTagsWithContext", param0)
+	return m.ListTagsWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) ListVersionsByFunction(param0 *lambda.ListVersionsByFunctionInput) (*lambda.ListVersionsByFunctionOutput, error) {
+	m.addCall("ListVersionsByFunction")
+	m.verifyInput("ListVersionsByFunction", param0)
+	return m.ListVersionsByFunctionFunc(param0)
+}
+
+func (m *lambdaMock) ListVersionsByFunctionRequest(param0 *lambda.ListVersionsByFunctionInput) (*request.Request, *lambda.ListVersionsByFunctionOutput) {
+	m.addCall("ListVersionsByFunctionRequest")
+	m.verifyInput("ListVersionsByFunctionRequest", param0)
+	return m.ListVersionsByFunctionRequestFunc(param0)
+}
+
+func (m *lambdaMock) ListVersionsByFunctionWithContext(param0 aws.Context, param1 *lambda.ListVersionsByFunctionInput, param2 ...request.Option) (*lambda.ListVersionsByFunctionOutput, error) {
+	m.addCall("ListVersionsByFunctionWithContext")
+	m.verifyInput("ListVersionsByFunctionWithContext", param0)
+	return m.ListVersionsByFunctionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) PublishVersion(param0 *lambda.PublishVersionInput) (*lambda.FunctionConfiguration, error) {
+	m.addCall("PublishVersion")
+	m.verifyInput("PublishVersion", param0)
+	return m.PublishVersionFunc(param0)
+}
+
+func (m *lambdaMock) PublishVersionRequest(param0 *lambda.PublishVersionInput) (*request.Request, *lambda.FunctionConfiguration) {
+	m.addCall("PublishVersionRequest")
+	m.verifyInput("PublishVersionRequest", param0)
+	return m.PublishVersionRequestFunc(param0)
+}
+
+func (m *lambdaMock) PublishVersionWithContext(param0 aws.Context, param1 *lambda.PublishVersionInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error) {
+	m.addCall("PublishVersionWithContext")
+	m.verifyInput("PublishVersionWithContext", param0)
+	return m.PublishVersionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) RemovePermission(param0 *lambda.RemovePermissionInput) (*lambda.RemovePermissionOutput, error) {
+	m.addCall("RemovePermission")
+	m.verifyInput("RemovePermission", param0)
+	return m.RemovePermissionFunc(param0)
+}
+
+func (m *lambdaMock) RemovePermissionRequest(param0 *lambda.RemovePermissionInput) (*request.Request, *lambda.RemovePermissionOutput) {
+	m.addCall("RemovePermissionRequest")
+	m.verifyInput("RemovePermissionRequest", param0)
+	return m.RemovePermissionRequestFunc(param0)
+}
+
+func (m *lambdaMock) RemovePermissionWithContext(param0 aws.Context, param1 *lambda.RemovePermissionInput, param2 ...request.Option) (*lambda.RemovePermissionOutput, error) {
+	m.addCall("RemovePermissionWithContext")
+	m.verifyInput("RemovePermissionWithContext", param0)
+	return m.RemovePermissionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) TagResource(param0 *lambda.TagResourceInput) (*lambda.TagResourceOutput, error) {
+	m.addCall("TagResource")
+	m.verifyInput("TagResource", param0)
+	return m.TagResourceFunc(param0)
+}
+
+func (m *lambdaMock) TagResourceRequest(param0 *lambda.TagResourceInput) (*request.Request, *lambda.TagResourceOutput) {
+	m.addCall("TagResourceRequest")
+	m.verifyInput("TagResourceRequest", param0)
+	return m.TagResourceRequestFunc(param0)
+}
+
+func (m *lambdaMock) TagResourceWithContext(param0 aws.Context, param1 *lambda.TagResourceInput, param2 ...request.Option) (*lambda.TagResourceOutput, error) {
+	m.addCall("TagResourceWithContext")
+	m.verifyInput("TagResourceWithContext", param0)
+	return m.TagResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) UntagResource(param0 *lambda.UntagResourceInput) (*lambda.UntagResourceOutput, error) {
+	m.addCall("UntagResource")
+	m.verifyInput("UntagResource", param0)
+	return m.UntagResourceFunc(param0)
+}
+
+func (m *lambdaMock) UntagResourceRequest(param0 *lambda.UntagResourceInput) (*request.Request, *lambda.UntagResourceOutput) {
+	m.addCall("UntagResourceRequest")
+	m.verifyInput("UntagResourceRequest", param0)
+	return m.UntagResourceRequestFunc(param0)
+}
+
+func (m *lambdaMock) UntagResourceWithContext(param0 aws.Context, param1 *lambda.UntagResourceInput, param2 ...request.Option) (*lambda.UntagResourceOutput, error) {
+	m.addCall("UntagResourceWithContext")
+	m.verifyInput("UntagResourceWithContext", param0)
+	return m.UntagResourceWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) UpdateAlias(param0 *lambda.UpdateAliasInput) (*lambda.AliasConfiguration, error) {
+	m.addCall("UpdateAlias")
+	m.verifyInput("UpdateAlias", param0)
+	return m.UpdateAliasFunc(param0)
+}
+
+func (m *lambdaMock) UpdateAliasRequest(param0 *lambda.UpdateAliasInput) (*request.Request, *lambda.AliasConfiguration) {
+	m.addCall("UpdateAliasRequest")
+	m.verifyInput("UpdateAliasRequest", param0)
+	return m.UpdateAliasRequestFunc(param0)
+}
+
+func (m *lambdaMock) UpdateAliasWithContext(param0 aws.Context, param1 *lambda.UpdateAliasInput, param2 ...request.Option) (*lambda.AliasConfiguration, error) {
+	m.addCall("UpdateAliasWithContext")
+	m.verifyInput("UpdateAliasWithContext", param0)
+	return m.UpdateAliasWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) UpdateEventSourceMapping(param0 *lambda.UpdateEventSourceMappingInput) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("UpdateEventSourceMapping")
+	m.verifyInput("UpdateEventSourceMapping", param0)
+	return m.UpdateEventSourceMappingFunc(param0)
+}
+
+func (m *lambdaMock) UpdateEventSourceMappingRequest(param0 *lambda.UpdateEventSourceMappingInput) (*request.Request, *lambda.EventSourceMappingConfiguration) {
+	m.addCall("UpdateEventSourceMappingRequest")
+	m.verifyInput("UpdateEventSourceMappingRequest", param0)
+	return m.UpdateEventSourceMappingRequestFunc(param0)
+}
+
+func (m *lambdaMock) UpdateEventSourceMappingWithContext(param0 aws.Context, param1 *lambda.UpdateEventSourceMappingInput, param2 ...request.Option) (*lambda.EventSourceMappingConfiguration, error) {
+	m.addCall("UpdateEventSourceMappingWithContext")
+	m.verifyInput("UpdateEventSourceMappingWithContext", param0)
+	return m.UpdateEventSourceMappingWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) UpdateFunctionCode(param0 *lambda.UpdateFunctionCodeInput) (*lambda.FunctionConfiguration, error) {
+	m.addCall("UpdateFunctionCode")
+	m.verifyInput("UpdateFunctionCode", param0)
+	return m.UpdateFunctionCodeFunc(param0)
+}
+
+func (m *lambdaMock) UpdateFunctionCodeRequest(param0 *lambda.UpdateFunctionCodeInput) (*request.Request, *lambda.FunctionConfiguration) {
+	m.addCall("UpdateFunctionCodeRequest")
+	m.verifyInput("UpdateFunctionCodeRequest", param0)
+	return m.UpdateFunctionCodeRequestFunc(param0)
+}
+
+func (m *lambdaMock) UpdateFunctionCodeWithContext(param0 aws.Context, param1 *lambda.UpdateFunctionCodeInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error) {
+	m.addCall("UpdateFunctionCodeWithContext")
+	m.verifyInput("UpdateFunctionCodeWithContext", param0)
+	return m.UpdateFunctionCodeWithContextFunc(param0, param1, param2...)
+}
+
+func (m *lambdaMock) UpdateFunctionConfiguration(param0 *lambda.UpdateFunctionConfigurationInput) (*lambda.FunctionConfiguration, error) {
+	m.addCall("UpdateFunctionConfiguration")
+	m.verifyInput("UpdateFunctionConfiguration", param0)
+	return m.UpdateFunctionConfigurationFunc(param0)
+}
+
+func (m *lambdaMock) UpdateFunctionConfigurationRequest(param0 *lambda.UpdateFunctionConfigurationInput) (*request.Request, *lambda.FunctionConfiguration) {
+	m.addCall("UpdateFunctionConfigurationRequest")
+	m.verifyInput("UpdateFunctionConfigurationRequest", param0)
+	return m.UpdateFunctionConfigurationRequestFunc(param0)
+}
+
+func (m *lambdaMock) UpdateFunctionConfigurationWithContext(param0 aws.Context, param1 *lambda.UpdateFunctionConfigurationInput, param2 ...request.Option) (*lambda.FunctionConfiguration, error) {
+	m.addCall("UpdateFunctionConfigurationWithContext")
+	m.verifyInput("UpdateFunctionConfigurationWithContext", param0)
+	return m.UpdateFunctionConfigurationWithContextFunc(param0, param1, param2...)
 }
 
 type rdsMock struct {
