@@ -1145,6 +1145,74 @@ func (cmd *CheckInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCheckScalinggroup(sess *session.Session, l ...*logger.Logger) *CheckScalinggroup {
+	cmd := new(CheckScalinggroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckScalinggroup) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *CheckScalinggroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckScalinggroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckScalinggroup) ParamsHelp() string {
+	return generateParamsHelp("checkscalinggroup", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckScalinggroup) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCheckSecuritygroup(sess *session.Session, l ...*logger.Logger) *CheckSecuritygroup {
 	cmd := new(CheckSecuritygroup)
 	if len(l) > 0 {
@@ -2995,6 +3063,80 @@ func (cmd *CreateRoutetable) ParamsHelp() string {
 }
 
 func (cmd *CreateRoutetable) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateScalinggroup(sess *session.Session, l ...*logger.Logger) *CreateScalinggroup {
+	cmd := new(CreateScalinggroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateScalinggroup) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateScalinggroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &autoscaling.CreateAutoScalingGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in autoscaling.CreateAutoScalingGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateAutoScalingGroup(input)
+	cmd.logger.ExtraVerbosef("autoscaling.CreateAutoScalingGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateScalinggroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateScalinggroup) ParamsHelp() string {
+	return generateParamsHelp("createscalinggroup", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateScalinggroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -5762,6 +5904,80 @@ func (cmd *DeleteRoutetable) ParamsHelp() string {
 }
 
 func (cmd *DeleteRoutetable) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteScalinggroup(sess *session.Session, l ...*logger.Logger) *DeleteScalinggroup {
+	cmd := new(DeleteScalinggroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteScalinggroup) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteScalinggroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &autoscaling.DeleteAutoScalingGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in autoscaling.DeleteAutoScalingGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteAutoScalingGroup(input)
+	cmd.logger.ExtraVerbosef("autoscaling.DeleteAutoScalingGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteScalinggroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteScalinggroup) ParamsHelp() string {
+	return generateParamsHelp("deletescalinggroup", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteScalinggroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -8623,6 +8839,80 @@ func (cmd *UpdatePolicy) ParamsHelp() string {
 }
 
 func (cmd *UpdatePolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateScalinggroup(sess *session.Session, l ...*logger.Logger) *UpdateScalinggroup {
+	cmd := new(UpdateScalinggroup)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateScalinggroup) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *UpdateScalinggroup) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &autoscaling.UpdateAutoScalingGroupInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in autoscaling.UpdateAutoScalingGroupInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.UpdateAutoScalingGroup(input)
+	cmd.logger.ExtraVerbosef("autoscaling.UpdateAutoScalingGroup call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateScalinggroup) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateScalinggroup) ParamsHelp() string {
+	return generateParamsHelp("updatescalinggroup", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateScalinggroup) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

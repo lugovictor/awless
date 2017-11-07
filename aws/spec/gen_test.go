@@ -76,11 +76,23 @@ var (
 	newDeleteAppscalingtarget = func() *DeleteAppscalingtarget {
 		return &DeleteAppscalingtarget{api: &mockApplicationautoscaling{}, logger: logger.DiscardLogger}
 	}
+	newCheckScalinggroup = func() *CheckScalinggroup {
+		return &CheckScalinggroup{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
+	}
+	newCreateScalinggroup = func() *CreateScalinggroup {
+		return &CreateScalinggroup{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
+	}
 	newCreateScalingpolicy = func() *CreateScalingpolicy {
 		return &CreateScalingpolicy{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
 	}
+	newDeleteScalinggroup = func() *DeleteScalinggroup {
+		return &DeleteScalinggroup{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
+	}
 	newDeleteScalingpolicy = func() *DeleteScalingpolicy {
 		return &DeleteScalingpolicy{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
+	}
+	newUpdateScalinggroup = func() *UpdateScalinggroup {
+		return &UpdateScalinggroup{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
 	}
 	newCreateStack       = func() *CreateStack { return &CreateStack{api: &mockCloudformation{}, logger: logger.DiscardLogger} }
 	newDeleteStack       = func() *DeleteStack { return &DeleteStack{api: &mockCloudformation{}, logger: logger.DiscardLogger} }
@@ -323,6 +335,16 @@ func (m *mockApplicationautoscaling) DeregisterScalableTarget(input *application
 	return nil, nil
 }
 
+func (m *mockAutoscaling) CreateAutoScalingGroup(input *autoscaling.CreateAutoScalingGroupInput) (*autoscaling.CreateAutoScalingGroupOutput, error) {
+	if got, want := input, genTestsExpected["createscalinggroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createscalinggroup"]; ok {
+		return outFunc().(*autoscaling.CreateAutoScalingGroupOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockAutoscaling) PutScalingPolicy(input *autoscaling.PutScalingPolicyInput) (*autoscaling.PutScalingPolicyOutput, error) {
 	if got, want := input, genTestsExpected["createscalingpolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -333,12 +355,32 @@ func (m *mockAutoscaling) PutScalingPolicy(input *autoscaling.PutScalingPolicyIn
 	return nil, nil
 }
 
+func (m *mockAutoscaling) DeleteAutoScalingGroup(input *autoscaling.DeleteAutoScalingGroupInput) (*autoscaling.DeleteAutoScalingGroupOutput, error) {
+	if got, want := input, genTestsExpected["deletescalinggroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletescalinggroup"]; ok {
+		return outFunc().(*autoscaling.DeleteAutoScalingGroupOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockAutoscaling) DeletePolicy(input *autoscaling.DeletePolicyInput) (*autoscaling.DeletePolicyOutput, error) {
 	if got, want := input, genTestsExpected["deletescalingpolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletescalingpolicy"]; ok {
 		return outFunc().(*autoscaling.DeletePolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockAutoscaling) UpdateAutoScalingGroup(input *autoscaling.UpdateAutoScalingGroupInput) (*autoscaling.UpdateAutoScalingGroupOutput, error) {
+	if got, want := input, genTestsExpected["updatescalinggroup"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["updatescalinggroup"]; ok {
+		return outFunc().(*autoscaling.UpdateAutoScalingGroupOutput), nil
 	}
 	return nil, nil
 }

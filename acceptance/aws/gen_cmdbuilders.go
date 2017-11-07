@@ -130,6 +130,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "checkscalinggroup":
+		return func() interface{} {
+			cmd := awsspec.NewCheckScalinggroup(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
+			return cmd
+		}
 	case "checksecuritygroup":
 		return func() interface{} {
 			cmd := awsspec.NewCheckSecuritygroup(nil)
@@ -266,6 +272,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateRoutetable(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "createscalinggroup":
+		return func() interface{} {
+			cmd := awsspec.NewCreateScalinggroup(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
 			return cmd
 		}
 	case "createscalingpolicy":
@@ -470,6 +482,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteRoutetable(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletescalinggroup":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteScalinggroup(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
 			return cmd
 		}
 	case "deletescalingpolicy":
@@ -680,6 +698,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewUpdatePolicy(nil)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "updatescalinggroup":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateScalinggroup(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
 			return cmd
 		}
 	case "updatesecuritygroup":
