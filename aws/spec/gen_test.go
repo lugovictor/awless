@@ -226,6 +226,7 @@ var (
 	newDetachInstance        = func() *DetachInstance { return &DetachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newUpdateTargetgroup     = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newAttachPolicy          = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newAttachRole            = func() *AttachRole { return &AttachRole{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newAttachUser            = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateAccesskey       = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateGroup           = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -234,6 +235,7 @@ var (
 	}
 	newCreateLoginprofile    = func() *CreateLoginprofile { return &CreateLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreatePolicy          = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateRole            = func() *CreateRole { return &CreateRole{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateUser            = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteAccesskey       = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteGroup           = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -242,8 +244,10 @@ var (
 	}
 	newDeleteLoginprofile  = func() *DeleteLoginprofile { return &DeleteLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeletePolicy        = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteRole          = func() *DeleteRole { return &DeleteRole{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteUser          = func() *DeleteUser { return &DeleteUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachPolicy        = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachRole          = func() *DetachRole { return &DetachRole{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachUser          = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdateLoginprofile  = func() *UpdateLoginprofile { return &UpdateLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdatePolicy        = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -988,6 +992,16 @@ func (m *mockElbv2) DeregisterTargets(input *elbv2.DeregisterTargetsInput) (*elb
 	return nil, nil
 }
 
+func (m *mockIam) AddRoleToInstanceProfile(input *iam.AddRoleToInstanceProfileInput) (*iam.AddRoleToInstanceProfileOutput, error) {
+	if got, want := input, genTestsExpected["attachrole"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["attachrole"]; ok {
+		return outFunc().(*iam.AddRoleToInstanceProfileOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) AddUserToGroup(input *iam.AddUserToGroupInput) (*iam.AddUserToGroupOutput, error) {
 	if got, want := input, genTestsExpected["attachuser"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -1114,6 +1128,16 @@ func (m *mockIam) DeleteUser(input *iam.DeleteUserInput) (*iam.DeleteUserOutput,
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteuser"]; ok {
 		return outFunc().(*iam.DeleteUserOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) RemoveRoleFromInstanceProfile(input *iam.RemoveRoleFromInstanceProfileInput) (*iam.RemoveRoleFromInstanceProfileOutput, error) {
+	if got, want := input, genTestsExpected["detachrole"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["detachrole"]; ok {
+		return outFunc().(*iam.RemoveRoleFromInstanceProfileOutput), nil
 	}
 	return nil, nil
 }

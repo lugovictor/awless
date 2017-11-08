@@ -49,6 +49,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
 	case "attachpolicy":
 		return func() interface{} { return NewAttachPolicy(f.Sess, f.Log) }
+	case "attachrole":
+		return func() interface{} { return NewAttachRole(f.Sess, f.Log) }
 	case "attachroutetable":
 		return func() interface{} { return NewAttachRoutetable(f.Sess, f.Log) }
 	case "attachsecuritygroup":
@@ -121,6 +123,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateLoginprofile(f.Sess, f.Log) }
 	case "createpolicy":
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
+	case "createrole":
+		return func() interface{} { return NewCreateRole(f.Sess, f.Log) }
 	case "createroute":
 		return func() interface{} { return NewCreateRoute(f.Sess, f.Log) }
 	case "createroutetable":
@@ -203,6 +207,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteLoginprofile(f.Sess, f.Log) }
 	case "deletepolicy":
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
+	case "deleterole":
+		return func() interface{} { return NewDeleteRole(f.Sess, f.Log) }
 	case "deleteroute":
 		return func() interface{} { return NewDeleteRoute(f.Sess, f.Log) }
 	case "deleteroutetable":
@@ -251,6 +257,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
 	case "detachpolicy":
 		return func() interface{} { return NewDetachPolicy(f.Sess, f.Log) }
+	case "detachrole":
+		return func() interface{} { return NewDetachRole(f.Sess, f.Log) }
 	case "detachroutetable":
 		return func() interface{} { return NewDetachRoutetable(f.Sess, f.Log) }
 	case "detachsecuritygroup":
@@ -309,6 +317,7 @@ var (
 	_ command = &AttachInstanceprofile{}
 	_ command = &AttachInternetgateway{}
 	_ command = &AttachPolicy{}
+	_ command = &AttachRole{}
 	_ command = &AttachRoutetable{}
 	_ command = &AttachSecuritygroup{}
 	_ command = &AttachUser{}
@@ -345,6 +354,7 @@ var (
 	_ command = &CreateLoadbalancer{}
 	_ command = &CreateLoginprofile{}
 	_ command = &CreatePolicy{}
+	_ command = &CreateRole{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
 	_ command = &CreateS3object{}
@@ -386,6 +396,7 @@ var (
 	_ command = &DeleteLoadbalancer{}
 	_ command = &DeleteLoginprofile{}
 	_ command = &DeletePolicy{}
+	_ command = &DeleteRole{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteS3object{}
@@ -410,6 +421,7 @@ var (
 	_ command = &DetachInstanceprofile{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachPolicy{}
+	_ command = &DetachRole{}
 	_ command = &DetachRoutetable{}
 	_ command = &DetachSecuritygroup{}
 	_ command = &DetachUser{}
