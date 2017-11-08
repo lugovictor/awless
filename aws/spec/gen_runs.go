@@ -2936,6 +2936,80 @@ func (cmd *CreateKeypair) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateLaunchconfiguration(sess *session.Session, l ...*logger.Logger) *CreateLaunchconfiguration {
+	cmd := new(CreateLaunchconfiguration)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateLaunchconfiguration) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateLaunchconfiguration) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &autoscaling.CreateLaunchConfigurationInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in autoscaling.CreateLaunchConfigurationInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateLaunchConfiguration(input)
+	cmd.logger.ExtraVerbosef("autoscaling.CreateLaunchConfiguration call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateLaunchconfiguration) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateLaunchconfiguration) ParamsHelp() string {
+	return generateParamsHelp("createlaunchconfiguration", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateLaunchconfiguration) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreatePolicy(sess *session.Session, l ...*logger.Logger) *CreatePolicy {
 	cmd := new(CreatePolicy)
 	if len(l) > 0 {
@@ -5848,6 +5922,80 @@ func (cmd *DeleteKeypair) ParamsHelp() string {
 }
 
 func (cmd *DeleteKeypair) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteLaunchconfiguration(sess *session.Session, l ...*logger.Logger) *DeleteLaunchconfiguration {
+	cmd := new(DeleteLaunchconfiguration)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = autoscaling.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteLaunchconfiguration) SetApi(api autoscalingiface.AutoScalingAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteLaunchconfiguration) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &autoscaling.DeleteLaunchConfigurationInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in autoscaling.DeleteLaunchConfigurationInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteLaunchConfiguration(input)
+	cmd.logger.ExtraVerbosef("autoscaling.DeleteLaunchConfiguration call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteLaunchconfiguration) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteLaunchconfiguration) ParamsHelp() string {
+	return generateParamsHelp("deletelaunchconfiguration", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteLaunchconfiguration) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

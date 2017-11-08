@@ -268,6 +268,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "createlaunchconfiguration":
+		return func() interface{} {
+			cmd := awsspec.NewCreateLaunchconfiguration(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
+			return cmd
+		}
 	case "createpolicy":
 		return func() interface{} {
 			cmd := awsspec.NewCreatePolicy(nil)
@@ -482,6 +488,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteKeypair(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "deletelaunchconfiguration":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteLaunchconfiguration(nil)
+			cmd.SetApi(f.Mock.(autoscalingiface.AutoScalingAPI))
 			return cmd
 		}
 	case "deletepolicy":

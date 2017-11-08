@@ -79,11 +79,17 @@ var (
 	newCheckScalinggroup = func() *CheckScalinggroup {
 		return &CheckScalinggroup{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
 	}
+	newCreateLaunchconfiguration = func() *CreateLaunchconfiguration {
+		return &CreateLaunchconfiguration{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
+	}
 	newCreateScalinggroup = func() *CreateScalinggroup {
 		return &CreateScalinggroup{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
 	}
 	newCreateScalingpolicy = func() *CreateScalingpolicy {
 		return &CreateScalingpolicy{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
+	}
+	newDeleteLaunchconfiguration = func() *DeleteLaunchconfiguration {
+		return &DeleteLaunchconfiguration{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
 	}
 	newDeleteScalinggroup = func() *DeleteScalinggroup {
 		return &DeleteScalinggroup{api: &mockAutoscaling{}, logger: logger.DiscardLogger}
@@ -347,6 +353,16 @@ func (m *mockApplicationautoscaling) DeregisterScalableTarget(input *application
 	return nil, nil
 }
 
+func (m *mockAutoscaling) CreateLaunchConfiguration(input *autoscaling.CreateLaunchConfigurationInput) (*autoscaling.CreateLaunchConfigurationOutput, error) {
+	if got, want := input, genTestsExpected["createlaunchconfiguration"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createlaunchconfiguration"]; ok {
+		return outFunc().(*autoscaling.CreateLaunchConfigurationOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockAutoscaling) CreateAutoScalingGroup(input *autoscaling.CreateAutoScalingGroupInput) (*autoscaling.CreateAutoScalingGroupOutput, error) {
 	if got, want := input, genTestsExpected["createscalinggroup"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -363,6 +379,16 @@ func (m *mockAutoscaling) PutScalingPolicy(input *autoscaling.PutScalingPolicyIn
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["createscalingpolicy"]; ok {
 		return outFunc().(*autoscaling.PutScalingPolicyOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockAutoscaling) DeleteLaunchConfiguration(input *autoscaling.DeleteLaunchConfigurationInput) (*autoscaling.DeleteLaunchConfigurationOutput, error) {
+	if got, want := input, genTestsExpected["deletelaunchconfiguration"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletelaunchconfiguration"]; ok {
+		return outFunc().(*autoscaling.DeleteLaunchConfigurationOutput), nil
 	}
 	return nil, nil
 }
