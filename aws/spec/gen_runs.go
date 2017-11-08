@@ -3226,6 +3226,80 @@ func (cmd *CreateLoadbalancer) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateLoginprofile(sess *session.Session, l ...*logger.Logger) *CreateLoginprofile {
+	cmd := new(CreateLoginprofile)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateLoginprofile) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateLoginprofile) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.CreateLoginProfileInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.CreateLoginProfileInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateLoginProfile(input)
+	cmd.logger.ExtraVerbosef("iam.CreateLoginProfile call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateLoginprofile) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateLoginprofile) ParamsHelp() string {
+	return generateParamsHelp("createloginprofile", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateLoginprofile) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreatePolicy(sess *session.Session, l ...*logger.Logger) *CreatePolicy {
 	cmd := new(CreatePolicy)
 	if len(l) > 0 {
@@ -6360,6 +6434,80 @@ func (cmd *DeleteLoadbalancer) ParamsHelp() string {
 }
 
 func (cmd *DeleteLoadbalancer) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteLoginprofile(sess *session.Session, l ...*logger.Logger) *DeleteLoginprofile {
+	cmd := new(DeleteLoginprofile)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteLoginprofile) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteLoginprofile) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.DeleteLoginProfileInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.DeleteLoginProfileInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteLoginProfile(input)
+	cmd.logger.ExtraVerbosef("iam.DeleteLoginProfile call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteLoginprofile) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteLoginprofile) ParamsHelp() string {
+	return generateParamsHelp("deleteloginprofile", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteLoginprofile) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -9561,6 +9709,80 @@ func (cmd *UpdateInstance) ParamsHelp() string {
 }
 
 func (cmd *UpdateInstance) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateLoginprofile(sess *session.Session, l ...*logger.Logger) *UpdateLoginprofile {
+	cmd := new(UpdateLoginprofile)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateLoginprofile) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *UpdateLoginprofile) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.UpdateLoginProfileInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.UpdateLoginProfileInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.UpdateLoginProfile(input)
+	cmd.logger.ExtraVerbosef("iam.UpdateLoginProfile call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateLoginprofile) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateLoginprofile) ParamsHelp() string {
+	return generateParamsHelp("updateloginprofile", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateLoginprofile) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

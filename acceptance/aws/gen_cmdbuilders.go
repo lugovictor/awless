@@ -292,6 +292,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
 			return cmd
 		}
+	case "createloginprofile":
+		return func() interface{} {
+			cmd := awsspec.NewCreateLoginprofile(nil)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "createpolicy":
 		return func() interface{} {
 			cmd := awsspec.NewCreatePolicy(nil)
@@ -526,6 +532,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
 			return cmd
 		}
+	case "deleteloginprofile":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteLoginprofile(nil)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "deletepolicy":
 		return func() interface{} {
 			cmd := awsspec.NewDeletePolicy(nil)
@@ -758,6 +770,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewUpdateInstance(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "updateloginprofile":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateLoginprofile(nil)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
 	case "updatepolicy":

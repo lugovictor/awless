@@ -117,6 +117,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateListener(f.Sess, f.Log) }
 	case "createloadbalancer":
 		return func() interface{} { return NewCreateLoadbalancer(f.Sess, f.Log) }
+	case "createloginprofile":
+		return func() interface{} { return NewCreateLoginprofile(f.Sess, f.Log) }
 	case "createpolicy":
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
 	case "createroute":
@@ -195,6 +197,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteListener(f.Sess, f.Log) }
 	case "deleteloadbalancer":
 		return func() interface{} { return NewDeleteLoadbalancer(f.Sess, f.Log) }
+	case "deleteloginprofile":
+		return func() interface{} { return NewDeleteLoginprofile(f.Sess, f.Log) }
 	case "deletepolicy":
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
 	case "deleteroute":
@@ -273,6 +277,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewUpdateDistribution(f.Sess, f.Log) }
 	case "updateinstance":
 		return func() interface{} { return NewUpdateInstance(f.Sess, f.Log) }
+	case "updateloginprofile":
+		return func() interface{} { return NewUpdateLoginprofile(f.Sess, f.Log) }
 	case "updatepolicy":
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
 	case "updatescalinggroup":
@@ -331,6 +337,7 @@ var (
 	_ command = &CreateLaunchconfiguration{}
 	_ command = &CreateListener{}
 	_ command = &CreateLoadbalancer{}
+	_ command = &CreateLoginprofile{}
 	_ command = &CreatePolicy{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
@@ -370,6 +377,7 @@ var (
 	_ command = &DeleteLaunchconfiguration{}
 	_ command = &DeleteListener{}
 	_ command = &DeleteLoadbalancer{}
+	_ command = &DeleteLoginprofile{}
 	_ command = &DeletePolicy{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
@@ -409,6 +417,7 @@ var (
 	_ command = &UpdateContainertask{}
 	_ command = &UpdateDistribution{}
 	_ command = &UpdateInstance{}
+	_ command = &UpdateLoginprofile{}
 	_ command = &UpdatePolicy{}
 	_ command = &UpdateScalinggroup{}
 	_ command = &UpdateSecuritygroup{}

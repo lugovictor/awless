@@ -232,6 +232,7 @@ var (
 	newCreateInstanceprofile = func() *CreateInstanceprofile {
 		return &CreateInstanceprofile{api: &mockIam{}, logger: logger.DiscardLogger}
 	}
+	newCreateLoginprofile    = func() *CreateLoginprofile { return &CreateLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreatePolicy          = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateUser            = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteAccesskey       = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -239,10 +240,12 @@ var (
 	newDeleteInstanceprofile = func() *DeleteInstanceprofile {
 		return &DeleteInstanceprofile{api: &mockIam{}, logger: logger.DiscardLogger}
 	}
+	newDeleteLoginprofile  = func() *DeleteLoginprofile { return &DeleteLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeletePolicy        = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteUser          = func() *DeleteUser { return &DeleteUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachPolicy        = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachUser          = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newUpdateLoginprofile  = func() *UpdateLoginprofile { return &UpdateLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdatePolicy        = func() *UpdatePolicy { return &UpdatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateFunction      = func() *CreateFunction { return &CreateFunction{api: &mockLambda{}, logger: logger.DiscardLogger} }
 	newDeleteFunction      = func() *DeleteFunction { return &DeleteFunction{api: &mockLambda{}, logger: logger.DiscardLogger} }
@@ -1022,6 +1025,16 @@ func (m *mockIam) CreateInstanceProfile(input *iam.CreateInstanceProfileInput) (
 	return nil, nil
 }
 
+func (m *mockIam) CreateLoginProfile(input *iam.CreateLoginProfileInput) (*iam.CreateLoginProfileOutput, error) {
+	if got, want := input, genTestsExpected["createloginprofile"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createloginprofile"]; ok {
+		return outFunc().(*iam.CreateLoginProfileOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) CreatePolicy(input *iam.CreatePolicyInput) (*iam.CreatePolicyOutput, error) {
 	if got, want := input, genTestsExpected["createpolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -1072,6 +1085,16 @@ func (m *mockIam) DeleteInstanceProfile(input *iam.DeleteInstanceProfileInput) (
 	return nil, nil
 }
 
+func (m *mockIam) DeleteLoginProfile(input *iam.DeleteLoginProfileInput) (*iam.DeleteLoginProfileOutput, error) {
+	if got, want := input, genTestsExpected["deleteloginprofile"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteloginprofile"]; ok {
+		return outFunc().(*iam.DeleteLoginProfileOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) DeletePolicy(input *iam.DeletePolicyInput) (*iam.DeletePolicyOutput, error) {
 	if got, want := input, genTestsExpected["deletepolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -1098,6 +1121,16 @@ func (m *mockIam) RemoveUserFromGroup(input *iam.RemoveUserFromGroupInput) (*iam
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["detachuser"]; ok {
 		return outFunc().(*iam.RemoveUserFromGroupOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) UpdateLoginProfile(input *iam.UpdateLoginProfileInput) (*iam.UpdateLoginProfileOutput, error) {
+	if got, want := input, genTestsExpected["updateloginprofile"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["updateloginprofile"]; ok {
+		return outFunc().(*iam.UpdateLoginProfileOutput), nil
 	}
 	return nil, nil
 }
