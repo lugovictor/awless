@@ -15,8 +15,8 @@ import (
 
 func TestInstance(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
-		userdataFile := generateTmpFile("this is my content with {{ .Variables.oneRef }} content")
-		defer os.Remove(userdataFile)
+		_, userdataFile, cleanup := generateTmpFile("this is my content with {{ .Variables.oneRef }} content")
+		defer cleanup()
 
 		Template("oneRef=awesome\n"+
 			"create instance count=3 image=ami-1234 "+
@@ -163,11 +163,20 @@ func TestInstance(t *testing.T) {
 	})
 }
 
-func generateTmpFile(content string) (path string) {
-	file, err := ioutil.TempFile("", "tmpfile")
+func generateTmpFile(content string) (*os.File, string, func()) {
+	file, err := ioutil.TempFile("", "awless-at-tmpfile")
 	if err != nil {
 		panic(err)
 	}
-	ioutil.WriteFile(file.Name(), []byte(content), 0644)
-	return file.Name()
+	if err := ioutil.WriteFile(file.Name(), []byte(content), 0644); err != nil {
+		panic(err)
+	}
+
+	cleanup := func() {
+		file.Close()
+		if err := os.Remove(file.Name()); err != nil {
+			panic(err)
+		}
+	}
+	return file, file.Name(), cleanup
 }

@@ -3,18 +3,17 @@ package awsat
 import (
 	"testing"
 
-	"os"
-
 	"github.com/aws/aws-sdk-go/service/cloudformation"
 )
 
 func TestStack(t *testing.T) {
-	t.Run("create", func(t *testing.T) {
-		tplFilePath := generateTmpFile("tpl body content")
-		defer os.Remove(tplFilePath)
+	_, tplFilePath, tplClean := generateTmpFile("tpl body content")
+	defer tplClean()
 
-		polFilePath := generateTmpFile("policy content")
-		defer os.Remove(polFilePath)
+	_, polFilePath, polClean := generateTmpFile("policy content")
+	defer polClean()
+
+	t.Run("create", func(t *testing.T) {
 
 		Template("create stack name=new-stack template-file="+tplFilePath+" capabilities=one,two disable-rollback=true notifications=none,ntwo on-failure=done parameters=1:pone,2:ptwo resource-types=rone,rtwo role=donjuan policy-file="+polFilePath+" timeout=180").Mock(&cloudformationMock{
 			CreateStackFunc: func(input *cloudformation.CreateStackInput) (*cloudformation.CreateStackOutput, error) {
@@ -35,14 +34,8 @@ func TestStack(t *testing.T) {
 	})
 
 	t.Run("update", func(t *testing.T) {
-		tplFilePath := generateTmpFile("tpl body content")
-		defer os.Remove(tplFilePath)
-
-		polFilePath := generateTmpFile("policy content")
-		defer os.Remove(polFilePath)
-
-		polUpdateFilePath := generateTmpFile("update policy content")
-		defer os.Remove(polUpdateFilePath)
+		_, polUpdateFilePath, clean := generateTmpFile("update policy content")
+		defer clean()
 
 		Template("update stack name=other-name template-file="+tplFilePath+" use-previous-template=true capabilities=one,two notifications=none,ntwo parameters=1:pone,2:ptwo resource-types=rone,rtwo role=donjuan policy-file="+polFilePath+" policy-update-file="+polUpdateFilePath).Mock(&cloudformationMock{
 			UpdateStackFunc: func(input *cloudformation.UpdateStackInput) (*cloudformation.UpdateStackOutput, error) {

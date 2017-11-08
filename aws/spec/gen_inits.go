@@ -125,6 +125,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateRoute(f.Sess, f.Log) }
 	case "createroutetable":
 		return func() interface{} { return NewCreateRoutetable(f.Sess, f.Log) }
+	case "creates3object":
+		return func() interface{} { return NewCreateS3object(f.Sess, f.Log) }
 	case "createscalinggroup":
 		return func() interface{} { return NewCreateScalinggroup(f.Sess, f.Log) }
 	case "createscalingpolicy":
@@ -205,6 +207,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteRoute(f.Sess, f.Log) }
 	case "deleteroutetable":
 		return func() interface{} { return NewDeleteRoutetable(f.Sess, f.Log) }
+	case "deletes3object":
+		return func() interface{} { return NewDeleteS3object(f.Sess, f.Log) }
 	case "deletescalinggroup":
 		return func() interface{} { return NewDeleteScalinggroup(f.Sess, f.Log) }
 	case "deletescalingpolicy":
@@ -281,6 +285,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewUpdateLoginprofile(f.Sess, f.Log) }
 	case "updatepolicy":
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
+	case "updates3object":
+		return func() interface{} { return NewUpdateS3object(f.Sess, f.Log) }
 	case "updatescalinggroup":
 		return func() interface{} { return NewUpdateScalinggroup(f.Sess, f.Log) }
 	case "updatesecuritygroup":
@@ -341,6 +347,7 @@ var (
 	_ command = &CreatePolicy{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
+	_ command = &CreateS3object{}
 	_ command = &CreateScalinggroup{}
 	_ command = &CreateScalingpolicy{}
 	_ command = &CreateSecuritygroup{}
@@ -381,6 +388,7 @@ var (
 	_ command = &DeletePolicy{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
+	_ command = &DeleteS3object{}
 	_ command = &DeleteScalinggroup{}
 	_ command = &DeleteScalingpolicy{}
 	_ command = &DeleteSecuritygroup{}
@@ -419,6 +427,7 @@ var (
 	_ command = &UpdateInstance{}
 	_ command = &UpdateLoginprofile{}
 	_ command = &UpdatePolicy{}
+	_ command = &UpdateS3object{}
 	_ command = &UpdateScalinggroup{}
 	_ command = &UpdateSecuritygroup{}
 	_ command = &UpdateStack{}

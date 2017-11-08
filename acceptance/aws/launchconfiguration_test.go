@@ -2,7 +2,6 @@ package awsat
 
 import (
 	"encoding/base64"
-	"os"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/service/autoscaling"
@@ -10,8 +9,9 @@ import (
 
 func TestLaunchConfiguration(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
-		userdataFile := generateTmpFile("this is my content with {{ .Variables.oneRef }} content")
-		defer os.Remove(userdataFile)
+		_, userdataFile, cleanup := generateTmpFile("this is my content with {{ .Variables.oneRef }} content")
+		defer cleanup()
+
 		Template("oneRef=awesome\n"+
 			"create launchconfiguration name=new-launchconfiguration type=t2.nano image=ami-1234 public=true "+
 			"keypair=an-existing-kp userdata="+userdataFile+" securitygroups=sg-1234,sg-2345 role=my-role spotprice=12.5").

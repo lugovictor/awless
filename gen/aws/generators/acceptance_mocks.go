@@ -226,11 +226,16 @@ package awsat
 import "github.com/wallix/awless/aws/spec"
 
 type AcceptanceFactory struct {
-	Mock interface{}
+	Mock   interface{}
+	Logger *logger.Logger
 }
 
-func NewAcceptanceFactory(mock interface{}) *AcceptanceFactory {
-	return &AcceptanceFactory{Mock: mock}
+func NewAcceptanceFactory(mock interface{}, l ...*logger.Logger) *AcceptanceFactory {
+	logger := logger.DiscardLogger
+	if len(l) > 0 {
+		logger = l[0]
+	}
+	return &AcceptanceFactory{Mock: mock, Logger: logger}
 }
 
 func (f *AcceptanceFactory) Build(key string) func() interface{} {
@@ -238,7 +243,7 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		{{- range $cmdName, $cmd := . }}
 		case "{{ $cmd.Action }}{{ $cmd.Entity }}":
 			return func() interface{} {
-				cmd := awsspec.New{{ $cmdName }}(nil)
+				cmd := awsspec.New{{ $cmdName }}(nil, f.Logger)
 				cmd.SetApi(f.Mock.({{$cmd.API}}iface.{{ ApiToInterface $cmd.API }}))
 				return cmd
 			}

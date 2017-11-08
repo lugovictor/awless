@@ -3572,6 +3572,74 @@ func (cmd *CreateRoutetable) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateS3object(sess *session.Session, l ...*logger.Logger) *CreateS3object {
+	cmd := new(CreateS3object)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = s3.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateS3object) SetApi(api s3iface.S3API) {
+	cmd.api = api
+}
+
+func (cmd *CreateS3object) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateS3object) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateS3object) ParamsHelp() string {
+	return generateParamsHelp("creates3object", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateS3object) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateScalinggroup(sess *session.Session, l ...*logger.Logger) *CreateScalinggroup {
 	cmd := new(CreateScalinggroup)
 	if len(l) > 0 {
@@ -6783,6 +6851,80 @@ func (cmd *DeleteRoutetable) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteS3object(sess *session.Session, l ...*logger.Logger) *DeleteS3object {
+	cmd := new(DeleteS3object)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = s3.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteS3object) SetApi(api s3iface.S3API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteS3object) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &s3.DeleteObjectInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in s3.DeleteObjectInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteObject(input)
+	cmd.logger.ExtraVerbosef("s3.DeleteObject call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteS3object) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteS3object) ParamsHelp() string {
+	return generateParamsHelp("deletes3object", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteS3object) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteScalinggroup(sess *session.Session, l ...*logger.Logger) *DeleteScalinggroup {
 	cmd := new(DeleteScalinggroup)
 	if len(l) > 0 {
@@ -9857,6 +9999,80 @@ func (cmd *UpdatePolicy) ParamsHelp() string {
 }
 
 func (cmd *UpdatePolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateS3object(sess *session.Session, l ...*logger.Logger) *UpdateS3object {
+	cmd := new(UpdateS3object)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = s3.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateS3object) SetApi(api s3iface.S3API) {
+	cmd.api = api
+}
+
+func (cmd *UpdateS3object) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &s3.PutObjectAclInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in s3.PutObjectAclInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.PutObjectAcl(input)
+	cmd.logger.ExtraVerbosef("s3.PutObjectAcl call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateS3object) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateS3object) ParamsHelp() string {
+	return generateParamsHelp("updates3object", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateS3object) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

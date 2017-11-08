@@ -261,8 +261,11 @@ var (
 	newCreateZone         = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newDeleteZone         = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newCreateBucket       = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newCreateS3object     = func() *CreateS3object { return &CreateS3object{api: &mockS3{}, logger: logger.DiscardLogger} }
 	newDeleteBucket       = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newDeleteS3object     = func() *DeleteS3object { return &DeleteS3object{api: &mockS3{}, logger: logger.DiscardLogger} }
 	newUpdateBucket       = func() *UpdateBucket { return &UpdateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
+	newUpdateS3object     = func() *UpdateS3object { return &UpdateS3object{api: &mockS3{}, logger: logger.DiscardLogger} }
 	newCreateSubscription = func() *CreateSubscription { return &CreateSubscription{api: &mockSns{}, logger: logger.DiscardLogger} }
 	newCreateTopic        = func() *CreateTopic { return &CreateTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
 	newDeleteSubscription = func() *DeleteSubscription { return &DeleteSubscription{api: &mockSns{}, logger: logger.DiscardLogger} }
@@ -1241,6 +1244,26 @@ func (m *mockS3) DeleteBucket(input *s3.DeleteBucketInput) (*s3.DeleteBucketOutp
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletebucket"]; ok {
 		return outFunc().(*s3.DeleteBucketOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockS3) DeleteObject(input *s3.DeleteObjectInput) (*s3.DeleteObjectOutput, error) {
+	if got, want := input, genTestsExpected["deletes3object"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletes3object"]; ok {
+		return outFunc().(*s3.DeleteObjectOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockS3) PutObjectAcl(input *s3.PutObjectAclInput) (*s3.PutObjectAclOutput, error) {
+	if got, want := input, genTestsExpected["updates3object"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["updates3object"]; ok {
+		return outFunc().(*s3.PutObjectAclOutput), nil
 	}
 	return nil, nil
 }
