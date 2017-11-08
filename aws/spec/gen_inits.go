@@ -111,6 +111,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateKeypair(f.Sess, f.Log) }
 	case "createlaunchconfiguration":
 		return func() interface{} { return NewCreateLaunchconfiguration(f.Sess, f.Log) }
+	case "createlistener":
+		return func() interface{} { return NewCreateListener(f.Sess, f.Log) }
 	case "createpolicy":
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
 	case "createroute":
@@ -185,6 +187,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteKeypair(f.Sess, f.Log) }
 	case "deletelaunchconfiguration":
 		return func() interface{} { return NewDeleteLaunchconfiguration(f.Sess, f.Log) }
+	case "deletelistener":
+		return func() interface{} { return NewDeleteListener(f.Sess, f.Log) }
 	case "deletepolicy":
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
 	case "deleteroute":
@@ -318,6 +322,7 @@ var (
 	_ command = &CreateInternetgateway{}
 	_ command = &CreateKeypair{}
 	_ command = &CreateLaunchconfiguration{}
+	_ command = &CreateListener{}
 	_ command = &CreatePolicy{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
@@ -355,6 +360,7 @@ var (
 	_ command = &DeleteInternetgateway{}
 	_ command = &DeleteKeypair{}
 	_ command = &DeleteLaunchconfiguration{}
+	_ command = &DeleteListener{}
 	_ command = &DeletePolicy{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}

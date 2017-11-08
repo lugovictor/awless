@@ -212,7 +212,9 @@ var (
 		return &UpdateContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
 	newAttachInstance        = func() *AttachInstance { return &AttachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newCreateListener        = func() *CreateListener { return &CreateListener{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newCreateTargetgroup     = func() *CreateTargetgroup { return &CreateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newDeleteListener        = func() *DeleteListener { return &DeleteListener{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newDeleteTargetgroup     = func() *DeleteTargetgroup { return &DeleteTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newDetachInstance        = func() *DetachInstance { return &DetachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newUpdateTargetgroup     = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
@@ -903,12 +905,32 @@ func (m *mockElbv2) RegisterTargets(input *elbv2.RegisterTargetsInput) (*elbv2.R
 	return nil, nil
 }
 
+func (m *mockElbv2) CreateListener(input *elbv2.CreateListenerInput) (*elbv2.CreateListenerOutput, error) {
+	if got, want := input, genTestsExpected["createlistener"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createlistener"]; ok {
+		return outFunc().(*elbv2.CreateListenerOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockElbv2) CreateTargetGroup(input *elbv2.CreateTargetGroupInput) (*elbv2.CreateTargetGroupOutput, error) {
 	if got, want := input, genTestsExpected["createtargetgroup"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["createtargetgroup"]; ok {
 		return outFunc().(*elbv2.CreateTargetGroupOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockElbv2) DeleteListener(input *elbv2.DeleteListenerInput) (*elbv2.DeleteListenerOutput, error) {
+	if got, want := input, genTestsExpected["deletelistener"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletelistener"]; ok {
+		return outFunc().(*elbv2.DeleteListenerOutput), nil
 	}
 	return nil, nil
 }

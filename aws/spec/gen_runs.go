@@ -3010,6 +3010,80 @@ func (cmd *CreateLaunchconfiguration) inject(params map[string]interface{}) erro
 	return structSetter(cmd, params)
 }
 
+func NewCreateListener(sess *session.Session, l ...*logger.Logger) *CreateListener {
+	cmd := new(CreateListener)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateListener) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *CreateListener) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.CreateListenerInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.CreateListenerInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateListener(input)
+	cmd.logger.ExtraVerbosef("elbv2.CreateListener call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateListener) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateListener) ParamsHelp() string {
+	return generateParamsHelp("createlistener", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateListener) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreatePolicy(sess *session.Session, l ...*logger.Logger) *CreatePolicy {
 	cmd := new(CreatePolicy)
 	if len(l) > 0 {
@@ -5996,6 +6070,80 @@ func (cmd *DeleteLaunchconfiguration) ParamsHelp() string {
 }
 
 func (cmd *DeleteLaunchconfiguration) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteListener(sess *session.Session, l ...*logger.Logger) *DeleteListener {
+	cmd := new(DeleteListener)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteListener) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteListener) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.DeleteListenerInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.DeleteListenerInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteListener(input)
+	cmd.logger.ExtraVerbosef("elbv2.DeleteListener call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteListener) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteListener) ParamsHelp() string {
+	return generateParamsHelp("deletelistener", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteListener) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
