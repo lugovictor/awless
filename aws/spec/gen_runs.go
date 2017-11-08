@@ -1213,6 +1213,74 @@ func (cmd *CheckInstance) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCheckLoadbalancer(sess *session.Session, l ...*logger.Logger) *CheckLoadbalancer {
+	cmd := new(CheckLoadbalancer)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckLoadbalancer) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *CheckLoadbalancer) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckLoadbalancer) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckLoadbalancer) ParamsHelp() string {
+	return generateParamsHelp("checkloadbalancer", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckLoadbalancer) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCheckScalinggroup(sess *session.Session, l ...*logger.Logger) *CheckScalinggroup {
 	cmd := new(CheckScalinggroup)
 	if len(l) > 0 {
@@ -3081,6 +3149,80 @@ func (cmd *CreateListener) ParamsHelp() string {
 }
 
 func (cmd *CreateListener) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateLoadbalancer(sess *session.Session, l ...*logger.Logger) *CreateLoadbalancer {
+	cmd := new(CreateLoadbalancer)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateLoadbalancer) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *CreateLoadbalancer) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.CreateLoadBalancerInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.CreateLoadBalancerInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateLoadBalancer(input)
+	cmd.logger.ExtraVerbosef("elbv2.CreateLoadBalancer call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateLoadbalancer) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateLoadbalancer) ParamsHelp() string {
+	return generateParamsHelp("createloadbalancer", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateLoadbalancer) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -6144,6 +6286,80 @@ func (cmd *DeleteListener) ParamsHelp() string {
 }
 
 func (cmd *DeleteListener) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteLoadbalancer(sess *session.Session, l ...*logger.Logger) *DeleteLoadbalancer {
+	cmd := new(DeleteLoadbalancer)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = elbv2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteLoadbalancer) SetApi(api elbv2iface.ELBV2API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteLoadbalancer) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &elbv2.DeleteLoadBalancerInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in elbv2.DeleteLoadBalancerInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteLoadBalancer(input)
+	cmd.logger.ExtraVerbosef("elbv2.DeleteLoadBalancer call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteLoadbalancer) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteLoadbalancer) ParamsHelp() string {
+	return generateParamsHelp("deleteloadbalancer", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteLoadbalancer) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

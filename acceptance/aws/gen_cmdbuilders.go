@@ -136,6 +136,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "checkloadbalancer":
+		return func() interface{} {
+			cmd := awsspec.NewCheckLoadbalancer(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
 	case "checkscalinggroup":
 		return func() interface{} {
 			cmd := awsspec.NewCheckScalinggroup(nil)
@@ -277,6 +283,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "createlistener":
 		return func() interface{} {
 			cmd := awsspec.NewCreateListener(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
+	case "createloadbalancer":
+		return func() interface{} {
+			cmd := awsspec.NewCreateLoadbalancer(nil)
 			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
 			return cmd
 		}
@@ -505,6 +517,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "deletelistener":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteListener(nil)
+			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
+	case "deleteloadbalancer":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteLoadbalancer(nil)
 			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
 			return cmd
 		}

@@ -211,10 +211,17 @@ var (
 	newUpdateContainertask = func() *UpdateContainertask {
 		return &UpdateContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
-	newAttachInstance        = func() *AttachInstance { return &AttachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newCreateListener        = func() *CreateListener { return &CreateListener{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newCreateTargetgroup     = func() *CreateTargetgroup { return &CreateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newDeleteListener        = func() *DeleteListener { return &DeleteListener{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newAttachInstance     = func() *AttachInstance { return &AttachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newCheckLoadbalancer  = func() *CheckLoadbalancer { return &CheckLoadbalancer{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newCreateListener     = func() *CreateListener { return &CreateListener{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newCreateLoadbalancer = func() *CreateLoadbalancer {
+		return &CreateLoadbalancer{api: &mockElbv2{}, logger: logger.DiscardLogger}
+	}
+	newCreateTargetgroup  = func() *CreateTargetgroup { return &CreateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newDeleteListener     = func() *DeleteListener { return &DeleteListener{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newDeleteLoadbalancer = func() *DeleteLoadbalancer {
+		return &DeleteLoadbalancer{api: &mockElbv2{}, logger: logger.DiscardLogger}
+	}
 	newDeleteTargetgroup     = func() *DeleteTargetgroup { return &DeleteTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newDetachInstance        = func() *DetachInstance { return &DetachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newUpdateTargetgroup     = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
@@ -915,6 +922,16 @@ func (m *mockElbv2) CreateListener(input *elbv2.CreateListenerInput) (*elbv2.Cre
 	return nil, nil
 }
 
+func (m *mockElbv2) CreateLoadBalancer(input *elbv2.CreateLoadBalancerInput) (*elbv2.CreateLoadBalancerOutput, error) {
+	if got, want := input, genTestsExpected["createloadbalancer"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createloadbalancer"]; ok {
+		return outFunc().(*elbv2.CreateLoadBalancerOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockElbv2) CreateTargetGroup(input *elbv2.CreateTargetGroupInput) (*elbv2.CreateTargetGroupOutput, error) {
 	if got, want := input, genTestsExpected["createtargetgroup"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -931,6 +948,16 @@ func (m *mockElbv2) DeleteListener(input *elbv2.DeleteListenerInput) (*elbv2.Del
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletelistener"]; ok {
 		return outFunc().(*elbv2.DeleteListenerOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockElbv2) DeleteLoadBalancer(input *elbv2.DeleteLoadBalancerInput) (*elbv2.DeleteLoadBalancerOutput, error) {
+	if got, want := input, genTestsExpected["deleteloadbalancer"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteloadbalancer"]; ok {
+		return outFunc().(*elbv2.DeleteLoadBalancerOutput), nil
 	}
 	return nil, nil
 }
