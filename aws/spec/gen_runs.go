@@ -776,6 +776,80 @@ func (cmd *AttachPolicy) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewAttachRole(sess *session.Session, l ...*logger.Logger) *AttachRole {
+	cmd := new(AttachRole)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachRole) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *AttachRole) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.AddRoleToInstanceProfileInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.AddRoleToInstanceProfileInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.AddRoleToInstanceProfile(input)
+	cmd.logger.ExtraVerbosef("iam.AddRoleToInstanceProfile call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachRole) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachRole) ParamsHelp() string {
+	return generateParamsHelp("attachrole", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachRole) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewAttachRoutetable(sess *session.Session, l ...*logger.Logger) *AttachRoutetable {
 	cmd := new(AttachRoutetable)
 	if len(l) > 0 {
@@ -4065,6 +4139,74 @@ func (cmd *CreateRecord) ParamsHelp() string {
 }
 
 func (cmd *CreateRecord) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateRole(sess *session.Session, l ...*logger.Logger) *CreateRole {
+	cmd := new(CreateRole)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateRole) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateRole) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateRole) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateRole) ParamsHelp() string {
+	return generateParamsHelp("createrole", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateRole) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -7736,6 +7878,74 @@ func (cmd *DeleteRecord) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteRole(sess *session.Session, l ...*logger.Logger) *DeleteRole {
+	cmd := new(DeleteRole)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteRole) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteRole) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteRole) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteRole) ParamsHelp() string {
+	return generateParamsHelp("deleterole", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteRole) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteRoute(sess *session.Session, l ...*logger.Logger) *DeleteRoute {
 	cmd := new(DeleteRoute)
 	if len(l) > 0 {
@@ -9846,6 +10056,80 @@ func (cmd *DetachPolicy) ParamsHelp() string {
 }
 
 func (cmd *DetachPolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDetachRole(sess *session.Session, l ...*logger.Logger) *DetachRole {
+	cmd := new(DetachRole)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachRole) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *DetachRole) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.RemoveRoleFromInstanceProfileInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.RemoveRoleFromInstanceProfileInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.RemoveRoleFromInstanceProfile(input)
+	cmd.logger.ExtraVerbosef("iam.RemoveRoleFromInstanceProfile call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachRole) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachRole) ParamsHelp() string {
+	return generateParamsHelp("detachrole", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachRole) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

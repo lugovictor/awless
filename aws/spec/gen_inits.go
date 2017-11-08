@@ -53,6 +53,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachNetworkinterface(f.Sess, f.Log) }
 	case "attachpolicy":
 		return func() interface{} { return NewAttachPolicy(f.Sess, f.Log) }
+	case "attachrole":
+		return func() interface{} { return NewAttachRole(f.Sess, f.Log) }
 	case "attachroutetable":
 		return func() interface{} { return NewAttachRoutetable(f.Sess, f.Log) }
 	case "attachsecuritygroup":
@@ -139,6 +141,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateQueue(f.Sess, f.Log) }
 	case "createrecord":
 		return func() interface{} { return NewCreateRecord(f.Sess, f.Log) }
+	case "createrole":
+		return func() interface{} { return NewCreateRole(f.Sess, f.Log) }
 	case "createroute":
 		return func() interface{} { return NewCreateRoute(f.Sess, f.Log) }
 	case "createroutetable":
@@ -231,6 +235,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteQueue(f.Sess, f.Log) }
 	case "deleterecord":
 		return func() interface{} { return NewDeleteRecord(f.Sess, f.Log) }
+	case "deleterole":
+		return func() interface{} { return NewDeleteRole(f.Sess, f.Log) }
 	case "deleteroute":
 		return func() interface{} { return NewDeleteRoute(f.Sess, f.Log) }
 	case "deleteroutetable":
@@ -283,6 +289,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachNetworkinterface(f.Sess, f.Log) }
 	case "detachpolicy":
 		return func() interface{} { return NewDetachPolicy(f.Sess, f.Log) }
+	case "detachrole":
+		return func() interface{} { return NewDetachRole(f.Sess, f.Log) }
 	case "detachroutetable":
 		return func() interface{} { return NewDetachRoutetable(f.Sess, f.Log) }
 	case "detachsecuritygroup":
@@ -345,6 +353,7 @@ var (
 	_ command = &AttachMfadevice{}
 	_ command = &AttachNetworkinterface{}
 	_ command = &AttachPolicy{}
+	_ command = &AttachRole{}
 	_ command = &AttachRoutetable{}
 	_ command = &AttachSecuritygroup{}
 	_ command = &AttachUser{}
@@ -388,6 +397,7 @@ var (
 	_ command = &CreatePolicy{}
 	_ command = &CreateQueue{}
 	_ command = &CreateRecord{}
+	_ command = &CreateRole{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
 	_ command = &CreateS3object{}
@@ -434,6 +444,7 @@ var (
 	_ command = &DeletePolicy{}
 	_ command = &DeleteQueue{}
 	_ command = &DeleteRecord{}
+	_ command = &DeleteRole{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteS3object{}
@@ -460,6 +471,7 @@ var (
 	_ command = &DetachMfadevice{}
 	_ command = &DetachNetworkinterface{}
 	_ command = &DetachPolicy{}
+	_ command = &DetachRole{}
 	_ command = &DetachRoutetable{}
 	_ command = &DetachSecuritygroup{}
 	_ command = &DetachUser{}

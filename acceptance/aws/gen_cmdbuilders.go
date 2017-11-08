@@ -107,6 +107,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
+	case "attachrole":
+		return func() interface{} {
+			cmd := awsspec.NewAttachRole(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "attachroutetable":
 		return func() interface{} {
 			cmd := awsspec.NewAttachRoutetable(nil, f.Logger)
@@ -363,6 +369,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateRecord(nil, f.Logger)
 			cmd.SetApi(f.Mock.(route53iface.Route53API))
+			return cmd
+		}
+	case "createrole":
+		return func() interface{} {
+			cmd := awsspec.NewCreateRole(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
 	case "createroute":
@@ -641,6 +653,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(route53iface.Route53API))
 			return cmd
 		}
+	case "deleterole":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteRole(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "deleteroute":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteRoute(nil, f.Logger)
@@ -794,6 +812,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "detachpolicy":
 		return func() interface{} {
 			cmd := awsspec.NewDetachPolicy(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "detachrole":
+		return func() interface{} {
+			cmd := awsspec.NewDetachRole(nil, f.Logger)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
