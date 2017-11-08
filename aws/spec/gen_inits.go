@@ -135,6 +135,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateNetworkinterface(f.Sess, f.Log) }
 	case "createpolicy":
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
+	case "createqueue":
+		return func() interface{} { return NewCreateQueue(f.Sess, f.Log) }
 	case "createroute":
 		return func() interface{} { return NewCreateRoute(f.Sess, f.Log) }
 	case "createroutetable":
@@ -223,6 +225,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteNetworkinterface(f.Sess, f.Log) }
 	case "deletepolicy":
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
+	case "deletequeue":
+		return func() interface{} { return NewDeleteQueue(f.Sess, f.Log) }
 	case "deleteroute":
 		return func() interface{} { return NewDeleteRoute(f.Sess, f.Log) }
 	case "deleteroutetable":
@@ -376,6 +380,7 @@ var (
 	_ command = &CreateNatgateway{}
 	_ command = &CreateNetworkinterface{}
 	_ command = &CreatePolicy{}
+	_ command = &CreateQueue{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
 	_ command = &CreateS3object{}
@@ -420,6 +425,7 @@ var (
 	_ command = &DeleteNatgateway{}
 	_ command = &DeleteNetworkinterface{}
 	_ command = &DeletePolicy{}
+	_ command = &DeleteQueue{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteS3object{}

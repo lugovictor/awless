@@ -33,6 +33,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/route53/route53iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/sns/snsiface"
+	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
 	"github.com/wallix/awless/aws/spec"
 	"github.com/wallix/awless/logger"
 )
@@ -352,6 +353,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
+	case "createqueue":
+		return func() interface{} {
+			cmd := awsspec.NewCreateQueue(nil, f.Logger)
+			cmd.SetApi(f.Mock.(sqsiface.SQSAPI))
+			return cmd
+		}
 	case "createroute":
 		return func() interface{} {
 			cmd := awsspec.NewCreateRoute(nil, f.Logger)
@@ -614,6 +621,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeletePolicy(nil, f.Logger)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "deletequeue":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteQueue(nil, f.Logger)
+			cmd.SetApi(f.Mock.(sqsiface.SQSAPI))
 			return cmd
 		}
 	case "deleteroute":

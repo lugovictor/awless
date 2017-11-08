@@ -50,6 +50,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/aws/aws-sdk-go/service/sns/snsiface"
+	"github.com/aws/aws-sdk-go/service/sqs"
+	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
 	"github.com/wallix/awless/logger"
 )
 
@@ -292,6 +294,8 @@ var (
 	newCreateTopic        = func() *CreateTopic { return &CreateTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
 	newDeleteSubscription = func() *DeleteSubscription { return &DeleteSubscription{api: &mockSns{}, logger: logger.DiscardLogger} }
 	newDeleteTopic        = func() *DeleteTopic { return &DeleteTopic{api: &mockSns{}, logger: logger.DiscardLogger} }
+	newCreateQueue        = func() *CreateQueue { return &CreateQueue{api: &mockSqs{}, logger: logger.DiscardLogger} }
+	newDeleteQueue        = func() *DeleteQueue { return &DeleteQueue{api: &mockSqs{}, logger: logger.DiscardLogger} }
 )
 
 type mockAcm struct {
@@ -338,6 +342,9 @@ type mockS3 struct {
 }
 type mockSns struct {
 	snsiface.SNSAPI
+}
+type mockSqs struct {
+	sqsiface.SQSAPI
 }
 
 func (m *mockAcm) DeleteCertificate(input *acm.DeleteCertificateInput) (*acm.DeleteCertificateOutput, error) {
@@ -1406,6 +1413,26 @@ func (m *mockSns) DeleteTopic(input *sns.DeleteTopicInput) (*sns.DeleteTopicOutp
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletetopic"]; ok {
 		return outFunc().(*sns.DeleteTopicOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockSqs) CreateQueue(input *sqs.CreateQueueInput) (*sqs.CreateQueueOutput, error) {
+	if got, want := input, genTestsExpected["createqueue"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createqueue"]; ok {
+		return outFunc().(*sqs.CreateQueueOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockSqs) DeleteQueue(input *sqs.DeleteQueueInput) (*sqs.DeleteQueueOutput, error) {
+	if got, want := input, genTestsExpected["deletequeue"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletequeue"]; ok {
+		return outFunc().(*sqs.DeleteQueueOutput), nil
 	}
 	return nil, nil
 }

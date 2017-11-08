@@ -308,7 +308,7 @@ func setFieldWithType(v, i interface{}, fieldPath string, destType string, inter
 		if field.IsNil() {
 			field.Set(reflect.MakeMap(field.Type()))
 		}
-		str := fmt.Sprint(v)
+		str := castString(v)
 		field.SetMapIndex(reflect.ValueOf(matches[2]), reflect.ValueOf(&str))
 		return nil
 	case awsslicestruct, awsslicestructint64:

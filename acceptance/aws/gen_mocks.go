@@ -50,6 +50,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/aws/aws-sdk-go/service/sns/snsiface"
+	"github.com/aws/aws-sdk-go/service/sqs"
+	"github.com/aws/aws-sdk-go/service/sqs/sqsiface"
 )
 
 type acmMock struct {
@@ -18808,4 +18810,366 @@ func (m *snsMock) UnsubscribeWithContext(param0 aws.Context, param1 *sns.Unsubsc
 	m.addCall("UnsubscribeWithContext")
 	m.verifyInput("UnsubscribeWithContext", param0)
 	return m.UnsubscribeWithContextFunc(param0, param1, param2...)
+}
+
+type sqsMock struct {
+	basicMock
+	sqsiface.SQSAPI
+	AddPermissionFunc                           func(param0 *sqs.AddPermissionInput) (*sqs.AddPermissionOutput, error)
+	AddPermissionRequestFunc                    func(param0 *sqs.AddPermissionInput) (*request.Request, *sqs.AddPermissionOutput)
+	AddPermissionWithContextFunc                func(param0 aws.Context, param1 *sqs.AddPermissionInput, param2 ...request.Option) (*sqs.AddPermissionOutput, error)
+	ChangeMessageVisibilityFunc                 func(param0 *sqs.ChangeMessageVisibilityInput) (*sqs.ChangeMessageVisibilityOutput, error)
+	ChangeMessageVisibilityBatchFunc            func(param0 *sqs.ChangeMessageVisibilityBatchInput) (*sqs.ChangeMessageVisibilityBatchOutput, error)
+	ChangeMessageVisibilityBatchRequestFunc     func(param0 *sqs.ChangeMessageVisibilityBatchInput) (*request.Request, *sqs.ChangeMessageVisibilityBatchOutput)
+	ChangeMessageVisibilityBatchWithContextFunc func(param0 aws.Context, param1 *sqs.ChangeMessageVisibilityBatchInput, param2 ...request.Option) (*sqs.ChangeMessageVisibilityBatchOutput, error)
+	ChangeMessageVisibilityRequestFunc          func(param0 *sqs.ChangeMessageVisibilityInput) (*request.Request, *sqs.ChangeMessageVisibilityOutput)
+	ChangeMessageVisibilityWithContextFunc      func(param0 aws.Context, param1 *sqs.ChangeMessageVisibilityInput, param2 ...request.Option) (*sqs.ChangeMessageVisibilityOutput, error)
+	CreateQueueFunc                             func(param0 *sqs.CreateQueueInput) (*sqs.CreateQueueOutput, error)
+	CreateQueueRequestFunc                      func(param0 *sqs.CreateQueueInput) (*request.Request, *sqs.CreateQueueOutput)
+	CreateQueueWithContextFunc                  func(param0 aws.Context, param1 *sqs.CreateQueueInput, param2 ...request.Option) (*sqs.CreateQueueOutput, error)
+	DeleteMessageFunc                           func(param0 *sqs.DeleteMessageInput) (*sqs.DeleteMessageOutput, error)
+	DeleteMessageBatchFunc                      func(param0 *sqs.DeleteMessageBatchInput) (*sqs.DeleteMessageBatchOutput, error)
+	DeleteMessageBatchRequestFunc               func(param0 *sqs.DeleteMessageBatchInput) (*request.Request, *sqs.DeleteMessageBatchOutput)
+	DeleteMessageBatchWithContextFunc           func(param0 aws.Context, param1 *sqs.DeleteMessageBatchInput, param2 ...request.Option) (*sqs.DeleteMessageBatchOutput, error)
+	DeleteMessageRequestFunc                    func(param0 *sqs.DeleteMessageInput) (*request.Request, *sqs.DeleteMessageOutput)
+	DeleteMessageWithContextFunc                func(param0 aws.Context, param1 *sqs.DeleteMessageInput, param2 ...request.Option) (*sqs.DeleteMessageOutput, error)
+	DeleteQueueFunc                             func(param0 *sqs.DeleteQueueInput) (*sqs.DeleteQueueOutput, error)
+	DeleteQueueRequestFunc                      func(param0 *sqs.DeleteQueueInput) (*request.Request, *sqs.DeleteQueueOutput)
+	DeleteQueueWithContextFunc                  func(param0 aws.Context, param1 *sqs.DeleteQueueInput, param2 ...request.Option) (*sqs.DeleteQueueOutput, error)
+	GetQueueAttributesFunc                      func(param0 *sqs.GetQueueAttributesInput) (*sqs.GetQueueAttributesOutput, error)
+	GetQueueAttributesRequestFunc               func(param0 *sqs.GetQueueAttributesInput) (*request.Request, *sqs.GetQueueAttributesOutput)
+	GetQueueAttributesWithContextFunc           func(param0 aws.Context, param1 *sqs.GetQueueAttributesInput, param2 ...request.Option) (*sqs.GetQueueAttributesOutput, error)
+	GetQueueUrlFunc                             func(param0 *sqs.GetQueueUrlInput) (*sqs.GetQueueUrlOutput, error)
+	GetQueueUrlRequestFunc                      func(param0 *sqs.GetQueueUrlInput) (*request.Request, *sqs.GetQueueUrlOutput)
+	GetQueueUrlWithContextFunc                  func(param0 aws.Context, param1 *sqs.GetQueueUrlInput, param2 ...request.Option) (*sqs.GetQueueUrlOutput, error)
+	ListDeadLetterSourceQueuesFunc              func(param0 *sqs.ListDeadLetterSourceQueuesInput) (*sqs.ListDeadLetterSourceQueuesOutput, error)
+	ListDeadLetterSourceQueuesRequestFunc       func(param0 *sqs.ListDeadLetterSourceQueuesInput) (*request.Request, *sqs.ListDeadLetterSourceQueuesOutput)
+	ListDeadLetterSourceQueuesWithContextFunc   func(param0 aws.Context, param1 *sqs.ListDeadLetterSourceQueuesInput, param2 ...request.Option) (*sqs.ListDeadLetterSourceQueuesOutput, error)
+	ListQueuesFunc                              func(param0 *sqs.ListQueuesInput) (*sqs.ListQueuesOutput, error)
+	ListQueuesRequestFunc                       func(param0 *sqs.ListQueuesInput) (*request.Request, *sqs.ListQueuesOutput)
+	ListQueuesWithContextFunc                   func(param0 aws.Context, param1 *sqs.ListQueuesInput, param2 ...request.Option) (*sqs.ListQueuesOutput, error)
+	PurgeQueueFunc                              func(param0 *sqs.PurgeQueueInput) (*sqs.PurgeQueueOutput, error)
+	PurgeQueueRequestFunc                       func(param0 *sqs.PurgeQueueInput) (*request.Request, *sqs.PurgeQueueOutput)
+	PurgeQueueWithContextFunc                   func(param0 aws.Context, param1 *sqs.PurgeQueueInput, param2 ...request.Option) (*sqs.PurgeQueueOutput, error)
+	ReceiveMessageFunc                          func(param0 *sqs.ReceiveMessageInput) (*sqs.ReceiveMessageOutput, error)
+	ReceiveMessageRequestFunc                   func(param0 *sqs.ReceiveMessageInput) (*request.Request, *sqs.ReceiveMessageOutput)
+	ReceiveMessageWithContextFunc               func(param0 aws.Context, param1 *sqs.ReceiveMessageInput, param2 ...request.Option) (*sqs.ReceiveMessageOutput, error)
+	RemovePermissionFunc                        func(param0 *sqs.RemovePermissionInput) (*sqs.RemovePermissionOutput, error)
+	RemovePermissionRequestFunc                 func(param0 *sqs.RemovePermissionInput) (*request.Request, *sqs.RemovePermissionOutput)
+	RemovePermissionWithContextFunc             func(param0 aws.Context, param1 *sqs.RemovePermissionInput, param2 ...request.Option) (*sqs.RemovePermissionOutput, error)
+	SendMessageFunc                             func(param0 *sqs.SendMessageInput) (*sqs.SendMessageOutput, error)
+	SendMessageBatchFunc                        func(param0 *sqs.SendMessageBatchInput) (*sqs.SendMessageBatchOutput, error)
+	SendMessageBatchRequestFunc                 func(param0 *sqs.SendMessageBatchInput) (*request.Request, *sqs.SendMessageBatchOutput)
+	SendMessageBatchWithContextFunc             func(param0 aws.Context, param1 *sqs.SendMessageBatchInput, param2 ...request.Option) (*sqs.SendMessageBatchOutput, error)
+	SendMessageRequestFunc                      func(param0 *sqs.SendMessageInput) (*request.Request, *sqs.SendMessageOutput)
+	SendMessageWithContextFunc                  func(param0 aws.Context, param1 *sqs.SendMessageInput, param2 ...request.Option) (*sqs.SendMessageOutput, error)
+	SetQueueAttributesFunc                      func(param0 *sqs.SetQueueAttributesInput) (*sqs.SetQueueAttributesOutput, error)
+	SetQueueAttributesRequestFunc               func(param0 *sqs.SetQueueAttributesInput) (*request.Request, *sqs.SetQueueAttributesOutput)
+	SetQueueAttributesWithContextFunc           func(param0 aws.Context, param1 *sqs.SetQueueAttributesInput, param2 ...request.Option) (*sqs.SetQueueAttributesOutput, error)
+}
+
+func (m *sqsMock) AddPermission(param0 *sqs.AddPermissionInput) (*sqs.AddPermissionOutput, error) {
+	m.addCall("AddPermission")
+	m.verifyInput("AddPermission", param0)
+	return m.AddPermissionFunc(param0)
+}
+
+func (m *sqsMock) AddPermissionRequest(param0 *sqs.AddPermissionInput) (*request.Request, *sqs.AddPermissionOutput) {
+	m.addCall("AddPermissionRequest")
+	m.verifyInput("AddPermissionRequest", param0)
+	return m.AddPermissionRequestFunc(param0)
+}
+
+func (m *sqsMock) AddPermissionWithContext(param0 aws.Context, param1 *sqs.AddPermissionInput, param2 ...request.Option) (*sqs.AddPermissionOutput, error) {
+	m.addCall("AddPermissionWithContext")
+	m.verifyInput("AddPermissionWithContext", param0)
+	return m.AddPermissionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) ChangeMessageVisibility(param0 *sqs.ChangeMessageVisibilityInput) (*sqs.ChangeMessageVisibilityOutput, error) {
+	m.addCall("ChangeMessageVisibility")
+	m.verifyInput("ChangeMessageVisibility", param0)
+	return m.ChangeMessageVisibilityFunc(param0)
+}
+
+func (m *sqsMock) ChangeMessageVisibilityBatch(param0 *sqs.ChangeMessageVisibilityBatchInput) (*sqs.ChangeMessageVisibilityBatchOutput, error) {
+	m.addCall("ChangeMessageVisibilityBatch")
+	m.verifyInput("ChangeMessageVisibilityBatch", param0)
+	return m.ChangeMessageVisibilityBatchFunc(param0)
+}
+
+func (m *sqsMock) ChangeMessageVisibilityBatchRequest(param0 *sqs.ChangeMessageVisibilityBatchInput) (*request.Request, *sqs.ChangeMessageVisibilityBatchOutput) {
+	m.addCall("ChangeMessageVisibilityBatchRequest")
+	m.verifyInput("ChangeMessageVisibilityBatchRequest", param0)
+	return m.ChangeMessageVisibilityBatchRequestFunc(param0)
+}
+
+func (m *sqsMock) ChangeMessageVisibilityBatchWithContext(param0 aws.Context, param1 *sqs.ChangeMessageVisibilityBatchInput, param2 ...request.Option) (*sqs.ChangeMessageVisibilityBatchOutput, error) {
+	m.addCall("ChangeMessageVisibilityBatchWithContext")
+	m.verifyInput("ChangeMessageVisibilityBatchWithContext", param0)
+	return m.ChangeMessageVisibilityBatchWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) ChangeMessageVisibilityRequest(param0 *sqs.ChangeMessageVisibilityInput) (*request.Request, *sqs.ChangeMessageVisibilityOutput) {
+	m.addCall("ChangeMessageVisibilityRequest")
+	m.verifyInput("ChangeMessageVisibilityRequest", param0)
+	return m.ChangeMessageVisibilityRequestFunc(param0)
+}
+
+func (m *sqsMock) ChangeMessageVisibilityWithContext(param0 aws.Context, param1 *sqs.ChangeMessageVisibilityInput, param2 ...request.Option) (*sqs.ChangeMessageVisibilityOutput, error) {
+	m.addCall("ChangeMessageVisibilityWithContext")
+	m.verifyInput("ChangeMessageVisibilityWithContext", param0)
+	return m.ChangeMessageVisibilityWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) CreateQueue(param0 *sqs.CreateQueueInput) (*sqs.CreateQueueOutput, error) {
+	m.addCall("CreateQueue")
+	m.verifyInput("CreateQueue", param0)
+	return m.CreateQueueFunc(param0)
+}
+
+func (m *sqsMock) CreateQueueRequest(param0 *sqs.CreateQueueInput) (*request.Request, *sqs.CreateQueueOutput) {
+	m.addCall("CreateQueueRequest")
+	m.verifyInput("CreateQueueRequest", param0)
+	return m.CreateQueueRequestFunc(param0)
+}
+
+func (m *sqsMock) CreateQueueWithContext(param0 aws.Context, param1 *sqs.CreateQueueInput, param2 ...request.Option) (*sqs.CreateQueueOutput, error) {
+	m.addCall("CreateQueueWithContext")
+	m.verifyInput("CreateQueueWithContext", param0)
+	return m.CreateQueueWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) DeleteMessage(param0 *sqs.DeleteMessageInput) (*sqs.DeleteMessageOutput, error) {
+	m.addCall("DeleteMessage")
+	m.verifyInput("DeleteMessage", param0)
+	return m.DeleteMessageFunc(param0)
+}
+
+func (m *sqsMock) DeleteMessageBatch(param0 *sqs.DeleteMessageBatchInput) (*sqs.DeleteMessageBatchOutput, error) {
+	m.addCall("DeleteMessageBatch")
+	m.verifyInput("DeleteMessageBatch", param0)
+	return m.DeleteMessageBatchFunc(param0)
+}
+
+func (m *sqsMock) DeleteMessageBatchRequest(param0 *sqs.DeleteMessageBatchInput) (*request.Request, *sqs.DeleteMessageBatchOutput) {
+	m.addCall("DeleteMessageBatchRequest")
+	m.verifyInput("DeleteMessageBatchRequest", param0)
+	return m.DeleteMessageBatchRequestFunc(param0)
+}
+
+func (m *sqsMock) DeleteMessageBatchWithContext(param0 aws.Context, param1 *sqs.DeleteMessageBatchInput, param2 ...request.Option) (*sqs.DeleteMessageBatchOutput, error) {
+	m.addCall("DeleteMessageBatchWithContext")
+	m.verifyInput("DeleteMessageBatchWithContext", param0)
+	return m.DeleteMessageBatchWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) DeleteMessageRequest(param0 *sqs.DeleteMessageInput) (*request.Request, *sqs.DeleteMessageOutput) {
+	m.addCall("DeleteMessageRequest")
+	m.verifyInput("DeleteMessageRequest", param0)
+	return m.DeleteMessageRequestFunc(param0)
+}
+
+func (m *sqsMock) DeleteMessageWithContext(param0 aws.Context, param1 *sqs.DeleteMessageInput, param2 ...request.Option) (*sqs.DeleteMessageOutput, error) {
+	m.addCall("DeleteMessageWithContext")
+	m.verifyInput("DeleteMessageWithContext", param0)
+	return m.DeleteMessageWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) DeleteQueue(param0 *sqs.DeleteQueueInput) (*sqs.DeleteQueueOutput, error) {
+	m.addCall("DeleteQueue")
+	m.verifyInput("DeleteQueue", param0)
+	return m.DeleteQueueFunc(param0)
+}
+
+func (m *sqsMock) DeleteQueueRequest(param0 *sqs.DeleteQueueInput) (*request.Request, *sqs.DeleteQueueOutput) {
+	m.addCall("DeleteQueueRequest")
+	m.verifyInput("DeleteQueueRequest", param0)
+	return m.DeleteQueueRequestFunc(param0)
+}
+
+func (m *sqsMock) DeleteQueueWithContext(param0 aws.Context, param1 *sqs.DeleteQueueInput, param2 ...request.Option) (*sqs.DeleteQueueOutput, error) {
+	m.addCall("DeleteQueueWithContext")
+	m.verifyInput("DeleteQueueWithContext", param0)
+	return m.DeleteQueueWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) GetQueueAttributes(param0 *sqs.GetQueueAttributesInput) (*sqs.GetQueueAttributesOutput, error) {
+	m.addCall("GetQueueAttributes")
+	m.verifyInput("GetQueueAttributes", param0)
+	return m.GetQueueAttributesFunc(param0)
+}
+
+func (m *sqsMock) GetQueueAttributesRequest(param0 *sqs.GetQueueAttributesInput) (*request.Request, *sqs.GetQueueAttributesOutput) {
+	m.addCall("GetQueueAttributesRequest")
+	m.verifyInput("GetQueueAttributesRequest", param0)
+	return m.GetQueueAttributesRequestFunc(param0)
+}
+
+func (m *sqsMock) GetQueueAttributesWithContext(param0 aws.Context, param1 *sqs.GetQueueAttributesInput, param2 ...request.Option) (*sqs.GetQueueAttributesOutput, error) {
+	m.addCall("GetQueueAttributesWithContext")
+	m.verifyInput("GetQueueAttributesWithContext", param0)
+	return m.GetQueueAttributesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) GetQueueUrl(param0 *sqs.GetQueueUrlInput) (*sqs.GetQueueUrlOutput, error) {
+	m.addCall("GetQueueUrl")
+	m.verifyInput("GetQueueUrl", param0)
+	return m.GetQueueUrlFunc(param0)
+}
+
+func (m *sqsMock) GetQueueUrlRequest(param0 *sqs.GetQueueUrlInput) (*request.Request, *sqs.GetQueueUrlOutput) {
+	m.addCall("GetQueueUrlRequest")
+	m.verifyInput("GetQueueUrlRequest", param0)
+	return m.GetQueueUrlRequestFunc(param0)
+}
+
+func (m *sqsMock) GetQueueUrlWithContext(param0 aws.Context, param1 *sqs.GetQueueUrlInput, param2 ...request.Option) (*sqs.GetQueueUrlOutput, error) {
+	m.addCall("GetQueueUrlWithContext")
+	m.verifyInput("GetQueueUrlWithContext", param0)
+	return m.GetQueueUrlWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) ListDeadLetterSourceQueues(param0 *sqs.ListDeadLetterSourceQueuesInput) (*sqs.ListDeadLetterSourceQueuesOutput, error) {
+	m.addCall("ListDeadLetterSourceQueues")
+	m.verifyInput("ListDeadLetterSourceQueues", param0)
+	return m.ListDeadLetterSourceQueuesFunc(param0)
+}
+
+func (m *sqsMock) ListDeadLetterSourceQueuesRequest(param0 *sqs.ListDeadLetterSourceQueuesInput) (*request.Request, *sqs.ListDeadLetterSourceQueuesOutput) {
+	m.addCall("ListDeadLetterSourceQueuesRequest")
+	m.verifyInput("ListDeadLetterSourceQueuesRequest", param0)
+	return m.ListDeadLetterSourceQueuesRequestFunc(param0)
+}
+
+func (m *sqsMock) ListDeadLetterSourceQueuesWithContext(param0 aws.Context, param1 *sqs.ListDeadLetterSourceQueuesInput, param2 ...request.Option) (*sqs.ListDeadLetterSourceQueuesOutput, error) {
+	m.addCall("ListDeadLetterSourceQueuesWithContext")
+	m.verifyInput("ListDeadLetterSourceQueuesWithContext", param0)
+	return m.ListDeadLetterSourceQueuesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) ListQueues(param0 *sqs.ListQueuesInput) (*sqs.ListQueuesOutput, error) {
+	m.addCall("ListQueues")
+	m.verifyInput("ListQueues", param0)
+	return m.ListQueuesFunc(param0)
+}
+
+func (m *sqsMock) ListQueuesRequest(param0 *sqs.ListQueuesInput) (*request.Request, *sqs.ListQueuesOutput) {
+	m.addCall("ListQueuesRequest")
+	m.verifyInput("ListQueuesRequest", param0)
+	return m.ListQueuesRequestFunc(param0)
+}
+
+func (m *sqsMock) ListQueuesWithContext(param0 aws.Context, param1 *sqs.ListQueuesInput, param2 ...request.Option) (*sqs.ListQueuesOutput, error) {
+	m.addCall("ListQueuesWithContext")
+	m.verifyInput("ListQueuesWithContext", param0)
+	return m.ListQueuesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) PurgeQueue(param0 *sqs.PurgeQueueInput) (*sqs.PurgeQueueOutput, error) {
+	m.addCall("PurgeQueue")
+	m.verifyInput("PurgeQueue", param0)
+	return m.PurgeQueueFunc(param0)
+}
+
+func (m *sqsMock) PurgeQueueRequest(param0 *sqs.PurgeQueueInput) (*request.Request, *sqs.PurgeQueueOutput) {
+	m.addCall("PurgeQueueRequest")
+	m.verifyInput("PurgeQueueRequest", param0)
+	return m.PurgeQueueRequestFunc(param0)
+}
+
+func (m *sqsMock) PurgeQueueWithContext(param0 aws.Context, param1 *sqs.PurgeQueueInput, param2 ...request.Option) (*sqs.PurgeQueueOutput, error) {
+	m.addCall("PurgeQueueWithContext")
+	m.verifyInput("PurgeQueueWithContext", param0)
+	return m.PurgeQueueWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) ReceiveMessage(param0 *sqs.ReceiveMessageInput) (*sqs.ReceiveMessageOutput, error) {
+	m.addCall("ReceiveMessage")
+	m.verifyInput("ReceiveMessage", param0)
+	return m.ReceiveMessageFunc(param0)
+}
+
+func (m *sqsMock) ReceiveMessageRequest(param0 *sqs.ReceiveMessageInput) (*request.Request, *sqs.ReceiveMessageOutput) {
+	m.addCall("ReceiveMessageRequest")
+	m.verifyInput("ReceiveMessageRequest", param0)
+	return m.ReceiveMessageRequestFunc(param0)
+}
+
+func (m *sqsMock) ReceiveMessageWithContext(param0 aws.Context, param1 *sqs.ReceiveMessageInput, param2 ...request.Option) (*sqs.ReceiveMessageOutput, error) {
+	m.addCall("ReceiveMessageWithContext")
+	m.verifyInput("ReceiveMessageWithContext", param0)
+	return m.ReceiveMessageWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) RemovePermission(param0 *sqs.RemovePermissionInput) (*sqs.RemovePermissionOutput, error) {
+	m.addCall("RemovePermission")
+	m.verifyInput("RemovePermission", param0)
+	return m.RemovePermissionFunc(param0)
+}
+
+func (m *sqsMock) RemovePermissionRequest(param0 *sqs.RemovePermissionInput) (*request.Request, *sqs.RemovePermissionOutput) {
+	m.addCall("RemovePermissionRequest")
+	m.verifyInput("RemovePermissionRequest", param0)
+	return m.RemovePermissionRequestFunc(param0)
+}
+
+func (m *sqsMock) RemovePermissionWithContext(param0 aws.Context, param1 *sqs.RemovePermissionInput, param2 ...request.Option) (*sqs.RemovePermissionOutput, error) {
+	m.addCall("RemovePermissionWithContext")
+	m.verifyInput("RemovePermissionWithContext", param0)
+	return m.RemovePermissionWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) SendMessage(param0 *sqs.SendMessageInput) (*sqs.SendMessageOutput, error) {
+	m.addCall("SendMessage")
+	m.verifyInput("SendMessage", param0)
+	return m.SendMessageFunc(param0)
+}
+
+func (m *sqsMock) SendMessageBatch(param0 *sqs.SendMessageBatchInput) (*sqs.SendMessageBatchOutput, error) {
+	m.addCall("SendMessageBatch")
+	m.verifyInput("SendMessageBatch", param0)
+	return m.SendMessageBatchFunc(param0)
+}
+
+func (m *sqsMock) SendMessageBatchRequest(param0 *sqs.SendMessageBatchInput) (*request.Request, *sqs.SendMessageBatchOutput) {
+	m.addCall("SendMessageBatchRequest")
+	m.verifyInput("SendMessageBatchRequest", param0)
+	return m.SendMessageBatchRequestFunc(param0)
+}
+
+func (m *sqsMock) SendMessageBatchWithContext(param0 aws.Context, param1 *sqs.SendMessageBatchInput, param2 ...request.Option) (*sqs.SendMessageBatchOutput, error) {
+	m.addCall("SendMessageBatchWithContext")
+	m.verifyInput("SendMessageBatchWithContext", param0)
+	return m.SendMessageBatchWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) SendMessageRequest(param0 *sqs.SendMessageInput) (*request.Request, *sqs.SendMessageOutput) {
+	m.addCall("SendMessageRequest")
+	m.verifyInput("SendMessageRequest", param0)
+	return m.SendMessageRequestFunc(param0)
+}
+
+func (m *sqsMock) SendMessageWithContext(param0 aws.Context, param1 *sqs.SendMessageInput, param2 ...request.Option) (*sqs.SendMessageOutput, error) {
+	m.addCall("SendMessageWithContext")
+	m.verifyInput("SendMessageWithContext", param0)
+	return m.SendMessageWithContextFunc(param0, param1, param2...)
+}
+
+func (m *sqsMock) SetQueueAttributes(param0 *sqs.SetQueueAttributesInput) (*sqs.SetQueueAttributesOutput, error) {
+	m.addCall("SetQueueAttributes")
+	m.verifyInput("SetQueueAttributes", param0)
+	return m.SetQueueAttributesFunc(param0)
+}
+
+func (m *sqsMock) SetQueueAttributesRequest(param0 *sqs.SetQueueAttributesInput) (*request.Request, *sqs.SetQueueAttributesOutput) {
+	m.addCall("SetQueueAttributesRequest")
+	m.verifyInput("SetQueueAttributesRequest", param0)
+	return m.SetQueueAttributesRequestFunc(param0)
+}
+
+func (m *sqsMock) SetQueueAttributesWithContext(param0 aws.Context, param1 *sqs.SetQueueAttributesInput, param2 ...request.Option) (*sqs.SetQueueAttributesOutput, error) {
+	m.addCall("SetQueueAttributesWithContext")
+	m.verifyInput("SetQueueAttributesWithContext", param0)
+	return m.SetQueueAttributesWithContextFunc(param0, param1, param2...)
 }
