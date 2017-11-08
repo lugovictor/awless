@@ -47,6 +47,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachInstanceprofile(f.Sess, f.Log) }
 	case "attachinternetgateway":
 		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
+	case "attachmfadevice":
+		return func() interface{} { return NewAttachMfadevice(f.Sess, f.Log) }
 	case "attachpolicy":
 		return func() interface{} { return NewAttachPolicy(f.Sess, f.Log) }
 	case "attachroutetable":
@@ -119,6 +121,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateLoadbalancer(f.Sess, f.Log) }
 	case "createloginprofile":
 		return func() interface{} { return NewCreateLoginprofile(f.Sess, f.Log) }
+	case "createmfadevice":
+		return func() interface{} { return NewCreateMfadevice(f.Sess, f.Log) }
 	case "createpolicy":
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
 	case "createroute":
@@ -201,6 +205,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteLoadbalancer(f.Sess, f.Log) }
 	case "deleteloginprofile":
 		return func() interface{} { return NewDeleteLoginprofile(f.Sess, f.Log) }
+	case "deletemfadevice":
+		return func() interface{} { return NewDeleteMfadevice(f.Sess, f.Log) }
 	case "deletepolicy":
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
 	case "deleteroute":
@@ -249,6 +255,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachInstanceprofile(f.Sess, f.Log) }
 	case "detachinternetgateway":
 		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
+	case "detachmfadevice":
+		return func() interface{} { return NewDetachMfadevice(f.Sess, f.Log) }
 	case "detachpolicy":
 		return func() interface{} { return NewDetachPolicy(f.Sess, f.Log) }
 	case "detachroutetable":
@@ -308,6 +316,7 @@ var (
 	_ command = &AttachInstance{}
 	_ command = &AttachInstanceprofile{}
 	_ command = &AttachInternetgateway{}
+	_ command = &AttachMfadevice{}
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
 	_ command = &AttachSecuritygroup{}
@@ -344,6 +353,7 @@ var (
 	_ command = &CreateListener{}
 	_ command = &CreateLoadbalancer{}
 	_ command = &CreateLoginprofile{}
+	_ command = &CreateMfadevice{}
 	_ command = &CreatePolicy{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
@@ -385,6 +395,7 @@ var (
 	_ command = &DeleteListener{}
 	_ command = &DeleteLoadbalancer{}
 	_ command = &DeleteLoginprofile{}
+	_ command = &DeleteMfadevice{}
 	_ command = &DeletePolicy{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
@@ -409,6 +420,7 @@ var (
 	_ command = &DetachInstance{}
 	_ command = &DetachInstanceprofile{}
 	_ command = &DetachInternetgateway{}
+	_ command = &DetachMfadevice{}
 	_ command = &DetachPolicy{}
 	_ command = &DetachRoutetable{}
 	_ command = &DetachSecuritygroup{}

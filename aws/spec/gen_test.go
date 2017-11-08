@@ -225,6 +225,7 @@ var (
 	newDeleteTargetgroup     = func() *DeleteTargetgroup { return &DeleteTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newDetachInstance        = func() *DetachInstance { return &DetachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
 	newUpdateTargetgroup     = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newAttachMfadevice       = func() *AttachMfadevice { return &AttachMfadevice{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newAttachPolicy          = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newAttachUser            = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateAccesskey       = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -233,6 +234,7 @@ var (
 		return &CreateInstanceprofile{api: &mockIam{}, logger: logger.DiscardLogger}
 	}
 	newCreateLoginprofile    = func() *CreateLoginprofile { return &CreateLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateMfadevice       = func() *CreateMfadevice { return &CreateMfadevice{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreatePolicy          = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newCreateUser            = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteAccesskey       = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -241,8 +243,10 @@ var (
 		return &DeleteInstanceprofile{api: &mockIam{}, logger: logger.DiscardLogger}
 	}
 	newDeleteLoginprofile  = func() *DeleteLoginprofile { return &DeleteLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteMfadevice     = func() *DeleteMfadevice { return &DeleteMfadevice{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeletePolicy        = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteUser          = func() *DeleteUser { return &DeleteUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDetachMfadevice     = func() *DetachMfadevice { return &DetachMfadevice{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachPolicy        = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachUser          = func() *DetachUser { return &DetachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newUpdateLoginprofile  = func() *UpdateLoginprofile { return &UpdateLoginprofile{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -988,6 +992,16 @@ func (m *mockElbv2) DeregisterTargets(input *elbv2.DeregisterTargetsInput) (*elb
 	return nil, nil
 }
 
+func (m *mockIam) EnableMFADevice(input *iam.EnableMFADeviceInput) (*iam.EnableMFADeviceOutput, error) {
+	if got, want := input, genTestsExpected["attachmfadevice"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["attachmfadevice"]; ok {
+		return outFunc().(*iam.EnableMFADeviceOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) AddUserToGroup(input *iam.AddUserToGroupInput) (*iam.AddUserToGroupOutput, error) {
 	if got, want := input, genTestsExpected["attachuser"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -1098,6 +1112,16 @@ func (m *mockIam) DeleteLoginProfile(input *iam.DeleteLoginProfileInput) (*iam.D
 	return nil, nil
 }
 
+func (m *mockIam) DeleteVirtualMFADevice(input *iam.DeleteVirtualMFADeviceInput) (*iam.DeleteVirtualMFADeviceOutput, error) {
+	if got, want := input, genTestsExpected["deletemfadevice"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletemfadevice"]; ok {
+		return outFunc().(*iam.DeleteVirtualMFADeviceOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) DeletePolicy(input *iam.DeletePolicyInput) (*iam.DeletePolicyOutput, error) {
 	if got, want := input, genTestsExpected["deletepolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -1114,6 +1138,16 @@ func (m *mockIam) DeleteUser(input *iam.DeleteUserInput) (*iam.DeleteUserOutput,
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deleteuser"]; ok {
 		return outFunc().(*iam.DeleteUserOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) DeactivateMFADevice(input *iam.DeactivateMFADeviceInput) (*iam.DeactivateMFADeviceOutput, error) {
+	if got, want := input, genTestsExpected["detachmfadevice"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["detachmfadevice"]; ok {
+		return outFunc().(*iam.DeactivateMFADeviceOutput), nil
 	}
 	return nil, nil
 }

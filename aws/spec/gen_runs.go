@@ -533,6 +533,80 @@ func (cmd *AttachInternetgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewAttachMfadevice(sess *session.Session, l ...*logger.Logger) *AttachMfadevice {
+	cmd := new(AttachMfadevice)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachMfadevice) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *AttachMfadevice) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.EnableMFADeviceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.EnableMFADeviceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.EnableMFADevice(input)
+	cmd.logger.ExtraVerbosef("iam.EnableMFADevice call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachMfadevice) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachMfadevice) ParamsHelp() string {
+	return generateParamsHelp("attachmfadevice", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachMfadevice) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewAttachPolicy(sess *session.Session, l ...*logger.Logger) *AttachPolicy {
 	cmd := new(AttachPolicy)
 	if len(l) > 0 {
@@ -3297,6 +3371,74 @@ func (cmd *CreateLoginprofile) ParamsHelp() string {
 }
 
 func (cmd *CreateLoginprofile) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateMfadevice(sess *session.Session, l ...*logger.Logger) *CreateMfadevice {
+	cmd := new(CreateMfadevice)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateMfadevice) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateMfadevice) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateMfadevice) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateMfadevice) ParamsHelp() string {
+	return generateParamsHelp("createmfadevice", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateMfadevice) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -6579,6 +6721,80 @@ func (cmd *DeleteLoginprofile) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteMfadevice(sess *session.Session, l ...*logger.Logger) *DeleteMfadevice {
+	cmd := new(DeleteMfadevice)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteMfadevice) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteMfadevice) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.DeleteVirtualMFADeviceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.DeleteVirtualMFADeviceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteVirtualMFADevice(input)
+	cmd.logger.ExtraVerbosef("iam.DeleteVirtualMFADevice call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteMfadevice) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteMfadevice) ParamsHelp() string {
+	return generateParamsHelp("deletemfadevice", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteMfadevice) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeletePolicy(sess *session.Session, l ...*logger.Logger) *DeletePolicy {
 	cmd := new(DeletePolicy)
 	if len(l) > 0 {
@@ -8553,6 +8769,80 @@ func (cmd *DetachInternetgateway) ParamsHelp() string {
 }
 
 func (cmd *DetachInternetgateway) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDetachMfadevice(sess *session.Session, l ...*logger.Logger) *DetachMfadevice {
+	cmd := new(DetachMfadevice)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = iam.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachMfadevice) SetApi(api iamiface.IAMAPI) {
+	cmd.api = api
+}
+
+func (cmd *DetachMfadevice) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &iam.DeactivateMFADeviceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in iam.DeactivateMFADeviceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeactivateMFADevice(input)
+	cmd.logger.ExtraVerbosef("iam.DeactivateMFADevice call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachMfadevice) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachMfadevice) ParamsHelp() string {
+	return generateParamsHelp("detachmfadevice", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachMfadevice) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

@@ -384,12 +384,18 @@ func castFloat(v interface{}) (float64, error) {
 
 func castInt(v interface{}) (int, error) {
 	switch vv := v.(type) {
+	case *string:
+		return strconv.Atoi(aws.StringValue(vv))
 	case string:
 		return strconv.Atoi(vv)
+	case *int:
+		return aws.IntValue(vv), nil
 	case int:
 		return vv, nil
 	case int64:
 		return int(vv), nil
+	case *int64:
+		return int(aws.Int64Value(vv)), nil
 	default:
 		return 0, fmt.Errorf("cannot cast %T to int", v)
 	}
@@ -402,7 +408,7 @@ func castBool(v interface{}) (bool, error) {
 	case bool:
 		return vv, nil
 	case *bool:
-		return *vv, nil
+		return aws.BoolValue(vv), nil
 	default:
 		return false, fmt.Errorf("cannot cast %T to bool", v)
 	}
@@ -416,11 +422,11 @@ func castInt64(v interface{}) (int64, error) {
 	case int:
 		return int64(vv), nil
 	case *int:
-		return int64(*vv), nil
+		return int64(aws.IntValue(vv)), nil
 	case int64:
 		return vv, nil
 	case *int64:
-		return *vv, nil
+		return aws.Int64Value(vv), nil
 	default:
 		return int64(0), fmt.Errorf("cannot cast %T to int64", v)
 	}

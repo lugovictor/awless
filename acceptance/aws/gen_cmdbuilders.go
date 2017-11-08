@@ -88,6 +88,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "attachmfadevice":
+		return func() interface{} {
+			cmd := awsspec.NewAttachMfadevice(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "attachpolicy":
 		return func() interface{} {
 			cmd := awsspec.NewAttachPolicy(nil, f.Logger)
@@ -301,6 +307,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "createloginprofile":
 		return func() interface{} {
 			cmd := awsspec.NewCreateLoginprofile(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "createmfadevice":
+		return func() interface{} {
+			cmd := awsspec.NewCreateMfadevice(nil, f.Logger)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
@@ -550,6 +562,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
+	case "deletemfadevice":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteMfadevice(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "deletepolicy":
 		return func() interface{} {
 			cmd := awsspec.NewDeletePolicy(nil, f.Logger)
@@ -692,6 +710,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDetachInternetgateway(nil, f.Logger)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "detachmfadevice":
+		return func() interface{} {
+			cmd := awsspec.NewDetachMfadevice(nil, f.Logger)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
 	case "detachpolicy":

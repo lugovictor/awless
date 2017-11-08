@@ -9,15 +9,8 @@ import (
 
 func TestAccesskey(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
-		originalStdErr := os.Stderr
-		defer func() {
-			os.Stderr = originalStdErr
-		}()
-		devNull, err := os.OpenFile(os.DevNull, os.O_RDWR, 0777)
-		if err != nil {
-			panic(err)
-		}
-		os.Stderr = devNull
+		defer redirectStdErrToDevNull()()
+
 		Template("create accesskey user=jdoe no-prompt=true").
 			Mock(&iamMock{
 				CreateAccessKeyFunc: func(*iam.CreateAccessKeyInput) (*iam.CreateAccessKeyOutput, error) {
@@ -38,4 +31,17 @@ func TestAccesskey(t *testing.T) {
 			AccessKeyId: String("ACCESSKEYID"),
 		}).ExpectCalls("DeleteAccessKey").Run(t)
 	})
+}
+
+func redirectStdErrToDevNull() func() {
+	originalStdErr := os.Stderr
+	toDefer := func() {
+		os.Stderr = originalStdErr
+	}
+	devNull, err := os.OpenFile(os.DevNull, os.O_RDWR, 0777)
+	if err != nil {
+		panic(err)
+	}
+	os.Stderr = devNull
+	return toDefer
 }
