@@ -128,6 +128,9 @@ var (
 	newAttachInternetgateway = func() *AttachInternetgateway {
 		return &AttachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
+	newAttachNetworkinterface = func() *AttachNetworkinterface {
+		return &AttachNetworkinterface{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newAttachRoutetable    = func() *AttachRoutetable { return &AttachRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newAttachSecuritygroup = func() *AttachSecuritygroup {
 		return &AttachSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
@@ -135,6 +138,9 @@ var (
 	newAttachVolume          = func() *AttachVolume { return &AttachVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckInstance         = func() *CheckInstance { return &CheckInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckNatgateway       = func() *CheckNatgateway { return &CheckNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCheckNetworkinterface = func() *CheckNetworkinterface {
+		return &CheckNetworkinterface{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newCheckSecuritygroup    = func() *CheckSecuritygroup { return &CheckSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckVolume           = func() *CheckVolume { return &CheckVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCopyImage             = func() *CopyImage { return &CopyImage{api: &mockEc2{}, logger: logger.DiscardLogger} }
@@ -144,8 +150,11 @@ var (
 	newCreateInternetgateway = func() *CreateInternetgateway {
 		return &CreateInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newCreateKeypair       = func() *CreateKeypair { return &CreateKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
-	newCreateNatgateway    = func() *CreateNatgateway { return &CreateNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateKeypair          = func() *CreateKeypair { return &CreateKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateNatgateway       = func() *CreateNatgateway { return &CreateNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateNetworkinterface = func() *CreateNetworkinterface {
+		return &CreateNetworkinterface{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newCreateRoute         = func() *CreateRoute { return &CreateRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateRoutetable    = func() *CreateRoutetable { return &CreateRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateSecuritygroup = func() *CreateSecuritygroup {
@@ -162,8 +171,11 @@ var (
 	newDeleteInternetgateway = func() *DeleteInternetgateway {
 		return &DeleteInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newDeleteKeypair       = func() *DeleteKeypair { return &DeleteKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
-	newDeleteNatgateway    = func() *DeleteNatgateway { return &DeleteNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteKeypair          = func() *DeleteKeypair { return &DeleteKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteNatgateway       = func() *DeleteNatgateway { return &DeleteNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteNetworkinterface = func() *DeleteNetworkinterface {
+		return &DeleteNetworkinterface{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newDeleteRoute         = func() *DeleteRoute { return &DeleteRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteRoutetable    = func() *DeleteRoutetable { return &DeleteRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteSecuritygroup = func() *DeleteSecuritygroup {
@@ -180,6 +192,9 @@ var (
 	}
 	newDetachInternetgateway = func() *DetachInternetgateway {
 		return &DetachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
+	newDetachNetworkinterface = func() *DetachNetworkinterface {
+		return &DetachNetworkinterface{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
 	newDetachRoutetable    = func() *DetachRoutetable { return &DetachRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDetachSecuritygroup = func() *DetachSecuritygroup {
@@ -535,6 +550,16 @@ func (m *mockEc2) AttachInternetGateway(input *ec2.AttachInternetGatewayInput) (
 	return nil, nil
 }
 
+func (m *mockEc2) AttachNetworkInterface(input *ec2.AttachNetworkInterfaceInput) (*ec2.AttachNetworkInterfaceOutput, error) {
+	if got, want := input, genTestsExpected["attachnetworkinterface"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["attachnetworkinterface"]; ok {
+		return outFunc().(*ec2.AttachNetworkInterfaceOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) AssociateRouteTable(input *ec2.AssociateRouteTableInput) (*ec2.AssociateRouteTableOutput, error) {
 	if got, want := input, genTestsExpected["attachroutetable"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -621,6 +646,16 @@ func (m *mockEc2) CreateNatGateway(input *ec2.CreateNatGatewayInput) (*ec2.Creat
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["createnatgateway"]; ok {
 		return outFunc().(*ec2.CreateNatGatewayOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) CreateNetworkInterface(input *ec2.CreateNetworkInterfaceInput) (*ec2.CreateNetworkInterfaceOutput, error) {
+	if got, want := input, genTestsExpected["createnetworkinterface"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createnetworkinterface"]; ok {
+		return outFunc().(*ec2.CreateNetworkInterfaceOutput), nil
 	}
 	return nil, nil
 }
@@ -741,6 +776,16 @@ func (m *mockEc2) DeleteNatGateway(input *ec2.DeleteNatGatewayInput) (*ec2.Delet
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletenatgateway"]; ok {
 		return outFunc().(*ec2.DeleteNatGatewayOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DeleteNetworkInterface(input *ec2.DeleteNetworkInterfaceInput) (*ec2.DeleteNetworkInterfaceOutput, error) {
+	if got, want := input, genTestsExpected["deletenetworkinterface"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletenetworkinterface"]; ok {
+		return outFunc().(*ec2.DeleteNetworkInterfaceOutput), nil
 	}
 	return nil, nil
 }

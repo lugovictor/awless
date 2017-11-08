@@ -49,6 +49,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
 	case "attachmfadevice":
 		return func() interface{} { return NewAttachMfadevice(f.Sess, f.Log) }
+	case "attachnetworkinterface":
+		return func() interface{} { return NewAttachNetworkinterface(f.Sess, f.Log) }
 	case "attachpolicy":
 		return func() interface{} { return NewAttachPolicy(f.Sess, f.Log) }
 	case "attachroutetable":
@@ -71,6 +73,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCheckLoadbalancer(f.Sess, f.Log) }
 	case "checknatgateway":
 		return func() interface{} { return NewCheckNatgateway(f.Sess, f.Log) }
+	case "checknetworkinterface":
+		return func() interface{} { return NewCheckNetworkinterface(f.Sess, f.Log) }
 	case "checkscalinggroup":
 		return func() interface{} { return NewCheckScalinggroup(f.Sess, f.Log) }
 	case "checksecuritygroup":
@@ -127,6 +131,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateMfadevice(f.Sess, f.Log) }
 	case "createnatgateway":
 		return func() interface{} { return NewCreateNatgateway(f.Sess, f.Log) }
+	case "createnetworkinterface":
+		return func() interface{} { return NewCreateNetworkinterface(f.Sess, f.Log) }
 	case "createpolicy":
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
 	case "createroute":
@@ -213,6 +219,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteMfadevice(f.Sess, f.Log) }
 	case "deletenatgateway":
 		return func() interface{} { return NewDeleteNatgateway(f.Sess, f.Log) }
+	case "deletenetworkinterface":
+		return func() interface{} { return NewDeleteNetworkinterface(f.Sess, f.Log) }
 	case "deletepolicy":
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
 	case "deleteroute":
@@ -263,6 +271,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
 	case "detachmfadevice":
 		return func() interface{} { return NewDetachMfadevice(f.Sess, f.Log) }
+	case "detachnetworkinterface":
+		return func() interface{} { return NewDetachNetworkinterface(f.Sess, f.Log) }
 	case "detachpolicy":
 		return func() interface{} { return NewDetachPolicy(f.Sess, f.Log) }
 	case "detachroutetable":
@@ -323,6 +333,7 @@ var (
 	_ command = &AttachInstanceprofile{}
 	_ command = &AttachInternetgateway{}
 	_ command = &AttachMfadevice{}
+	_ command = &AttachNetworkinterface{}
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
 	_ command = &AttachSecuritygroup{}
@@ -334,6 +345,7 @@ var (
 	_ command = &CheckInstance{}
 	_ command = &CheckLoadbalancer{}
 	_ command = &CheckNatgateway{}
+	_ command = &CheckNetworkinterface{}
 	_ command = &CheckScalinggroup{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CheckVolume{}
@@ -362,6 +374,7 @@ var (
 	_ command = &CreateLoginprofile{}
 	_ command = &CreateMfadevice{}
 	_ command = &CreateNatgateway{}
+	_ command = &CreateNetworkinterface{}
 	_ command = &CreatePolicy{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
@@ -405,6 +418,7 @@ var (
 	_ command = &DeleteLoginprofile{}
 	_ command = &DeleteMfadevice{}
 	_ command = &DeleteNatgateway{}
+	_ command = &DeleteNetworkinterface{}
 	_ command = &DeletePolicy{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
@@ -430,6 +444,7 @@ var (
 	_ command = &DetachInstanceprofile{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachMfadevice{}
+	_ command = &DetachNetworkinterface{}
 	_ command = &DetachPolicy{}
 	_ command = &DetachRoutetable{}
 	_ command = &DetachSecuritygroup{}

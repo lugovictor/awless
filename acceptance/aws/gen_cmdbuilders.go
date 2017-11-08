@@ -94,6 +94,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
+	case "attachnetworkinterface":
+		return func() interface{} {
+			cmd := awsspec.NewAttachNetworkinterface(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "attachpolicy":
 		return func() interface{} {
 			cmd := awsspec.NewAttachPolicy(nil, f.Logger)
@@ -157,6 +163,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "checknatgateway":
 		return func() interface{} {
 			cmd := awsspec.NewCheckNatgateway(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "checknetworkinterface":
+		return func() interface{} {
+			cmd := awsspec.NewCheckNetworkinterface(nil, f.Logger)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
@@ -325,6 +337,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 	case "createnatgateway":
 		return func() interface{} {
 			cmd := awsspec.NewCreateNatgateway(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "createnetworkinterface":
+		return func() interface{} {
+			cmd := awsspec.NewCreateNetworkinterface(nil, f.Logger)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
@@ -586,6 +604,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "deletenetworkinterface":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteNetworkinterface(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "deletepolicy":
 		return func() interface{} {
 			cmd := awsspec.NewDeletePolicy(nil, f.Logger)
@@ -734,6 +758,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDetachMfadevice(nil, f.Logger)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "detachnetworkinterface":
+		return func() interface{} {
+			cmd := awsspec.NewDetachNetworkinterface(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "detachpolicy":

@@ -607,6 +607,105 @@ func (cmd *AttachMfadevice) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewAttachNetworkinterface(sess *session.Session, l ...*logger.Logger) *AttachNetworkinterface {
+	cmd := new(AttachNetworkinterface)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AttachNetworkinterface) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *AttachNetworkinterface) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.AttachNetworkInterfaceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.AttachNetworkInterfaceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.AttachNetworkInterface(input)
+	cmd.logger.ExtraVerbosef("ec2.AttachNetworkInterface call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AttachNetworkinterface) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AttachNetworkinterface) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.AttachNetworkInterfaceInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.AttachNetworkInterfaceInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.AttachNetworkInterface(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.AttachNetworkInterface call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: attach networkinterface ok")
+			return fakeDryRunId("networkinterface"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *AttachNetworkinterface) ParamsHelp() string {
+	return generateParamsHelp("attachnetworkinterface", structListParamsKeys(cmd))
+}
+
+func (cmd *AttachNetworkinterface) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewAttachPolicy(sess *session.Session, l ...*logger.Logger) *AttachPolicy {
 	cmd := new(AttachPolicy)
 	if len(l) > 0 {
@@ -1420,6 +1519,74 @@ func (cmd *CheckNatgateway) ParamsHelp() string {
 }
 
 func (cmd *CheckNatgateway) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCheckNetworkinterface(sess *session.Session, l ...*logger.Logger) *CheckNetworkinterface {
+	cmd := new(CheckNetworkinterface)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckNetworkinterface) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *CheckNetworkinterface) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckNetworkinterface) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckNetworkinterface) ParamsHelp() string {
+	return generateParamsHelp("checknetworkinterface", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckNetworkinterface) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -3581,6 +3748,105 @@ func (cmd *CreateNatgateway) ParamsHelp() string {
 }
 
 func (cmd *CreateNatgateway) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateNetworkinterface(sess *session.Session, l ...*logger.Logger) *CreateNetworkinterface {
+	cmd := new(CreateNetworkinterface)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateNetworkinterface) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *CreateNetworkinterface) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.CreateNetworkInterfaceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.CreateNetworkInterfaceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateNetworkInterface(input)
+	cmd.logger.ExtraVerbosef("ec2.CreateNetworkInterface call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateNetworkinterface) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateNetworkinterface) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.CreateNetworkInterfaceInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.CreateNetworkInterfaceInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.CreateNetworkInterface(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.CreateNetworkInterface call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: create networkinterface ok")
+			return fakeDryRunId("networkinterface"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *CreateNetworkinterface) ParamsHelp() string {
+	return generateParamsHelp("createnetworkinterface", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateNetworkinterface) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -7011,6 +7277,105 @@ func (cmd *DeleteNatgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteNetworkinterface(sess *session.Session, l ...*logger.Logger) *DeleteNetworkinterface {
+	cmd := new(DeleteNetworkinterface)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteNetworkinterface) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteNetworkinterface) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.DeleteNetworkInterfaceInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DeleteNetworkInterfaceInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteNetworkInterface(input)
+	cmd.logger.ExtraVerbosef("ec2.DeleteNetworkInterface call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteNetworkinterface) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteNetworkinterface) DryRun(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("dry run: cannot set params on command struct: %s", err)
+	}
+
+	input := &ec2.DeleteNetworkInterfaceInput{}
+	input.SetDryRun(true)
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("dry run: cannot inject in ec2.DeleteNetworkInterfaceInput: %s", err)
+	}
+
+	start := time.Now()
+	_, err := cmd.api.DeleteNetworkInterface(input)
+	if awsErr, ok := err.(awserr.Error); ok {
+		switch code := awsErr.Code(); {
+		case code == dryRunOperation, strings.HasSuffix(code, notFound), strings.Contains(awsErr.Message(), "Invalid IAM Instance Profile name"):
+			cmd.logger.ExtraVerbosef("dry run: ec2.DeleteNetworkInterface call took %s", time.Since(start))
+			cmd.logger.Verbose("dry run: delete networkinterface ok")
+			return fakeDryRunId("networkinterface"), nil
+		}
+	}
+
+	return nil, fmt.Errorf("dry run: %s", err)
+}
+
+func (cmd *DeleteNetworkinterface) ParamsHelp() string {
+	return generateParamsHelp("deletenetworkinterface", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteNetworkinterface) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeletePolicy(sess *session.Session, l ...*logger.Logger) *DeletePolicy {
 	cmd := new(DeletePolicy)
 	if len(l) > 0 {
@@ -9059,6 +9424,74 @@ func (cmd *DetachMfadevice) ParamsHelp() string {
 }
 
 func (cmd *DetachMfadevice) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDetachNetworkinterface(sess *session.Session, l ...*logger.Logger) *DetachNetworkinterface {
+	cmd := new(DetachNetworkinterface)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DetachNetworkinterface) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *DetachNetworkinterface) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DetachNetworkinterface) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DetachNetworkinterface) ParamsHelp() string {
+	return generateParamsHelp("detachnetworkinterface", structListParamsKeys(cmd))
+}
+
+func (cmd *DetachNetworkinterface) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
