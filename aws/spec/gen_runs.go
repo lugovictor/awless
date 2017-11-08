@@ -1355,6 +1355,74 @@ func (cmd *CheckLoadbalancer) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCheckNatgateway(sess *session.Session, l ...*logger.Logger) *CheckNatgateway {
+	cmd := new(CheckNatgateway)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CheckNatgateway) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *CheckNatgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CheckNatgateway) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CheckNatgateway) ParamsHelp() string {
+	return generateParamsHelp("checknatgateway", structListParamsKeys(cmd))
+}
+
+func (cmd *CheckNatgateway) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCheckScalinggroup(sess *session.Session, l ...*logger.Logger) *CheckScalinggroup {
 	cmd := new(CheckScalinggroup)
 	if len(l) > 0 {
@@ -3439,6 +3507,80 @@ func (cmd *CreateMfadevice) ParamsHelp() string {
 }
 
 func (cmd *CreateMfadevice) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewCreateNatgateway(sess *session.Session, l ...*logger.Logger) *CreateNatgateway {
+	cmd := new(CreateNatgateway)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateNatgateway) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *CreateNatgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.CreateNatGatewayInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.CreateNatGatewayInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateNatGateway(input)
+	cmd.logger.ExtraVerbosef("ec2.CreateNatGateway call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateNatgateway) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateNatgateway) ParamsHelp() string {
+	return generateParamsHelp("createnatgateway", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateNatgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
@@ -6792,6 +6934,80 @@ func (cmd *DeleteMfadevice) ParamsHelp() string {
 }
 
 func (cmd *DeleteMfadevice) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteNatgateway(sess *session.Session, l ...*logger.Logger) *DeleteNatgateway {
+	cmd := new(DeleteNatgateway)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ec2.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteNatgateway) SetApi(api ec2iface.EC2API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteNatgateway) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ec2.DeleteNatGatewayInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ec2.DeleteNatGatewayInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteNatGateway(input)
+	cmd.logger.ExtraVerbosef("ec2.DeleteNatGateway call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteNatgateway) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteNatgateway) ParamsHelp() string {
+	return generateParamsHelp("deletenatgateway", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteNatgateway) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

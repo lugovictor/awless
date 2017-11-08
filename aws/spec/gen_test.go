@@ -134,6 +134,7 @@ var (
 	}
 	newAttachVolume          = func() *AttachVolume { return &AttachVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckInstance         = func() *CheckInstance { return &CheckInstance{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCheckNatgateway       = func() *CheckNatgateway { return &CheckNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckSecuritygroup    = func() *CheckSecuritygroup { return &CheckSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCheckVolume           = func() *CheckVolume { return &CheckVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCopyImage             = func() *CopyImage { return &CopyImage{api: &mockEc2{}, logger: logger.DiscardLogger} }
@@ -144,6 +145,7 @@ var (
 		return &CreateInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
 	newCreateKeypair       = func() *CreateKeypair { return &CreateKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newCreateNatgateway    = func() *CreateNatgateway { return &CreateNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateRoute         = func() *CreateRoute { return &CreateRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateRoutetable    = func() *CreateRoutetable { return &CreateRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newCreateSecuritygroup = func() *CreateSecuritygroup {
@@ -161,6 +163,7 @@ var (
 		return &DeleteInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
 	newDeleteKeypair       = func() *DeleteKeypair { return &DeleteKeypair{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDeleteNatgateway    = func() *DeleteNatgateway { return &DeleteNatgateway{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteRoute         = func() *DeleteRoute { return &DeleteRoute{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteRoutetable    = func() *DeleteRoutetable { return &DeleteRoutetable{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteSecuritygroup = func() *DeleteSecuritygroup {
@@ -612,6 +615,16 @@ func (m *mockEc2) ImportKeyPair(input *ec2.ImportKeyPairInput) (*ec2.ImportKeyPa
 	return nil, nil
 }
 
+func (m *mockEc2) CreateNatGateway(input *ec2.CreateNatGatewayInput) (*ec2.CreateNatGatewayOutput, error) {
+	if got, want := input, genTestsExpected["createnatgateway"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createnatgateway"]; ok {
+		return outFunc().(*ec2.CreateNatGatewayOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockEc2) CreateRoute(input *ec2.CreateRouteInput) (*ec2.CreateRouteOutput, error) {
 	if got, want := input, genTestsExpected["createroute"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -718,6 +731,16 @@ func (m *mockEc2) DeleteKeyPair(input *ec2.DeleteKeyPairInput) (*ec2.DeleteKeyPa
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletekeypair"]; ok {
 		return outFunc().(*ec2.DeleteKeyPairOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEc2) DeleteNatGateway(input *ec2.DeleteNatGatewayInput) (*ec2.DeleteNatGatewayOutput, error) {
+	if got, want := input, genTestsExpected["deletenatgateway"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deletenatgateway"]; ok {
+		return outFunc().(*ec2.DeleteNatGatewayOutput), nil
 	}
 	return nil, nil
 }

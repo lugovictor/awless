@@ -69,6 +69,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCheckInstance(f.Sess, f.Log) }
 	case "checkloadbalancer":
 		return func() interface{} { return NewCheckLoadbalancer(f.Sess, f.Log) }
+	case "checknatgateway":
+		return func() interface{} { return NewCheckNatgateway(f.Sess, f.Log) }
 	case "checkscalinggroup":
 		return func() interface{} { return NewCheckScalinggroup(f.Sess, f.Log) }
 	case "checksecuritygroup":
@@ -123,6 +125,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateLoginprofile(f.Sess, f.Log) }
 	case "createmfadevice":
 		return func() interface{} { return NewCreateMfadevice(f.Sess, f.Log) }
+	case "createnatgateway":
+		return func() interface{} { return NewCreateNatgateway(f.Sess, f.Log) }
 	case "createpolicy":
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
 	case "createroute":
@@ -207,6 +211,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteLoginprofile(f.Sess, f.Log) }
 	case "deletemfadevice":
 		return func() interface{} { return NewDeleteMfadevice(f.Sess, f.Log) }
+	case "deletenatgateway":
+		return func() interface{} { return NewDeleteNatgateway(f.Sess, f.Log) }
 	case "deletepolicy":
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
 	case "deleteroute":
@@ -327,6 +333,7 @@ var (
 	_ command = &CheckDistribution{}
 	_ command = &CheckInstance{}
 	_ command = &CheckLoadbalancer{}
+	_ command = &CheckNatgateway{}
 	_ command = &CheckScalinggroup{}
 	_ command = &CheckSecuritygroup{}
 	_ command = &CheckVolume{}
@@ -354,6 +361,7 @@ var (
 	_ command = &CreateLoadbalancer{}
 	_ command = &CreateLoginprofile{}
 	_ command = &CreateMfadevice{}
+	_ command = &CreateNatgateway{}
 	_ command = &CreatePolicy{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
@@ -396,6 +404,7 @@ var (
 	_ command = &DeleteLoadbalancer{}
 	_ command = &DeleteLoginprofile{}
 	_ command = &DeleteMfadevice{}
+	_ command = &DeleteNatgateway{}
 	_ command = &DeletePolicy{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}

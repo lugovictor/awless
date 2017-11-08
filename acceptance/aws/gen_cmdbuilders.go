@@ -154,6 +154,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
 			return cmd
 		}
+	case "checknatgateway":
+		return func() interface{} {
+			cmd := awsspec.NewCheckNatgateway(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "checkscalinggroup":
 		return func() interface{} {
 			cmd := awsspec.NewCheckScalinggroup(nil, f.Logger)
@@ -314,6 +320,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateMfadevice(nil, f.Logger)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "createnatgateway":
+		return func() interface{} {
+			cmd := awsspec.NewCreateNatgateway(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "createpolicy":
@@ -566,6 +578,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteMfadevice(nil, f.Logger)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "deletenatgateway":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteNatgateway(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "deletepolicy":
