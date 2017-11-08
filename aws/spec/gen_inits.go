@@ -43,6 +43,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachElasticip(f.Sess, f.Log) }
 	case "attachinstance":
 		return func() interface{} { return NewAttachInstance(f.Sess, f.Log) }
+	case "attachinstanceprofile":
+		return func() interface{} { return NewAttachInstanceprofile(f.Sess, f.Log) }
 	case "attachinternetgateway":
 		return func() interface{} { return NewAttachInternetgateway(f.Sess, f.Log) }
 	case "attachpolicy":
@@ -101,6 +103,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateGroup(f.Sess, f.Log) }
 	case "createinstance":
 		return func() interface{} { return NewCreateInstance(f.Sess, f.Log) }
+	case "createinstanceprofile":
+		return func() interface{} { return NewCreateInstanceprofile(f.Sess, f.Log) }
 	case "createinternetgateway":
 		return func() interface{} { return NewCreateInternetgateway(f.Sess, f.Log) }
 	case "createkeypair":
@@ -171,6 +175,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteImage(f.Sess, f.Log) }
 	case "deleteinstance":
 		return func() interface{} { return NewDeleteInstance(f.Sess, f.Log) }
+	case "deleteinstanceprofile":
+		return func() interface{} { return NewDeleteInstanceprofile(f.Sess, f.Log) }
 	case "deleteinternetgateway":
 		return func() interface{} { return NewDeleteInternetgateway(f.Sess, f.Log) }
 	case "deletekeypair":
@@ -217,6 +223,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDetachElasticip(f.Sess, f.Log) }
 	case "detachinstance":
 		return func() interface{} { return NewDetachInstance(f.Sess, f.Log) }
+	case "detachinstanceprofile":
+		return func() interface{} { return NewDetachInstanceprofile(f.Sess, f.Log) }
 	case "detachinternetgateway":
 		return func() interface{} { return NewDetachInternetgateway(f.Sess, f.Log) }
 	case "detachpolicy":
@@ -272,6 +280,7 @@ var (
 	_ command = &AttachContainertask{}
 	_ command = &AttachElasticip{}
 	_ command = &AttachInstance{}
+	_ command = &AttachInstanceprofile{}
 	_ command = &AttachInternetgateway{}
 	_ command = &AttachPolicy{}
 	_ command = &AttachRoutetable{}
@@ -301,6 +310,7 @@ var (
 	_ command = &CreateFunction{}
 	_ command = &CreateGroup{}
 	_ command = &CreateInstance{}
+	_ command = &CreateInstanceprofile{}
 	_ command = &CreateInternetgateway{}
 	_ command = &CreateKeypair{}
 	_ command = &CreatePolicy{}
@@ -336,6 +346,7 @@ var (
 	_ command = &DeleteGroup{}
 	_ command = &DeleteImage{}
 	_ command = &DeleteInstance{}
+	_ command = &DeleteInstanceprofile{}
 	_ command = &DeleteInternetgateway{}
 	_ command = &DeleteKeypair{}
 	_ command = &DeletePolicy{}
@@ -359,6 +370,7 @@ var (
 	_ command = &DetachContainertask{}
 	_ command = &DetachElasticip{}
 	_ command = &DetachInstance{}
+	_ command = &DetachInstanceprofile{}
 	_ command = &DetachInternetgateway{}
 	_ command = &DetachPolicy{}
 	_ command = &DetachRoutetable{}

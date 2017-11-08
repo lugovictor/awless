@@ -70,6 +70,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
 			return cmd
 		}
+	case "attachinstanceprofile":
+		return func() interface{} {
+			cmd := awsspec.NewAttachInstanceprofile(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
 	case "attachinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewAttachInternetgateway(nil)
@@ -242,6 +248,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewCreateInstance(nil)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "createinstanceprofile":
+		return func() interface{} {
+			cmd := awsspec.NewCreateInstanceprofile(nil)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
 			return cmd
 		}
 	case "createinternetgateway":
@@ -454,6 +466,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
+	case "deleteinstanceprofile":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteInstanceprofile(nil)
+			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
 	case "deleteinternetgateway":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteInternetgateway(nil)
@@ -590,6 +608,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDetachInstance(nil)
 			cmd.SetApi(f.Mock.(elbv2iface.ELBV2API))
+			return cmd
+		}
+	case "detachinstanceprofile":
+		return func() interface{} {
+			cmd := awsspec.NewDetachInstanceprofile(nil)
+			cmd.SetApi(f.Mock.(ec2iface.EC2API))
 			return cmd
 		}
 	case "detachinternetgateway":

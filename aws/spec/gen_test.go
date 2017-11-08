@@ -116,6 +116,9 @@ var (
 	newStartAlarm            = func() *StartAlarm { return &StartAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newStopAlarm             = func() *StopAlarm { return &StopAlarm{api: &mockCloudwatch{}, logger: logger.DiscardLogger} }
 	newAttachElasticip       = func() *AttachElasticip { return &AttachElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newAttachInstanceprofile = func() *AttachInstanceprofile {
+		return &AttachInstanceprofile{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newAttachInternetgateway = func() *AttachInternetgateway {
 		return &AttachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -163,6 +166,9 @@ var (
 	newDeleteVolume          = func() *DeleteVolume { return &DeleteVolume{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDeleteVpc             = func() *DeleteVpc { return &DeleteVpc{api: &mockEc2{}, logger: logger.DiscardLogger} }
 	newDetachElasticip       = func() *DetachElasticip { return &DetachElasticip{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newDetachInstanceprofile = func() *DetachInstanceprofile {
+		return &DetachInstanceprofile{api: &mockEc2{}, logger: logger.DiscardLogger}
+	}
 	newDetachInternetgateway = func() *DetachInternetgateway {
 		return &DetachInternetgateway{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
@@ -199,19 +205,25 @@ var (
 	newUpdateContainertask = func() *UpdateContainertask {
 		return &UpdateContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
-	newAttachInstance      = func() *AttachInstance { return &AttachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newCreateTargetgroup   = func() *CreateTargetgroup { return &CreateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newDeleteTargetgroup   = func() *DeleteTargetgroup { return &DeleteTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newDetachInstance      = func() *DetachInstance { return &DetachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newUpdateTargetgroup   = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
-	newAttachPolicy        = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newAttachUser          = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreateAccesskey     = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreateGroup         = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreatePolicy        = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newCreateUser          = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeleteAccesskey     = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
-	newDeleteGroup         = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newAttachInstance        = func() *AttachInstance { return &AttachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newCreateTargetgroup     = func() *CreateTargetgroup { return &CreateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newDeleteTargetgroup     = func() *DeleteTargetgroup { return &DeleteTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newDetachInstance        = func() *DetachInstance { return &DetachInstance{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newUpdateTargetgroup     = func() *UpdateTargetgroup { return &UpdateTargetgroup{api: &mockElbv2{}, logger: logger.DiscardLogger} }
+	newAttachPolicy          = func() *AttachPolicy { return &AttachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newAttachUser            = func() *AttachUser { return &AttachUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateAccesskey       = func() *CreateAccesskey { return &CreateAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateGroup           = func() *CreateGroup { return &CreateGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateInstanceprofile = func() *CreateInstanceprofile {
+		return &CreateInstanceprofile{api: &mockIam{}, logger: logger.DiscardLogger}
+	}
+	newCreatePolicy          = func() *CreatePolicy { return &CreatePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newCreateUser            = func() *CreateUser { return &CreateUser{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteAccesskey       = func() *DeleteAccesskey { return &DeleteAccesskey{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteGroup           = func() *DeleteGroup { return &DeleteGroup{api: &mockIam{}, logger: logger.DiscardLogger} }
+	newDeleteInstanceprofile = func() *DeleteInstanceprofile {
+		return &DeleteInstanceprofile{api: &mockIam{}, logger: logger.DiscardLogger}
+	}
 	newDeletePolicy        = func() *DeletePolicy { return &DeletePolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDeleteUser          = func() *DeleteUser { return &DeleteUser{api: &mockIam{}, logger: logger.DiscardLogger} }
 	newDetachPolicy        = func() *DetachPolicy { return &DetachPolicy{api: &mockIam{}, logger: logger.DiscardLogger} }
@@ -925,6 +937,16 @@ func (m *mockIam) CreateGroup(input *iam.CreateGroupInput) (*iam.CreateGroupOutp
 	return nil, nil
 }
 
+func (m *mockIam) CreateInstanceProfile(input *iam.CreateInstanceProfileInput) (*iam.CreateInstanceProfileOutput, error) {
+	if got, want := input, genTestsExpected["createinstanceprofile"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createinstanceprofile"]; ok {
+		return outFunc().(*iam.CreateInstanceProfileOutput), nil
+	}
+	return nil, nil
+}
+
 func (m *mockIam) CreatePolicy(input *iam.CreatePolicyInput) (*iam.CreatePolicyOutput, error) {
 	if got, want := input, genTestsExpected["createpolicy"]; !reflect.DeepEqual(got, want) {
 		return nil, fmt.Errorf("got %#v, want %#v", got, want)
@@ -961,6 +983,16 @@ func (m *mockIam) DeleteGroup(input *iam.DeleteGroupInput) (*iam.DeleteGroupOutp
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["deletegroup"]; ok {
 		return outFunc().(*iam.DeleteGroupOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockIam) DeleteInstanceProfile(input *iam.DeleteInstanceProfileInput) (*iam.DeleteInstanceProfileOutput, error) {
+	if got, want := input, genTestsExpected["deleteinstanceprofile"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleteinstanceprofile"]; ok {
+		return outFunc().(*iam.DeleteInstanceProfileOutput), nil
 	}
 	return nil, nil
 }
