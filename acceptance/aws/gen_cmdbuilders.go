@@ -25,6 +25,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudfront/cloudfrontiface"
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecr/ecriface"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/elbv2/elbv2iface"
 	"github.com/aws/aws-sdk-go/service/iam/iamiface"
@@ -135,6 +136,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewAttachVolume(nil, f.Logger)
 			cmd.SetApi(f.Mock.(ec2iface.EC2API))
+			return cmd
+		}
+	case "authenticateregistry":
+		return func() interface{} {
+			cmd := awsspec.NewAuthenticateRegistry(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ecriface.ECRAPI))
 			return cmd
 		}
 	case "checkcertificate":

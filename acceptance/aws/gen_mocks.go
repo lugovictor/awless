@@ -34,6 +34,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecr"
+	"github.com/aws/aws-sdk-go/service/ecr/ecriface"
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/elbv2"
@@ -8900,6 +8902,368 @@ func (m *ec2Mock) WaitUntilVpnConnectionDeletedWithContext(param0 aws.Context, p
 	m.addCall("WaitUntilVpnConnectionDeletedWithContext")
 	m.verifyInput("WaitUntilVpnConnectionDeletedWithContext", param0)
 	return m.WaitUntilVpnConnectionDeletedWithContextFunc(param0, param1, param2...)
+}
+
+type ecrMock struct {
+	basicMock
+	ecriface.ECRAPI
+	BatchCheckLayerAvailabilityFunc            func(param0 *ecr.BatchCheckLayerAvailabilityInput) (*ecr.BatchCheckLayerAvailabilityOutput, error)
+	BatchCheckLayerAvailabilityRequestFunc     func(param0 *ecr.BatchCheckLayerAvailabilityInput) (*request.Request, *ecr.BatchCheckLayerAvailabilityOutput)
+	BatchCheckLayerAvailabilityWithContextFunc func(param0 aws.Context, param1 *ecr.BatchCheckLayerAvailabilityInput, param2 ...request.Option) (*ecr.BatchCheckLayerAvailabilityOutput, error)
+	BatchDeleteImageFunc                       func(param0 *ecr.BatchDeleteImageInput) (*ecr.BatchDeleteImageOutput, error)
+	BatchDeleteImageRequestFunc                func(param0 *ecr.BatchDeleteImageInput) (*request.Request, *ecr.BatchDeleteImageOutput)
+	BatchDeleteImageWithContextFunc            func(param0 aws.Context, param1 *ecr.BatchDeleteImageInput, param2 ...request.Option) (*ecr.BatchDeleteImageOutput, error)
+	BatchGetImageFunc                          func(param0 *ecr.BatchGetImageInput) (*ecr.BatchGetImageOutput, error)
+	BatchGetImageRequestFunc                   func(param0 *ecr.BatchGetImageInput) (*request.Request, *ecr.BatchGetImageOutput)
+	BatchGetImageWithContextFunc               func(param0 aws.Context, param1 *ecr.BatchGetImageInput, param2 ...request.Option) (*ecr.BatchGetImageOutput, error)
+	CompleteLayerUploadFunc                    func(param0 *ecr.CompleteLayerUploadInput) (*ecr.CompleteLayerUploadOutput, error)
+	CompleteLayerUploadRequestFunc             func(param0 *ecr.CompleteLayerUploadInput) (*request.Request, *ecr.CompleteLayerUploadOutput)
+	CompleteLayerUploadWithContextFunc         func(param0 aws.Context, param1 *ecr.CompleteLayerUploadInput, param2 ...request.Option) (*ecr.CompleteLayerUploadOutput, error)
+	CreateRepositoryFunc                       func(param0 *ecr.CreateRepositoryInput) (*ecr.CreateRepositoryOutput, error)
+	CreateRepositoryRequestFunc                func(param0 *ecr.CreateRepositoryInput) (*request.Request, *ecr.CreateRepositoryOutput)
+	CreateRepositoryWithContextFunc            func(param0 aws.Context, param1 *ecr.CreateRepositoryInput, param2 ...request.Option) (*ecr.CreateRepositoryOutput, error)
+	DeleteRepositoryFunc                       func(param0 *ecr.DeleteRepositoryInput) (*ecr.DeleteRepositoryOutput, error)
+	DeleteRepositoryPolicyFunc                 func(param0 *ecr.DeleteRepositoryPolicyInput) (*ecr.DeleteRepositoryPolicyOutput, error)
+	DeleteRepositoryPolicyRequestFunc          func(param0 *ecr.DeleteRepositoryPolicyInput) (*request.Request, *ecr.DeleteRepositoryPolicyOutput)
+	DeleteRepositoryPolicyWithContextFunc      func(param0 aws.Context, param1 *ecr.DeleteRepositoryPolicyInput, param2 ...request.Option) (*ecr.DeleteRepositoryPolicyOutput, error)
+	DeleteRepositoryRequestFunc                func(param0 *ecr.DeleteRepositoryInput) (*request.Request, *ecr.DeleteRepositoryOutput)
+	DeleteRepositoryWithContextFunc            func(param0 aws.Context, param1 *ecr.DeleteRepositoryInput, param2 ...request.Option) (*ecr.DeleteRepositoryOutput, error)
+	DescribeImagesFunc                         func(param0 *ecr.DescribeImagesInput) (*ecr.DescribeImagesOutput, error)
+	DescribeImagesRequestFunc                  func(param0 *ecr.DescribeImagesInput) (*request.Request, *ecr.DescribeImagesOutput)
+	DescribeImagesWithContextFunc              func(param0 aws.Context, param1 *ecr.DescribeImagesInput, param2 ...request.Option) (*ecr.DescribeImagesOutput, error)
+	DescribeRepositoriesFunc                   func(param0 *ecr.DescribeRepositoriesInput) (*ecr.DescribeRepositoriesOutput, error)
+	DescribeRepositoriesRequestFunc            func(param0 *ecr.DescribeRepositoriesInput) (*request.Request, *ecr.DescribeRepositoriesOutput)
+	DescribeRepositoriesWithContextFunc        func(param0 aws.Context, param1 *ecr.DescribeRepositoriesInput, param2 ...request.Option) (*ecr.DescribeRepositoriesOutput, error)
+	GetAuthorizationTokenFunc                  func(param0 *ecr.GetAuthorizationTokenInput) (*ecr.GetAuthorizationTokenOutput, error)
+	GetAuthorizationTokenRequestFunc           func(param0 *ecr.GetAuthorizationTokenInput) (*request.Request, *ecr.GetAuthorizationTokenOutput)
+	GetAuthorizationTokenWithContextFunc       func(param0 aws.Context, param1 *ecr.GetAuthorizationTokenInput, param2 ...request.Option) (*ecr.GetAuthorizationTokenOutput, error)
+	GetDownloadUrlForLayerFunc                 func(param0 *ecr.GetDownloadUrlForLayerInput) (*ecr.GetDownloadUrlForLayerOutput, error)
+	GetDownloadUrlForLayerRequestFunc          func(param0 *ecr.GetDownloadUrlForLayerInput) (*request.Request, *ecr.GetDownloadUrlForLayerOutput)
+	GetDownloadUrlForLayerWithContextFunc      func(param0 aws.Context, param1 *ecr.GetDownloadUrlForLayerInput, param2 ...request.Option) (*ecr.GetDownloadUrlForLayerOutput, error)
+	GetRepositoryPolicyFunc                    func(param0 *ecr.GetRepositoryPolicyInput) (*ecr.GetRepositoryPolicyOutput, error)
+	GetRepositoryPolicyRequestFunc             func(param0 *ecr.GetRepositoryPolicyInput) (*request.Request, *ecr.GetRepositoryPolicyOutput)
+	GetRepositoryPolicyWithContextFunc         func(param0 aws.Context, param1 *ecr.GetRepositoryPolicyInput, param2 ...request.Option) (*ecr.GetRepositoryPolicyOutput, error)
+	InitiateLayerUploadFunc                    func(param0 *ecr.InitiateLayerUploadInput) (*ecr.InitiateLayerUploadOutput, error)
+	InitiateLayerUploadRequestFunc             func(param0 *ecr.InitiateLayerUploadInput) (*request.Request, *ecr.InitiateLayerUploadOutput)
+	InitiateLayerUploadWithContextFunc         func(param0 aws.Context, param1 *ecr.InitiateLayerUploadInput, param2 ...request.Option) (*ecr.InitiateLayerUploadOutput, error)
+	ListImagesFunc                             func(param0 *ecr.ListImagesInput) (*ecr.ListImagesOutput, error)
+	ListImagesRequestFunc                      func(param0 *ecr.ListImagesInput) (*request.Request, *ecr.ListImagesOutput)
+	ListImagesWithContextFunc                  func(param0 aws.Context, param1 *ecr.ListImagesInput, param2 ...request.Option) (*ecr.ListImagesOutput, error)
+	PutImageFunc                               func(param0 *ecr.PutImageInput) (*ecr.PutImageOutput, error)
+	PutImageRequestFunc                        func(param0 *ecr.PutImageInput) (*request.Request, *ecr.PutImageOutput)
+	PutImageWithContextFunc                    func(param0 aws.Context, param1 *ecr.PutImageInput, param2 ...request.Option) (*ecr.PutImageOutput, error)
+	SetRepositoryPolicyFunc                    func(param0 *ecr.SetRepositoryPolicyInput) (*ecr.SetRepositoryPolicyOutput, error)
+	SetRepositoryPolicyRequestFunc             func(param0 *ecr.SetRepositoryPolicyInput) (*request.Request, *ecr.SetRepositoryPolicyOutput)
+	SetRepositoryPolicyWithContextFunc         func(param0 aws.Context, param1 *ecr.SetRepositoryPolicyInput, param2 ...request.Option) (*ecr.SetRepositoryPolicyOutput, error)
+	UploadLayerPartFunc                        func(param0 *ecr.UploadLayerPartInput) (*ecr.UploadLayerPartOutput, error)
+	UploadLayerPartRequestFunc                 func(param0 *ecr.UploadLayerPartInput) (*request.Request, *ecr.UploadLayerPartOutput)
+	UploadLayerPartWithContextFunc             func(param0 aws.Context, param1 *ecr.UploadLayerPartInput, param2 ...request.Option) (*ecr.UploadLayerPartOutput, error)
+}
+
+func (m *ecrMock) BatchCheckLayerAvailability(param0 *ecr.BatchCheckLayerAvailabilityInput) (*ecr.BatchCheckLayerAvailabilityOutput, error) {
+	m.addCall("BatchCheckLayerAvailability")
+	m.verifyInput("BatchCheckLayerAvailability", param0)
+	return m.BatchCheckLayerAvailabilityFunc(param0)
+}
+
+func (m *ecrMock) BatchCheckLayerAvailabilityRequest(param0 *ecr.BatchCheckLayerAvailabilityInput) (*request.Request, *ecr.BatchCheckLayerAvailabilityOutput) {
+	m.addCall("BatchCheckLayerAvailabilityRequest")
+	m.verifyInput("BatchCheckLayerAvailabilityRequest", param0)
+	return m.BatchCheckLayerAvailabilityRequestFunc(param0)
+}
+
+func (m *ecrMock) BatchCheckLayerAvailabilityWithContext(param0 aws.Context, param1 *ecr.BatchCheckLayerAvailabilityInput, param2 ...request.Option) (*ecr.BatchCheckLayerAvailabilityOutput, error) {
+	m.addCall("BatchCheckLayerAvailabilityWithContext")
+	m.verifyInput("BatchCheckLayerAvailabilityWithContext", param0)
+	return m.BatchCheckLayerAvailabilityWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) BatchDeleteImage(param0 *ecr.BatchDeleteImageInput) (*ecr.BatchDeleteImageOutput, error) {
+	m.addCall("BatchDeleteImage")
+	m.verifyInput("BatchDeleteImage", param0)
+	return m.BatchDeleteImageFunc(param0)
+}
+
+func (m *ecrMock) BatchDeleteImageRequest(param0 *ecr.BatchDeleteImageInput) (*request.Request, *ecr.BatchDeleteImageOutput) {
+	m.addCall("BatchDeleteImageRequest")
+	m.verifyInput("BatchDeleteImageRequest", param0)
+	return m.BatchDeleteImageRequestFunc(param0)
+}
+
+func (m *ecrMock) BatchDeleteImageWithContext(param0 aws.Context, param1 *ecr.BatchDeleteImageInput, param2 ...request.Option) (*ecr.BatchDeleteImageOutput, error) {
+	m.addCall("BatchDeleteImageWithContext")
+	m.verifyInput("BatchDeleteImageWithContext", param0)
+	return m.BatchDeleteImageWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) BatchGetImage(param0 *ecr.BatchGetImageInput) (*ecr.BatchGetImageOutput, error) {
+	m.addCall("BatchGetImage")
+	m.verifyInput("BatchGetImage", param0)
+	return m.BatchGetImageFunc(param0)
+}
+
+func (m *ecrMock) BatchGetImageRequest(param0 *ecr.BatchGetImageInput) (*request.Request, *ecr.BatchGetImageOutput) {
+	m.addCall("BatchGetImageRequest")
+	m.verifyInput("BatchGetImageRequest", param0)
+	return m.BatchGetImageRequestFunc(param0)
+}
+
+func (m *ecrMock) BatchGetImageWithContext(param0 aws.Context, param1 *ecr.BatchGetImageInput, param2 ...request.Option) (*ecr.BatchGetImageOutput, error) {
+	m.addCall("BatchGetImageWithContext")
+	m.verifyInput("BatchGetImageWithContext", param0)
+	return m.BatchGetImageWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) CompleteLayerUpload(param0 *ecr.CompleteLayerUploadInput) (*ecr.CompleteLayerUploadOutput, error) {
+	m.addCall("CompleteLayerUpload")
+	m.verifyInput("CompleteLayerUpload", param0)
+	return m.CompleteLayerUploadFunc(param0)
+}
+
+func (m *ecrMock) CompleteLayerUploadRequest(param0 *ecr.CompleteLayerUploadInput) (*request.Request, *ecr.CompleteLayerUploadOutput) {
+	m.addCall("CompleteLayerUploadRequest")
+	m.verifyInput("CompleteLayerUploadRequest", param0)
+	return m.CompleteLayerUploadRequestFunc(param0)
+}
+
+func (m *ecrMock) CompleteLayerUploadWithContext(param0 aws.Context, param1 *ecr.CompleteLayerUploadInput, param2 ...request.Option) (*ecr.CompleteLayerUploadOutput, error) {
+	m.addCall("CompleteLayerUploadWithContext")
+	m.verifyInput("CompleteLayerUploadWithContext", param0)
+	return m.CompleteLayerUploadWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) CreateRepository(param0 *ecr.CreateRepositoryInput) (*ecr.CreateRepositoryOutput, error) {
+	m.addCall("CreateRepository")
+	m.verifyInput("CreateRepository", param0)
+	return m.CreateRepositoryFunc(param0)
+}
+
+func (m *ecrMock) CreateRepositoryRequest(param0 *ecr.CreateRepositoryInput) (*request.Request, *ecr.CreateRepositoryOutput) {
+	m.addCall("CreateRepositoryRequest")
+	m.verifyInput("CreateRepositoryRequest", param0)
+	return m.CreateRepositoryRequestFunc(param0)
+}
+
+func (m *ecrMock) CreateRepositoryWithContext(param0 aws.Context, param1 *ecr.CreateRepositoryInput, param2 ...request.Option) (*ecr.CreateRepositoryOutput, error) {
+	m.addCall("CreateRepositoryWithContext")
+	m.verifyInput("CreateRepositoryWithContext", param0)
+	return m.CreateRepositoryWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) DeleteRepository(param0 *ecr.DeleteRepositoryInput) (*ecr.DeleteRepositoryOutput, error) {
+	m.addCall("DeleteRepository")
+	m.verifyInput("DeleteRepository", param0)
+	return m.DeleteRepositoryFunc(param0)
+}
+
+func (m *ecrMock) DeleteRepositoryPolicy(param0 *ecr.DeleteRepositoryPolicyInput) (*ecr.DeleteRepositoryPolicyOutput, error) {
+	m.addCall("DeleteRepositoryPolicy")
+	m.verifyInput("DeleteRepositoryPolicy", param0)
+	return m.DeleteRepositoryPolicyFunc(param0)
+}
+
+func (m *ecrMock) DeleteRepositoryPolicyRequest(param0 *ecr.DeleteRepositoryPolicyInput) (*request.Request, *ecr.DeleteRepositoryPolicyOutput) {
+	m.addCall("DeleteRepositoryPolicyRequest")
+	m.verifyInput("DeleteRepositoryPolicyRequest", param0)
+	return m.DeleteRepositoryPolicyRequestFunc(param0)
+}
+
+func (m *ecrMock) DeleteRepositoryPolicyWithContext(param0 aws.Context, param1 *ecr.DeleteRepositoryPolicyInput, param2 ...request.Option) (*ecr.DeleteRepositoryPolicyOutput, error) {
+	m.addCall("DeleteRepositoryPolicyWithContext")
+	m.verifyInput("DeleteRepositoryPolicyWithContext", param0)
+	return m.DeleteRepositoryPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) DeleteRepositoryRequest(param0 *ecr.DeleteRepositoryInput) (*request.Request, *ecr.DeleteRepositoryOutput) {
+	m.addCall("DeleteRepositoryRequest")
+	m.verifyInput("DeleteRepositoryRequest", param0)
+	return m.DeleteRepositoryRequestFunc(param0)
+}
+
+func (m *ecrMock) DeleteRepositoryWithContext(param0 aws.Context, param1 *ecr.DeleteRepositoryInput, param2 ...request.Option) (*ecr.DeleteRepositoryOutput, error) {
+	m.addCall("DeleteRepositoryWithContext")
+	m.verifyInput("DeleteRepositoryWithContext", param0)
+	return m.DeleteRepositoryWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) DescribeImages(param0 *ecr.DescribeImagesInput) (*ecr.DescribeImagesOutput, error) {
+	m.addCall("DescribeImages")
+	m.verifyInput("DescribeImages", param0)
+	return m.DescribeImagesFunc(param0)
+}
+
+func (m *ecrMock) DescribeImagesRequest(param0 *ecr.DescribeImagesInput) (*request.Request, *ecr.DescribeImagesOutput) {
+	m.addCall("DescribeImagesRequest")
+	m.verifyInput("DescribeImagesRequest", param0)
+	return m.DescribeImagesRequestFunc(param0)
+}
+
+func (m *ecrMock) DescribeImagesWithContext(param0 aws.Context, param1 *ecr.DescribeImagesInput, param2 ...request.Option) (*ecr.DescribeImagesOutput, error) {
+	m.addCall("DescribeImagesWithContext")
+	m.verifyInput("DescribeImagesWithContext", param0)
+	return m.DescribeImagesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) DescribeRepositories(param0 *ecr.DescribeRepositoriesInput) (*ecr.DescribeRepositoriesOutput, error) {
+	m.addCall("DescribeRepositories")
+	m.verifyInput("DescribeRepositories", param0)
+	return m.DescribeRepositoriesFunc(param0)
+}
+
+func (m *ecrMock) DescribeRepositoriesRequest(param0 *ecr.DescribeRepositoriesInput) (*request.Request, *ecr.DescribeRepositoriesOutput) {
+	m.addCall("DescribeRepositoriesRequest")
+	m.verifyInput("DescribeRepositoriesRequest", param0)
+	return m.DescribeRepositoriesRequestFunc(param0)
+}
+
+func (m *ecrMock) DescribeRepositoriesWithContext(param0 aws.Context, param1 *ecr.DescribeRepositoriesInput, param2 ...request.Option) (*ecr.DescribeRepositoriesOutput, error) {
+	m.addCall("DescribeRepositoriesWithContext")
+	m.verifyInput("DescribeRepositoriesWithContext", param0)
+	return m.DescribeRepositoriesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) GetAuthorizationToken(param0 *ecr.GetAuthorizationTokenInput) (*ecr.GetAuthorizationTokenOutput, error) {
+	m.addCall("GetAuthorizationToken")
+	m.verifyInput("GetAuthorizationToken", param0)
+	return m.GetAuthorizationTokenFunc(param0)
+}
+
+func (m *ecrMock) GetAuthorizationTokenRequest(param0 *ecr.GetAuthorizationTokenInput) (*request.Request, *ecr.GetAuthorizationTokenOutput) {
+	m.addCall("GetAuthorizationTokenRequest")
+	m.verifyInput("GetAuthorizationTokenRequest", param0)
+	return m.GetAuthorizationTokenRequestFunc(param0)
+}
+
+func (m *ecrMock) GetAuthorizationTokenWithContext(param0 aws.Context, param1 *ecr.GetAuthorizationTokenInput, param2 ...request.Option) (*ecr.GetAuthorizationTokenOutput, error) {
+	m.addCall("GetAuthorizationTokenWithContext")
+	m.verifyInput("GetAuthorizationTokenWithContext", param0)
+	return m.GetAuthorizationTokenWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) GetDownloadUrlForLayer(param0 *ecr.GetDownloadUrlForLayerInput) (*ecr.GetDownloadUrlForLayerOutput, error) {
+	m.addCall("GetDownloadUrlForLayer")
+	m.verifyInput("GetDownloadUrlForLayer", param0)
+	return m.GetDownloadUrlForLayerFunc(param0)
+}
+
+func (m *ecrMock) GetDownloadUrlForLayerRequest(param0 *ecr.GetDownloadUrlForLayerInput) (*request.Request, *ecr.GetDownloadUrlForLayerOutput) {
+	m.addCall("GetDownloadUrlForLayerRequest")
+	m.verifyInput("GetDownloadUrlForLayerRequest", param0)
+	return m.GetDownloadUrlForLayerRequestFunc(param0)
+}
+
+func (m *ecrMock) GetDownloadUrlForLayerWithContext(param0 aws.Context, param1 *ecr.GetDownloadUrlForLayerInput, param2 ...request.Option) (*ecr.GetDownloadUrlForLayerOutput, error) {
+	m.addCall("GetDownloadUrlForLayerWithContext")
+	m.verifyInput("GetDownloadUrlForLayerWithContext", param0)
+	return m.GetDownloadUrlForLayerWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) GetRepositoryPolicy(param0 *ecr.GetRepositoryPolicyInput) (*ecr.GetRepositoryPolicyOutput, error) {
+	m.addCall("GetRepositoryPolicy")
+	m.verifyInput("GetRepositoryPolicy", param0)
+	return m.GetRepositoryPolicyFunc(param0)
+}
+
+func (m *ecrMock) GetRepositoryPolicyRequest(param0 *ecr.GetRepositoryPolicyInput) (*request.Request, *ecr.GetRepositoryPolicyOutput) {
+	m.addCall("GetRepositoryPolicyRequest")
+	m.verifyInput("GetRepositoryPolicyRequest", param0)
+	return m.GetRepositoryPolicyRequestFunc(param0)
+}
+
+func (m *ecrMock) GetRepositoryPolicyWithContext(param0 aws.Context, param1 *ecr.GetRepositoryPolicyInput, param2 ...request.Option) (*ecr.GetRepositoryPolicyOutput, error) {
+	m.addCall("GetRepositoryPolicyWithContext")
+	m.verifyInput("GetRepositoryPolicyWithContext", param0)
+	return m.GetRepositoryPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) InitiateLayerUpload(param0 *ecr.InitiateLayerUploadInput) (*ecr.InitiateLayerUploadOutput, error) {
+	m.addCall("InitiateLayerUpload")
+	m.verifyInput("InitiateLayerUpload", param0)
+	return m.InitiateLayerUploadFunc(param0)
+}
+
+func (m *ecrMock) InitiateLayerUploadRequest(param0 *ecr.InitiateLayerUploadInput) (*request.Request, *ecr.InitiateLayerUploadOutput) {
+	m.addCall("InitiateLayerUploadRequest")
+	m.verifyInput("InitiateLayerUploadRequest", param0)
+	return m.InitiateLayerUploadRequestFunc(param0)
+}
+
+func (m *ecrMock) InitiateLayerUploadWithContext(param0 aws.Context, param1 *ecr.InitiateLayerUploadInput, param2 ...request.Option) (*ecr.InitiateLayerUploadOutput, error) {
+	m.addCall("InitiateLayerUploadWithContext")
+	m.verifyInput("InitiateLayerUploadWithContext", param0)
+	return m.InitiateLayerUploadWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) ListImages(param0 *ecr.ListImagesInput) (*ecr.ListImagesOutput, error) {
+	m.addCall("ListImages")
+	m.verifyInput("ListImages", param0)
+	return m.ListImagesFunc(param0)
+}
+
+func (m *ecrMock) ListImagesRequest(param0 *ecr.ListImagesInput) (*request.Request, *ecr.ListImagesOutput) {
+	m.addCall("ListImagesRequest")
+	m.verifyInput("ListImagesRequest", param0)
+	return m.ListImagesRequestFunc(param0)
+}
+
+func (m *ecrMock) ListImagesWithContext(param0 aws.Context, param1 *ecr.ListImagesInput, param2 ...request.Option) (*ecr.ListImagesOutput, error) {
+	m.addCall("ListImagesWithContext")
+	m.verifyInput("ListImagesWithContext", param0)
+	return m.ListImagesWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) PutImage(param0 *ecr.PutImageInput) (*ecr.PutImageOutput, error) {
+	m.addCall("PutImage")
+	m.verifyInput("PutImage", param0)
+	return m.PutImageFunc(param0)
+}
+
+func (m *ecrMock) PutImageRequest(param0 *ecr.PutImageInput) (*request.Request, *ecr.PutImageOutput) {
+	m.addCall("PutImageRequest")
+	m.verifyInput("PutImageRequest", param0)
+	return m.PutImageRequestFunc(param0)
+}
+
+func (m *ecrMock) PutImageWithContext(param0 aws.Context, param1 *ecr.PutImageInput, param2 ...request.Option) (*ecr.PutImageOutput, error) {
+	m.addCall("PutImageWithContext")
+	m.verifyInput("PutImageWithContext", param0)
+	return m.PutImageWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) SetRepositoryPolicy(param0 *ecr.SetRepositoryPolicyInput) (*ecr.SetRepositoryPolicyOutput, error) {
+	m.addCall("SetRepositoryPolicy")
+	m.verifyInput("SetRepositoryPolicy", param0)
+	return m.SetRepositoryPolicyFunc(param0)
+}
+
+func (m *ecrMock) SetRepositoryPolicyRequest(param0 *ecr.SetRepositoryPolicyInput) (*request.Request, *ecr.SetRepositoryPolicyOutput) {
+	m.addCall("SetRepositoryPolicyRequest")
+	m.verifyInput("SetRepositoryPolicyRequest", param0)
+	return m.SetRepositoryPolicyRequestFunc(param0)
+}
+
+func (m *ecrMock) SetRepositoryPolicyWithContext(param0 aws.Context, param1 *ecr.SetRepositoryPolicyInput, param2 ...request.Option) (*ecr.SetRepositoryPolicyOutput, error) {
+	m.addCall("SetRepositoryPolicyWithContext")
+	m.verifyInput("SetRepositoryPolicyWithContext", param0)
+	return m.SetRepositoryPolicyWithContextFunc(param0, param1, param2...)
+}
+
+func (m *ecrMock) UploadLayerPart(param0 *ecr.UploadLayerPartInput) (*ecr.UploadLayerPartOutput, error) {
+	m.addCall("UploadLayerPart")
+	m.verifyInput("UploadLayerPart", param0)
+	return m.UploadLayerPartFunc(param0)
+}
+
+func (m *ecrMock) UploadLayerPartRequest(param0 *ecr.UploadLayerPartInput) (*request.Request, *ecr.UploadLayerPartOutput) {
+	m.addCall("UploadLayerPartRequest")
+	m.verifyInput("UploadLayerPartRequest", param0)
+	return m.UploadLayerPartRequestFunc(param0)
+}
+
+func (m *ecrMock) UploadLayerPartWithContext(param0 aws.Context, param1 *ecr.UploadLayerPartInput, param2 ...request.Option) (*ecr.UploadLayerPartOutput, error) {
+	m.addCall("UploadLayerPartWithContext")
+	m.verifyInput("UploadLayerPartWithContext", param0)
+	return m.UploadLayerPartWithContextFunc(param0, param1, param2...)
 }
 
 type ecsMock struct {

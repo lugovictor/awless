@@ -63,6 +63,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewAttachUser(f.Sess, f.Log) }
 	case "attachvolume":
 		return func() interface{} { return NewAttachVolume(f.Sess, f.Log) }
+	case "authenticateregistry":
+		return func() interface{} { return NewAuthenticateRegistry(f.Sess, f.Log) }
 	case "checkcertificate":
 		return func() interface{} { return NewCheckCertificate(f.Sess, f.Log) }
 	case "checkdatabase":
@@ -358,6 +360,7 @@ var (
 	_ command = &AttachSecuritygroup{}
 	_ command = &AttachUser{}
 	_ command = &AttachVolume{}
+	_ command = &AuthenticateRegistry{}
 	_ command = &CheckCertificate{}
 	_ command = &CheckDatabase{}
 	_ command = &CheckDistribution{}

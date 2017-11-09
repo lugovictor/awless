@@ -38,6 +38,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecr"
+	"github.com/aws/aws-sdk-go/service/ecr/ecriface"
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/elbv2"
@@ -1187,6 +1189,74 @@ func (cmd *AttachVolume) ParamsHelp() string {
 }
 
 func (cmd *AttachVolume) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewAuthenticateRegistry(sess *session.Session, l ...*logger.Logger) *AuthenticateRegistry {
+	cmd := new(AuthenticateRegistry)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecr.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *AuthenticateRegistry) SetApi(api ecriface.ECRAPI) {
+	cmd.api = api
+}
+
+func (cmd *AuthenticateRegistry) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *AuthenticateRegistry) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *AuthenticateRegistry) ParamsHelp() string {
+	return generateParamsHelp("authenticateregistry", structListParamsKeys(cmd))
+}
+
+func (cmd *AuthenticateRegistry) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

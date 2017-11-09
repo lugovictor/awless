@@ -34,6 +34,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecr/ecriface"
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
 	"github.com/aws/aws-sdk-go/service/elbv2"
@@ -210,7 +211,10 @@ var (
 	newUpdateSecuritygroup = func() *UpdateSecuritygroup {
 		return &UpdateSecuritygroup{api: &mockEc2{}, logger: logger.DiscardLogger}
 	}
-	newUpdateSubnet        = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newUpdateSubnet         = func() *UpdateSubnet { return &UpdateSubnet{api: &mockEc2{}, logger: logger.DiscardLogger} }
+	newAuthenticateRegistry = func() *AuthenticateRegistry {
+		return &AuthenticateRegistry{api: &mockEcr{}, logger: logger.DiscardLogger}
+	}
 	newAttachContainertask = func() *AttachContainertask {
 		return &AttachContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
@@ -325,6 +329,9 @@ type mockCloudwatch struct {
 }
 type mockEc2 struct {
 	ec2iface.EC2API
+}
+type mockEcr struct {
+	ecriface.ECRAPI
 }
 type mockEcs struct {
 	ecsiface.ECSAPI
