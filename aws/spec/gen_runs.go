@@ -4000,6 +4000,74 @@ func (cmd *CreateQueue) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateRecord(sess *session.Session, l ...*logger.Logger) *CreateRecord {
+	cmd := new(CreateRecord)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = route53.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateRecord) SetApi(api route53iface.Route53API) {
+	cmd.api = api
+}
+
+func (cmd *CreateRecord) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateRecord) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateRecord) ParamsHelp() string {
+	return generateParamsHelp("createrecord", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateRecord) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateRoute(sess *session.Session, l ...*logger.Logger) *CreateRoute {
 	cmd := new(CreateRoute)
 	if len(l) > 0 {
@@ -7600,6 +7668,74 @@ func (cmd *DeleteQueue) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewDeleteRecord(sess *session.Session, l ...*logger.Logger) *DeleteRecord {
+	cmd := new(DeleteRecord)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = route53.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteRecord) SetApi(api route53iface.Route53API) {
+	cmd.api = api
+}
+
+func (cmd *DeleteRecord) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteRecord) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteRecord) ParamsHelp() string {
+	return generateParamsHelp("deleterecord", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteRecord) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewDeleteRoute(sess *session.Session, l ...*logger.Logger) *DeleteRoute {
 	cmd := new(DeleteRoute)
 	if len(l) > 0 {
@@ -11088,6 +11224,74 @@ func (cmd *UpdatePolicy) ParamsHelp() string {
 }
 
 func (cmd *UpdatePolicy) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewUpdateRecord(sess *session.Session, l ...*logger.Logger) *UpdateRecord {
+	cmd := new(UpdateRecord)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = route53.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *UpdateRecord) SetApi(api route53iface.Route53API) {
+	cmd.api = api
+}
+
+func (cmd *UpdateRecord) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	output, err := cmd.ManualRun(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *UpdateRecord) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *UpdateRecord) ParamsHelp() string {
+	return generateParamsHelp("updaterecord", structListParamsKeys(cmd))
+}
+
+func (cmd *UpdateRecord) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 

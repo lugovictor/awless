@@ -282,8 +282,11 @@ var (
 	newDeleteDbsubnetgroup = func() *DeleteDbsubnetgroup {
 		return &DeleteDbsubnetgroup{api: &mockRds{}, logger: logger.DiscardLogger}
 	}
+	newCreateRecord       = func() *CreateRecord { return &CreateRecord{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newCreateZone         = func() *CreateZone { return &CreateZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newDeleteRecord       = func() *DeleteRecord { return &DeleteRecord{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newDeleteZone         = func() *DeleteZone { return &DeleteZone{api: &mockRoute53{}, logger: logger.DiscardLogger} }
+	newUpdateRecord       = func() *UpdateRecord { return &UpdateRecord{api: &mockRoute53{}, logger: logger.DiscardLogger} }
 	newCreateBucket       = func() *CreateBucket { return &CreateBucket{api: &mockS3{}, logger: logger.DiscardLogger} }
 	newCreateS3object     = func() *CreateS3object { return &CreateS3object{api: &mockS3{}, logger: logger.DiscardLogger} }
 	newDeleteBucket       = func() *DeleteBucket { return &DeleteBucket{api: &mockS3{}, logger: logger.DiscardLogger} }

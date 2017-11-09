@@ -137,6 +137,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreatePolicy(f.Sess, f.Log) }
 	case "createqueue":
 		return func() interface{} { return NewCreateQueue(f.Sess, f.Log) }
+	case "createrecord":
+		return func() interface{} { return NewCreateRecord(f.Sess, f.Log) }
 	case "createroute":
 		return func() interface{} { return NewCreateRoute(f.Sess, f.Log) }
 	case "createroutetable":
@@ -227,6 +229,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeletePolicy(f.Sess, f.Log) }
 	case "deletequeue":
 		return func() interface{} { return NewDeleteQueue(f.Sess, f.Log) }
+	case "deleterecord":
+		return func() interface{} { return NewDeleteRecord(f.Sess, f.Log) }
 	case "deleteroute":
 		return func() interface{} { return NewDeleteRoute(f.Sess, f.Log) }
 	case "deleteroutetable":
@@ -313,6 +317,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewUpdateLoginprofile(f.Sess, f.Log) }
 	case "updatepolicy":
 		return func() interface{} { return NewUpdatePolicy(f.Sess, f.Log) }
+	case "updaterecord":
+		return func() interface{} { return NewUpdateRecord(f.Sess, f.Log) }
 	case "updates3object":
 		return func() interface{} { return NewUpdateS3object(f.Sess, f.Log) }
 	case "updatescalinggroup":
@@ -381,6 +387,7 @@ var (
 	_ command = &CreateNetworkinterface{}
 	_ command = &CreatePolicy{}
 	_ command = &CreateQueue{}
+	_ command = &CreateRecord{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
 	_ command = &CreateS3object{}
@@ -426,6 +433,7 @@ var (
 	_ command = &DeleteNetworkinterface{}
 	_ command = &DeletePolicy{}
 	_ command = &DeleteQueue{}
+	_ command = &DeleteRecord{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}
 	_ command = &DeleteS3object{}
@@ -469,6 +477,7 @@ var (
 	_ command = &UpdateInstance{}
 	_ command = &UpdateLoginprofile{}
 	_ command = &UpdatePolicy{}
+	_ command = &UpdateRecord{}
 	_ command = &UpdateS3object{}
 	_ command = &UpdateScalinggroup{}
 	_ command = &UpdateSecuritygroup{}

@@ -359,6 +359,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(sqsiface.SQSAPI))
 			return cmd
 		}
+	case "createrecord":
+		return func() interface{} {
+			cmd := awsspec.NewCreateRecord(nil, f.Logger)
+			cmd.SetApi(f.Mock.(route53iface.Route53API))
+			return cmd
+		}
 	case "createroute":
 		return func() interface{} {
 			cmd := awsspec.NewCreateRoute(nil, f.Logger)
@@ -629,6 +635,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(sqsiface.SQSAPI))
 			return cmd
 		}
+	case "deleterecord":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteRecord(nil, f.Logger)
+			cmd.SetApi(f.Mock.(route53iface.Route53API))
+			return cmd
+		}
 	case "deleteroute":
 		return func() interface{} {
 			cmd := awsspec.NewDeleteRoute(nil, f.Logger)
@@ -885,6 +897,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewUpdatePolicy(nil, f.Logger)
 			cmd.SetApi(f.Mock.(iamiface.IAMAPI))
+			return cmd
+		}
+	case "updaterecord":
+		return func() interface{} {
+			cmd := awsspec.NewUpdateRecord(nil, f.Logger)
+			cmd.SetApi(f.Mock.(route53iface.Route53API))
 			return cmd
 		}
 	case "updates3object":
