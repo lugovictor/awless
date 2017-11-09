@@ -378,6 +378,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 			cmd.SetApi(f.Mock.(route53iface.Route53API))
 			return cmd
 		}
+	case "createrepository":
+		return func() interface{} {
+			cmd := awsspec.NewCreateRepository(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ecriface.ECRAPI))
+			return cmd
+		}
 	case "createrole":
 		return func() interface{} {
 			cmd := awsspec.NewCreateRole(nil, f.Logger)
@@ -658,6 +664,12 @@ func (f *AcceptanceFactory) Build(key string) func() interface{} {
 		return func() interface{} {
 			cmd := awsspec.NewDeleteRecord(nil, f.Logger)
 			cmd.SetApi(f.Mock.(route53iface.Route53API))
+			return cmd
+		}
+	case "deleterepository":
+		return func() interface{} {
+			cmd := awsspec.NewDeleteRepository(nil, f.Logger)
+			cmd.SetApi(f.Mock.(ecriface.ECRAPI))
 			return cmd
 		}
 	case "deleterole":

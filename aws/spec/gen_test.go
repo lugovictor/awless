@@ -34,6 +34,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/cloudwatch/cloudwatchiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go/service/ecr"
 	"github.com/aws/aws-sdk-go/service/ecr/ecriface"
 	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/ecs/ecsiface"
@@ -215,6 +216,8 @@ var (
 	newAuthenticateRegistry = func() *AuthenticateRegistry {
 		return &AuthenticateRegistry{api: &mockEcr{}, logger: logger.DiscardLogger}
 	}
+	newCreateRepository    = func() *CreateRepository { return &CreateRepository{api: &mockEcr{}, logger: logger.DiscardLogger} }
+	newDeleteRepository    = func() *DeleteRepository { return &DeleteRepository{api: &mockEcr{}, logger: logger.DiscardLogger} }
 	newAttachContainertask = func() *AttachContainertask {
 		return &AttachContainertask{api: &mockEcs{}, logger: logger.DiscardLogger}
 	}
@@ -967,6 +970,26 @@ func (m *mockEc2) ModifySubnetAttribute(input *ec2.ModifySubnetAttributeInput) (
 	}
 	if outFunc, ok := genTestsOutputExtractFunc["updatesubnet"]; ok {
 		return outFunc().(*ec2.ModifySubnetAttributeOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEcr) CreateRepository(input *ecr.CreateRepositoryInput) (*ecr.CreateRepositoryOutput, error) {
+	if got, want := input, genTestsExpected["createrepository"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["createrepository"]; ok {
+		return outFunc().(*ecr.CreateRepositoryOutput), nil
+	}
+	return nil, nil
+}
+
+func (m *mockEcr) DeleteRepository(input *ecr.DeleteRepositoryInput) (*ecr.DeleteRepositoryOutput, error) {
+	if got, want := input, genTestsExpected["deleterepository"]; !reflect.DeepEqual(got, want) {
+		return nil, fmt.Errorf("got %#v, want %#v", got, want)
+	}
+	if outFunc, ok := genTestsOutputExtractFunc["deleterepository"]; ok {
+		return outFunc().(*ecr.DeleteRepositoryOutput), nil
 	}
 	return nil, nil
 }

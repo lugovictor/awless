@@ -143,6 +143,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewCreateQueue(f.Sess, f.Log) }
 	case "createrecord":
 		return func() interface{} { return NewCreateRecord(f.Sess, f.Log) }
+	case "createrepository":
+		return func() interface{} { return NewCreateRepository(f.Sess, f.Log) }
 	case "createrole":
 		return func() interface{} { return NewCreateRole(f.Sess, f.Log) }
 	case "createroute":
@@ -237,6 +239,8 @@ func (f *AWSFactory) Build(key string) func() interface{} {
 		return func() interface{} { return NewDeleteQueue(f.Sess, f.Log) }
 	case "deleterecord":
 		return func() interface{} { return NewDeleteRecord(f.Sess, f.Log) }
+	case "deleterepository":
+		return func() interface{} { return NewDeleteRepository(f.Sess, f.Log) }
 	case "deleterole":
 		return func() interface{} { return NewDeleteRole(f.Sess, f.Log) }
 	case "deleteroute":
@@ -400,6 +404,7 @@ var (
 	_ command = &CreatePolicy{}
 	_ command = &CreateQueue{}
 	_ command = &CreateRecord{}
+	_ command = &CreateRepository{}
 	_ command = &CreateRole{}
 	_ command = &CreateRoute{}
 	_ command = &CreateRoutetable{}
@@ -447,6 +452,7 @@ var (
 	_ command = &DeletePolicy{}
 	_ command = &DeleteQueue{}
 	_ command = &DeleteRecord{}
+	_ command = &DeleteRepository{}
 	_ command = &DeleteRole{}
 	_ command = &DeleteRoute{}
 	_ command = &DeleteRoutetable{}

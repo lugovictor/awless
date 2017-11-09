@@ -4212,6 +4212,80 @@ func (cmd *CreateRecord) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
+func NewCreateRepository(sess *session.Session, l ...*logger.Logger) *CreateRepository {
+	cmd := new(CreateRepository)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecr.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *CreateRepository) SetApi(api ecriface.ECRAPI) {
+	cmd.api = api
+}
+
+func (cmd *CreateRepository) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ecr.CreateRepositoryInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ecr.CreateRepositoryInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.CreateRepository(input)
+	cmd.logger.ExtraVerbosef("ecr.CreateRepository call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *CreateRepository) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *CreateRepository) ParamsHelp() string {
+	return generateParamsHelp("createrepository", structListParamsKeys(cmd))
+}
+
+func (cmd *CreateRepository) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
 func NewCreateRole(sess *session.Session, l ...*logger.Logger) *CreateRole {
 	cmd := new(CreateRole)
 	if len(l) > 0 {
@@ -7945,6 +8019,80 @@ func (cmd *DeleteRecord) ParamsHelp() string {
 }
 
 func (cmd *DeleteRecord) inject(params map[string]interface{}) error {
+	return structSetter(cmd, params)
+}
+
+func NewDeleteRepository(sess *session.Session, l ...*logger.Logger) *DeleteRepository {
+	cmd := new(DeleteRepository)
+	if len(l) > 0 {
+		cmd.logger = l[0]
+	} else {
+		cmd.logger = logger.DiscardLogger
+	}
+	if sess != nil {
+		cmd.api = ecr.New(sess)
+	}
+	return cmd
+}
+
+func (cmd *DeleteRepository) SetApi(api ecriface.ECRAPI) {
+	cmd.api = api
+}
+
+func (cmd *DeleteRepository) Run(ctx, params map[string]interface{}) (interface{}, error) {
+	if err := cmd.inject(params); err != nil {
+		return nil, fmt.Errorf("cannot set params on command struct: %s", err)
+	}
+
+	if v, ok := implementsBeforeRun(cmd); ok {
+		if brErr := v.BeforeRun(ctx); brErr != nil {
+			return nil, fmt.Errorf("before run: %s", brErr)
+		}
+	}
+
+	input := &ecr.DeleteRepositoryInput{}
+	if err := structInjector(cmd, input, ctx); err != nil {
+		return nil, fmt.Errorf("cannot inject in ecr.DeleteRepositoryInput: %s", err)
+	}
+	start := time.Now()
+	output, err := cmd.api.DeleteRepository(input)
+	cmd.logger.ExtraVerbosef("ecr.DeleteRepository call took %s", time.Since(start))
+	if err != nil {
+		return nil, err
+	}
+
+	if v, ok := implementsAfterRun(cmd); ok {
+		if brErr := v.AfterRun(ctx, output); brErr != nil {
+			return nil, fmt.Errorf("after run: %s", brErr)
+		}
+	}
+
+	if v, ok := implementsResultExtractor(cmd); ok {
+		return v.ExtractResult(output), nil
+	}
+	return nil, nil
+}
+
+func (cmd *DeleteRepository) ValidateCommand(params map[string]interface{}, refs []string) (errs []error) {
+	if err := cmd.inject(params); err != nil {
+		return []error{err}
+	}
+	if err := validateStruct(cmd, refs); err != nil {
+		errs = append(errs, err)
+	}
+
+	if mv, ok := implementsManualValidator(cmd); ok {
+		errs = append(errs, mv.ManualValidateCommand(params, refs)...)
+	}
+
+	return
+}
+
+func (cmd *DeleteRepository) ParamsHelp() string {
+	return generateParamsHelp("deleterepository", structListParamsKeys(cmd))
+}
+
+func (cmd *DeleteRepository) inject(params map[string]interface{}) error {
 	return structSetter(cmd, params)
 }
 
