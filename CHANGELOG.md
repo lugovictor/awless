@@ -1,3 +1,15 @@
+## v0.1.7 [unreleased]
+
+### Features
+
+- Create instance from community distro names (`awless create instance distro=debian`). In default config value, deprecation of `instance.image` in favor of `instance.distro` (migration should be seamless).
+- Quick way to switch to profiles and regions. Ex: `awless switch eu-west-1`, `awless switch mfa us-west-1`
+- Now create a public subnet in only one command with: `awless create subnet public=true...`
+
+### AWS Services
+
+- Update Cloudfront distribution with: `awless update distribution...`
+
 ## v0.1.6 [2017-11-16]
 
 **Overall re-design of AWS commands with full acceptance testing allowing for easier external contribution, greater flexibility and scalability moving forward**

@@ -20,7 +20,7 @@ type Env struct {
 
 	Fillers          map[string]interface{}
 	AliasFunc        func(entity, key, alias string) string
-	MissingHolesFunc func(string) interface{}
+	MissingHolesFunc func(string, []string) interface{}
 	Log              *logger.Logger
 
 	processedFillers map[string]interface{}
@@ -266,8 +266,8 @@ func convertParamsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 		}
 		return nil
 	}
-	tpl.visitCommandNodesE(convert)
-	return tpl, env, nil
+	err := tpl.visitCommandNodesE(convert)
+	return tpl, env, err
 }
 
 func validateCommandsPass(tpl *Template, env *Env) (*Template, *Env, error) {
@@ -295,7 +295,9 @@ func validateCommandsPass(tpl *Template, env *Env) (*Template, *Env, error) {
 		}
 		return nil
 	}
-	tpl.visitCommandNodesE(collectValidationErrs)
+	if err := tpl.visitCommandNodesE(collectValidationErrs); err != nil {
+		return tpl, env, err
+	}
 	switch len(errs) {
 	case 0:
 		return tpl, env, nil
@@ -410,10 +412,15 @@ func resolveHolesPass(tpl *Template, env *Env) (*Template, *Env, error) {
 }
 
 func resolveMissingHolesPass(tpl *Template, env *Env) (*Template, *Env, error) {
-	uniqueHoles := make(map[string]struct{})
+	uniqueHoles := make(map[string][]string)
 	tpl.visitHoles(func(h ast.WithHoles) {
-		for _, v := range h.GetHoles() {
-			uniqueHoles[v] = struct{}{}
+		for k, v := range h.GetHoles() {
+			uniqueHoles[k] = nil
+			for _, vv := range v {
+				if !contains(uniqueHoles[k], vv) {
+					uniqueHoles[k] = append(uniqueHoles[k], vv)
+				}
+			}
 		}
 	})
 	var sortedHoles []string
@@ -422,9 +429,10 @@ func resolveMissingHolesPass(tpl *Template, env *Env) (*Template, *Env, error) {
 	}
 	sort.Strings(sortedHoles)
 	fillers := make(map[string]interface{})
+
 	for _, k := range sortedHoles {
 		if env.MissingHolesFunc != nil {
-			actual := env.MissingHolesFunc(k)
+			actual := env.MissingHolesFunc(k, uniqueHoles[k])
 			fillers[k] = actual
 		}
 	}
@@ -478,12 +486,17 @@ func resolveAliasPass(tpl *Template, env *Env) (*Template, *Env, error) {
 }
 
 func failOnUnresolvedHolesPass(tpl *Template, env *Env) (*Template, *Env, error) {
-	var unresolved []string
+	uniqueUnresolved := make(map[string]struct{})
 	tpl.visitHoles(func(withHole ast.WithHoles) {
-		for _, hole := range withHole.GetHoles() {
-			unresolved = append(unresolved, hole)
+		for hole := range withHole.GetHoles() {
+			uniqueUnresolved[hole] = struct{}{}
 		}
 	})
+
+	var unresolved []string
+	for k := range uniqueUnresolved {
+		unresolved = append(unresolved, k)
+	}
 
 	if len(unresolved) > 0 {
 		return tpl, env, fmt.Errorf("template contains unresolved holes: %v", unresolved)
@@ -551,4 +564,13 @@ func cmdErr(cmd *ast.CommandNode, i interface{}, a ...interface{}) error {
 		return errors.New(prefix + msg)
 	}
 	return fmt.Errorf("%s"+msg, append([]interface{}{prefix}, a...)...)
+}
+
+func contains(arr []string, s string) bool {
+	for _, v := range arr {
+		if v == s {
+			return true
+		}
+	}
+	return false
 }
